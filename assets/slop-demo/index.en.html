@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>
+/* Мова демо: ?lang= від сторінки портфоліо (shared/embed.js), інакше мова рейки.
+   Українська й англійська — два окремі файли з однаковими помітками походження. */
+(function () {
+  var q = new URLSearchParams(location.search), l = q.get('lang');
+  if (!l) { try { l = localStorage.getItem('pmp-lang'); } catch (e) {} }
+  var en = /index\.en\.html$/.test(location.pathname);
+  if (l === 'en' && !en) location.replace('index.en.html' + location.search + location.hash);
+  if (l === 'uk' && en) location.replace('index.html' + location.search + location.hash);
+})();
+</script>
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project management 2026</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="assets/prov.css">
+</head>
+<body>
+
+<div class="topbar"><div class="wrap">
+  <b>PM 2026</b>
+  <span class="sp"></span>
+  <button class="pill">Overview</button>
+  <button class="pill solid">Trends</button>
+</div></div>
+
+<div class="wrap">
+
+  <div class="howto">
+    <p class="kicker">How to use it</p>
+    <ol>
+      <li><b>The assistant writes the text</b> and sets the initial marks itself: what it took from a source, what it made up, what you gave it.</li>
+      <li><b>You go through the page.</b> Clicking the icon to the left of a block cycles through the types. Each block has a “+” on the right — you leave a comment there, and it stays visible in the same place.</li>
+      <li><b>You say “work through the comments”.</b> The assistant reads your comments together with the working marks and edits the text.</li>
+      <li><b>The goal of a pass</b> is to leave no “Redo · ai slop” on the page: every block is either backed by a source, rewritten by you, or removed.</li>
+    </ol>
+  </div>
+
+  <div class="provleg">
+    <div class="fact"><span class="ln"></span><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>Verified</div>
+    <div class="hyp"><span class="ln"></span><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="13" r="8.5" stroke-dasharray="3 3.4"/><path d="M13 9.4v4.2"/><path d="M13 17.1h.01"/></svg></span>Hypothesis</div>
+    <div class="mine"><span class="ln"></span><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 4.5v17"/><path d="M5.5 13h9"/><path d="M11 8.5l4 4.5-4 4.5"/><path d="M18.5 13h2.5"/></svg></span>My conclusion</div>
+    <div class="todo"><span class="ln"></span><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 4.8l3.7 3.7L9.6 20.2l-4.6.9.9-4.6z"/><path d="M15.2 7.1l3.7 3.7"/></svg></span>To finish</div>
+    <div class="redo"><span class="ln"></span><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>Redo · ai slop</div>
+    <div class="del"><span class="ln"></span><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 8h15"/><path d="M10 8V5.5h6V8"/><path d="M7.5 8l1 12.5h9L18.5 8"/><path d="M11 11.5v6M15 11.5v6"/></svg></span>Delete</div>
+  </div>
+
+  <p class="kicker">Analysis · August 2026</p>
+  <h1>Where project management is heading.</h1>
+
+  <p class="prov redo lead" data-prov="01-1-1"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>Six shifts that by 2026 stopped being a forecast and became a manager’s daily work. And separately — what gets talked about less: how, along with them, the question of what exactly a manager is accountable for is changing.</p>
+
+
+  <div class="prov redo txt" data-prov="01-1-2"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>
+    <p>Every year someone publishes a list of trends, and every time half of the items turn out to be the same item reworded. So I will start not with a list but with a distinction. Some shifts change the tools: a new button appears, you learn to press it, and six months later you no longer remember how it was before. Other shifts change the questions a manager is obliged to answer. The first cost a week of training. The second rewrite what you will be held accountable for.</p>
+    <p>2026 is interesting because both types met on one topic. AI entered project work first as a tool — to prepare minutes, collect a status, sketch a work breakdown. And then, almost unnoticed, it raised a question this profession did not have before: if part of the work is done by something other than a person, who is accountable for the result of that work. And that is no longer a question about a tool.</p>
+    <p>Below are six directions on a chart, four stages teams go through in this transition, and three analyses from PMI material where this same accountability is broken down into concrete mechanisms: the responsibility matrix, the work breakdown structure and the line beyond which the decision stays with a person.</p>
+  </div>
+
+  <!-- ============ радар ============ -->
+  <section class="sec">
+    <p class="eyebrow">Chart one</p>
+    <h2>What pushes hardest.</h2>
+
+    <div class="prov redo txt" data-prov="01-2-1"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>
+      <p>Six directions are laid out on two axes. Horizontally — how far the shift has already arrived: on the left, what has become everyday and does not ask for your consent; on the right, what is still forming and is so far discussed at conferences. Vertically — how strongly it changes the manager’s work itself, not just the set of tools on their desk.</p>
+      <p>The split is not academic. The bottom-right quarter is what you can put off and come back to in a year. The top-left is what you are already dealing with, even if you have not named it out loud. Most discussions about trends confuse these two quarters and end with nothing because of it.</p>
+    </div>
+
+    <div class="prov redo card radar edge" data-prov="01-2-2"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>
+      <svg viewBox="0 0 420 420" aria-label="Trend radar">
+        <circle class="ring" cx="210" cy="210" r="60"/>
+        <circle class="ring" cx="210" cy="210" r="115"/>
+        <circle class="ring" cx="210" cy="210" r="170"/>
+        <line class="axis" x1="210" y1="30" x2="210" y2="390"/>
+        <line class="axis" x1="30" y1="210" x2="390" y2="210"/>
+        <text class="lbl" x="14" y="210" transform="rotate(-90 14 210)">ALREADY HERE</text>
+        <text class="lbl" x="406" y="210" transform="rotate(90 406 210)">STILL FORMING</text>
+        <text class="lbl" x="210" y="18">CHANGES THE WORK A LOT</text>
+        <text class="lbl" x="210" y="412">BARELY CHANGES IT</text>
+        <text class="quad" x="48" y="46">teams work with this now</text>
+        <text class="quad r" x="372" y="46">teams prepare for this</text>
+        <text class="quad" x="48" y="382">already routine, adds no work</text>
+        <text class="quad r" x="372" y="382">can wait a year</text>
+        <g id="dots"></g>
+      </svg>
+      <div>
+        <div class="rcats" id="rcats"></div>
+        <div class="rpanel" id="rpanel"></div>
+      </div>
+    </div>
+
+    <div class="prov redo txt" data-prov="01-2-3"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>
+      <p>The most interesting thing on this chart is not the AI dot itself but what has gathered around it. Paying for outcomes instead of hours turns an estimate from a forecast into a commitment: if you got the estimate wrong, it is no longer “we guessed wrong” but an unfulfilled contract. Hybrid teams remove the synchronous meeting as the backbone of the process — when half the team is in another time zone and some join for two months as contractors, status has to be collected differently. Skills instead of job titles break the org chart as a description of reality.</p>
+      <p>None of these shifts needs AI to happen. But each of them makes manual information gathering more expensive — and that is exactly why they arrived together.</p>
+    </div>
+  </section>
+
+  <!-- ============ стадії ============ -->
+  <section class="sec">
+    <p class="eyebrow">Chart two</p>
+    <h2>Four stages of maturity.</h2>
+
+    <div class="prov redo txt" data-prov="01-3-1"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>
+      <p>Teams do not move to AI-assisted management in one leap. Between “we tried it” and “we can’t work without it” lie four stages, and they are not about the number of licenses but about what has changed in the work.</p>
+      <p>Almost everyone gets stuck at the second. It looks like this: routine really has been automated, minutes and statuses are no longer typed by hand, time has been freed up — and there it all stopped. The freed time never made it into the plan, estimates stayed the same, meetings run the same way. Formally the rollout happened. In practice nothing changed except that people type less.</p>
+      <p>Moving to the third stage costs more than any rollout, because it requires changing a habit, not a tool: estimating durations from completed projects rather than gut feeling, and checking a number rather than accepting it because the system produced it.</p>
+    </div>
+
+    <div class="prov redo card stage edge" data-prov="01-3-2" id="stage"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>
+      <div class="track"><span class="bar"></span></div>
+      <div class="steps" id="steps"></div>
+      <div class="spanel" id="spanel"></div>
+    </div>
+
+    <div data-prov="01-3-3" class="prov todo"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 4.8l3.7 3.7L9.6 20.2l-4.6.9.9-4.6z"/><path d="M15.2 7.1l3.7 3.7"/></svg></span>
+      <table>
+        <tr><th>Stage</th><th>What is measured</th><th>Typical trap</th></tr>
+        <tr><td>Trying</td><td>Number of tools</td><td>A pilot for the sake of a pilot</td></tr>
+        <tr><td>Support</td><td>Time spent on routine</td><td>Savings never reach the plan</td></tr>
+        <tr><td>Process</td><td>Estimate accuracy</td><td>Trusting a number without checking it</td></tr>
+        <tr><td>Norm</td><td>Delivery predictability</td><td>Losing the skill without the tool</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ PMI: RACI ============ -->
+  <section class="sec">
+    <p class="eyebrow">Analysis · PMI</p>
+    <h2>Who is accountable when an agent does part of the work. <a class="ref" href="#src-1">1</a></h2>
+
+    <div class="prov fact txt" data-prov="01-4-1"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <p>At the end of July PMI published an analysis of what happens to the RACI matrix when some of the doers are not people. Any manager can sketch this matrix from memory: Responsible, Accountable, Consulted, Informed, and the main rule — exactly one Accountable per outcome. The grid was never the hard part. The hard part starts on a live project, where priorities shift and people feel left out the minute they are not invited to a decision that matters to them.</p>
+      <p>The question of “who owns what” gets sharper when part of the team is not human. AI is already an ordinary part of project work: it summarizes meetings, drafts statuses, analyzes risks, finds themes in stakeholder feedback. Increasingly, agents also take over bounded pieces of a process entirely. The principles of stakeholder engagement do not change — how they are applied does.</p>
+    </div>
+
+    <div class="prov fact card edge" data-prov="01-4-2"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <h3>Three questions that did not exist before</h3>
+      <ul class="qa">
+        <li><b>Who reviews what was generated?</b><span>A status draft or minutes are still someone’s text, and someone is accountable for what it says.</span></li>
+        <li><b>Who approves the action?</b><span>An agent can prepare a decision, but the button must be pressed by whoever will be asked about it later.</span></li>
+        <li><b>Who owns the escalation?</b><span>If an AI-driven process produced a wrong result, there must be one name in the Accountable column — that rule has not moved.</span></li>
+      </ul>
+    </div>
+
+    <div class="prov fact txt" data-prov="01-4-3"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <p>PMI calls the nearest shift not autonomous delivery but augmented intelligence: AI does not replace a person but helps them do their work better. It prepares faster, spots patterns earlier, communicates more evenly — but context, judgment, understanding of stakeholders and final accountability stay with the manager.</p>
+      <p>There is also a point that is not about AI at all but explains why this whole conversation about roles is not bureaucracy. From PMI research on project success: a project can hit every deadline and stay within budget — and still be considered a failure if those whose opinion matters did not see value in it. Roles, relationships and clarity about who owns what are part of that judgment on a par with the schedule.</p>
+    </div>
+
+    <div class="prov fact note" data-prov="01-4-4"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <span class="tg">What you can apply tomorrow</span>
+      <p>If two functions claim the Accountable column — or both avoid it — a neater grid will not help. That is a decision the sponsor usually has to make. Force that conversation to happen in advance, before an incident forces it.</p>
+    </div>
+  </section>
+
+  <!-- ============ PMI: WBS ============ -->
+  <section class="sec">
+    <p class="eyebrow">Chart three · PMI</p>
+    <h2>What gets added to the work plan. <a class="ref" href="#src-2">2</a></h2>
+
+    <div class="prov fact txt" data-prov="01-5-1"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <p>The most expensive work on a project is the work nobody planned. It shows up late and as a surprise: an integration that was nobody’s task, a verification step everyone thought belonged to someone else, a deliverable that fell into the gap between two teams. When it finally surfaces, fixing it costs many times more than anticipating it would have.</p>
+      <p>A work breakdown structure exists exactly to catch such work early. Sketching one today takes seconds: a template in the tracker, or AI producing a first pass from a short brief before you finish your coffee. The hard part is still elsewhere: deciding what is in the project and what is not, and where one piece of work ends and the next begins. The same discipline now also answers a new question — what exactly the agent will do and what it will not.</p>
+    </div>
+
+    <div class="prov fact card wbs edge" data-prov="01-5-2" id="wbs"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <div class="sw" id="wbsSw">
+        <button data-i="0">Regular feature</button>
+        <button data-i="1">Agentic process</button>
+      </div>
+      <p class="cnt" id="wbsCnt"></p>
+      <div class="tree" id="wbsTree"></div>
+      <p class="rule" id="wbsRule"></p>
+    </div>
+
+    <div class="prov fact txt" data-prov="01-5-3"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <p>The example in the analysis is mundane: an assistant that drafts replies to customer requests. Built as a regular product feature, it gives the expected structure — requirements, development, testing, rollout, management. Built as an agentic process, it keeps all these branches and adds five new ones, and what adds them is not the technology but the delegated freedom to act.</p>
+      <p>The principle does not change. The structure still describes deliverables, not activities, and the 100% rule still applies: everything within the project scope and nothing extra. What expands is not the form but the content — it now includes the agent’s behavior and the control system around it.</p>
+    </div>
+
+    <div class="prov fact note" data-prov="01-5-4"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <span class="tg">An old formula that works again</span>
+      <p>If it is not in the WBS, it is not in the project. Work that cannot be found in the structure has to be approved first and done afterwards. For twenty years this phrase was about protecting against scope creep. Now it also describes the boundary of an agent’s authority.</p>
+    </div>
+  </section>
+
+  <!-- ============ PMI: human-in-the-loop ============ -->
+  <section class="sec">
+    <p class="eyebrow">Analysis · PMI</p>
+    <h2>Automation, assistance, augmentation. <a class="ref" href="#src-3">3</a></h2>
+
+    <div class="prov fact txt" data-prov="01-6-1"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <p>The question of “where exactly a person is needed” is usually settled by intuition, and so anew each time. PMI suggests breaking it down along two dimensions. The first is task complexity: how many variables it has, whether it needs business context, whether it needs actual project management experience. The second is how much a person has to intervene to get a usable result. The relationship is direct: the more complex the task, the more intervention — and this field shows which mode of work you have actually chosen.</p>
+    </div>
+
+    <div class="prov fact card hitl edge" data-prov="01-6-2"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <svg viewBox="0 0 380 300" aria-label="Task complexity and the human intervention it needs">
+        <rect class="zn" x="40" y="200" width="105" height="70" rx="10" fill="#0071E3"/>
+        <rect class="zn" x="145" y="130" width="105" height="140" rx="10" fill="#7D3CE0"/>
+        <rect class="zn" x="250" y="30" width="105" height="240" rx="10" fill="#C7442E"/>
+        <text class="zl" x="92" y="240" text-anchor="middle">Automation</text>
+        <text class="zl" x="197" y="205" text-anchor="middle">Assistance</text>
+        <text class="zl" x="302" y="160" text-anchor="middle">Augmentation</text>
+        <line class="ln" x1="40" y1="270" x2="360" y2="270"/>
+        <line class="ln" x1="40" y1="20" x2="40" y2="270"/>
+        <text class="ax" x="40" y="288">TASK COMPLEXITY →</text>
+        <text class="ax" x="30" y="20" transform="rotate(-90 30 20)">HUMAN INTERVENTION →</text>
+      </svg>
+      <ul class="zdesc">
+        <li><i style="background:#0071E3"></i><span><b>Automation</b>The task is simple and repetitive. A person sets the rule once and spot-checks.</span></li>
+        <li><i style="background:#7D3CE0"></i><span><b>Assistance</b>The tool prepares a draft; a person reviews it and brings it to a usable state.</span></li>
+        <li><i style="background:#C7442E"></i><span><b>Augmentation</b>The decision stays with a person; the tool only widens what they can cover.</span></li>
+      </ul>
+      <ul class="ztasks" id="ztasks" style="grid-column:1/-1"></ul>
+    </div>
+
+    <p class="prov fact quote" data-prov="01-6-3"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>«AI is excellent at managing data… It understands the how and what. Humans understand the why.»</p>
+
+    <div class="prov fact txt" data-prov="01-6-4"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h8l4.5 4.5v6"/><path d="M14 4.5V9h4.5"/><path d="M6 4.5v17h6"/><path d="M9 10h5M9 13.5h6M9 17h3"/><path d="M14.5 18.5l2.5 2.5 4.5-5"/></svg></span>
+      <p>That is Juanita Woods, PMP, PgMP, at PMI Global Summit in Atlanta. She also offered a comparison that explains the need for oversight better than any manual: a tool with the intelligence of a savant and the emotional age of a five-year-old. You can and should work with it; you should not leave it unsupervised.</p>
+      <p>The reason a person cannot be taken out of the loop is put briefly in the analysis. An algorithm will not push back on leadership, will not defend an ethical line and will not take responsibility for its own choice. A manager can do all of that — and that is exactly why a project with generative AI needs a person in the loop, not around it.</p>
+    </div>
+  </section>
+
+  <!-- ============ цифри ============ -->
+  <section class="sec">
+    <h2>Three numbers that change the conversation.</h2>
+    <div class="prov del grid3 edge" data-prov="01-7-1"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 8h15"/><path d="M10 8V5.5h6V8"/><path d="M7.5 8l1 12.5h9L18.5 8"/><path d="M11 11.5v6M15 11.5v6"/></svg></span>
+      <div class="card"><div class="num">42%</div><p class="mut">of a manager’s time goes into collecting statuses rather than decisions.</p></div>
+      <div class="card"><div class="num">2×</div><p class="mut">more often do teams working in two-week horizons revise their plan.</p></div>
+      <div class="card"><div class="num">1 in 5</div><p class="mut">projects closes early — not because of success but because priorities changed.</p></div>
+    </div>
+    <div class="prov redo txt" data-prov="01-7-2"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>
+      <p>The numbers here are deliberately made up: the page shows how the marks work, not research results. That is exactly why the block is marked “redo” — it has to be either matched to a source for each number or removed entirely. It cannot stay as it is: three big numbers on gray cards look like fact, even when the text next to them says the opposite.</p>
+    </div>
+  </section>
+
+  <!-- ============ висновок ============ -->
+  <section class="sec">
+    <h2>What follows from this.</h2>
+
+    <p class="prov redo quote" data-prov="01-8-1"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>The manager’s role is shifting from the person who collects information to the person accountable for the quality of the decision based on it.</p>
+
+    <div class="prov redo txt" data-prov="01-8-2"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13a8 8 0 1 1-2.6-5.9"/><path d="M21 4.5V9h-4.5"/></svg></span>
+      <p>The three analyses above talk about different things — roles, work breakdown, the line of intervention — but they meet in one place. Wherever an agent appears, you have to answer in advance a question that used to be settled along the way: whose decision is this. In the responsibility matrix it is one Accountable, in the WBS it is written-down boundaries and approval points, in the complexity field it is the choice of mode. Three different mechanisms for one thing.</p>
+      <p>Tools get cheaper; accountability does not. The more routine automation takes over, the more each judgment left to a person is worth, and the harder it is to see the moment when judgment was replaced by a tool’s output. The marks on this page are an attempt to make that moment visible, at least in the text: the rail on the left says where each block came from and does not let you pass off someone else’s fact as your own conclusion, or your own guess as verified.</p>
+    </div>
+
+    <div class="prov todo note" data-prov="01-8-3"><span class="ic" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 4.8l3.7 3.7L9.6 20.2l-4.6.9.9-4.6z"/><path d="M15.2 7.1l3.7 3.7"/></svg></span>
+      <span class="tg">What is still left to do</span>
+      <p>The section on budgeting has not been written at all. The numbers block rests on made-up values and has to be either confirmed or removed. The maturity stages and the radar are my own construction, not someone’s methodology, and for now they stand as hypotheses.</p>
+    </div>
+  </section>
+
+  <!-- ============ джерела ============ -->
+  <section class="sec sources">
+    <h2>Sources</h2>
+    <ol class="srclist">
+      <li id="src-1"><a href="https://www.pmi.org/blog/stakeholder-management-raci" target="_blank" rel="noopener">Stakeholder Management and RACI: Who Does What, and Who Answers for It</a><span>Project Management Institute, July 29, 2026</span></li>
+      <li id="src-2"><a href="https://www.pmi.org/blog/work-breakdown-structure" target="_blank" rel="noopener">Work Breakdown Structure: Define the Work Before You Build It</a><span>Project Management Institute, August 18, 2026</span></li>
+      <li id="src-3"><a href="https://www.pmi.org/blog/human-in-the-loop-what-project-managers-need-to-know" target="_blank" rel="noopener">Human-in-the-Loop: What Project Managers Need to Know</a><span>Project Management Institute; based on the study “Shaping the Future of Project Management with AI”</span></li>
+    </ol>
+    <p class="mut" style="font-size:15px">The number next to a section heading shows which source its content comes from. Blocks without a number have no source — and are marked accordingly.</p>
+  </section>
+
+</div>
+
+<script>
+var REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* ============ 1. радар ============ */
+var TRENDS = [
+  {id:'ai',   x:-0.55, y:0.80, t:'AI in planning', cat:'Tools', w:5, when:'now',
+   act:'Check the logic of the rebuilt plan instead of typing up the grid',
+   d:'The assistant no longer suggests wording — it rebuilds the plan: redistributes tasks when one date slips. The manager checks the logic instead of typing up the grid.'},
+  {id:'out',  x:0.62, y:0.52, t:'Paying for outcomes', cat:'Contracts', w:4, when:'1–2 years',
+   act:'Rewrite the estimate so it can be defended as a commitment',
+   d:'The customer pays for an achieved metric, not for hours spent. The estimate stops being a forecast and becomes a commitment.'},
+  {id:'hyb',  x:-0.8, y:-0.18, t:'Hybrid teams', cat:'People', w:3, when:'now',
+   act:'Remove the process’s dependence on the synchronous meeting',
+   d:'Half the team in the office, half in another time zone, some are contractors for two months. The synchronous meeting stops being the backbone of the process.'},
+  {id:'data', x:-0.12, y:0.30, t:'Data instead of status', cat:'Process', w:4, when:'now',
+   act:'Collect status from the system, keep the meeting for discrepancies',
+   d:'Status is collected from the system, not from what people say at the stand-up. The meeting is kept for discrepancies, not for reporting.'},
+  {id:'sust', x:0.4, y:-0.68, t:'Sustainability as a requirement', cat:'Regulation', w:2, when:'later',
+   act:'Put the metric into the same reporting as budget and schedule',
+   d:'A project’s carbon and social footprint goes into the same reports as budget and schedule. So far as an obligation, not as a lever.'},
+  {id:'skill',x:0.7, y:-0.05, t:'Skills instead of roles', cat:'People', w:3, when:'1–2 years',
+   act:'Describe the team by skills, not job titles',
+   d:'The team is assembled for the task from a set of skills, not from positions. The org chart stops describing reality.'}
+];
+var CATS = ['All','Tools','People','Process','Contracts','Regulation'];
+var dots = document.getElementById('dots'), rp = document.getElementById('rpanel');
+  var rcats = document.getElementById('rcats');
+var NS = 'http://www.w3.org/2000/svg', curCat = 'All', curId = 'ai';
+
+TRENDS.forEach(function (t) {
+  var cx = 210 + t.x * 170, cy = 210 - t.y * 170;
+  t.cx = cx; t.cy = cy;
+  var g = document.createElementNS(NS, 'g');
+  g.setAttribute('class', 'dot'); g.dataset.id = t.id;
+  g.innerHTML = '<circle class="halo" cx="' + cx + '" cy="' + cy + '" r="14"/>'
+              + '<circle class="hit" cx="' + cx + '" cy="' + cy + '" r="26"/>'
+              + '<circle class="pt" cx="' + cx + '" cy="' + cy + '" r="7"/>'
+              + '<text x="' + cx + '" y="' + (cy + (t.y > 0 ? -22 : 30)) + '">' + t.t + '</text>'
+              + '<text class="sub" x="' + cx + '" y="' + (cy + (t.y > 0 ? -8 : 44)) + '">' + t.cat.toLowerCase() + ' · ' + t.when + '</text>';
+  g.addEventListener('click', function () { pick(t.id); });
+  dots.appendChild(g);
+});
+
+CATS.forEach(function (c) {
+  var b = document.createElement('button');
+  b.textContent = c;
+  b.addEventListener('click', function () { filter(c); });
+  rcats.appendChild(b);
+});
+
+function filter(c) {
+  curCat = c;
+  Array.prototype.forEach.call(rcats.children, function (b) {
+    b.classList.toggle('on', b.textContent === c);
+  });
+  document.querySelectorAll('.radar .dot').forEach(function (g) {
+    var t = byId(g.dataset.id);
+    g.classList.toggle('dim', c !== 'All' && t.cat !== c);
+  });
+  // если выбранная точка отфильтрована — панель переезжает на первую видимую
+  var cur = byId(curId);
+  if (c !== 'All' && cur.cat !== c) {
+    var first = TRENDS.filter(function (t) { return t.cat === c; })[0];
+    if (first) pick(first.id);
+  }
+}
+
+function byId(id) { return TRENDS.filter(function (t) { return t.id === id; })[0]; }
+
+function pick(id) {
+  var t = byId(id); curId = id;
+  document.querySelectorAll('.radar .dot').forEach(function (g) {
+    g.classList.toggle('on', g.dataset.id === id);
+  });
+  var m = ''; for (var i = 0; i < 5; i++) m += '<i class="' + (i < t.w ? 'f' : '') + '"></i>';
+  rp.className = 'rpanel'; void rp.offsetWidth; rp.className = 'rpanel sw';
+  rp.innerHTML = '<span class="tg">' + t.cat + '</span><h3>' + t.t + '</h3>'
+    + '<p class="mut">' + t.d + '</p>'
+    + '<div class="meter">' + m + '</div>'
+    + '<div class="rmeta"><span>Pressure on the role<b>' + t.w + ' of 5</b></span>'
+    + '<span>Horizon<b>' + t.when + '</b></span></div>'
+    + '<p class="mut" style="font-size:14px;margin-top:12px"><b style="color:var(--ink-1)">What to do:</b> ' + t.act + '</p>';
+}
+filter('All'); pick('ai');
+
+/* Точки проявляются, когда схема доехала до экрана, — иначе анимацию никто не увидит.
+   Скрытые точки — это пустая схема, поэтому у показа есть и второй путь: обычный
+   скролл. Если наблюдатель не сработал, схема всё равно наполнится. */
+var dotsDone = false;
+function revealDots() {
+  if (dotsDone) return;
+  dotsDone = true;
+  document.querySelectorAll('.radar .dot').forEach(function (g, i) {
+    setTimeout(function () { g.classList.add('shown'); }, REDUCED ? 0 : i * 70);
+  });
+}
+window.addEventListener('scroll', function onScroll() {
+  var r = document.querySelector('.radar').getBoundingClientRect();
+  if (r.top < innerHeight * 0.9) { revealDots(); window.removeEventListener('scroll', onScroll); }
+}, { passive: true });
+
+/* ============ 2. стадії ============ */
+var STAGES = [
+  {c:'Trying', h:'Someone on the team is trying it.', share:15,
+   signs:['The tool comes from the bottom up, not from a leadership decision','Results cannot be compared: everyone has their own approach','The question “does it work” has no answer yet'],
+   pm:['Do not get in the way; watch what takes root','Record where the time savings came from'],
+   metric:'What is measured: number of tools. Trap: a pilot for the sake of a pilot.'},
+  {c:'Support', h:'Routine goes to automation.', share:45,
+   signs:['Minutes, statuses, email drafts — not by hand','Time is freed up, but it has not reached the plan yet','This is where most teams get stuck'],
+   pm:['Find out where the freed time went','Stop treating the rollout as finished'],
+   metric:'What is measured: time spent on routine. Trap: savings never reach the plan.'},
+  {c:'Process', h:'Estimates rely on history.', share:28,
+   signs:['Durations are estimated from completed projects, not gut feeling','A habit appears of checking a number rather than accepting it','The shape of the meeting itself changes'],
+   pm:['Make comparing estimates with actuals a mandatory step','Keep the meeting for discrepancies, not for reporting'],
+   metric:'What is measured: estimate accuracy. Trap: trusting a number without checking it.'},
+  {c:'Norm', h:'Nobody works without it anymore.', share:12,
+   signs:['Delivery predictability becomes the main metric','The risk shifts: the team loses the skill without the tool','The manager’s role is decision quality, not data collection'],
+   pm:['Keep a manual fallback for critical steps','Make sure judgment is not replaced by the tool’s output'],
+   metric:'What is measured: delivery predictability. Trap: losing the skill without the tool.'}
+];
+var steps = document.getElementById('steps'), sp = document.getElementById('spanel'), st = document.getElementById('stage');
+STAGES.forEach(function (s, i) {
+  var b = document.createElement('button');
+  b.innerHTML = '<span class="knob"></span><span class="cap">' + s.c + '</span>';
+  b.addEventListener('click', function () { go(i); });
+  steps.appendChild(b);
+});
+function go(i) {
+  var s = STAGES[i];
+  st.style.setProperty('--pos', i);
+  Array.prototype.forEach.call(steps.children, function (b, j) { b.classList.toggle('on', j <= i); });
+  sp.style.animation = 'none'; void sp.offsetWidth; sp.style.animation = '';
+  sp.innerHTML = '<p class="lead">' + s.h + '</p>'
+    + '<div class="cols"><div><h4>Signs</h4><ul>' + s.signs.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div>'
+    + '<div><h4>What the manager does</h4><ul>' + s.pm.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul></div></div>'
+    + '<p class="metric">' + s.metric + '</p>'
+    + '<p class="metric">Approximate share of teams at this stage <span class="bar2"><i></i></span></p>';
+  var bar = sp.querySelector('.bar2 i');
+  setTimeout(function () { bar.style.width = s.share + '%'; }, 40);
+}
+go(1);
+
+/* ============ 3. WBS ============ */
+var BASE = [
+  ['1','Requirements and design','',['Requirements gathering','Solution design']],
+  ['2','Development','',['Ticketing integration','Response logic']],
+  ['3','Testing','',['Functional checks','Load']],
+  ['4','Rollout','',[]],
+  ['5','Project management','',[]]
+];
+var EXTRA = [
+  ['6','Task boundaries','It is written down what the agent does and does not do.',['List of allowed actions','List of forbidden actions']],
+  ['7','Agent design','Role and instructions, connected tools, context handling.',['Instructions and role','Knowledge access']],
+  ['8','Guardrails and approvals','What the agent may do on its own, and where a person has to press the button.',['Action limits','Approval points']],
+  ['9','Escalation and fallback','What happens at low confidence or in an edge case.',['Confidence threshold','Handoff to a person']],
+  ['10','Oversight and evaluation','Output checks, a log, repeated reviews over time.',['Output validation','Log and audit']]
+];
+var wsw = document.getElementById('wbsSw'), wtree = document.getElementById('wbsTree');
+var wrule = document.getElementById('wbsRule'), wcnt = document.getElementById('wbsCnt');
+var mode = 1, open = {};
+
+function wbs(i) {
+  mode = i;
+  Array.prototype.forEach.call(wsw.children, function (b, j) { b.classList.toggle('on', j === i); });
+  var rows = i ? BASE.concat(EXTRA) : BASE;
+  var kids = rows.reduce(function (n, r) { return n + r[3].length; }, 0);
+  wcnt.innerHTML = 'Top-level branches: <b>' + rows.length + '</b> · work packages below: <b>' + kids + '</b>';
+  wtree.innerHTML = rows.map(function (r, n) {
+    var add = n >= BASE.length;
+    var o = open[r[0]];
+    var html = '<div class="row head' + (add ? ' add' : '') + (o ? ' open' : '') + '" data-k="' + r[0] + '"'
+      + ' style="animation-delay:' + ((n - BASE.length) * 45) + 'ms">'
+      + '<span class="k">' + r[0] + '</span><span><b>' + r[1] + '</b>'
+      + (add ? '<span class="bd">agent</span>' : '')
+      + (r[2] ? '<span class="d">' + r[2] + '</span>' : '') + '</span>'
+      + (r[3].length ? '<span class="tw">▶</span>' : '') + '</div>';
+    if (o) html += r[3].map(function (c, ci) {
+      return '<div class="row lvl2"><span class="k">' + r[0] + '.' + (ci + 1) + '</span><span>' + c + '</span></div>';
+    }).join('');
+    return html;
+  }).join('');
+  wtree.querySelectorAll('.row.head').forEach(function (row) {
+    row.addEventListener('click', function () {
+      var k = row.dataset.k;
+      open[k] = !open[k];
+      wbs(mode);
+    });
+  });
+  wrule.textContent = i
+    ? 'The five branches are added not by the technology itself but by the freedom to act delegated to it: everything the agent decides without a person has to be described as work. Click a branch to open its work packages.'
+    : 'The same assistant, built as a regular product feature: the structure is what you would expect and adds nothing.';
+}
+Array.prototype.forEach.call(wsw.children, function (b) {
+  b.addEventListener('click', function () { open = {}; wbs(+b.dataset.i); });
+});
+wbs(1);
+
+/* ============ 4. поле «складність × втручання» ============ */
+var ZONES = {
+  auto: ['Sending reminders about overdue tasks','Summarizing costs by category','Moving dates by a fixed rule'],
+  assist: ['Draft meeting minutes','A first pass at the work breakdown','Grouping feedback into themes'],
+  augment: ['Deciding to move a milestone','A conversation with an unhappy customer','Choosing what to cut from scope']
+};
+var ZKEYS = ['auto','assist','augment'];
+var zt = document.getElementById('ztasks');
+var zrects = document.querySelectorAll('.hitl .zn');
+var zlis = document.querySelectorAll('.zdesc li');
+function zone(i) {
+  zrects.forEach(function (r, j) { r.classList.toggle('on', j === i); r.classList.toggle('off', j !== i); });
+  zlis.forEach(function (l, j) { l.classList.toggle('on', j === i); });
+  zt.style.animation = 'none'; void zt.offsetWidth; zt.style.animation = 'fade .3s ease';
+  zt.innerHTML = ZONES[ZKEYS[i]].map(function (t) { return '<li>' + t + '</li>'; }).join('');
+}
+zrects.forEach(function (r, i) { r.addEventListener('click', function () { zone(i); }); });
+zlis.forEach(function (l, i) { l.addEventListener('click', function () { zone(i); }); });
+zone(1);
+
+/* ============ 5. появление блоков и счёт цифр ============ */
+(function () {
+  var targets = document.querySelectorAll('.sec > *, .howto, .provleg, h1, .lead');
+  if (!('IntersectionObserver' in window) || REDUCED) return;
+  targets.forEach(function (el) { el.classList.add('rv'); });
+  var seen = 0;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      seen++;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+      if (e.target.querySelector && e.target.querySelector('.radar')) revealDots();
+      if (e.target.classList.contains('radar')) revealDots();
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+  targets.forEach(function (el) { io.observe(el); });
+
+  /* Появление — украшение, и оно не имеет права скрыть текст. Если наблюдатель
+     почему-то не сработал, через секунду показываем всё как есть. */
+  setTimeout(function () {
+    if (seen) return;
+    io.disconnect();
+    targets.forEach(function (el) { el.classList.add('in'); });
+    revealDots();
+  }, 1000);
+})();
+if (REDUCED) revealDots();
+
+(function () {
+  var nums = document.querySelectorAll('.num');
+  if (!nums.length || !('IntersectionObserver' in window) || REDUCED) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      var el = e.target, txt = el.textContent, m = txt.match(/[\d.]+/);
+      if (!m) return;
+      var end = parseFloat(m[0]), t0 = performance.now();
+      (function step(now) {
+        var k = Math.min(1, (now - t0) / 900);
+        var v = end * (1 - Math.pow(1 - k, 3));
+        el.textContent = txt.replace(m[0], end % 1 ? v.toFixed(1) : Math.round(v));
+        if (k < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }, { threshold: 0.5 });
+  nums.forEach(function (n) { io.observe(n); });
+})();
+</script>
+</body>
+</html>

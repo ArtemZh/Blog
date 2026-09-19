@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Агентний AI поверх OSS/BSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/css/tokens.css">
+<link rel="stylesheet" href="../shared/css/base.css">
+<link rel="stylesheet" href="../shared/css/diagram.css">
+<link rel="stylesheet" href="../shared/css/components.css">
+<link rel="stylesheet" href="css/page.css">
+</head>
+<body>
+
+<header class="top">
+  <span class="top__title" data-i18n="ui.brand"></span>
+  <a class="back" href="../index.html" data-i18n="ui.back"></a>
+  <nav class="top__nav">
+    <a href="#agent" data-i18n="nav.1"></a>
+    <a href="#levels" data-i18n="nav.2"></a>
+    <a href="#stack-sec" data-i18n="nav.3"></a>
+    <a href="#protocols-sec" data-i18n="nav.4"></a>
+    <a href="#who" data-i18n="nav.5"></a>
+    <a href="#limits" data-i18n="nav.6"></a>
+    <a href="#refs" data-i18n="nav.7"></a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="hero__kicker" data-i18n="hero.kicker"></div>
+    <h1 data-i18n="hero.title"></h1>
+    <p data-i18n-html="hero.lead"></p>
+    <div class="specs">
+      <div><b data-i18n="hero.s1.b"></b><span data-i18n="hero.s1.s"></span></div>
+      <div><b data-i18n="hero.s2.b"></b><span data-i18n="hero.s2.s"></span></div>
+      <div><b data-i18n="hero.s3.b"></b><span data-i18n="hero.s3.s"></span></div>
+      <div><b data-i18n="hero.s4.b"></b><span data-i18n="hero.s4.s"></span></div>
+    </div>
+  </div>
+
+  <!-- 01 ─────────────────────────────────────────────── -->
+  <section id="agent">
+    <div class="sec__head">
+      <span class="sec__num">01</span>
+      <h2 data-i18n="s1.h"></h2>
+      <p data-i18n="s1.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s1.lead"></p>
+    <div class="steps3">
+      <div class="card card--soft"><span class="kicker" data-i18n="s1.st1.k"></span><h3 data-i18n="s1.st1.t"></h3><p data-i18n="s1.st1.b"></p><div class="ex" data-i18n="s1.st1.ex"></div></div>
+      <div class="card card--soft"><span class="kicker" data-i18n="s1.st2.k"></span><h3 data-i18n="s1.st2.t"></h3><p data-i18n="s1.st2.b"></p><div class="ex" data-i18n="s1.st2.ex"></div></div>
+      <div class="card"><span class="kicker" data-i18n="s1.st3.k"></span><h3 data-i18n="s1.st3.t"></h3><p data-i18n="s1.st3.b"></p><div class="ex" data-i18n="s1.st3.ex"></div></div>
+    </div>
+    <h3 class="sub" data-i18n="s1.eq.h"></h3>
+    <div class="eq" id="parts"></div>
+    <div class="note" id="partsNote"></div>
+  </section>
+
+  <!-- 02 ─────────────────────────────────────────────── -->
+  <section id="levels">
+    <div class="sec__head">
+      <span class="sec__num">02</span>
+      <h2 data-i18n="s2.h"></h2>
+      <p data-i18n="s2.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s2.lead"></p>
+    <div class="levels">
+      <div class="lv-scale" id="levels-scale"></div>
+      <div class="card" id="levelCard"></div>
+    </div>
+    <div class="note" data-i18n-html="s2.survey"></div>
+  </section>
+
+  <!-- 03 ─────────────────────────────────────────────── -->
+  <section id="stack-sec">
+    <div class="sec__head">
+      <span class="sec__num">03</span>
+      <h2 data-i18n="s3.h"></h2>
+      <p data-i18n="s3.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s3.lead"></p>
+    <div id="flowBox" class="wide">
+      <div class="flows toggles"></div>
+      <div id="stack"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+      </div>
+    </div>
+    <div class="cols cols--3" style="margin-top:22px">
+      <div class="card card--soft"><span class="kicker" data-i18n="s3.k1.k"></span><h3 data-i18n="s3.k1.t"></h3><p data-i18n="s3.k1.b"></p></div>
+      <div class="card card--soft"><span class="kicker" data-i18n="s3.k2.k"></span><h3 data-i18n="s3.k2.t"></h3><p data-i18n="s3.k2.b"></p></div>
+      <div class="card card--soft"><span class="kicker" data-i18n="s3.k3.k"></span><h3 data-i18n="s3.k3.t"></h3><p data-i18n="s3.k3.b"></p></div>
+    </div>
+  </section>
+
+  <!-- 04 ─────────────────────────────────────────────── -->
+  <section id="protocols-sec">
+    <div class="sec__head">
+      <span class="sec__num">04</span>
+      <h2 data-i18n="s4.h"></h2>
+      <p data-i18n="s4.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s4.lead"></p>
+    <div class="cols cols--4" id="protocols"></div>
+    <div class="note" data-i18n-html="s4.blueprint"></div>
+  </section>
+
+  <!-- 05 ─────────────────────────────────────────────── -->
+  <section id="who">
+    <div class="sec__head">
+      <span class="sec__num">05</span>
+      <h2 data-i18n="s5.h"></h2>
+      <p data-i18n="s5.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s5.lead"></p>
+    <div class="toggles" id="vendorBar"></div>
+    <div class="vendor">
+      <div id="vendorMap"></div>
+      <div class="card vendor__card" id="vendorCard"></div>
+    </div>
+    <div class="legend">
+      <span><i class="lg lg--full"></i><em data-i18n="s5.lg.full"></em></span>
+      <span><i class="lg lg--part"></i><em data-i18n="s5.lg.part"></em></span>
+      <span><i class="lg lg--ctx"></i><em data-i18n="s5.lg.ctx"></em></span>
+    </div>
+    <h3 class="sub" data-i18n="s5.cases.h"></h3>
+    <p class="lead" data-i18n-html="s5.cases.lead"></p>
+    <div class="cols cols--3" id="cases"></div>
+  </section>
+
+  <!-- 06 ─────────────────────────────────────────────── -->
+  <section id="limits">
+    <div class="sec__head">
+      <span class="sec__num">06</span>
+      <h2 data-i18n="s6.h"></h2>
+      <p data-i18n="s6.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s6.lead"></p>
+    <div class="auth">
+      <div class="au" id="authority"></div>
+      <div class="card" id="authCard"></div>
+    </div>
+    <h3 class="sub" data-i18n="s6.risks.h"></h3>
+    <div class="cols cols--3">
+      <div class="card card--soft"><h3 data-i18n="s6.r1.t"></h3><p data-i18n-html="s6.r1.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s6.r2.t"></h3><p data-i18n-html="s6.r2.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s6.r3.t"></h3><p data-i18n-html="s6.r3.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s6.r4.t"></h3><p data-i18n-html="s6.r4.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s6.r5.t"></h3><p data-i18n-html="s6.r5.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s6.r6.t"></h3><p data-i18n-html="s6.r6.b"></p></div>
+    </div>
+    <div class="note" data-i18n-html="s6.bridge"></div>
+  </section>
+
+  <!-- 07 ─────────────────────────────────────────────── -->
+  <section id="refs">
+    <div class="sec__head">
+      <span class="sec__num">07</span>
+      <h2 data-i18n="s7.h"></h2>
+      <p data-i18n="s7.p"></p>
+    </div>
+    <h3 class="sub" data-i18n="s7.check.h"></h3>
+    <ol class="check">
+      <li data-i18n-html="s7.c1"></li><li data-i18n-html="s7.c2"></li><li data-i18n-html="s7.c3"></li>
+      <li data-i18n-html="s7.c4"></li><li data-i18n-html="s7.c5"></li><li data-i18n-html="s7.c6"></li>
+      <li data-i18n-html="s7.c7"></li>
+    </ol>
+    <h3 class="sub" data-i18n="s7.gloss.h"></h3>
+    <input class="search" id="glossSearch" type="search" data-i18n-ph="s7.gloss.ph">
+    <div class="gloss" id="gloss"></div>
+    <h3 class="sub" data-i18n="s7.src.h"></h3>
+    <ul class="src">
+      <li><a href="https://www.tmforum.org/ai-native-blueprint-project/" target="_blank" rel="noopener">TM Forum — AI-Native Blueprint Project</a></li>
+      <li><a href="https://www.tmforum.org/news-insight/newsroom/tm-forum-advances-ai-native-blueprint-with-launch-of-first-core-operational-projects-for-ai-at-scale" target="_blank" rel="noopener" data-i18n="src.aiblueprint">TM Forum — перші проєкти AI-Native Blueprint (2026)</a></li>
+      <li><a href="https://inform.tmforum.org/features-and-opinion/how-telcos-are-building-safe-environments-for-ai-agents" target="_blank" rel="noopener">TM Forum Inform — How telcos are building safe environments for AI agents</a></li>
+      <li><a href="https://www.tmforum.org/resources/introductory-guide/ig1453-agent-to-agent-protocol-for-telecoms-a2a-t-v2-0-0/" target="_blank" rel="noopener">TM Forum — IG1453 A2A-T v2.0.0</a></li>
+      <li><a href="https://www.tmforum.org/catalysts/projects/C26.0.910/agent-fabric-phase-iii" target="_blank" rel="noopener">TM Forum Catalyst — Agent fabric: A2A-T runtime, Phase III</a></li>
+      <li><a href="https://www.tmforum.org/catalysts/projects/C26.0.924/agentic-noc-ainative-operations-for-the-autonomous-telco" target="_blank" rel="noopener">TM Forum Catalyst — Agentic NOC</a></li>
+      <li><a href="https://www.tmforum.org/open-digital-architecture/open-apis/intent-management-api-TMF921/v5.0" target="_blank" rel="noopener">TM Forum — TMF921 Intent Management API v5.0</a></li>
+      <li><a href="https://www.lightreading.com/network-platforms/autonomy-in-action-achieving-l4-networks-at-scale" target="_blank" rel="noopener">Light Reading — Autonomy in Action: Achieving L4 Networks at Scale</a></li>
+      <li><a href="https://www.fierce-network.com/cloud/telcos-hit-level-4-autonomous-network-milestone-says-tm-forum" target="_blank" rel="noopener">Fierce Network — TM Forum report on Level 4</a></li>
+      <li><a href="https://rcrwireless.com/20260626/ai/ericsson-ai-agents-oss-bss-stack" target="_blank" rel="noopener">RCR Wireless — Ericsson makes AI agents core to its OSS/BSS stack</a></li>
+      <li><a href="https://www.ericsson.com/en/blog/2026/2/agentic-rapp-as-a-service" target="_blank" rel="noopener">Ericsson — Agentic AI-powered rApp as a Service</a></li>
+      <li><a href="https://www.globenewswire.com/news-release/2026/06/23/3315726/0/en/Nokia-advances-autonomous-networks-portfolio-with-upgraded-agentic-AI-capabilities-DTW26.html" target="_blank" rel="noopener">Nokia — autonomous networks, DTW26</a></li>
+      <li><a href="https://www.huawei.com/en/news/2026/3/mwc-ai-agents-operation" target="_blank" rel="noopener">Huawei — Agentic Operations, MWC 2026</a></li>
+      <li><a href="https://www.fierce-network.com/sponsored/amdocs-introduces-aos-agentic-operating-system-telecommunications" target="_blank" rel="noopener">Fierce Network — Amdocs introduces aOS</a></li>
+      <li><a href="https://www.accessnewswire.com/newsroom/en/computers-technology-and-internet/mwc-2026-amdocs-unveils-ces26-an-agent-driven-bss-oss-network-sui-1142366" target="_blank" rel="noopener">Amdocs — CES26 (MWC 2026)</a></li>
+      <li><a href="https://www.netcracker.com/portfolio/products/netcracker-agentic-ai-solution" target="_blank" rel="noopener">Netcracker — Agentic AI Solution</a></li>
+      <li><a href="https://www.telekom.com/en/newsroom/latest-updates/media-information/2026/2/mindr-ai-agents-in-telekom-network" target="_blank" rel="noopener">Deutsche Telekom — MINDR / RAN Guardian (2026)</a></li>
+      <li><a href="https://tecknexus.com/ai-automation-insights-march-2026/" target="_blank" rel="noopener">TeckNexus — AI &amp; Automation Insights, March 2026</a></li>
+      <li><a href="https://symphony.rakuten.com/blog/agentic-ai-in-telecom-why-2026-will-be-the-breakout-year-and-how-telcos-can-actually-get-there" target="_blank" rel="noopener">Rakuten Symphony — Agentic AI in Telecom: 2026</a></li>
+      <li><a href="https://www.gsma.com/newsroom/article/gsma-open-telco-llm-benchmarks-ranks-frontier-ai-models-for-telco-ai-revealing-critical-gap-in-network-automation-readiness/" target="_blank" rel="noopener">GSMA — Open-Telco LLM Benchmarks</a></li>
+    </ul>
+    <div class="foot" data-i18n="ui.foot"></div>
+  </section>
+
+</main>
+
+<script src="copy.js?v=20260918102857"></script>
+<script src="../shared/js/i18n.js"></script>
+<script src="data/stack.js"></script>
+<script src="data/content.js"></script>
+<script src="../shared/js/diagram-engine.js"></script>
+<script src="../shared/js/scenarios.js"></script>
+<script src="js/sections.js"></script>
+<script src="js/app.js"></script>
+<script src="../shared/js/toc.js?v=20260918102857"></script>
+</body>
+</html>

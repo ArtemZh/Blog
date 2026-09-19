@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en" data-lang-default="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Artem Zhavrotskyi — Delivery / Project Manager">Артем Жавроцький — Delivery / Project Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<style>
+/* ── Хаб: один екран ────────────────────────────────────────────────────────
+   Три смуги: знайомство · підходи · статті. Висоти й відступи від висоти
+   вікна, але шрифти не падають нижче 12px — замість дрібноти прибрано зайве. */
+.main.hub{padding:clamp(16px,3vh,30px) var(--sp-lg) clamp(12px,2vh,20px);
+  height:calc(100svh - 56px);display:flex;flex-direction:column;gap:clamp(14px,3vh,30px);max-width:1360px;overflow:hidden}
+.main.hub > section{margin-bottom:0}
+
+/* знайомство: компактна шапка */
+.hello{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(16px,3vw,48px);align-items:center}
+.hello .kicker{margin-bottom:6px}
+.hello .hi{font-size:clamp(15px,2vh,18px);color:var(--ink-3);margin:0 0 4px;letter-spacing:-.01em}
+.hello h1{font-size:clamp(22px,3vh,30px);line-height:1.1;letter-spacing:-.03em;margin:0 0 clamp(6px,1.2vh,12px)}
+.hello p{margin:0;font-size:clamp(13px,1.6vh,14.5px);line-height:1.5;color:var(--ink-2);max-width:78ch}
+.me{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;
+  border:1px solid var(--rule);border-radius:var(--r-lg);padding:10px 18px 10px 10px;background:var(--paper);
+  transition:border-color .15s,background .15s;white-space:nowrap}
+.me:hover{border-color:var(--act);background:var(--act-soft)}
+.me img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:0 0 auto}
+.me b{display:block;font-size:14.5px}
+.me small{display:block;font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.me .go{font:500 18px/1 var(--sans);color:var(--act);margin-left:6px}
+
+/* смуги */
+.band{border-top:1px solid var(--rule);padding-top:clamp(10px,1.6vh,16px);display:flex;flex-direction:column;min-height:0}
+.band h2{font-size:clamp(15px,1.9vh,17px);letter-spacing:-.02em;margin:0 0 clamp(8px,1.2vh,12px)}
+.band.grow{flex:1 1 auto}
+
+/* плитка: «13 · Назва» одним рядком, під ним опис, мініатюра праворуч */
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;
+  text-decoration:none;color:inherit;border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:8px 8px 8px 12px;background:var(--paper);transition:border-color .15s,background .15s;min-width:0}
+.item:hover{border-color:var(--act);background:var(--act-soft)}
+.item .tt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  font-size:14px;line-height:1.25;letter-spacing:-.01em;font-weight:600}
+/* у дереві заголовок може зайняти два рядки — опис тоді один */
+.item .tt{-webkit-line-clamp:2}
+.item p{-webkit-line-clamp:2}
+.item .tt .n{color:var(--ink-3);font-weight:500;font-variant-numeric:tabular-nums}
+.item .tt .n::after{content:" · "}
+.item p{margin:3px 0 0;font-size:12.5px;line-height:1.35;color:var(--ink-3);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.item .hv-wrap{order:2;width:clamp(100px,8.6vw,128px);height:calc(var(--ih) - 16px);margin:0;border:1px solid var(--rule);border-radius:6px;
+  background:var(--ground);overflow:hidden;flex:0 0 auto}
+.item .en{display:inline-block;vertical-align:1px;white-space:nowrap;font:600 8.5px/1 var(--mono);letter-spacing:.08em;color:var(--ink-3);border:1px solid var(--rule-2);
+  border-radius:3px;padding:2px 4px;margin-right:4px}
+html[lang="en"] .item .en{display:none}
+.main.hub{--ih:clamp(76px,10.4vh,98px)}
+.item{height:var(--ih)}
+
+.lbl{font-size:12px;line-height:14px;color:var(--ink-3);margin:0 0 6px;height:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* дерево підходів: ряд 1 — 13 і 15; ряд 2 під 13 — 14d, 16a, 16. Лінії помітні. */
+.htree{--G:clamp(22px,3.6vh,36px);--C:clamp(12px,1.4vw,20px);--lh:20px;
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:var(--C);row-gap:var(--G)}
+.htree .cell{position:relative;min-width:0}
+.htree .c13{grid-column:2}.htree .c15{grid-column:4}
+.htree .c14{grid-column:1}.htree .c16a{grid-column:2}.htree .c16{grid-column:3}
+.htree .c16 .lbl{visibility:hidden}
+.htree .c16a .lbl{overflow:visible;width:calc(200% + var(--C))}
+.htree .c15::before{content:"";position:absolute;left:calc(-100% - 2 * var(--C));width:calc(100% + 2 * var(--C));
+  top:calc(var(--lh) + var(--ih) / 2);height:1.5px;background:var(--rule-2)}
+.htree .c13::after{content:"";position:absolute;left:50%;top:100%;width:1.5px;height:calc(var(--G) / 2);background:var(--rule-2)}
+.htree .kid::before{content:"";position:absolute;top:calc(-1 * var(--G) / 2);height:1.5px;background:var(--rule-2)}
+.htree .c14::before{left:50%;right:calc(-1 * var(--C) / 2)}
+.htree .c16a::before{left:calc(-1 * var(--C) / 2);right:calc(-1 * var(--C) / 2)}
+.htree .c16::before{left:calc(-1 * var(--C) / 2);right:50%}
+.htree .kid::after{content:"";position:absolute;left:50%;top:calc(-1 * var(--G) / 2);width:1.5px;
+  height:calc(var(--G) / 2);background:var(--rule-2)}
+
+/* статті: без мініатюр, 4 колонки; чернетки другим рядом, приглушені */
+.arts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.4vh,14px) clamp(12px,1.4vw,20px)}
+.arts .item{height:calc(var(--ih) - 6px)}
+.arts .item .hv-wrap{height:calc(var(--ih) - 22px)}
+.item.is-draft .hv-wrap{opacity:.75}
+.arts .draft-first{grid-column:1}
+.item.is-draft{background:var(--paper-2);border-style:dashed}
+.item.is-draft .tt{color:var(--ink-2)}
+.arts .row-lbl{grid-column:1/-1;font-size:12px;color:var(--ink-3);margin:2px 0 -2px}
+
+/* до 1366 px: мініатюра вужча, опис — один рядок, щоб текст не вилазив за плитку */
+@media (max-width:1366px){ .item .hv-wrap{width:clamp(84px,7vw,96px)} .item p{-webkit-line-clamp:1} .item .tt{font-size:13.5px} }
+@media (max-width:1100px){ .main.hub{height:auto;overflow:visible} .arts{grid-template-columns:repeat(2,minmax(0,1fr))} .item .hv-wrap{display:none} }
+@media (max-width:760px){ .hello,.arts,.htree{grid-template-columns:1fr} .me{white-space:normal} .htree .cell{grid-column:1!important} .htree .cell::before,.htree .cell::after{display:none} .htree .c16 .lbl{display:none} }
+/* Мініатюри (shared/hub-visuals.js) */
+.hv{display:block;width:100%;height:100%}
+.hv .k,.hv .k-ink,.hv .k-teal,.hv .k-clay,.hv .acc-s,.hv .acc-l{fill:none;stroke-width:1.5;stroke-linecap:round}
+.hv .k{stroke:var(--rule-2)} .hv .k-ink{stroke:var(--ink-3)}
+.hv .k-teal{stroke:var(--c-teal)} .hv .k-clay{stroke:var(--c-clay)}
+.hv .acc-s,.hv .acc-l{stroke:var(--act)}
+.hv .o{fill:var(--ground);stroke:var(--rule-2);stroke-width:1}
+.hv .f-s{fill:var(--paper-2)} .hv .f-rule{fill:var(--rule)}
+.hv .f-blue{fill:var(--c-blue)} .hv .f-blue-s{fill:var(--c-blue-s)} .hv .f-teal{fill:var(--c-teal)}
+.hv .f-teal-s{fill:var(--c-teal-s)} .hv .f-purple{fill:var(--c-purple)} .hv .f-clay{fill:var(--c-clay)}
+.hv .f-green{fill:var(--c-green)}
+.hv .c-blue{fill:var(--c-blue-s);stroke:var(--c-blue);stroke-width:1.5}
+.hv .c-purple{fill:var(--c-purple-s);stroke:var(--c-purple);stroke-width:1.5}
+.hv .hatch{fill:var(--paper-2);stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.hv .acc{fill:var(--act)} .hv .acc-box{fill:var(--act-soft);stroke:var(--act);stroke-width:1.5}
+.hv .t{font:500 9px var(--mono);fill:var(--ink-3)} .hv .acc-t{fill:var(--act)}
+.hv .d-gov{fill:var(--d-gov)} .hv .d-scope{fill:var(--d-scope)} .hv .d-sched{fill:var(--d-sched)}
+.hv .d-fin{fill:var(--d-fin)} .hv .d-stake{fill:var(--d-stake)} .hv .d-res{fill:var(--d-res)} .hv .d-risk{fill:var(--d-risk)}
+.hv [class^="dd-"]{fill:var(--paper-2);stroke:var(--rule-2);stroke-width:.75}
+.hv .acc,.hv .acc-s,.hv .acc-l,.hv .acc-box,.hv .acc-t{opacity:.7;transition:opacity .2s}
+.item:hover .hv .acc,.item:hover .hv .acc-s,.item:hover .hv .acc-l,.item:hover .hv .acc-box,.item:hover .hv .acc-t{opacity:1}
+.item:hover .hv-wrap{border-color:var(--act)}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top" data-en="Artem Zhavrotskyi">Артем Жавроцький</a>
+</header>
+
+<main class="main hub" id="top">
+
+  <section class="hello" id="s-hello">
+    <div>
+      <div class="kicker" data-en="Delivery / Project Manager · blog">Delivery / Project Manager · блог</div>
+      <p class="hi" data-en="Hi, my name is Artem.">Вітаю, мене звати Артем.</p>
+      <h1 data-en="How I actually run projects">Як я насправді веду проєкти</h1>
+      <p data-en="7+ years as a Delivery / Project Manager: the whole life cycle from pre-sale to closure, several projects at once on Fixed Price, Dedicated Team and T&amp;amp;M, PMI standards and Agile in daily practice. Here are the working things themselves — diagrams, dashboards, breakdowns — and how to use them.">7+ років Delivery / Project Manager: увесь життєвий цикл від пресейлу до закриття, кілька проєктів одночасно на Fixed Price, Dedicated Team і T&amp;M, стандарти PMI та Agile у щоденній практиці. Тут — самі робочі речі: схеми, дашборди, розбори — і те, як ними користуватись.</p>
+    </div>
+    <a class="me" href="18-cv.html">
+      <img src="assets/cv-photo.jpg" alt="">
+      <span><b data-en="More about me">Детальніше про мене</b><small data-en="Experience, projects, contacts">Досвід, проєкти, контакти</small></span>
+      <span class="go">→</span>
+    </a>
+  </section>
+
+  <section class="band" id="s-approach">
+    <h2 data-en="How I run projects">Мої підходи до ведення проєктів</h2>
+    <div class="htree">
+      <div class="cell c13"><p class="lbl" data-en="For outsourcing">Для аутсорсу</p>
+        <a class="item" href="13-delivery-framework.html" data-hv="13-delivery-framework.html"><span><span class="tt"><span class="n">13</span><span data-en="Delivery Framework">Delivery Framework</span></span><p data-en="PM and PC duties by grade"><span class="en">EN</span> Обовʼязки PM і PC за грейдами</p></span></a></div>
+      <div class="cell c15"><p class="lbl" data-en="At the same level">На тому ж рівні</p>
+        <a class="item" href="15-outsourcing-product.html" data-hv="15-outsourcing-product.html"><span><span class="tt"><span class="n">15</span><span data-en="Outsourcing vs product">Аутсорс і продукт</span></span><p data-en="Service vs product work">Сервісна й продуктова робота</p></span></a></div>
+      <div class="cell kid c14"><p class="lbl" data-en="What it stands on">На чому це стоїть</p>
+        <a class="item" href="14d-pmbok8-focus.html" data-hv="14d-pmbok8-focus.html"><span><span class="tt"><span class="n">14d</span><span data-en="PMBOK 8 Focus View">PMBOK 8 Focus View</span></span><p data-en="Phases × domains, inputs and outputs"><span class="en">EN</span> Фази × домени, входи й виходи</p></span></a></div>
+      <div class="cell kid c16a"><p class="lbl" data-en="How to visualize portfolio management">Як візуалізувати керування портфелем</p>
+        <a class="item" href="16a-portfolio-accounts.html" data-hv="16a-portfolio-accounts.html"><span><span class="tt"><span class="n">16a</span><span data-en="Portfolio &amp; accounts">Портфель і акаунти</span></span><p data-en="Accounts, margin, plans">Акаунти, маржа, плани</p></span></a></div>
+      <div class="cell kid c16"><p class="lbl">&nbsp;</p>
+        <a class="item" href="16-jira-dashboard.html" data-hv="16-jira-dashboard.html"><span><span class="tt"><span class="n">16</span><span data-en="Jira dashboard">Jira-дашборд</span></span><p data-en="Burn, velocity, workload">Burn, velocity, навантаження</p></span></a></div>
+    </div>
+  </section>
+
+  <section class="band grow" id="s-articles">
+    <h2 data-en="Articles">Статті</h2>
+    <div class="arts">
+      <a class="item" href="24-dwh.html" data-hv="24-dwh.html"><span><span class="tt"><span class="n">24</span><span data-en="Data and its governance">Дані та керування ними</span></span><p data-en="Sources, DWH, data governance">Джерела, DWH, data governance</p></span></a>
+      <a class="item" href="23-release.html" data-hv="23-release.html"><span><span class="tt"><span class="n">23</span><span data-en="Release management">Реліз-менеджмент</span></span><p data-en="Windows, strategies, Go/No-Go, DORA">Вікна, стратегії, Go/No-Go, DORA</p></span></a>
+      <a class="item" href="17-ai.html" data-hv="17-ai.html"><span><span class="tt"><span class="n">17</span><span data-en="AI slop helper">AI slop helper</span></span><p data-en="Provenance marks inside the document">Помітки походження в документі</p></span></a>
+      <a class="item" href="https://artemzh.github.io/Be_like_Sheldon/" data-hv="https://artemzh.github.io/Be_like_Sheldon/" target="_blank" rel="noopener"><span><span class="tt"><span class="n">25</span><span data-en="Be like Sheldon ↗">Be like Sheldon ↗</span></span><p data-en="Open data: OSM, Wikipedia">Відкриті дані: OSM, Вікіпедія</p></span></a>
+      <p class="row-lbl" data-en="Drafts">Чернетки</p>
+      <a class="item is-draft draft-first" href="19-oss-bss.html" data-hv="19-oss-bss.html"><span><span class="tt"><span class="n">19</span><span data-en="OSS and BSS">OSS і BSS</span></span><p data-en="A telecom operator’s systems">Системи телеком-оператора</p></span></a>
+      <a class="item is-draft" href="20-agentic-ai.html" data-hv="20-agentic-ai.html"><span><span class="tt"><span class="n">20</span><span data-en="Agentic AI">Агентний AI</span></span><p data-en="Autonomy, agent stack, MCP">Автономія, стек агента, MCP</p></span></a>
+      <a class="item is-draft" href="21-support-chat.html" data-hv="21-support-chat.html"><span><span class="tt"><span class="n">21</span><span data-en="Support chatbot">Чат-бот підтримки</span></span><p data-en="Architecture, scenarios, metrics">Архітектура, сценарії, метрики</p></span></a>
+      <a class="item is-draft" href="22-support-voice.html" data-hv="22-support-voice.html"><span><span class="tt"><span class="n">22</span><span data-en="Voice bot">Голосовий бот</span></span><p data-en="A call step by step">Дзвінок крок за кроком</p></span></a>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<script src="shared/lang.js?v=20260919091816"></script>
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/hub-visuals.js?v=20260919091816"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PMBOK 8 Domains across Phases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<link rel="stylesheet" href="shared/map.css?v=20260919091816">
+<link rel="stylesheet" href="shared/overview.css?v=20260919091816">
+<style>.back14{display:inline-block;margin-bottom:10px;font:600 12px/1 var(--mono);text-decoration:none;color:var(--act)}.back14:hover{text-decoration:underline}</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top">Domains across Phases</a>
+  <div class="readbar"><div class="trk" role="progressbar" aria-label="Read"
+       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  <p class="note">Level 1 of 2 — processes by domain inside each phase; level 2 adds inputs and outputs.</p>
+</header>
+
+<main class="main" id="top">
+  <header class="mast wrap">
+    <a class="back14" href="14-pmbok8-map.html">← Process Map</a>
+    <div class="kicker">PMBOK 8 · level 1</div>
+    <h1>Domains across Phases</h1>
+    <p class="lede">Phases are regions; inside each, the domains that have processes there, with the processes
+      listed. The shape of each domain in time is read off the picture. Executing and Monitoring &amp;
+      Controlling share one column because they run in parallel.</p>
+  </header>
+
+  <section id="s-map">
+    <h2>The map</h2>
+    <p>Click a domain group to follow that domain through the phases. Level 2 — inputs, tools and
+      outputs of each process — opens from a card.</p>
+    <div class="controls">
+      <div class="ctl"><span class="ctl-label">Inputs &amp; outputs</span>
+        <div class="seg" role="group" aria-label="Detail">
+          <button type="button" id="btn-expand">Expand all</button>
+          <button type="button" id="btn-collapse">Collapse all</button>
+        </div></div>
+    </div>
+    <p class="note">Click a process to open its inputs, tools and outputs and highlight what it connects to.
+      Click a domain group to follow the domain through the phases. ⌘/Ctrl + wheel to zoom, drag to pan.</p>
+    <div class="stage-fit" id="fit"><div class="ov" id="ov"><svg class="ovwires" id="ovwires" aria-hidden="true"></svg></div></div>
+  </section>
+
+  <section id="s-reading">
+    <h2>What the shape says</h2>
+    <p><b>Governance</b> is the only domain present in all five phases — it opens the project and closes
+      it. <b>Stakeholders</b> is the only other domain that starts in Initiating. <b>Scope, Schedule and
+      Finance</b> go from Planning straight into Monitoring &amp; Controlling: the eighth edition gives them
+      no Executing processes — they are planned and controlled, the doing belongs to the delivery team.
+      <b>Resources</b> and <b>Risk</b> are the domains where the project manager both plans and executes.</p>
+  </section>
+</main>
+</div>
+
+<script src="shared/zoom.js?v=20260919091816"></script>
+<script src="shared/pmbok-io.js?v=20260919091816"></script>
+<script src="shared/pmbok-data.js?v=20260919091816"></script>
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/topbar.js?v=20260919091816"></script>
+<script src="shared/overview.js?v=20260919091816"></script>
+</body>
+</html>

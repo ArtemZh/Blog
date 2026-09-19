@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Portfolio and accounts">Портфель і акаунти</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<style>
+.blocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--sp-md);
+  margin-top:var(--sp-md)}
+.block{border:1px solid var(--rule);border-left:4px solid var(--act);border-radius:var(--r-md);
+  padding:var(--sp-sm) var(--sp-md);background:var(--paper)}
+.block h4{margin:0 0 4px;font-size:13px}
+.block p{margin:0;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top" data-en="Portfolio and accounts">Портфель і акаунти</a>
+  <div class="readbar"><div class="trk" role="progressbar" aria-label="Прочитано / Read"
+       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  <p class="note" data-en="Outstaff model: an account lives on people, margin and trust — not on sprints.">Аутстаф-модель: акаунт живе не спринтами, а людьми, маржею й довірою.</p>
+</header>
+
+<main class="main" id="top">
+  <header class="mast wrap">
+    <div class="kicker" data-en="Delivery management">Delivery-менеджмент</div>
+    <h1 data-en="Portfolio and accounts">Портфель і акаунти</h1>
+    <p class="lede" data-en="Project metrics show how the work is going. But in outstaff the client buys a team, not a sprint, and the questions to the manager are different: how many people are billable, what the margin is, where the account is heading and whether the client is satisfied. This dashboard answers those.">Проєктні метрики показують, як іде робота. Але в аутстафі замовник купує
+      не спринт, а команду — і питання до менеджера інші: скільки людей білиться, яка маржа,
+      куди рухається акаунт і чи задоволений клієнт. Цей дашборд відповідає саме на них.</p>
+  </header>
+
+  <section id="s-board">
+    <h2 data-en="The panel">Панель</h2>
+    <p data-en="Seventeen accounts, demonstrative data. The &lt;b&gt;Clients&lt;/b&gt; tab is the account card: team, billable months, open positions, events and the development plan.">Сімнадцять акаунтів, дані демонстраційні. Вкладка <b>Клієнти</b> — картка акаунта:
+      команда, білабельні місяці, відкриті позиції, події та план розвитку.</p>
+    <div class="embed-full">
+      <div class="embed-bar">
+        <span data-en="Portfolio KPI Dashboard · 17 accounts, 6 projects, 4 tabs">Portfolio KPI Dashboard · 17 акаунтів, 6 проєктів, 4 вкладки</span>
+        <a href="assets/demo_dashboard3.html?v=20260919091816" target="_blank" rel="noopener" data-en="Open in a separate tab ↗">Відкрити в окремій вкладці ↗</a>
+      </div>
+      <iframe src="assets/demo_dashboard3.html?v=20260919091816" title="Portfolio KPI Dashboard" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <section id="s-why">
+    <h2 data-en="What the manager does with it">Що з цим робить менеджер</h2>
+    <p data-en="Margin below target — a conversation about the rate card and team mix before renewal. NPS below 50 — an interview with the sponsor and two complaints closed before the next quarter. Open positions are lost billable months, so they carry a closing date, not a &quot;searching&quot; status. Every line of the plan leads to an action, otherwise it does not belong on the panel.">Маржа нижче цільової — розмова про рейт-кард і склад команди до продовження контракту.
+      NPS нижче 50 — інтервʼю зі спонсором і дві закриті претензії до наступного кварталу.
+      Відкриті позиції — це втрачені білабельні місяці, і вони мають дату закриття, а не статус
+      «шукаємо». Кожен рядок плану веде до дії, інакше він не потрібен у панелі.</p>
+  </section>
+
+  <section id="s-link">
+    <h2 data-en="How it connects to the other sections">Звʼязок з іншими розділами</h2>
+    <p data-en="This panel looks at the portfolio from above: clients, money, people. The &lt;a href=&quot;16-jira-dashboard.html&quot;&gt;Jira dashboard&lt;/a&gt; looks inside a single project: flow, cycle, ageing tasks. The first answers to the delivery director, the second to the team. Both grow out of the same artefact layer in the &lt;a href=&quot;13-delivery-framework.html&quot;&gt;delivery framework&lt;/a&gt;.">Ця панель дивиться на портфель зверху: клієнти, гроші, люди. <a href="16-jira-dashboard.html">Jira-дашборд</a>
+      дивиться всередину одного проєкту: потік, цикл, задавнені задачі. Перша відповідає
+      делівері-директору, друга — команді. Обидві виростають із того самого шару артефактів
+      у <a href="13-delivery-framework.html">схемі доставки</a>.</p>
+  </section>
+</main>
+</div>
+
+<script src="shared/lang.js?v=20260919091816"></script>
+<script src="shared/embed.js?v=20260919091816"></script>
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/topbar.js?v=20260919091816"></script>
+</body>
+</html>

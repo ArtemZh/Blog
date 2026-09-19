@@ -1,0 +1,178 @@
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.55 var(--sans)}
+h1,h2,h3{line-height:1.2;margin:0 0 var(--sp-sm)}
+h1{font-size:31px;letter-spacing:-.02em}
+h2{font-size:21px;letter-spacing:-.01em}
+h3{font-size:16px}
+p{margin:0 0 var(--sp-sm);max-width:66ch;color:var(--ink-2)}
+a{color:var(--act)}
+code{font-family:var(--mono);font-size:.92em}
+
+/* ── рейка модулей ───────────────────────────────────────────── */
+.railnav{position:fixed;left:0;top:16.667vh;height:66.667vh;width:var(--rail);background:var(--paper);
+  border:1px solid var(--rule);border-left:0;border-radius:0 var(--r-lg) var(--r-lg) 0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;
+  gap:var(--sp-2xs);padding:var(--sp-sm) 0;z-index:40}
+.railnav a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;
+  border-radius:var(--r-sm);color:var(--ink-3);text-decoration:none;position:relative;
+  font:600 12px/1 var(--mono)}
+.railnav a:hover{background:var(--act-soft);color:var(--act)}
+.railnav a.on{background:var(--act);color:#fff}
+.railnav a svg{width:19px;height:19px}
+.railnav .sep{width:22px;height:1px;background:var(--rule-2);margin:var(--sp-2xs) 0}
+.railnav .tip{position:absolute;left:calc(100% + 9px);white-space:nowrap;background:var(--ink);
+  color:#fff;padding:5px 9px;border-radius:var(--r-sm);font:500 12px/1 var(--sans);
+  opacity:0;pointer-events:none;transition:opacity .12s}
+.railnav .tip{display:none}
+.railpop{position:fixed;z-index:60;white-space:nowrap;background:var(--ink);color:#fff;padding:6px 10px;
+  border-radius:var(--r-sm);font:500 12.5px/1 var(--sans);opacity:0;pointer-events:none;transition:opacity .12s;left:-999px;top:-999px}
+.railpop.on{opacity:1}
+
+/* ── шапка с полосой прочитанного ────────────────────────────
+   Слева одна панель — рейка модулей. Оглавление раздела не занимает
+   вторую колонку, а живёт полосой в шапке: засечки на ней и есть разделы. */
+.page{margin-left:var(--rail);min-height:100vh}
+
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:16px;
+  padding:13px 30px;min-height:56px;background:rgba(255,255,255,.86);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule)}
+.topbar .brand{font:600 14px/1 var(--sans);color:var(--ink);text-decoration:none;
+  white-space:nowrap;flex:0 0 auto;letter-spacing:-.011em}
+@media (max-width:760px){.topbar{padding:11px 16px}}
+/* Повернення на головну: сірим, як сусідні посилання в шапці статей. */
+.topbar .back{font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  text-decoration:none;padding:6px 8px;border:1px solid transparent;border-radius:var(--r-md);white-space:nowrap}
+.topbar .back:hover{color:var(--ink);border-color:var(--rule)}
+/* Пояснение в шапке — одной строкой: перенос ломает высоту полосы. */
+.topbar .note{margin:0 0 0 auto;font-size:11.5px;color:var(--ink-3);
+  max-width:38ch;flex:0 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.readbar{flex:1 1 auto;min-width:0;max-width:640px;height:26px;
+  display:flex;align-items:center}
+.readbar .trk{position:relative;width:100%;height:3px;border-radius:2px;background:var(--rule)}
+.readbar .fil{position:absolute;left:0;top:0;height:100%;width:0;border-radius:2px;
+  background:var(--act);transition:width .12s linear}
+/* Точка раздела: у всех один цвет, пройденность и текущий различаются размером. */
+.readbar .tk{position:absolute;top:50%;width:28px;height:28px;margin:-14px 0 0 -14px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center}
+.readbar .tk::before{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;
+  margin:-2.5px 0 0 -2.5px;border-radius:50%;background:var(--rule-2);
+  transition:width .16s,height .16s,margin .16s,background .16s}
+.readbar .tk[data-passed="1"]::before{background:var(--act)}
+.readbar .tk:hover::before,.readbar .tk:focus-visible::before,
+.readbar .tk[data-cur="1"]::before{width:9px;height:9px;margin:-4.5px 0 0 -4.5px}
+.readbar .tk .tt{position:absolute;top:24px;left:50%;transform:translateX(-50%) translateY(-4px);
+  white-space:nowrap;font-size:12px;line-height:1;color:var(--ink-2);background:var(--ground);
+  border:1px solid var(--rule);border-radius:var(--r-sm);padding:6px 9px;
+  box-shadow:0 4px 14px rgba(20,25,40,.10);opacity:0;pointer-events:none;
+  transition:opacity .18s,transform .18s}
+.readbar .tk:hover .tt,.readbar .tk:focus-visible .tt{opacity:1;transform:translateX(-50%) translateY(0)}
+.readbar .tk:last-child .tt{left:auto;right:0;transform:translateY(-4px)}
+.readbar .tk:last-child:hover .tt{transform:translateY(0)}
+@media (max-width:1180px){ .topbar .note{display:none} }
+@media (max-width:760px){ .readbar{display:none} }
+
+.main{min-width:0;padding:var(--sp-xl) var(--sp-lg) 88px}
+.wrap{max-width:1180px}
+.mast{margin-bottom:var(--sp-xl)}
+.kicker{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:var(--sp-sm)}
+.lede{font-size:17px;color:var(--ink-2);max-width:70ch}
+section{margin-bottom:var(--sp-xl);scroll-margin-top:76px}
+.note{font-size:13px;color:var(--ink-3);max-width:74ch}
+
+/* ── общий контейнер широкой схемы ───────────────────────────── */
+.board{overflow-x:auto;padding-bottom:var(--sp-sm);border:1px solid var(--rule);
+  border-radius:var(--r-lg);background:var(--paper)}
+.board-inner{padding:var(--sp-md)}
+
+/* ── панель управления схемой ────────────────────────────────── */
+.controls{display:flex;flex-wrap:wrap;gap:var(--sp-md);align-items:flex-end;margin-bottom:var(--sp-md)}
+.ctl{display:flex;flex-direction:column;gap:6px}
+.ctl-label{font:600 10px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+.seg{display:inline-flex;border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden;
+  background:var(--ground)}
+.seg button{appearance:none;border:0;background:transparent;padding:7px 13px;font:500 13px/1 var(--sans);
+  color:var(--ink-2);cursor:pointer;border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}
+.seg button:hover{background:var(--paper-2);color:var(--ink)}
+.seg button[aria-pressed="true"],.seg button.on{background:var(--act);color:#fff}
+
+/* ── печать ──────────────────────────────────────────────────── */
+@media print{
+  .railnav,.topbar,.controls,#zoom-seg{display:none!important}
+  .page{display:block;margin:0}
+  .board,.zoomwrap,.stage-fit{overflow:visible!important;max-height:none!important;
+    border:0;background:none}
+  /* Масштаб полотна задан инлайном для экрана; на печати он мешает — сбрасываем. */
+  .zoomstage,.stage{transform:none!important}
+  body{font-size:10px}
+}
+
+/* ── узкие экраны ────────────────────────────────────────────── */
+@media (max-width:1080px){
+  .page{margin-left:0}
+  .railnav{top:auto;bottom:0;right:0;width:auto;height:auto;flex-direction:row;
+    border:0;border-top:1px solid var(--rule);border-radius:0;justify-content:center;padding:6px}
+  .railnav .sep{width:1px;height:20px;margin:0 var(--sp-2xs)}
+  .railnav .tip{display:none}
+  .main{padding:var(--sp-md) var(--sp-md) 76px}
+}
+
+/* Перемикач мови в шапці. Дві кнопки, активна підсвічена — стан видно без підказки. */
+.langsw{display:inline-flex;border:1px solid var(--rule);border-radius:var(--r-md);overflow:hidden;
+  margin-left:auto;flex:0 0 auto}
+.langsw button{border:0;background:var(--paper);color:var(--ink-3);cursor:pointer;
+  font:600 11px/1 var(--mono);letter-spacing:.04em;padding:6px 9px}
+.langsw button + button{border-left:1px solid var(--rule)}
+.langsw button:hover{background:var(--act-soft);color:var(--act)}
+.langsw button.on{background:var(--act);color:#fff}
+.railnav .langsw{flex-direction:column;margin:0}
+.langsw.off{opacity:.45;filter:grayscale(1);cursor:not-allowed}
+.langsw.off button{pointer-events:none}
+.railnav .langsw button{width:34px;padding:7px 0}
+.railnav .langsw button + button{border-left:0;border-top:1px solid var(--rule)}
+@media (max-width:1080px){.railnav .langsw{flex-direction:row}.railnav .langsw button + button{border-top:0;border-left:1px solid var(--rule)}}
+
+/* Запуск звіту замість вбудованого фрейма. Дашборд усередині сторінки — це
+   скрол у скролі: миша не знає, кого крутити, а звіт лишається обрізаним
+   смужкою. Тому тут — картка запуску: що всередині, скільки там усього
+   і кнопка, яка відкриває повний екран у новій вкладці. */
+.launch{display:grid;grid-template-columns:1.5fr 1fr;gap:var(--sp-lg);align-items:start;
+  border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper);
+  padding:var(--sp-md) var(--sp-lg);box-shadow:var(--lift-sm)}
+.launch h3{margin:0 0 6px;font-size:16px}
+.launch p{margin:0 0 var(--sp-sm);font-size:13px;color:var(--ink-2)}
+.launch ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--ink-2);line-height:1.75}
+.launch-side{display:flex;flex-direction:column;gap:10px}
+.launch-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 18px;border-radius:var(--r-md);background:var(--act);color:#fff;
+  font-weight:600;font-size:13.5px;text-decoration:none;border:1px solid var(--act)}
+.launch-btn:hover{filter:brightness(1.06)}
+.launch-btn.ghost{background:transparent;color:var(--act)}
+.launch-facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.launch-fact{border:1px solid var(--rule);border-radius:var(--r-md);padding:8px 10px;background:var(--ground)}
+.launch-fact .v{font:700 17px/1.15 var(--sans)}
+.launch-fact .l{font-size:10.5px;color:var(--ink-3);margin-top:3px}
+.launch-note{font-size:11.5px;color:var(--ink-3);line-height:1.6}
+@media(max-width:760px){.launch{grid-template-columns:1fr}}
+
+/* Вбудований звіт: фрейм росте під свій вміст, тому внутрішнього скролу немає
+   і крутиться сама сторінка. Поки висота не виміряна — тримаємо скромний
+   плейсхолдер, щоб сторінка не стрибала. */
+.embed-full{border:1px solid var(--rule);border-radius:var(--r-lg);overflow:hidden;
+  background:var(--ground);box-shadow:var(--lift-sm);position:relative}
+.embed-full iframe{display:block;width:100%;border:0;height:520px;transition:height .15s linear}
+.embed-full.ready iframe{transition:none}
+.embed-bar{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-md);
+  padding:9px 14px;border-bottom:1px solid var(--rule);background:var(--paper);
+  font:500 12px/1.4 var(--sans);color:var(--ink-3)}
+.embed-bar a{font-weight:600}
+
+/* ── стаття на всю ширину (19–22) ────────────────────────────
+   Фрейм — це і є сторінка: висота екрана, скрол усередині, обгортка не крутиться. */
+.page.article{height:100vh;overflow:hidden}
+.article-frame{display:block;width:100%;height:100vh;border:0;background:var(--paper)}
+@media (max-width:1080px){.article-frame{height:calc(100vh - 49px)}}

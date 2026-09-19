@@ -1,0 +1,77 @@
+/* Токены портфолио. Светлая база: схемы читаются как печатные плакаты,
+   а не как интерфейс — у обеих есть режим печати на A0/A4. */
+:root {
+  --ground: #FFFFFF;
+  --paper: #FAFAFB;
+  --paper-2: #F2F3F5;
+  --rule: #E3E5EA;
+  --rule-2: #C6CAD3;
+
+  --ink: #15181D;
+  --ink-2: #4B515C;
+  --ink-3: #838A97;
+
+  /* Дія — тим самим сигнальним кольором, що й у статтях (Itspired).
+     Раніше тут був синій #1F6FEB, і сайт виглядав як два різні продукти. */
+  --act: #EA5212;
+  --act-soft: rgba(234, 82, 18, .10);
+
+  /* Мова схеми з Busy Bar: етап — світла плашка, гейт — бурштинова капсула,
+     повернення — червоне. Переносимо токени, щоб розділ 15 виглядав так само. */
+  --sunk: #F4F5F7;
+  --warm: #FFF4F0;
+  --amber: #EA5212;
+  --signal-ink: #D62839;
+  --lift-sm: 0 8px 24px -12px rgba(18, 27, 54, .18);
+
+  /* Категорійна палітра для дашбордів — знята піпеткою з робочої дошки
+     власника: сім кольорів, які він уже використовує для розрізнення
+     сутностей. Кожен має світлий варіант для заливок і фонів. */
+  --c-blue: #4678DC;      --c-blue-s: #E3EBFB;
+  --c-teal: #1E968C;      --c-teal-s: #DCF0EE;
+  --c-purple: #8C64F0;    --c-purple-s: #ECE4FE;
+  --c-clay: #D28264;      --c-clay-s: #FAEAE3;
+  --c-green: #6EAA1E;     --c-green-s: #EBF4DC;
+  --c-magenta: #DC3278;   --c-magenta-s: #FBE2EC;
+  --c-gold: #B4823C;      --c-gold-s: #F6EEDF;
+
+
+  /* Домены PMBOK 8 — семь различимых оттенков, книжный порядок */
+  --d-gov: #4B5563;
+  --d-scope: #6D4AC7;
+  --d-sched: #0E7C9E;
+  --d-fin: #1B7F4B;
+  --d-stake: #B03A86;
+  --d-res: #7A8A1E;
+  --d-risk: #B0700E;
+
+  /* Грейды из легенды исходного слайда */
+  --g-any: rgba(206, 231, 65, .28);
+  --g-senior: rgba(206, 231, 65, .62);
+  --g-po: #8FD14F;
+  --a-any: rgba(128, 128, 128, .18);
+  --a-senior: rgba(128, 128, 128, .42);
+  --plc: rgba(45, 155, 240, .22);
+  --plc-strong: rgba(45, 155, 240, .5);
+
+  --ok: #1E9159;
+  --warn: #B0700E;
+  --gone: #B4364A;
+
+  --r-sm: 5px;
+  --r-md: 12px;
+  --r-lg: 16px;
+
+  --sp-2xs: 4px;
+  --sp-xs: 8px;
+  --sp-sm: 12px;
+  --sp-md: 18px;
+  --sp-lg: 28px;
+  --sp-xl: 44px;
+
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --rail: 56px;
+  --toc: 268px;
+}

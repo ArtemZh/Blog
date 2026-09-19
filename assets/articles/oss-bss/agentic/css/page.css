@@ -1,0 +1,60 @@
+/* Компоненти, яких немає в статті 1. Токени й базові стилі — з shared/. */
+
+.back{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--g500);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--signal)}
+
+/* ── 01 рівняння агента ───────────────────────────────────── */
+.eq{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap}
+.eq__op{align-self:center;font-family:var(--mono);font-size:18px;color:var(--g300)}
+.eq__part{
+  flex:1 1 150px;text-align:left;border:1px solid var(--line-soft);border-radius:var(--r-md);
+  background:var(--paper);padding:13px 14px;cursor:pointer;box-shadow:var(--lift-sm);color:var(--ink);
+  transition:border-color .15s ease,opacity .2s ease;
+}
+.eq__part:hover{border-color:var(--signal)}
+.eq__part b{display:block;font-size:15px;font-weight:600}
+.eq__part span{display:block;margin-top:4px;font-size:12.5px;line-height:1.45;color:var(--g700)}
+/* Вимкнена складова — перекреслена, а не кольорова: сигнал лишається за дією. */
+.eq__part.is-off{opacity:.45;border-style:dashed}
+.eq__part.is-off b{text-decoration:line-through}
+.eq__res{flex:1 1 170px;align-self:stretch;display:flex;align-items:center;justify-content:center;text-align:center;
+  border-radius:var(--r-md);background:var(--ink);color:#fff;padding:13px 14px;font-size:15px;font-weight:600}
+.eq__res.is-broken{background:var(--surface);color:var(--g700);border:1px dashed var(--g300)}
+@media (max-width:900px){.eq__op{display:none}.eq__part,.eq__res{flex:1 1 45%}}
+
+.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:26px;counter-reset:s}
+.steps3 .card{position:relative}
+.steps3 .card::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);
+  font-family:var(--mono);color:var(--g300)}
+.steps3 .card:last-child::after{content:none}
+.steps3 .ex{margin-top:10px;font-family:var(--mono);font-size:10.5px;color:var(--g500);line-height:1.5}
+@media (max-width:760px){.steps3{grid-template-columns:1fr}.steps3 .card::after{content:none}}
+
+/* ── 02 шкала автономності ─────────────────────────────────
+   Висота стовпця росте з рівнем — одна змінна, «наскільки система сама». */
+.levels{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:end}
+.lv-scale{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;align-items:end}
+.lv{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;text-align:left;
+  background:none;border:0;padding:0;cursor:pointer;color:var(--ink)}
+.lv i{display:block;height:var(--h);border-radius:var(--r) var(--r) 3px 3px;background:var(--surface);
+  border:1px solid var(--line-soft);font-style:normal;font-family:var(--mono);font-size:10px;
+  letter-spacing:.1em;color:var(--g500);padding:6px 8px;transition:background .2s ease,border-color .2s ease}
+.lv.is-reached i{background:var(--g300);border-color:var(--g300);color:#fff}
+.lv.on i{background:var(--ink);border-color:var(--ink);color:#fff}
+.lv:hover i{border-color:var(--signal)}
+.lv b{font-size:12px;font-weight:600;line-height:1.25;min-height:2.5em} /* дві лінії для всіх — інакше стовпці стрибають */
+.lv span{display:none}
+.levels .card h3{margin:2px 0 6px;font-size:18px}
+.lv__lead{margin:0 0 6px !important}
+.levels dl,.proto dl,.vendor__card dl{margin:0}
+.levels dt,.proto dt{margin-top:10px;font-size:12.5px;font-weight:600}
+.levels dd,.proto dd{margin:2px 0 0;font-size:13px;line-height:1.5;color:var(--g700)}
+@media (max-width:980px){.levels{grid-template-columns:minmax(0,1fr)}}
+/* На телефоні назви рівнів не влазять у шість колонок — лишаємо номери, назва є в картці. */
+@media (max-width:560px){.lv b{display:none}.lv-scale{gap:5px}}
+
+/* ── 04 протоколи ─────────────────────────────────────────── */
+.proto h3{font-size:17px}
+.proto__what{margin-bottom:4px !important}
+

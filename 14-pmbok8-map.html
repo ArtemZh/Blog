@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PMBOK 8 Process Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<link rel="stylesheet" href="shared/map.css?v=20260919091816">
+<style>
+/* інші розрізи карти */
+.cut-lead{color:var(--ink-3)}
+.cuts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--sp-sm);margin-top:var(--sp-sm)}
+.cut{display:block;text-decoration:none;color:inherit;border:1px solid var(--rule);border-radius:var(--r-lg);
+  padding:var(--sp-sm) var(--sp-md);background:var(--paper)}
+.cut:hover{border-color:var(--act);background:var(--act-soft)}
+.cut b{display:block;font-size:15px;margin-bottom:4px}
+.cut span{font-size:12.5px;color:var(--ink-2)}
+.cut-main{border-color:var(--act)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="topbar">
+  <a class="brand" href="#top">PMBOK 8 Process Map</a>
+  <div class="readbar"><div class="trk" role="progressbar" aria-label="Read"
+       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  <p class="note">Structure and names are facts from the standard; layout and the transition view are original.</p>
+</header>
+
+<main class="main" id="top">
+
+  <header class="mast wrap">
+    <div class="kicker">Sixth edition → Eighth edition</div>
+    <h1>Process Map</h1>
+    <p class="lede">Forty-nine processes became forty, and the vertical grouping changed underneath them:
+      ten knowledge areas gave way to seven performance domains. The five containers survived — process
+      groups return in the eighth edition as Focus Areas.</p>
+  </header>
+
+  <section id="s-map">
+    <h2>The map</h2>
+    <p>PMBOK 8 is the standard the rest of this portfolio is checked against, so it gets its own map.
+      Phases run left to right and domains top to bottom; click any process to trace what feeds it and
+      what it feeds, by the artefacts the standard names. The edition switch shows the sixth edition on
+      the same grid — what was renamed, merged, moved, or stopped being a process.</p>
+
+    <div class="controls">
+      <div class="ctl"><span class="ctl-label">Edition</span>
+        <div class="seg" id="ed-seg" role="group" aria-label="Edition">
+          <button type="button" data-ed="6">PMBOK 6</button>
+          <button type="button" data-ed="8" class="on">PMBOK 8</button>
+          <button type="button" data-ed="delta">What changed</button>
+        </div></div>
+    </div>
+
+    <div class="counts" id="counts"></div>
+
+    <div class="dlegend" id="dlegend" hidden></div>
+
+    <p class="note">⌘/Ctrl + wheel to zoom, drag to pan.</p>
+
+    <div class="stage-fit" id="fit"><div class="stage" id="stage"></div></div>
+  </section>
+
+  <section id="s-reading">
+    <h2>How to read the transition</h2>
+    <p>The seventh edition is deliberately absent: it carried no processes at all, having replaced them
+      with principles and performance domains. The eighth brings processes back, so the meaningful
+      comparison runs from the sixth straight to the eighth — with the seventh sitting between them as the
+      edition where the process layer was gone.</p>
+    <p>Three structural moves account for most of the shrinkage. Integration dissolved into
+      <b>Governance</b>, which also took quality assurance and sourcing strategy, and which is the only
+      domain with processes in all five focus areas. Cost widened into <b>Finance</b> — no longer only
+      spend, but the financial viability of the deliverables. Communications stopped being an area of its
+      own and moved wholesale into <b>Stakeholders</b>.</p>
+    <p>The rest is consolidation: four scheduling processes into one Develop Schedule, two risk analyses
+      into one Perform Risk Analysis, two team processes into one Lead the Team. What looks like
+      simplification is mostly the standard admitting these were never separate activities in practice.</p>
+
+    <div class="dropped" id="dropped" hidden>
+      <h3>Processes that stopped being processes</h3>
+      <ul>
+        <li><b>8.1 Plan Quality Management</b> — quality is no longer planned as its own thread; it
+          carries as the principle <em>Embed Quality Into Processes and Deliverables</em>.</li>
+        <li><b>8.3 Control Quality</b> — absorbed into Manage Quality Assurance and Monitor and Control
+          Project Performance.</li>
+        <li><b>12.2 Conduct Procurements</b> — absorbed into Acquire Resources; sourcing is planned once,
+          in Governance.</li>
+        <li><b>12.3 Control Procurements</b> — absorbed into Monitor and Control Resourcing.</li>
+        <li><b>6.2–6.4 Define Activities, Sequence Activities, Estimate Activity Durations</b> — folded
+          into a single Develop Schedule.</li>
+        <li><b>11.3 / 11.4 Qualitative and Quantitative Risk Analysis</b> — one Perform Risk Analysis,
+          with both as techniques inside it.</li>
+        <li><b>9.4 / 9.5 Develop Team, Manage Team</b> — one Lead the Team.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="s-cuts">
+    <h2>Other cuts of the same map</h2>
+    <p class="cut-lead">The same forty processes and the same links, read another way.</p>
+    <a class="cut cut-main" href="14d-pmbok8-focus.html"><b>Focus View</b>
+      <span>Interactive view: click a process to keep only what feeds it and what it feeds; click a domain to line it up across the phases.</span></a>
+    <div class="cuts">
+      <a class="cut" href="14a-pmbok8-overview.html"><b>Domains across Phases</b>
+        <span>Phases as regions, domains as groups inside them, with inputs and outputs on every card.</span></a>
+      <a class="cut" href="14b-pmbok8-flow.html"><b>Processes Flow</b>
+        <span>The wall-chart flow of the practice guide, redrawn for the eighth edition.</span></a>
+      <a class="cut" href="14c-pmbok8-stack.html"><b>Phases Stacked</b>
+        <span>Phases top to bottom, so a domain can be followed straight down the sheet.</span></a>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<script src="shared/zoom.js?v=20260919091816"></script>
+<script src="shared/pmbok-data.js?v=20260919091816"></script>
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/topbar.js?v=20260919091816"></script>
+<script src="shared/map.js?v=20260919091816"></script>
+</body>
+</html>

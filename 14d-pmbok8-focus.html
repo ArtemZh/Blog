@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PMBOK 8 Focus View</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<link rel="stylesheet" href="shared/map.css?v=20260919091816">
+<link rel="stylesheet" href="shared/overview.css?v=20260919091816">
+<style>
+/* 14d — фази колонками зліва направо, домени в колонці одна під одною. */
+.ov{width:auto}
+.ov .region .cap{font-size:14px;letter-spacing:.02em}
+.ov .w{stroke-width:1.4}
+.ov .w.back{stroke-dasharray:5 5}
+/* Дроти над плашками груп: фон групи непрозорий і інакше ховав би лінії. */
+.ov svg.ovwires{z-index:6}
+.ov .grp .pnode{margin-bottom:10px}
+.ov .grp .pnode:last-child{margin-bottom:0}
+.lg-in,.lg-out{font-weight:600;padding:0 4px;border-radius:4px}
+.lg-in{color:var(--c-teal);box-shadow:inset 0 0 0 1.5px var(--c-teal)}
+.lg-out{color:var(--c-clay);box-shadow:inset 0 0 0 1.5px var(--c-clay)}
+
+/* Рядок назв фаз: живе окремо від плашок-областей і лишається видимим і в
+   фокусі, коли плашки гаснуть. Тому власний підпис області вимкнено. */
+.ov .region .cap{display:none}
+.ov .pcap{position:absolute;text-align:center;z-index:5;
+  font:600 13px/1.2 var(--sans);color:var(--ink-2);pointer-events:none}
+
+/* Колонка доменів — суцільні кольорові плашки заввишки з рядок; заголовок над
+   парою Executing · M&C і підписи-підколонки під ним. */
+.ov .dpanel{position:absolute;border-radius:var(--r-md);color:#fff;font:600 12px/1.2 var(--sans);
+  display:flex;align-items:center;padding:0 10px;cursor:pointer;z-index:3;
+  transition:opacity .35s cubic-bezier(.4,0,.2,1)}
+.ov .dpanel:hover{filter:brightness(1.08)}
+.ov.focus-mode .dpanel{opacity:.25}
+.ov.focus-mode .dpanel.on{opacity:1;box-shadow:0 0 0 2.5px var(--act)}
+.ov .pcap.pcap-em{background:#DCE9FA;border-radius:var(--r-md);padding:8px 0 6px;color:var(--ink)}
+.ov .pcap.pcap-em small{display:block;font:500 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:3px}
+.ov .pcap:not(.pcap-em):not(.sub){background:#DCE9FA;border-radius:var(--r-md);padding:12px 0;color:var(--ink)}
+.ov .pcap.sub{font:600 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.ov .pcap.pcap-pan{background:#DCE9FA;border-radius:var(--r-md);padding:12px 0;color:var(--ink);font-size:12px}
+.ov .region{background:#F8F9FB;border-color:transparent}
+/* Група домену обведена пунктиром у кольорі домену — як на 14a. */
+.ov .grp{background:#FCFCFD;border:1.5px dashed;border-color:inherit}
+.ov.focus-mode .pcap.pcap-em,.ov.focus-mode .pcap-pan{opacity:.55}
+
+/* ── фокус ─────────────────────────────────────────────────────────── */
+/* Дві фази анімації, кожна своїм класом: спершу .fading (350 мс), потім
+   .moving (700 мс). Одна крива на обидві. */
+.ov.fading .pnode{transition:opacity .35s cubic-bezier(.4,0,.2,1)}
+.ov.moving .pnode{transition:left .7s cubic-bezier(.4,0,.2,1),
+  top .7s cubic-bezier(.4,0,.2,1),width .7s cubic-bezier(.4,0,.2,1)}
+.ov.moving{transition:width .7s cubic-bezier(.4,0,.2,1),height .7s cubic-bezier(.4,0,.2,1)}
+/* Незв'язані картки гаснуть і виходять із розкладки (вони вже absolute). */
+.ov .pnode.gone{opacity:0;pointer-events:none}
+.ov.focus-mode:not(.moving):not(.fading) .pnode.gone{display:none}
+/* Плашки груп і областей у фокусі не потрібні — лишається кластер і фази. */
+.ov.focus-mode .grp,.ov.focus-mode .region{opacity:0;pointer-events:none;transition:opacity .35s cubic-bezier(.4,0,.2,1)}
+/* Підпис домену над зібраною карткою — у кольорі домену, не сірий. */
+.ov .pnode .fgl{display:none}
+.ov.focus-mode .pnode .fgl{display:block;position:absolute;top:-14px;left:2px;
+  font:600 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.ov.focus-mode .pnode{background:#fff;z-index:7}
+.ov.focus-mode .pnode.hot{z-index:9}
+/* Двосторонній зв'язок: контур teal (як у джерела) плюс clay-крапка справа. */
+/* Напрямок показують лише стрілки: teal входить, clay виходить. Рамки карток
+   лишаються в кольорі домену, інакше кольори з'їдають одне одного. */
+.ov.is-hot .pnode.in,.ov.is-hot .pnode.out,.ov.is-hot .pnode.both{border-color:var(--rule);box-shadow:none}
+.ov.is-hot .pnode.both::after{display:none}
+  width:6px;height:6px;border-radius:50%;background:var(--c-clay)}
+.ov.is-hot .pnode.hot{box-shadow:0 0 0 2.5px var(--act)}
+
+/* Кнопка входів/виходів: клік по картці — це фокус, тому I/O має свій «+». */
+.ov .pnode .iobtn{position:absolute;top:3px;right:3px;width:18px;height:18px;padding:0;
+  border:0;background:none;cursor:pointer;border-radius:4px;
+  font:600 13px/18px var(--mono);color:var(--ink-3);text-align:center}
+.ov .pnode .iobtn:hover{color:var(--ink);background:var(--paper-2,#EEF0F4)}
+.ov .pnode .iobtn:focus-visible{outline:2px solid var(--act);outline-offset:1px}
+
+/* ── панель доменів ────────────────────────────────────────────────── */
+.focus-wrap{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;border:1px solid var(--rule);border-radius:var(--r-lg);padding:12px;background:var(--ground)}
+/* Панель — «язичок» по центру верхньої межі рамки: третина ширини, нижні кути
+   заокруглені, верхні плавно розходяться до межі. Керування, легенда, підказка
+   й повний екран — окремими елементами. */
+.fv-top{flex:1 1 100%;display:flex;justify-content:center;margin:-13px 0 2px}
+.fv-bar{position:relative;display:flex;align-items:center;gap:12px;min-width:33%;justify-content:center;
+  padding:7px 14px 8px;background:var(--paper-2);border:1px solid var(--rule);border-top:0;border-radius:0 0 14px 14px}
+.fv-bar::before,.fv-bar::after{content:'';position:absolute;top:0;width:14px;height:14px}
+.fv-bar::before{left:-14px;background:radial-gradient(circle at 0 100%,transparent 13px,var(--rule) 13px,var(--rule) 14px,var(--paper-2) 14px)}
+.fv-bar::after{right:-14px;background:radial-gradient(circle at 100% 100%,transparent 13px,var(--rule) 13px,var(--rule) 14px,var(--paper-2) 14px)}
+.fv-seg button{font-size:12px;padding:5px 10px}
+.fv-legend{display:flex;gap:6px;padding:0 12px;border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
+.fv-hint{padding-right:12px;border-right:1px solid var(--rule)}
+.fv-legend span{font-size:11.5px;padding:2px 7px}
+.fv-hint{font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.fv-fs{width:28px;height:28px;border:1px solid var(--rule);border-radius:8px;background:var(--ground);color:var(--ink-2);
+  cursor:pointer;font-size:14px;line-height:1}
+.fv-fs:hover{border-color:var(--act);color:var(--act)}
+.fs-btn{font:600 12.5px/1 var(--sans);padding:9px 14px;border:1px solid var(--rule);border-radius:var(--r-md);
+  background:var(--paper);color:var(--act);cursor:pointer}
+.fs-btn:hover{border-color:var(--act);background:var(--act-soft)}
+.fs-x{display:none}
+.focus-wrap:fullscreen{border:0;border-radius:0;padding:12px 18px 18px;overflow:auto;align-content:flex-start}
+.focus-wrap:fullscreen .fv-top{margin-top:-12px}
+.focus-wrap:fullscreen .fs-x{display:inline-block}
+.focus-wrap:fullscreen #btn-fs-in{display:none}
+.focus-wrap .stage-fit{flex:1;min-width:0}
+.dompanel{position:sticky;top:76px;display:flex;flex-direction:column;gap:4px;
+  flex:0 0 172px;padding:6px;border:1px solid var(--rule);border-radius:var(--r-md);background:#FCFCFD}
+.dombtn{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px 0 0;
+  border:0;background:none;border-radius:6px;cursor:pointer;text-align:left;
+  font:500 12px/1.2 var(--sans);color:var(--ink-2)}
+.dombtn .bar{flex:0 0 4px;align-self:stretch;margin:5px 0;border-radius:2px;background:var(--dc)}
+.dombtn:hover{background:var(--paper-2,#EEF0F4)}
+.dombtn:focus-visible{outline:2px solid var(--act);outline-offset:1px}
+.dombtn[aria-pressed="true"]{color:var(--ink);font-weight:600;
+  background:color-mix(in srgb, var(--dc) 15%, transparent)}
+.fstatus{min-height:18px;margin:6px 0 4px;font:500 12px/1.4 var(--mono);color:var(--ink-2)}
+.lg-act{font-weight:600;padding:0 4px;border-radius:4px;color:var(--act);
+  box-shadow:inset 0 0 0 2px var(--act)}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top">Focus View</a>
+  <div class="readbar"><div class="trk" role="progressbar" aria-label="Read"
+       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  <p class="note">The same forty processes, read left to right — and one process at a time.</p>
+</header>
+
+<main class="main" id="top">
+  <header class="mast wrap">
+    <div class="kicker">PMBOK 8 · one process at a time</div>
+    <h1>Focus View</h1>
+    <p class="lede">Five phases as five columns, in the order a project meets them, with the performance
+      domains stacked inside each column. Click a process to see only what feeds it and what it feeds:
+      everything unconnected fades away, the sources gather on its left and the targets on its right.
+      Click it again, or press Esc, to get the whole sheet back.</p>
+  </header>
+
+  <section id="s-map">
+    <h2>The sheet</h2>
+    <p>Click a process to focus on it — it stays exactly where it is and the rest gathers around it.
+      Click a domain's colour panel to line that domain up as one band across the phases. The <b>+</b> in a
+      card's corner opens its inputs and outputs. Click again, click empty canvas, or press Esc to return.</p>
+    <div class="controls">
+      <button type="button" class="fs-btn" id="btn-fs">⤢ Open full screen</button>
+    </div>
+    <p class="fstatus" id="fstatus" role="status" aria-live="polite"></p>
+    <div class="focus-wrap" id="fvFrame">
+      <div class="fv-top"><div class="fv-bar">
+        <div class="seg fv-seg" role="group" aria-label="Inputs and outputs">
+          <button type="button" id="btn-expand">Expand all</button>
+          <button type="button" id="btn-collapse">Collapse all</button>
+        </div>
+        <div class="fv-legend" aria-label="Legend">
+          <span class="lg-act">selected</span><span class="lg-in">feeds in</span><span class="lg-out">feeds out</span>
+        </div>
+        <span class="fv-hint">pinch — zoom · two fingers or drag — pan</span>
+        <button type="button" class="fv-fs" id="btn-fs-in" title="Open full screen" aria-label="Open full screen">⤢</button>
+        <button type="button" class="fv-fs fs-x" id="btn-fs-x" title="Exit full screen" aria-label="Exit full screen">✕</button>
+      </div></div>
+      <div class="stage-fit" id="fit"><div class="ov" id="ov"><svg class="ovwires" id="ovwires" aria-hidden="true"></svg></div></div>
+    </div>
+  </section>
+
+  <section id="s-reading">
+    <h2>What the focus says</h2>
+    <p>The full sheet is the map; the focused state is the answer to a single question — what does this
+      process need, and who is waiting for it. Once the other thirty-odd cards are gone, the shape of a
+      process is easy to read: some have a wide teal fan and a single clay arrow, some are the opposite,
+      and the planning processes in the middle of the sheet tend to have both.</p>
+    <p>Sources keep their phase order left to right, so a card that pulls from Initiating sits further out
+      than one that pulls from its own phase — the distance is roughly how far back in the project the
+      input comes from.</p>
+  </section>
+</main>
+</div>
+
+<script src="shared/zoom.js?v=20260919091816"></script>
+<script src="shared/pmbok-io.js?v=20260919091816"></script>
+<script src="shared/pmbok-data.js?v=20260919091816"></script>
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/topbar.js?v=20260919091816"></script>
+<script>
+/* На весь екран — рамка схеми разом із панеллю; схема переміряється на resize сама */
+(function(){
+  var fr=document.getElementById('fvFrame');
+  ['btn-fs','btn-fs-in'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click',function(){ if(fr.requestFullscreen) fr.requestFullscreen(); }); });
+  document.getElementById('btn-fs-x').addEventListener('click',function(){ if(document.fullscreenElement) document.exitFullscreen(); });
+})();
+</script>
+<script src="shared/focus.js?v=20260919091816"></script>
+</body>
+</html>

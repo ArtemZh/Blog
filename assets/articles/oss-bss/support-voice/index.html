@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Голосовий бот першої лінії на OpenAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/css/tokens.css">
+<link rel="stylesheet" href="../shared/css/base.css">
+<link rel="stylesheet" href="../shared/css/diagram.css">
+<link rel="stylesheet" href="../shared/css/components.css">
+<link rel="stylesheet" href="css/page.css">
+</head>
+<body>
+
+<header class="top">
+  <span class="top__title" data-i18n="ui.brand"></span>
+  <a class="back" href="../support-chat/index.html" data-i18n="ui.back1"></a>
+  <nav class="top__nav">
+    <a href="#compare-sec" data-i18n="nav.1"></a>
+    <a href="#arch" data-i18n="nav.2"></a>
+    <a href="#flows-sec" data-i18n="nav.3"></a>
+    <a href="#safety-sec" data-i18n="nav.4"></a>
+    <a href="#quality-sec" data-i18n="nav.5"></a>
+    <a href="#rollout-sec" data-i18n="nav.6"></a>
+    <a href="#refs" data-i18n="nav.7"></a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="hero__kicker" data-i18n="hero.kicker"></div>
+    <h1 data-i18n="hero.title"></h1>
+    <p data-i18n-html="hero.lead"></p>
+    <div class="specs">
+      <div><b data-i18n="hero.s1.b"></b><span data-i18n="hero.s1.s"></span></div>
+      <div><b data-i18n="hero.s2.b"></b><span data-i18n="hero.s2.s"></span></div>
+      <div><b data-i18n="hero.s3.b"></b><span data-i18n="hero.s3.s"></span></div>
+      <div><b data-i18n="hero.s4.b"></b><span data-i18n="hero.s4.s"></span></div>
+    </div>
+  </div>
+
+  <!-- 01 ─────────────────────────────────────────────── -->
+  <section id="compare-sec">
+    <div class="sec__head">
+      <span class="sec__num">01</span>
+      <h2 data-i18n="s1.h"></h2>
+      <p data-i18n="s1.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s1.lead"></p>
+    <div class="compare">
+      <div class="cmp" id="compare"></div>
+      <div class="card" id="compareCard"></div>
+    </div>
+  </section>
+
+  <!-- 02 ─────────────────────────────────────────────── -->
+  <section id="arch">
+    <div class="sec__head">
+      <span class="sec__num">02</span>
+      <h2 data-i18n="s2.h"></h2>
+      <p data-i18n="s2.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s2.lead"></p>
+    <div class="cols cols--2" id="archs"></div>
+    <div class="note" data-i18n-html="s2.lang"></div>
+    <div class="note" data-i18n-html="s2.model"></div>
+  </section>
+
+  <!-- 03 ─────────────────────────────────────────────── -->
+  <section id="flows-sec">
+    <div class="sec__head">
+      <span class="sec__num">03</span>
+      <h2 data-i18n="s3.h"></h2>
+      <p data-i18n="s3.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s3.lead"></p>
+    <div id="flowBox" class="wide">
+      <div class="pathbar" id="pathBar"></div>
+      <div class="flows toggles"></div>
+      <div id="stack"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 ─────────────────────────────────────────────── -->
+  <section id="safety-sec">
+    <div class="sec__head">
+      <span class="sec__num">04</span>
+      <h2 data-i18n="s4.h"></h2>
+      <p data-i18n="s4.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s4.lead"></p>
+    <div class="auth">
+      <div class="au" id="authority"></div>
+      <div class="card" id="authCard"></div>
+    </div>
+    <h3 class="sub" data-i18n="s4.safe.h"></h3>
+    <div class="cols cols--3" id="safety"></div>
+  </section>
+
+  <!-- 05 ─────────────────────────────────────────────── -->
+  <section id="quality-sec">
+    <div class="sec__head">
+      <span class="sec__num">05</span>
+      <h2 data-i18n="s5.h"></h2>
+      <p data-i18n="s5.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s5.lead"></p>
+    <div class="cols cols--3" id="quality"></div>
+  </section>
+
+  <!-- 06 ─────────────────────────────────────────────── -->
+  <section id="rollout-sec">
+    <div class="sec__head">
+      <span class="sec__num">06</span>
+      <h2 data-i18n="s6.h"></h2>
+      <p data-i18n="s6.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s6.lead"></p>
+    <div class="roll">
+      <div class="ro-bar" id="rollout"></div>
+      <div class="card" id="rollCard"></div>
+    </div>
+    <h3 class="sub" data-i18n="s6.metrics.h"></h3>
+    <p class="lead" data-i18n-html="s6.metrics.lead"></p>
+    <div class="cols cols--4" id="metrics"></div>
+    <h3 class="sub" data-i18n="s6.cases.h"></h3>
+    <div class="cols cols--3">
+      <div class="card case">
+        <div class="case__top"><span class="mode" data-mode="recommend" data-i18n="s6.c1.mode"></span></div>
+        <h3 data-i18n="s6.c1.t"></h3><p class="case__b" data-i18n-html="s6.c1.b"></p><p class="case__r" data-i18n-html="s6.c1.r"></p>
+      </div>
+      <div class="card case">
+        <div class="case__top"><span class="mode" data-mode="assist" data-i18n="s6.c2.mode"></span><span class="single" data-i18n="s6.single"></span></div>
+        <h3 data-i18n="s6.c2.t"></h3><p class="case__b" data-i18n-html="s6.c2.b"></p><p class="case__r" data-i18n-html="s6.c2.r"></p>
+      </div>
+      <div class="card case">
+        <div class="case__top"><span class="mode" data-mode="infra" data-i18n="s6.c3.mode"></span></div>
+        <h3 data-i18n="s6.c3.t"></h3><p class="case__b" data-i18n-html="s6.c3.b"></p><p class="case__r" data-i18n-html="s6.c3.r"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 ─────────────────────────────────────────────── -->
+  <section id="refs">
+    <div class="sec__head">
+      <span class="sec__num">07</span>
+      <h2 data-i18n="s7.h"></h2>
+      <p data-i18n="s7.p"></p>
+    </div>
+    <h3 class="sub" data-i18n="s7.check.h"></h3>
+    <ol class="check">
+      <li data-i18n-html="s7.c1"></li><li data-i18n-html="s7.c2"></li><li data-i18n-html="s7.c3"></li>
+      <li data-i18n-html="s7.c4"></li><li data-i18n-html="s7.c5"></li><li data-i18n-html="s7.c6"></li>
+      <li data-i18n-html="s7.c7"></li>
+    </ol>
+    <h3 class="sub" data-i18n="s7.gloss.h"></h3>
+    <input class="search" id="glossSearch" type="search" data-i18n-ph="s7.gloss.ph">
+    <div class="gloss" id="gloss"></div>
+    <h3 class="sub" data-i18n="s7.src.h"></h3>
+    <ul class="src">
+      <li><a href="https://openai.com/index/introducing-gpt-realtime/" target="_blank" rel="noopener">OpenAI — Introducing gpt-realtime and Realtime API updates</a></li>
+      <li><a href="https://www.infoq.com/news/2025/09/openai-gpt-realtime/" target="_blank" rel="noopener">InfoQ — OpenAI’s gpt-realtime enables production-ready voice agents</a></li>
+      <li><a href="https://developers.openai.com/api/docs/guides/realtime" target="_blank" rel="noopener">OpenAI API — Realtime API</a></li>
+      <li><a href="https://developers.openai.com/api/docs/guides/realtime-sip" target="_blank" rel="noopener">OpenAI API — Realtime API with SIP</a></li>
+      <li><a href="https://developers.openai.com/api/docs/guides/voice-agents" target="_blank" rel="noopener">OpenAI API — Voice agents</a></li>
+      <li><a href="https://openai.github.io/openai-agents-python/voice/pipeline/" target="_blank" rel="noopener">OpenAI Agents SDK — Voice pipeline</a></li>
+      <li><a href="https://openai.github.io/openai-agents-js/guides/voice-agents/" target="_blank" rel="noopener">OpenAI Agents SDK (JS) — Voice agents</a></li>
+      <li><a href="https://openai.com/index/introducing-our-next-generation-audio-models/" target="_blank" rel="noopener">OpenAI — Next-generation audio models in the API</a></li>
+      <li><a href="https://developers.openai.com/blog/updates-audio-models" target="_blank" rel="noopener">OpenAI Developers — Updates for developers building with voice</a></li>
+      <li><a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener">OpenAI API — Models</a></li>
+      <li><a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">OpenAI API — Data controls</a></li>
+      <li><a href="https://openai.com/index/introducing-data-residency-in-europe/" target="_blank" rel="noopener">OpenAI — Data residency in Europe</a></li>
+      <li><a href="https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act" target="_blank" rel="noopener">European Commission — Transparency obligations under Article 50 of the AI Act</a></li>
+      <li><a href="https://artificialintelligenceact.eu/transparency-rules-article-50/" target="_blank" rel="noopener">EU AI Act — Practical guide to Article 50</a></li>
+      <li><a href="https://picovoice.ai/guide/voice-agents/voice-ux-latency-turn-taking/" target="_blank" rel="noopener">Picovoice — Voice agent latency, turn-taking and barge-in</a></li>
+      <li><a href="https://hamming.ai/resources/voice-agent-interruption-handling-runbook" target="_blank" rel="noopener">Hamming AI — Voice agent interruption handling</a></li>
+      <li><a href="https://livekit.com/blog/turn-detection-voice-agents-vad-endpointing-model-based-detection" target="_blank" rel="noopener">LiveKit — Turn detection for voice agents</a></li>
+      <li><a href="https://www.twilio.com/en-us/blog/developers/tutorials/product/openai-realtime-api-elastic-sip-trunking" target="_blank" rel="noopener">Twilio — OpenAI Realtime SIP Connector with Elastic SIP Trunking</a></li>
+      <li><a href="https://www.pwc.com/us/en/technology/alliances/library/open-ai-dcs-launch-engine-brief.html" target="_blank" rel="noopener">PwC — Real-time voice agent powered by OpenAI</a></li>
+      <li><a href="https://seekingalpha.com/pr/20242681-bandwidth-expands-bring-your-own-ai-approach-with-support-for-openais-realtime-api-to-power" target="_blank" rel="noopener">Bandwidth — support for OpenAI Realtime API</a></li>
+    </ul>
+    <div class="foot" data-i18n="ui.foot"></div>
+  </section>
+
+</main>
+
+<script src="copy.js?v=20260918102857"></script>
+<script src="../shared/js/i18n.js"></script>
+<script src="data/stack.js"></script>
+<script src="data/content.js"></script>
+<script src="../shared/js/diagram-engine.js"></script>
+<script src="../shared/js/scenarios.js"></script>
+<script src="js/sections.js"></script>
+<script src="js/app.js"></script>
+<script src="../shared/js/toc.js?v=20260918102857"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+/* 14a — фази як області, домени як групи карток процесів усередині.
+   Рівень 1 із двох: картка = номер + назва; рівень 2 (входи/виходи) — далі.
+   Executing і Monitoring & Controlling — два блоки в одній колонці. */
+/* transform-origin 0 0 обов'язковий: без нього масштаб іде від центру і вміст з'їжджає */
+.ov{position:relative;width:1420px;transform-origin:0 0}
+.ov .region{position:absolute;border:1px solid var(--rule);border-radius:var(--r-lg);background:#F7F8FA}
+.ov .region .cap{position:absolute;top:12px;left:0;right:0;text-align:center;
+  font:600 13px/1.2 var(--sans);color:var(--ink-2)}
+.ov .region .cap small{display:block;font:500 9.5px/1 var(--mono);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);margin-top:4px}
+/* група домену у фазі: підпис зверху, картки стовпчиком */
+.ov .grp{position:absolute;border:1px dashed var(--rule-2);border-radius:var(--r-md);
+  background:#FCFCFD;padding:22px 8px 8px;z-index:2}
+.ov .grp .gl{position:absolute;top:6px;left:10px;font:600 10px/1 var(--mono);letter-spacing:.12em;
+  text-transform:uppercase}
+.ov .grp.gov{background:rgba(75,85,99,.08)}
+.ov .pnode{position:relative;left:auto;top:auto;width:auto;margin-bottom:6px;
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:0 7px}
+.ov .pnode .io{flex:1 0 100%}
+.ov .pnode:last-child{margin-bottom:0}
+.ov svg.ovwires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.ov .w{fill:none;stroke:#7E8797;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ov .w.gov{stroke:#4B5563}
+/* клік по групі: решта гасне, шлях домену крізь фази лишається */
+/* Тьмяніють картки, а не групи: інакше картка з підсвіченим зв'язком (near)
+   лишалась блідою всередині блідої групи, і стрілка вела «в нікуди». */
+.ov.is-hot .grp{opacity:1}
+.ov.is-hot .grp .gl{opacity:.3}
+.ov.is-hot .grp.hot .gl{opacity:1}
+.ov.is-hot .w,.ov.is-hot polygon{opacity:.08}
+.ov.is-hot .grp.hot{opacity:1}
+.ov.is-hot .w.hot{opacity:1;stroke:var(--act)}
+.ov.is-hot polygon.hot{opacity:1;fill:var(--act)}
+/* Домальовані на кліку зв'язки процесу: пунктир, щоб не плутати з постійною схемою. */
+.ov .w.tmp{stroke-dasharray:6 4;fill:none}
+
+/* ── рівень 2: входи, інструменти, виходи ─────────────────────────── */
+.ov .pnode{cursor:pointer}
+.ov .pnode:focus-visible{outline:2px solid var(--act);outline-offset:2px}
+/* Три колонки в картку шириною ~290px не влазять: виходить ~80px на колонку,
+   і «Organizational process assets» ламається на чотири рядки. Стос вертикальний. */
+.ov .pnode .io{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--rule)}
+.ov .pnode.open .io{display:block}
+.ov .io > div + div{margin-top:8px}
+.ov .pnode.open{box-shadow:0 6px 22px rgba(20,25,40,.14)}
+.ov .io h4{margin:0 0 4px;font:600 9px/1 var(--mono);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3)}
+.ov .io ul{margin:0;padding-left:12px}
+.ov .io li{font-size:10.5px;line-height:1.35;color:var(--ink-2)}
+.ov .io .none{font-size:10.5px;color:var(--ink-3)}
+/* підсвічування зв'язків картки */
+.ov.is-hot .pnode{opacity:.25}
+.ov.is-hot .grp.hot .pnode{opacity:1}
+.ov.is-hot .pnode.hot{opacity:1;border-color:var(--act);box-shadow:0 0 0 2.5px var(--act);z-index:8}
+.ov.is-hot .pnode.hot .nm{font-weight:700;color:var(--act)}
+.ov.is-hot .pnode.near{opacity:1}
+/* напрямок звʼязку — кольором: teal входить у вибрану картку, clay виходить із неї */
+.ov.is-hot .pnode.in{border-color:var(--c-teal);box-shadow:0 0 0 1.5px var(--c-teal)}
+.ov.is-hot .pnode.out{border-color:var(--c-clay);box-shadow:0 0 0 1.5px var(--c-clay)}
+.ov.is-hot .w.in{stroke:var(--c-teal)}
+.ov.is-hot polygon.in{fill:var(--c-teal)}
+.ov.is-hot .w.out{stroke:var(--c-clay)}
+.ov.is-hot polygon.out{fill:var(--c-clay)}

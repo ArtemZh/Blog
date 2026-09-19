@@ -1,0 +1,197 @@
+/* Схема Delivery Framework.
+ *
+ * Каркас: пресейл — слева, ВНЕ скобки Project Management Process, потому что
+ * он идёт до проекта. Дальше вертикальная подпись и сам процесс. Слой процессов
+ * и слой артефактов сидят на одной сетке колонок фокус-областей: привязка
+ * артефакта к фазе позиционная, стрелок между слоями нет и не должно быть. */
+
+.fw{position:relative;display:grid;
+  grid-template-columns:22px 540px 22px 250px 22px max-content;
+  gap:14px;align-items:stretch;width:max-content}
+
+/* Зум: полотно масштабируется целиком, как в схеме процессов. */
+/* Полотно вписане в ширину сторінки: без власного скролу і без зуму.
+   Висоту обгортки ставить скрипт — масштабовану висоту полотна. */
+.zoomframe{border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper);
+  padding:var(--sp-md);position:relative}
+.zoomwrap{position:relative;overflow:clip}
+.zoomstage{transform-origin:0 0;width:max-content}
+
+/* Подпись слоя тянется на всю его высоту — это скобка, а не заголовок. */
+.side{align-self:stretch;display:flex;align-items:center;justify-content:center;
+  border-radius:var(--r-md);font:600 12px/1 var(--sans);letter-spacing:.06em;
+  writing-mode:vertical-rl;transform:rotate(180deg);padding:var(--sp-sm) 0;text-align:center;font-size:11px}
+.side.pre{background:rgba(60,90,130,.14);color:#2E4460}
+.side.proc{background:var(--plc);color:var(--ink)}
+.side.art{background:var(--a-senior);color:var(--ink)}
+
+/* шов между пресейлом и проектом */
+.seam{grid-column:3;align-self:stretch}
+
+.cell{border-radius:var(--r-md);padding:10px 12px;font-size:12.5px;line-height:1.35;
+  display:flex;align-items:center;justify-content:center;text-align:center;min-height:44px;
+  transition:opacity .18s}
+.plc{background:var(--plc);font-weight:600;font-size:14px;min-height:44px}
+/* Лента сквозной дисциплины идёт сплошной: границы фаз и так читаются по
+   жёлобам между блоками, а засечки внутри ленты только спорят с текстом. */
+.band-cell{position:relative}
+
+.plc.sm{min-height:26px;font-size:12px;padding:4px 8px}
+
+.g-any{background:var(--g-any)}
+.g-senior{background:var(--g-senior)}
+.g-po{background:var(--g-po);font-weight:600}
+.a-any{background:var(--a-any);font-size:11.5px;min-height:30px}
+.a-senior{background:var(--a-senior);font-size:11.5px;min-height:30px}
+/* Продажи — сине-стальной, не красный: красный в схеме процессов читается
+   как «проблема», а пресейл не проблема. Красного тут нет вообще. */
+.r-sales{background:rgba(60,90,130,.16);border:1px solid rgba(60,90,130,.32)}
+.r-tech{background:rgba(14,124,158,.14);border:1px solid rgba(14,124,158,.3)}
+
+.stack{display:flex;flex-direction:column;gap:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+/* ── пресейл ─────────────────────────────────────────────────── */
+.pre{grid-column:2;display:flex;flex-direction:column;gap:14px}
+.pre-stages{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:start}
+.stage-head{background:rgba(60,90,130,.14);color:#2E4460;border-radius:var(--r-md);
+  padding:6px;font:600 11px/1.2 var(--sans);text-align:center;min-height:26px;
+  display:flex;align-items:center;justify-content:center}
+.pre-col{display:flex;flex-direction:column;gap:10px}
+.pre .cell{font-size:11.5px;min-height:46px}
+
+.gate{border:2px solid #2E4460;background:#fff;border-radius:var(--r-md);
+  padding:9px 11px;text-align:center;font:600 12px/1.25 var(--sans);color:#2E4460}
+.gate .q{display:block;font-weight:500;font-size:11px;color:var(--ink-3);margin-top:3px}
+
+/* Discovery — отдельная возможная фаза между пресейлом и проектом,
+   а не вложенный блок пресейла. Поэтому своя колонка и своя подпись. */
+.disc{grid-column:4;align-self:start;border:2px dashed #2E4460;border-radius:var(--r-lg);
+  padding:12px;background:rgba(60,90,130,.05);display:flex;flex-direction:column;gap:10px}
+.side.disco{background:rgba(60,90,130,.10);color:#2E4460;border:1px dashed #2E4460}
+.disc-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;
+  gap:4px 12px;margin-bottom:8px;font:600 11px/1.35 var(--mono);letter-spacing:.04em;
+  text-transform:uppercase;color:#2E4460}
+.disc-head>span{max-width:60%}
+.disc-head em{font:500 10px/1 var(--mono);color:var(--ink-3);font-style:normal}
+.disc-steps{display:flex;flex-direction:column;gap:10px}
+.disc-out{margin-top:8px;display:flex;flex-direction:column;gap:4px;
+  font-size:11px;color:var(--ink-2)}
+.disc-out b{font:600 10px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:2px}
+.fw[data-discovery="off"] .disc,.fw[data-discovery="off"] .side.disco,
+.fw[data-discovery="off"] .gate{display:none}
+
+/* ── слой процессов проекта ──────────────────────────────────── */
+/* Слой на непрерывной шкале: у каждого элемента свой отрезок жизненного цикла.
+   Дорожка (.track) — обычная строка потока, внутри неё элементы позиционируются
+   абсолютно по процентам. Высота дорожки задаётся скриптом по содержимому. */
+.proc-layer{grid-column:6;position:relative;width:1500px}
+/* Зазор между дорожками — это коридор для стрелок, а не отступ.
+   При 12px линия там физически не помещается и лезет на плашки. */
+:root{--track-gap:26px}
+.track{position:relative;margin-bottom:var(--track-gap)}
+.track > *{position:absolute;top:0}
+.track .cell{width:auto}
+/* Якорь блока дисциплин — только точка привязки стрелки, ничего не рисует. */
+.anchor{pointer-events:none}
+
+.scale-note{font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 6px}
+
+/* Межа циклу — лише лінією: колір на схемі означає тип і грейд власника,
+   і рамці іншого кольору тут не місце. Kanban — пунктир, бо ітерації немає. */
+.iter{position:relative;border:2px solid var(--rule-2);border-radius:var(--r-lg);
+  padding:104px var(--sp-sm) 34px;background:var(--ground)}
+/* Перемикач підходу — вкладки під заголовком циклу. Шрифт більший за решту
+   полотна: схема вписується в сторінку зі зменшенням, а вкладки мають лишатись читабельними. */
+.iter-tabs{position:absolute;top:34px;left:14px;right:14px;display:flex;gap:4px;
+  border-bottom:1px solid var(--rule-2);z-index:6}
+.iter-tabs button{appearance:none;border:0;background:none;cursor:pointer;
+  padding:8px 14px 10px;margin-bottom:-1px;border-bottom:3px solid transparent;
+  font:600 18px/1 var(--sans);color:var(--ink-3);white-space:nowrap}
+.iter-tabs button:hover{color:var(--ink)}
+.iter-tabs button.on{color:var(--ink);border-bottom-color:var(--act)}
+.iter-tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+.iter[data-fw="kanban"]{border-style:dashed}
+.iter-head{position:absolute;top:10px;left:14px;right:14px;display:flex;
+  justify-content:space-between;align-items:center;
+  font:600 11px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+/* Висота блоку циклу однакова для всіх підходів — перемикання не зсуває решту схеми.
+   Рядки ділять цю висоту порівну, картки стоять по центру свого рядка. */
+.iter-grid{position:relative;z-index:4;display:grid;column-gap:28px;row-gap:36px;
+  height:350px;align-items:center;align-content:space-evenly}
+/* Підпис доріжки — у лівому жолобі, а не в коридорі між доріжками: там ідуть стрілки. */
+.lane-label{font:600 10px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);align-self:center;text-align:right;padding-right:4px}
+.iter .cell{font-size:11.5px;min-height:54px;flex-direction:column;gap:2px;padding:8px 8px}
+.cell b{font-weight:600}
+.cell small{font-size:10px;color:var(--ink-3);line-height:1.2}
+.cwires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.cwire{fill:none;stroke:#5C6675;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+
+/* ── провода ─────────────────────────────────────────────────── */
+.wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+.wire{fill:none;stroke:#5C6675;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+.wire.hand{stroke:#2E4460;stroke-width:3}
+.wire.disco{stroke:#2E4460;stroke-dasharray:6 6;stroke-width:2.4}
+
+/* ── фильтр по грейду ────────────────────────────────────────── */
+.fw.filtered .cell:not(.match){opacity:.16}
+
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--sp-sm);
+  margin-top:var(--sp-md)}
+.legend .item{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--ink-2)}
+.legend .sw{width:26px;height:26px;border-radius:var(--r-sm);flex:0 0 auto}
+
+.triggers{margin-top:var(--sp-md);border:1px dashed #2E4460;border-radius:var(--r-md);
+  padding:var(--sp-sm) var(--sp-md);background:rgba(60,90,130,.05)}
+.triggers h3{margin:0 0 6px;font-size:13px;color:#2E4460}
+.triggers ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--ink-2)}
+.triggers li{margin-bottom:3px}
+
+/* ── підказки й підсвітка звʼязків ───────────────────────────── */
+#fw-wrap .cell,#fw-wrap .gate{cursor:pointer}
+#fw-wrap .cell:focus-visible,#fw-wrap .gate:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+#fw-wrap .cell.is-pin,#fw-wrap .gate.is-pin{box-shadow:0 0 0 2px var(--ink)}
+/* Решта стрілок не тьмяніє: звʼязки картки лише темнішають. */
+#fw-wrap.chain .is-hot{stroke:var(--ink)}
+#fw-wrap.chain polygon.is-hot{fill:var(--ink)}
+.fw-pop{position:absolute;z-index:50;width:320px;background:var(--paper);border:1px solid var(--rule);
+  border-radius:var(--r-md);box-shadow:0 18px 40px -18px rgba(18,24,38,.35);padding:12px 14px;
+  font-size:12.5px;line-height:1.5;color:var(--ink-2);pointer-events:none;opacity:0;transition:opacity .12s}
+.fw-pop.on{opacity:1}
+.fw-pop.pin{pointer-events:auto}
+.fw-pop .k{display:block;font:600 9.5px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.fw-pop .t{display:block;margin:4px 0 6px;font:600 14px/1.25 var(--sans);color:var(--ink)}
+.fw-pop .o{display:block;margin-top:8px;font-size:11.5px;color:var(--ink-3)}
+.fw-pop .x{margin-top:6px;display:block;font-size:11.5px;color:var(--ink-3)}
+
+/* ── вузький екран: замість полотна — стрічка карток із тих самих даних ── */
+.fw-list{display:none}
+@media (max-width:760px){
+  .zoomframe{display:none}
+  .fw-list{display:block}
+  .fw-list h4{margin:18px 0 8px;font:600 10px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  .fw-list .cell{justify-content:flex-start;text-align:left;margin-bottom:6px;flex-direction:column;align-items:flex-start;gap:2px}
+  .fw-list .cell p{display:none;margin:6px 0 0;font-size:12.5px;color:var(--ink-2)}
+  .fw-list .cell.open p{display:block}
+}
+
+/* на темній плашці PO підпис читається тим самим кольором, що й назва */
+.g-po small{color:inherit;opacity:.78}
+
+/* артефакти пресейлу й discovery — той самий крок 8 px, що й в артефактах проєкту */
+#fw-art .stack{gap:8px}
+#fw-art .row2{column-gap:18px}
+#fw-art .stack .cell{min-height:34px;padding:6px 10px}
+
+/* На широкому екрані перемикач підходу — у блоці циклу; у стрічці карток полотна немає,
+   тож там лишається перемикач у панелі керування. */
+.ctl-fw{display:none}
+@media (max-width:760px){.ctl-fw{display:flex}}
+
+/* один рядок у фіксованій висоті — картки більші, щоб блок не виглядав порожнім */
+.iter[data-fw="hybrid"] .cell{min-height:110px;font-size:13px}

@@ -1,0 +1,20 @@
+/* Токени Itspired — один в один із DWH і брендбука.
+   Монохром, Inter + Roboto Mono, майже прямі кути. */
+:root{
+  --ink:#121826;
+  --g900:#3A3A42; --g700:#5A5A63; --g500:#82828C; --g300:#A8A8B0;
+  --paper:#FFFFFF; --surface:#F5F5F7; --surface-2:#FAFAFC;
+  --line:#E0E0E4; --line-soft:#EAEAEB;
+  --wire:#D3D3D9;
+
+  /* Сигнал — єдиний колір бренду. Тільки дія, ніколи декор. */
+  --signal:#EA5212;
+
+  --lift-sm:0 8px 24px -14px rgba(18,27,54,.16);
+  --lift:0 20px 50px -20px rgba(18,27,54,.20);
+
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'Roboto Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --r:8px; --r-md:12px; --r-lg:16px;
+}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PMBOK 8 Phases Stacked</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<link rel="stylesheet" href="shared/map.css?v=20260919091816">
+<link rel="stylesheet" href="shared/overview.css?v=20260919091816">
+<style>
+/* Стос: смуга-фаза на всю ширину, домени колонками всередині. Ширину полотна
+   задає третій ряд — Executing і Monitoring & Controlling стоять поруч. */
+.ov{width:auto}
+.ov .region .cap{font-size:14px;letter-spacing:.02em}
+/* Тут намальовані всі 55 зв'язків, а не лише переходи домену між фазами:
+   лінія тонша, зворотні зв'язки — пунктиром. */
+.ov .w{stroke-width:1.4}
+.ov .w.back{stroke-dasharray:5 5}
+/* Дроти лежать НАД плашками груп: фон групи непрозорий, і на 14a з рідкими
+   зв'язками це не заважало, а тут ховало більшість ліній. Крізь картки жоден
+   дріт не проходить — це перевіряється скриптом, — тому підняти їх безпечно. */
+.ov svg.ovwires{z-index:6}
+/* Між картками в групі має влізти стрілка з наконечником, інакше зв'язок
+   сусідів згори-вниз перетворюється на шестипіксельну рисочку. */
+.ov .grp .pnode{margin-bottom:24px}
+.ov .grp .pnode:last-child{margin-bottom:0}
+.lg-in,.lg-out{font-weight:600;padding:0 4px;border-radius:4px}
+.lg-in{color:var(--c-teal);box-shadow:inset 0 0 0 1.5px var(--c-teal)}
+.lg-out{color:var(--c-clay);box-shadow:inset 0 0 0 1.5px var(--c-clay)}
+</style>
+<style>.back14{display:inline-block;margin-bottom:10px;font:600 12px/1 var(--mono);text-decoration:none;color:var(--act)}.back14:hover{text-decoration:underline}</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top">Phases Stacked</a>
+  <div class="readbar"><div class="trk" role="progressbar" aria-label="Read"
+       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  <p class="note">The same processes as the previous sheet, read top to bottom instead of left to right.</p>
+</header>
+
+<main class="main" id="top">
+  <header class="mast wrap">
+    <a class="back14" href="14-pmbok8-map.html">← Process Map</a>
+    <div class="kicker">PMBOK 8 · phases in sequence</div>
+    <h1>Phases Stacked</h1>
+    <p class="lede">One phase per band, in the order a project meets them: Initiating, Planning, then
+      Executing and Monitoring &amp; Controlling side by side because they run at the same time, and
+      Closing at the end. Inside each band the performance domains stand as columns, so a domain can be
+      followed straight down the sheet.</p>
+  </header>
+
+  <section id="s-map">
+    <h2>The stack</h2>
+    <p>Click a domain group to follow that domain through the phases; click a process to open its
+      inputs, tools and outputs and highlight what it connects to.</p>
+    <div class="controls">
+      <div class="ctl"><span class="ctl-label">Inputs &amp; outputs</span>
+        <div class="seg" role="group" aria-label="Detail">
+          <button type="button" id="btn-expand">Expand all</button>
+          <button type="button" id="btn-collapse">Collapse all</button>
+        </div></div>
+    </div>
+    <p class="note">⌘/Ctrl + wheel to zoom, drag to pan. When a process is selected:
+      <span class="lg-in">teal</span> — what feeds into it, <span class="lg-out">clay</span> — what it feeds.</p>
+    <div class="stage-fit" id="fit"><div class="ov" id="ov"><svg class="ovwires" id="ovwires" aria-hidden="true"></svg></div></div>
+  </section>
+
+  <section id="s-reading">
+    <h2>What the stack says</h2>
+    <p>Read downward, the sheet is a timeline: everything above a band has to have happened for that band
+      to make sense, and the two middle bands sit side by side because execution and control are not
+      consecutive — the project is being run and being watched at the same time.</p>
+    <p>Read down a column, it is the life of one domain. <b>Governance</b> is the only column that runs
+      from the first band to the last. <b>Scope, Schedule and Finance</b> skip the Executing band
+      entirely: they are planned and then controlled. <b>Resources</b> and <b>Risk</b> are the columns
+      where the project manager both does the work and watches it.</p>
+  </section>
+</main>
+</div>
+
+<script src="shared/zoom.js?v=20260919091816"></script>
+<script src="shared/pmbok-io.js?v=20260919091816"></script>
+<script src="shared/pmbok-data.js?v=20260919091816"></script>
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/topbar.js?v=20260919091816"></script>
+<script src="shared/stack.js?v=20260919091816"></script>
+</body>
+</html>

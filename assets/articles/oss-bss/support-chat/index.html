@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Чат-бот підтримки на OpenAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/css/tokens.css?v=20260918102857">
+<link rel="stylesheet" href="../shared/css/base.css?v=20260918102857">
+<link rel="stylesheet" href="../shared/css/diagram.css?v=20260918102857">
+<link rel="stylesheet" href="../shared/css/components.css?v=20260918102857">
+<link rel="stylesheet" href="css/page.css?v=20260918102857">
+</head>
+<body>
+
+<header class="top">
+  <span class="top__title" data-i18n="ui.brand"></span>
+  <a class="back" href="../index.html" data-i18n="ui.back1"></a>
+  <nav class="top__nav">
+    <a href="#topics-sec" data-i18n="nav.1"></a>
+    <a href="#arch" data-i18n="nav.2"></a>
+    <a href="#flows-sec" data-i18n="nav.3"></a>
+    <a href="#safety-sec" data-i18n="nav.4"></a>
+    <a href="#rollout-sec" data-i18n="nav.5"></a>
+    <a href="#aws-sec" data-i18n="nav.6"></a>
+    <a href="#metrics-sec" data-i18n="nav.7"></a>
+    <a href="#refs" data-i18n="nav.8"></a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="hero__kicker" data-i18n="hero.kicker"></div>
+    <h1 data-i18n="hero.title"></h1>
+    <p data-i18n-html="hero.lead"></p>
+    <div class="specs">
+      <div><b data-i18n="hero.s1.b"></b><span data-i18n="hero.s1.s"></span></div>
+      <div><b data-i18n="hero.s2.b"></b><span data-i18n="hero.s2.s"></span></div>
+      <div><b data-i18n="hero.s3.b"></b><span data-i18n="hero.s3.s"></span></div>
+      <div><b data-i18n="hero.s4.b"></b><span data-i18n="hero.s4.s"></span></div>
+    </div>
+  </div>
+
+  <!-- 01 ─────────────────────────────────────────────── -->
+  <section id="topics-sec">
+    <div class="sec__head">
+      <span class="sec__num">01</span>
+      <h2 data-i18n="s1.h"></h2>
+      <p data-i18n="s1.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s1.lead"></p>
+    <div class="topics">
+      <div class="tp-grid" id="topics"></div>
+      <div class="card" id="topicCard"></div>
+    </div>
+    <div class="note" data-i18n-html="s1.note"></div>
+  </section>
+
+  <!-- 02 + 03 ────────────────────────────────────────── -->
+  <section id="arch">
+    <div class="sec__head">
+      <span class="sec__num">02</span>
+      <h2 data-i18n="s2.h"></h2>
+      <p data-i18n="s2.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s2.lead"></p>
+    <div class="cols cols--4" style="margin-bottom:22px">
+      <div class="card card--soft"><span class="kicker" data-i18n="s2.o1.k"></span><h3 data-i18n="s2.o1.t"></h3><p data-i18n-html="s2.o1.b"></p></div>
+      <div class="card card--soft"><span class="kicker" data-i18n="s2.o2.k"></span><h3 data-i18n="s2.o2.t"></h3><p data-i18n-html="s2.o2.b"></p></div>
+      <div class="card card--soft"><span class="kicker" data-i18n="s2.o3.k"></span><h3 data-i18n="s2.o3.t"></h3><p data-i18n-html="s2.o3.b"></p></div>
+      <div class="card card--soft"><span class="kicker" data-i18n="s2.o4.k"></span><h3 data-i18n="s2.o4.t"></h3><p data-i18n-html="s2.o4.b"></p></div>
+    </div>
+    <div class="note" data-i18n-html="s2.model" style="margin-bottom:34px"></div>
+
+    <div id="flows-sec" class="sec__head">
+      <span class="sec__num">03</span>
+      <h2 data-i18n="s3.h"></h2>
+      <p data-i18n="s3.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s3.lead"></p>
+    <div id="flowBox" class="wide">
+      <p class="flows-scale" data-i18n-html="flow.levels"></p>
+      <div class="flows toggles"></div>
+      <!-- Панель кроку стоїть НАД схемою: схема висока, і внизу лічильник
+           зі стрілками не потрапляв на екран — сценарій виглядав обрізаним. -->
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+        <!-- доріжка кроків: скільки їх усього, який зараз, що вже пройдено -->
+        <span class="steps__track"></span>
+      </div>
+      <div id="stack"></div>
+    </div>
+  </section>
+
+  <!-- 04 ─────────────────────────────────────────────── -->
+  <section id="safety-sec">
+    <div class="sec__head">
+      <span class="sec__num">04</span>
+      <h2 data-i18n="s4.h"></h2>
+      <p data-i18n="s4.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s4.lead"></p>
+    <div class="auth">
+      <div class="au" id="authority"></div>
+      <div class="card" id="authCard"></div>
+    </div>
+    <h3 class="sub" data-i18n="s4.safe.h"></h3>
+    <div class="cols cols--2" id="safety"></div>
+    <div class="note" data-i18n-html="s4.aiact"></div>
+  </section>
+
+  <!-- 05 ─────────────────────────────────────────────── -->
+  <section id="rollout-sec">
+    <div class="sec__head">
+      <span class="sec__num">05</span>
+      <h2 data-i18n="s5.h"></h2>
+      <p data-i18n="s5.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s5.lead"></p>
+    <div class="roll">
+      <div class="ro-bar" id="rollout"></div>
+      <div class="card" id="rollCard"></div>
+    </div>
+  </section>
+
+  <!-- 06 ─────────────────────────────────────────────── -->
+  <section id="aws-sec">
+    <div class="sec__head">
+      <span class="sec__num">06</span>
+      <h2 data-i18n="aws.h"></h2>
+      <p data-i18n="aws.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="aws.lead"></p>
+    <!-- Схема: шлях запиту згори вниз + наскрізна смуга знизу. Рушій — shared/js/diagram-engine.js, дані — data/aws.js. -->
+    <div id="awsStack"></div>
+    <div class="note" data-i18n="aws.note"></div>
+    <h3 class="sub" data-i18n="aws.dec.h"></h3>
+    <div class="cols cols--4">
+      <div class="card"><h3 data-i18n="aws.d1.t"></h3><p data-i18n="aws.d1.b"></p></div>
+      <div class="card"><h3 data-i18n="aws.d2.t"></h3><p data-i18n="aws.d2.b"></p></div>
+      <div class="card"><h3 data-i18n="aws.d3.t"></h3><p data-i18n="aws.d3.b"></p></div>
+      <div class="card"><h3 data-i18n="aws.d4.t"></h3><p data-i18n="aws.d4.b"></p></div>
+    </div>
+    <h3 class="sub" data-i18n="aws.stack.h"></h3>
+    <table class="aw-stack">
+      <thead><tr><th data-i18n="aws.stack.c1"></th><th data-i18n="aws.stack.c2"></th><th data-i18n="aws.stack.c3"></th></tr></thead>
+      <tbody>
+        <tr><td data-i18n="aws.l1"></td><td>CloudFront · WAF</td><td data-i18n="aws.s.waf"></td></tr>
+        <tr><td data-i18n="aws.l2"></td><td>API Gateway (WebSocket) · Cognito</td><td data-i18n="aws.s.apigw"></td></tr>
+        <tr><td data-i18n="aws.l3"></td><td>ECS on Fargate · OpenAI Agents SDK</td><td data-i18n="aws.s.sdk"></td></tr>
+        <tr><td data-i18n="aws.l4"></td><td>OpenAI API · NAT Gateway · Secrets Manager</td><td data-i18n="aws.s.openai"></td></tr>
+        <tr><td data-i18n="aws.l4"></td><td>OpenAI File Search / OpenSearch Serverless · S3</td><td data-i18n="aws.s.kb"></td></tr>
+        <tr><td data-i18n="aws.l5"></td><td>Lambda · VPC · PrivateLink / VPN</td><td data-i18n="aws.s.lambda"></td></tr>
+        <tr><td data-i18n="aws.b1"></td><td>DynamoDB · ElastiCache</td><td data-i18n="aws.s.ddb"></td></tr>
+        <tr><td data-i18n="aws.b1"></td><td>EventBridge / SQS · Connect Chat</td><td data-i18n="aws.s.eb"></td></tr>
+        <tr><td data-i18n="aws.b2"></td><td>KMS · Comprehend · S3 Object Lock</td><td data-i18n="aws.s.pii"></td></tr>
+        <tr><td data-i18n="aws.b3"></td><td>CloudWatch · X-Ray / OTel · Athena · QuickSight</td><td data-i18n="aws.s.xray"></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 07 ─────────────────────────────────────────────── -->
+  <section id="metrics-sec">
+    <div class="sec__head">
+      <span class="sec__num">07</span>
+      <h2 data-i18n="s6.h"></h2>
+      <p data-i18n="s6.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s6.lead"></p>
+    <div class="cols cols--4" id="metrics"></div>
+    <h3 class="sub" data-i18n="s6.val.h"></h3>
+    <div class="cols cols--2">
+      <div class="card case">
+        <div class="case__top"><span class="mode" data-mode="act" data-i18n="s6.v1.mode"></span></div>
+        <h3 data-i18n="s6.v1.t"></h3><p class="case__b" data-i18n-html="s6.v1.b"></p><p class="case__r" data-i18n-html="s6.v1.r"></p>
+      </div>
+      <div class="card case">
+        <div class="case__top"><span class="mode" data-mode="act" data-i18n="s6.v2.mode"></span></div>
+        <h3 data-i18n="s6.v2.t"></h3><p class="case__b" data-i18n-html="s6.v2.b"></p><p class="case__r" data-i18n-html="s6.v2.r"></p>
+      </div>
+    </div>
+    <h3 class="sub" data-i18n="s6.cases.h"></h3>
+    <div class="cols cols--3">
+      <div class="card case">
+        <div class="case__top"><span class="mode" data-mode="act" data-i18n="s6.c1.mode"></span></div>
+        <h3 data-i18n="s6.c1.t"></h3><p class="case__b" data-i18n-html="s6.c1.b"></p><p class="case__r" data-i18n-html="s6.c1.r"></p>
+      </div>
+      <div class="card case">
+        <div class="case__top"><span class="mode" data-mode="assist" data-i18n="s6.c2.mode"></span><span class="single" data-i18n="s6.single"></span></div>
+        <h3 data-i18n="s6.c2.t"></h3><p class="case__b" data-i18n-html="s6.c2.b"></p><p class="case__r" data-i18n-html="s6.c2.r"></p>
+      </div>
+      <div class="card case">
+        <div class="case__top"><span class="mode" data-mode="infra" data-i18n="s6.c3.mode"></span></div>
+        <h3 data-i18n="s6.c3.t"></h3><p class="case__b" data-i18n-html="s6.c3.b"></p><p class="case__r" data-i18n-html="s6.c3.r"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 ─────────────────────────────────────────────── -->
+  <section id="refs">
+    <div class="sec__head">
+      <span class="sec__num">08</span>
+      <h2 data-i18n="s7.h"></h2>
+      <p data-i18n="s7.p"></p>
+    </div>
+    <h3 class="sub" data-i18n="s7.check.h"></h3>
+    <ol class="check">
+      <li data-i18n-html="s7.c1"></li><li data-i18n-html="s7.c2"></li><li data-i18n-html="s7.c3"></li>
+      <li data-i18n-html="s7.c4"></li><li data-i18n-html="s7.c5"></li><li data-i18n-html="s7.c6"></li>
+      <li data-i18n-html="s7.c7"></li>
+    </ol>
+    <h3 class="sub" data-i18n="s7.gloss.h"></h3>
+    <input class="search" id="glossSearch" type="search" data-i18n-ph="s7.gloss.ph">
+    <div class="gloss" id="gloss"></div>
+    <h3 class="sub" data-i18n="s7.src.h"></h3>
+    <ul class="src">
+      <li><a href="https://openai.com/index/new-tools-for-building-agents/" target="_blank" rel="noopener">OpenAI — New tools for building agents (Responses API, Agents SDK)</a></li>
+      <li><a href="https://developers.openai.com/api/docs/guides/migrate-to-responses" target="_blank" rel="noopener">OpenAI API — Migrate to the Responses API</a></li>
+      <li><a href="https://openai.github.io/openai-agents-python/" target="_blank" rel="noopener" data-i18n="src.agentsdk">OpenAI Agents SDK — документація</a></li>
+      <li><a href="https://openai.github.io/openai-agents-python/handoffs/" target="_blank" rel="noopener">OpenAI Agents SDK — Handoffs</a></li>
+      <li><a href="https://openai.github.io/openai-agents-python/guardrails/" target="_blank" rel="noopener">OpenAI Agents SDK — Guardrails</a></li>
+      <li><a href="https://developers.openai.com/api/docs/guides/tools-file-search" target="_blank" rel="noopener">OpenAI API — File search</a></li>
+      <li><a href="https://openai.com/index/introducing-agentkit/" target="_blank" rel="noopener">OpenAI — Introducing AgentKit</a></li>
+      <li><a href="https://community.openai.com/t/deprecation-notice-agent-builder/1382650" target="_blank" rel="noopener">OpenAI Developer Community — Deprecation notice: Agent Builder</a></li>
+      <li><a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener">OpenAI API — Models</a></li>
+      <li><a href="https://developers.openai.com/api/docs/guides/agent-builder-safety" target="_blank" rel="noopener">OpenAI API — Safety in building agents</a></li>
+      <li><a href="https://openai.com/index/designing-agents-to-resist-prompt-injection/" target="_blank" rel="noopener">OpenAI — Designing AI agents to resist prompt injection</a></li>
+      <li><a href="https://developers.openai.com/api/docs/guides/safety-best-practices" target="_blank" rel="noopener">OpenAI API — Safety best practices</a></li>
+      <li><a href="https://openai.com/index/introducing-data-residency-in-europe/" target="_blank" rel="noopener">OpenAI — Introducing data residency in Europe</a></li>
+      <li><a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">OpenAI API — Data controls</a></li>
+      <li><a href="https://openai.com/index/offering-zero-data-retention-for-frontier-models/" target="_blank" rel="noopener">OpenAI — Zero Data Retention for frontier models</a></li>
+      <li><a href="https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act" target="_blank" rel="noopener">European Commission — Transparency obligations under Article 50 of the AI Act</a></li>
+      <li><a href="https://www.t-mobile.com/news/business/t-mobile-launches-intentcx-with-openai" target="_blank" rel="noopener">T-Mobile — IntentCX with OpenAI (2024)</a></li>
+      <li><a href="https://www.telcotitans.com/deutsche-telekomwatch/t-mobile-says-joint-openai-platform-now-live-paying-dividends/9819.article" target="_blank" rel="noopener">TelcoTitans — T-Mobile says joint OpenAI platform now live</a></li>
+      <li><a href="https://masterofcode.com/portfolio/telecom-virtual-assistant" target="_blank" rel="noopener">Master of Code — Telecom Virtual Assistant case study</a></li>
+      <li><a href="https://openai.com/index/deutsche-telekom-collaboration/" target="_blank" rel="noopener">OpenAI — Deutsche Telekom collaboration</a></li>
+      <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api.html" target="_blank" rel="noopener">AWS — API Gateway WebSocket APIs</a></li>
+      <li><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html" target="_blank" rel="noopener">AWS — Amazon ECS on AWS Fargate</a></li>
+      <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html" target="_blank" rel="noopener">AWS — Lambda concurrency</a></li>
+      <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" target="_blank" rel="noopener">AWS — NAT gateways</a></li>
+      <li><a href="https://www.vodafone.com/news/newsroom/technology/meet-super-tobi-vodafone-s-new-generative-ai-virtual-assistant-now-serving-customers-in-multiple-countries" target="_blank" rel="noopener">Vodafone — Meet SuperTOBi (2024)</a></li>
+      <li><a href="https://www.langchain.com/blog/customers-vodafone-italy" target="_blank" rel="noopener">LangChain — Fastweb + Vodafone: AI agents (2025)</a></li>
+      <li><a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-pii.html" target="_blank" rel="noopener">AWS — Amazon Comprehend: PII detection</a></li>
+      <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html" target="_blank" rel="noopener">AWS — S3 Object Lock</a></li>
+      <li><a href="https://docs.aws.amazon.com/connect/latest/adminguide/chat.html" target="_blank" rel="noopener">AWS — Amazon Connect chat</a></li>
+      <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP — LLM Prompt Injection Prevention Cheat Sheet</a></li>
+    </ul>
+    <div class="foot" data-i18n="ui.foot"></div>
+  </section>
+
+</main>
+
+<script src="copy.js?v=20260918102857"></script>
+<script src="../shared/js/i18n.js"></script>
+<script src="data/stack.js?v=20260918102857"></script>
+<script src="data/content.js?v=20260918102857"></script>
+<script src="data/aws.js?v=20260918102857"></script>
+<script src="../shared/js/diagram-engine.js?v=20260918102857"></script>
+<script src="../shared/js/scenarios.js?v=20260918102857"></script>
+<script src="js/sections.js?v=20260918102857"></script>
+<script src="js/app.js?v=20260918102857"></script>
+<script src="../shared/js/toc.js?v=20260918102857"></script>
+</body>
+</html>

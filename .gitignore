@@ -1,0 +1,17 @@
+# Службове й локальне
+.DS_Store
+.claude/
+HANDOFF.md
+PLAN-*.md
+TASK-*.md
+
+# Не для публікації
+assets/jira-dashboard-v2.html
+assets/PMBOK8_.pdf
+assets/practice-guide_flow_color_EN-A0.pdf
+assets/Zhavrotskyi_PMO_Officer_ERGO_CV.docx
+assets/PMO_experience_summary.md
+assets/pmbok8-notes.md
+assets/refs/
+assets/Picture 1.png
+assets/Zhavrotskyi_DM_CV_.pdf

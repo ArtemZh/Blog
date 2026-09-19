@@ -1,0 +1,110 @@
+/* Спільна тема для двох дашбордів. Обидва писалися окремо і мали власні
+   палітри й типографіку — поруч із портфоліо це виглядало як три різні
+   продукти. Тепер вони зводяться не просто «до наших токенів», а до мови
+   статей (assets/articles/oss-bss/shared/css): Inter + Roboto Mono, майже
+   прямі кути, світла шапка з розмиттям, один сигнальний колір на дію.
+
+   Кольорів у дашборді треба більше, ніж у статті, тому нижче окрема шкала
+   даних: сім відтінків однакової насиченості, підібраних так, щоб жити
+   поруч із помаранчевим сигналом і не сперечатися з ним за увагу —
+   сигнал лишається найяскравішим плямою на екрані.
+
+   Підключається ПІСЛЯ власних стилів дашборда, тому перекриває їх без
+   правки кожного правила. */
+
+:root{
+  /* мова статей */
+  --a-ink:#121826;
+  --a-g900:#3A3A42; --a-g700:#5A5A63; --a-g500:#82828C; --a-g300:#A8A8B0;
+  --a-paper:#FFFFFF; --a-surface:#F5F5F7; --a-surface-2:#FAFAFC;
+  --a-line:#E0E0E4; --a-line-soft:#EAEAEB;
+  --a-signal:#EA5212;
+  --a-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --a-mono:'Roboto Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --a-r:8px; --a-r-md:12px; --a-r-lg:16px;
+
+  /* шкала даних: сім категорій + світлі заливки */
+  --c-teal:#12857A;    --c-teal-s:#DCEFEC;
+  --c-blue:#2E6FB7;    --c-blue-s:#E2EAF6;
+  --c-purple:#6A57C4;  --c-purple-s:#E8E4F7;
+  --c-clay:#C2703C;    --c-clay-s:#F7E8DD;
+  --c-green:#7C8F2A;   --c-green-s:#EDF1DC;
+  --c-magenta:#BE2E6A; --c-magenta-s:#F7E0E9;
+  --c-gold:#A8792F;    --c-gold-s:#F4EBDB;
+
+  /* сумісність зі старими іменами токенів портфоліо */
+  --act:var(--a-signal);
+  --act-soft:rgba(234,82,18,.10);
+}
+
+body{
+  background:var(--a-surface) !important;
+  color:var(--a-ink) !important;
+  font-family:var(--a-sans) !important;
+  letter-spacing:-.011em;
+}
+
+/* — шапка: світла з розмиттям, як .top у статтях — */
+.nav, .shell > header, .topbar{
+  background:rgba(255,255,255,.86) !important;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--a-line-soft) !important;
+  box-shadow:none !important;
+}
+.nav{ gap:20px }
+.nav-brand{ color:var(--a-ink) !important; font-weight:600; letter-spacing:-.01em;
+  white-space:nowrap; margin-right:8px }
+.nav-tabs{ gap:2px !important }
+.nav-brand span{ color:var(--a-g300) !important }
+.nav-tab{
+  color:var(--a-g500) !important; background:transparent !important;
+  border:1px solid transparent !important; border-radius:var(--a-r) !important;
+  font-family:var(--a-mono) !important; font-size:10px !important; font-weight:400 !important;
+  letter-spacing:.1em; text-transform:uppercase; opacity:1 !important;
+}
+.nav-tab:hover{ color:var(--a-ink) !important; border-color:var(--a-line) !important;
+  background:transparent !important }
+.nav-tab.active{ background:var(--a-signal) !important; color:#fff !important;
+  border-color:var(--a-signal) !important }
+
+/* бічна панель Jira-панелі — та сама поверхня, що й картки статей */
+aside{ background:var(--a-paper) !important; border-right:1px solid var(--a-line-soft) !important }
+.brand h1{ font-family:var(--a-sans) !important; font-weight:700 !important;
+  letter-spacing:-.03em !important; color:var(--a-ink) !important }
+.brand .eyebrow, .eyebrow{ font-family:var(--a-mono) !important; letter-spacing:.14em !important;
+  text-transform:uppercase; color:var(--a-g500) !important }
+
+/* — картки й секції — */
+.card, .panel, .box, .kpi, .metric, .au-t{
+  background:var(--a-paper) !important;
+  border:1px solid var(--a-line-soft) !important;
+  border-radius:var(--a-r-md) !important;
+  box-shadow:none !important;
+}
+.card-title, .panel h3, .card h4{ color:var(--a-ink) !important; font-weight:600 !important;
+  letter-spacing:-.02em }
+.card-sub, .kpi-label, .metric-label, .muted{ color:var(--a-g500) !important }
+.sec-label{ font-family:var(--a-mono) !important; font-size:10px !important;
+  letter-spacing:.16em !important; text-transform:uppercase; color:var(--a-g500) !important }
+.kpi-value, .metric-value, h1, h2, h3{ color:var(--a-ink) !important; letter-spacing:-.028em }
+
+/* — таблиці. Капс лишається тільки в шапці колонок; підписи рядків у
+     теплокартах — це текст, і вони капсу не отримують (див. .wl-n / .hm-lab). — */
+table{ border-collapse:collapse !important }
+th{ color:var(--a-g500) !important; border-bottom:1px solid var(--a-line) !important;
+    font-family:var(--a-mono) !important; font-weight:400 !important;
+    text-transform:uppercase; letter-spacing:.1em; font-size:9.5px }
+td{ border-bottom:1px solid var(--a-line-soft) !important; color:var(--a-g900) !important }
+tr:hover td{ background:var(--a-surface-2) !important }
+
+/* — стани — */
+.badge, .chip, .pill, .delta{ border-radius:var(--a-r) !important; font-weight:600 !important }
+.status-Green, .sev-Low, .badge.ok{ color:var(--c-teal) !important }
+.status-Amber, .sev-Medium{ color:var(--c-gold) !important }
+.status-Red, .sev-High{ color:var(--c-magenta) !important }
+
+/* — дія — */
+a{ color:var(--a-signal) }
+.tog.on{ background:var(--a-signal) !important; color:#fff !important;
+  border-color:var(--a-signal) !important }
+::selection{ background:rgba(234,82,18,.16) }

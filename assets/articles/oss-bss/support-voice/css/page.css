@@ -1,0 +1,43 @@
+/* Компоненти статті 4. Спільне (етапи, метрики, безпека, матриця) — у shared/. */
+
+/* ── 01 чат проти голосу ──────────────────────────────────── */
+.compare{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+.cmp{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.cmp__head{display:grid;grid-template-columns:170px minmax(0,1fr) minmax(0,1fr);gap:12px;padding:0 13px 4px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g700)}
+.cmp__row{display:grid;grid-template-columns:170px minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start;text-align:left;
+  padding:11px 12px;border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper);cursor:pointer;
+  color:var(--ink);box-shadow:var(--lift-sm);transition:border-color .15s ease}
+.cmp__row:hover,.cmp__row.on{border-color:var(--signal)}
+.cmp__row b{font-size:13.5px;font-weight:600}
+.cmp__row span{font-size:13px;line-height:1.45;color:var(--g500)}
+/* Колонка голосу темніша: сторінка про голос, чат — лише точка відліку. */
+.cmp__row .v{color:var(--ink)}
+.say{margin-top:12px;border-radius:var(--r-md);padding:11px 13px;background:var(--surface-2);border:1px solid var(--line-soft)}
+.say--voice{background:var(--paper);border-color:var(--g300)}
+.say i{display:block;font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--g500)}
+.say p{margin:5px 0 0 !important;font-size:13.5px !important;line-height:1.55;color:var(--ink) !important}
+@media (max-width:980px){.compare{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:700px){
+  .cmp__row{grid-template-columns:minmax(0,1fr);gap:4px}
+  .cmp__head{display:none}
+}
+
+/* ── 02 архітектури ───────────────────────────────────────── */
+.arch{display:flex;flex-direction:column}
+.arch.on{border-color:var(--ink)}
+.arch h3{font-size:18px}
+.arch dl{margin:4px 0 0}
+.arch dt{margin-top:10px;font-size:12.5px;font-weight:600}
+.arch dd{margin:2px 0 0;font-size:13px;line-height:1.5;color:var(--g700)}
+.arch__go{align-self:flex-start;margin-top:14px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--signal);background:none;border:1px solid var(--line);border-radius:var(--r);padding:8px 11px;cursor:pointer}
+.arch__go:hover{border-color:var(--signal)}
+
+/* Перемикач шляху над схемою — поряд зі сценаріями, щоб читався як частина схеми. */
+.pathbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.path__k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g500);margin-right:4px}
+.pathbar button{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:9px 13px;
+  border:1px solid var(--line);border-radius:var(--r);background:var(--paper);color:var(--g500);cursor:pointer}
+.pathbar button:hover{color:var(--ink);border-color:var(--g300)}
+.pathbar button.on{background:var(--ink);border-color:var(--ink);color:#fff}

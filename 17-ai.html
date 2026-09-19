@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="AI slop helper">AI slop helper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<style>
+.types{width:100%;border-collapse:collapse;margin-top:var(--sp-sm);font-size:13px}
+.types th,.types td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+.types th{font:600 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.types code{font:600 12px/1 var(--mono)}
+.tp{display:inline-block;padding:2px 7px;border-radius:5px;font:600 11px/1.5 var(--mono)}
+.tp-fact{background:#ECFDF5;color:#047857}.tp-hyp{background:#EFF6FF;color:#1D4ED8}
+.tp-mine{background:#F5F3FF;color:#6D28D9}.tp-todo{background:#FFFBEB;color:#92400E}
+.tp-redo{background:#FEF2F2;color:#B91C1C}.tp-del{background:#F5F7F9;color:#4A5F70}
+.stay{font-size:12px;color:var(--ink-3)}
+.steps{counter-reset:st;margin:var(--sp-sm) 0 0;padding:0;list-style:none}
+.steps li{counter-increment:st;position:relative;padding:0 0 12px 34px;font-size:13.5px}
+.steps li::before{content:counter(st);position:absolute;left:0;top:0;width:22px;height:22px;
+  border-radius:50%;background:var(--act-soft);color:var(--act);
+  font:600 11px/22px var(--mono);text-align:center}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--sp-md);
+  margin-top:var(--sp-md)}
+.rule{border:1px solid var(--rule);border-left:4px solid var(--act);border-radius:var(--r-md);
+  padding:var(--sp-sm) var(--sp-md);background:var(--paper)}
+.rule h4{margin:0 0 4px;font-size:13px}
+.rule p{margin:0;font-size:12.5px}
+/* ширше за основний текст, але не на весь екран */
+.main > section,.main > .mast{max-width:1075px;margin-left:auto;margin-right:auto}
+.main > section > :not(.embed-full),.main > .mast > *{max-width:860px;margin-left:auto;margin-right:auto}
+.main > section > .embed-full{max-width:1075px}
+.types{width:100%}
+.main p{max-width:none}
+.get{display:flex;flex-wrap:wrap;gap:8px;margin-top:var(--sp-sm)}
+.get a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:7px 13px;background:var(--paper);font-weight:600;font-size:13px;text-decoration:none;color:var(--act)}
+.get a:hover{border-color:var(--act);background:var(--act-soft)}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top" data-en="AI slop helper">AI slop helper</a>
+  <div class="readbar"><div class="trk" role="progressbar" aria-label="Прочитано / Read"
+       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  <p class="note" data-en="Provenance marks in the document. Proofreading as a list, not as a full re-read.">Помітки походження в документі. Вичитка як список, а не як суцільне перечитування.</p>
+</header>
+
+<main class="main" id="top">
+  <header class="mast wrap">
+    <div class="kicker" data-en="An instrument, not a slogan">Інструмент, а не гасло</div>
+    <h1 data-en="AI slop helper">AI slop helper</h1>
+    <p class="lede" data-en="An assistant writes with the same conviction regardless of where the material came from. A paragraph from a source and a paragraph it has just invented look identical: same tone, same confidence. That is why the bottleneck became proofreading, not the work. My approach is to make the provenance of every block visible inside the document itself.">Асистент пише однаково переконливо незалежно від того, звідки взяв матеріал.
+      Абзац із джерела і абзац, який він щойно вигадав, виглядають однаково: той самий тон,
+      та сама впевненість. Тому вузьким місцем стала не робота, а вичитка. Мій підхід —
+      зробити походження кожного блока видимим прямо в документі.</p>
+    <p class="note" data-en="The module is available as a skill for Claude — it can be downloaded and plugged in.">Модуль оформлений як скіл для Claude — його можна завантажити й підключити.</p>
+    <div class="get">
+      <a href="assets/ai-slop-helper-skill.zip" download data-en="Download the skill · ZIP">Завантажити скіл · ZIP</a>
+      <a href="https://github.com/ArtemZh/Ai_slop_helper" target="_blank" rel="noopener" data-en="GitHub ↗">GitHub ↗</a>
+    </div>
+  </header>
+
+  <section id="s-problem">
+    <h2 data-en="The problem">Проблема</h2>
+    <p data-en="There are many documents: analyses, reviews, specifications, briefs. Nearly every one starts from a draft written by an assistant. Before hand-off the document has to be re-read in full, recalling for every statement where it came from. By the third document in a week that stops working.">Документів багато: аналітика, розбори, специфікації, довідки. Майже кожен починається
+      з чернетки, яку пише асистент. Перед здачею документ доводиться перечитувати цілком
+      і по кожному твердженню згадувати, звідки воно взялося. На третьому документі за тиждень
+      це перестає працювати.</p>
+    <p data-en="Then one of two things happens. Either invented material slips in — a number with no source, a reference to a &quot;study&quot; nobody has seen. Or the author stops trusting the draft and rewrites everything by hand, and then the assistant saved nothing.">Далі стається одне з двох. Або в документ проникає вигадане — цифра без джерела,
+      посилання на «дослідження», якого ніхто не бачив. Або автор перестає довіряти чернетці
+      й переписує все руками, і тоді асистент не заощадив нічого.</p>
+  </section>
+
+  <section id="s-types">
+    <h2 data-en="Six kinds of mark">Шість типів поміток</h2>
+    <p data-en="Every substantive block gets a mark. Headings and figure captions are not marked — they assert nothing.">Кожен змістовний блок отримує помітку. Заголовки й підписи до схем не позначаються —
+      вони нічого не стверджують.</p>
+    <table class="types">
+      <thead data-en="&lt;tr&gt;&lt;th&gt;Type&lt;/th&gt;&lt;th&gt;What it means&lt;/th&gt;&lt;th&gt;Fate&lt;/th&gt;&lt;/tr&gt;"><tr><th>Тип</th><th>Що означає</th><th>Доля</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tp tp-fact" data-en="Verified">Перевірено</span></td>
+          <td data-en="Taken from an open source or provided by the owner. A source is mandatory.">Взято з відкритого джерела або надано власником. Джерело обовʼязкове.</td>
+          <td class="stay" data-en="stays in the delivered work">лишається у зданій роботі</td></tr>
+        <tr><td><span class="tp tp-hyp" data-en="Hypothesis">Гіпотеза</span></td>
+          <td data-en="A stated assumption or interpretation you can work with.">Висловлене припущення або тлумачення, з яким можна працювати.</td>
+          <td class="stay" data-en="stays">лишається</td></tr>
+        <tr><td><span class="tp tp-mine" data-en="My conclusion">Мій висновок</span></td>
+          <td data-en="The &lt;b&gt;owner&#x27;s&lt;/b&gt; judgement from their own experience — even if the assistant rewrote the words.">Судження <b>власника</b> з його досвіду — навіть якщо асистент переписав слова.</td>
+          <td class="stay" data-en="stays">лишається</td></tr>
+        <tr><td><span class="tp tp-todo" data-en="To finish">Доробити</span></td>
+          <td data-en="Work is still needed here.">Тут ще потрібна робота.</td>
+          <td class="stay" data-en="must be gone before hand-off">має зникнути до здачі</td></tr>
+        <tr><td><span class="tp tp-redo" data-en="Redo · ai slop">Переробити · ai slop</span></td>
+          <td data-en="Assistant text with no source. In a fresh draft this is the normal state of most blocks.">Текст асистента без джерела. У свіжій чернетці це нормальний стан більшості блоків.</td>
+          <td class="stay" data-en="must be gone before hand-off">має зникнути до здачі</td></tr>
+        <tr><td><span class="tp tp-del" data-en="Delete">Видалити</span></td>
+          <td data-en="The block is up for removal. The mark itself deletes nothing.">Блок під зніс. Помітка нічого не видаляє сама.</td>
+          <td class="stay" data-en="must be gone before hand-off">має зникнути до здачі</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:var(--sp-sm)" data-en="&lt;b&gt;The work is finished when not a single &quot;ai slop&quot; mark is left on the page.&lt;/b&gt; That is a measurable definition of ready — the same role a definition of done plays in delivery."><b>Робота вважається закінченою, коли на сторінці
+      не лишилося жодної помітки «ai slop».</b> Це вимірюваний критерій готовності —
+      те саме, чим для доставки є визначення готовності.</p>
+  </section>
+
+  <section id="s-demo">
+    <h2 data-en="What it looks like">Як це виглядає</h2>
+    <p data-en="A demonstration article, fully marked up. The rail to the left of each block says where the text came from; the column on the right holds the comments. This is a read-only copy — the working version lets you cycle the marks with a click and writes them back to the file.">Демонстраційна стаття, повністю розмічена. Рейка зліва від кожного блока каже,
+      звідки текст; колонка справа тримає зауваження. Тут копія в режимі читання —
+      робоча версія дозволяє перемикати помітки клікою й зберігає їх у файл.</p>
+    <div class="embed-full">
+      <div class="embed-bar">
+        <span data-en="ai slop helper · demo article with marks">ai slop helper · демо-стаття з помітками</span>
+        <a href="assets/slop-demo/index.html?v=20260919091816" target="_blank" rel="noopener" data-en="Open in a separate tab ↗">Відкрити в окремій вкладці ↗</a>
+      </div>
+      <iframe src="assets/slop-demo/index.html?v=20260919091816" title="ai slop helper" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <section id="s-where">
+    <h2 data-en="Where it is already applied">Де це вже застосовано</h2>
+    <p data-en="Diagrams &lt;a href=&quot;13-delivery-framework.html&quot;&gt;13&lt;/a&gt;, &lt;a href=&quot;14-pmbok8-map.html&quot;&gt;14&lt;/a&gt; and &lt;a href=&quot;14a-pmbok8-overview.html&quot;&gt;14a&lt;/a&gt; were built together with an assistant, but their geometry is computed from data rather than placed by hand, and every edit is verified by script — by measurement, not by eye. That is the same principle as the provenance marks: a result is accepted not because it looks convincing but because there is a way to check it.">Схеми <a href="13-delivery-framework.html">13</a>, <a href="14-pmbok8-map.html">14</a>
+      і <a href="14a-pmbok8-overview.html">14a</a> зроблені в парі з асистентом, але геометрія
+      в них рахується з даних, а не розставляється руками, і кожна правка перевіряється
+      скриптом — вимірюванням, а не на око. Це той самий принцип, що й помітки походження:
+      результат приймається не тому, що виглядає переконливо, а тому, що є спосіб це перевірити.</p>
+  </section>
+</main>
+</div>
+
+<script src="shared/lang.js?v=20260919091816"></script>
+<script src="shared/embed.js?v=20260919091816"></script>
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/topbar.js?v=20260919091816"></script>
+</body>
+</html>

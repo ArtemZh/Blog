@@ -1,0 +1,64 @@
+/* 14b — плакат потоку процесів PMBOK 8. Формат узятий з плаката Варгаса до
+ * Process Groups Practice Guide: кожен процес показаний повністю, з ITTO,
+ * і все видно одночасно. Тому й розкладка плакатна, а не інтерфейсна:
+ * п'ять областей-регіонів, усередині — колонки карток.
+ *
+ * Один канал — одне значення: колір = домен, і більше нічого. Постійні дроти
+ * малюються лише там, де вони короткі й прямі (сусіди в одній колонці);
+ * решта зв'язків з'являється за кліком, як на 14. */
+
+.flowstage{position:relative;transform-origin:0 0;background:var(--ground)}
+
+.fregion{position:absolute;z-index:0;border:1px solid var(--rule);
+  border-radius:var(--r-lg);background:#F7F8FA}
+.fregion-hd{position:absolute;z-index:1;box-sizing:border-box;
+  padding:9px 16px;background:#E4E6EA;border:1px solid var(--rule-2);
+  text-align:center;font:800 24px/1.15 var(--sans);letter-spacing:.06em;
+  text-transform:uppercase;color:#4A5058}
+.fregion-hd b{font:600 13px/1 var(--mono);letter-spacing:.1em;color:var(--ink-3);margin-left:12px}
+
+/* Пунктирна рамка навколо процесів однієї області — як на референсі. */
+.fhull{position:absolute;z-index:1;border:1.4px dashed;border-radius:var(--r-md);
+  opacity:.55;pointer-events:none}
+
+.fcard{position:absolute;z-index:3;background:var(--ground);
+  border:1.4px solid var(--rule-2);border-radius:3px;
+  padding:0 9px 8px;cursor:pointer;
+  transition:opacity .18s,box-shadow .15s}
+.fcard:hover{box-shadow:0 3px 14px rgba(20,25,40,.14)}
+.fcard:focus-visible{outline:2px solid var(--act);outline-offset:2px}
+
+.fcard-bar{margin:0 -9px 0;padding:3px 9px;display:flex;justify-content:space-between;
+  align-items:center;color:#fff;font:700 8.5px/1.3 var(--mono);letter-spacing:.13em;
+  text-transform:uppercase}
+.fcard-bar .no{opacity:.9}
+.fcard-hd{padding:9px 4px 2px}
+.fcard-hd .nm{display:block;text-align:center;font:700 12.5px/1.3 var(--sans);color:var(--ink)}
+
+.fwires{position:absolute;inset:0;pointer-events:none;z-index:2}
+.fwire{fill:none;stroke:#8E96A5;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fwire.back{stroke-dasharray:5 5}
+.fwires polygon{fill:#8E96A5}
+.fchev{fill:var(--rule-2);opacity:.6}
+
+/* Виділення: полотно гасне, лишається обраний процес, його сусіди й
+   тимчасові дроти до них. */
+.flowstage.is-hot .fcard{opacity:.13}
+.flowstage.is-hot .fwire,.flowstage.is-hot .fwires polygon,.flowstage.is-hot .fdot{opacity:.06}
+.flowstage.is-hot .fhull{opacity:.12}
+.flowstage.is-hot .fcard.hot{opacity:1;border-color:var(--act);
+  box-shadow:0 3px 18px rgba(31,111,235,.22)}
+.flowstage.is-hot .fcard.near{opacity:1}
+.fwire.tmp{stroke:var(--act);stroke-width:2;stroke-dasharray:6 4}
+.fwires polygon.tmp{fill:var(--act)}
+.flowstage.is-hot .fwire.tmp,.flowstage.is-hot .fwires polygon.tmp{opacity:1}
+
+.flegend{display:flex;gap:var(--sp-md);flex-wrap:wrap;font-size:12px;
+  color:var(--ink-2);margin:var(--sp-sm) 0}
+.flegend span{display:flex;align-items:center;gap:6px}
+.flegend i{width:14px;height:14px;border-radius:3px;display:inline-block}
+
+@media print{
+  .topbar,.railnav,.controls,.note{display:none}
+  .stage-fit{overflow:visible;border:0}
+}

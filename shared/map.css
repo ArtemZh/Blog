@@ -1,0 +1,107 @@
+/* Карта процессов. Композиция плаката: Initiating слева вверху, Planning большим
+ * блоком справа, Executing слева, Monitoring & Controlling справа внизу, Closing
+ * слева внизу. Маршруты проводов спроектированы под неё: самый плотный обмен идёт
+ * между Planning и M&C, и они стоят друг над другом. Если растянуть пять
+ * контейнеров в ряд, эти связи станут длинными линиями через весь холст. */
+.stage-fit{position:relative;width:100%;overflow:auto;cursor:grab;
+  border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--ground)}
+.stage{position:relative;transform-origin:0 0}
+
+/* Полосы по принципу DWH: подпись сверху внутри блока, моноширинная
+   в разрядку, заливка едва отличима от фона — рамка держит группу,
+   а не спорит с карточками за внимание. */
+.grp{position:absolute;z-index:0;border:1px dashed var(--rule-2);border-radius:var(--r-md);
+  background:#FCFCFD}
+.grp-label{position:absolute;font:500 10px/1 var(--mono);letter-spacing:.13em;
+  text-transform:uppercase}
+
+.fa{position:absolute;z-index:0;border:1px solid var(--rule);border-radius:var(--r-lg);
+  background:#F7F8FA}
+.fa-label{position:absolute;font:500 11.5px/1 var(--mono);letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3)}
+
+.pnode{position:absolute;z-index:2;background:var(--ground);border:1px solid var(--rule);
+  border-left-width:4px;border-radius:var(--r-sm);padding:6px 9px;cursor:pointer;
+  transition:opacity .2s,box-shadow .15s,border-color .15s}
+/* Номер і назва — одним рядком: номер попереду, назва поруч. Двома рядками
+   картка займала вдвічі більше висоти заради чотирьох символів. */
+.pnode{display:flex;align-items:baseline;gap:7px}
+.pnode .num{flex:0 0 auto;font:600 9.5px/1.35 var(--mono);color:var(--ink-3);letter-spacing:.04em}
+.pnode .nm{font-size:11.5px;line-height:1.35;color:var(--ink)}
+.pnode:hover{box-shadow:0 2px 10px rgba(20,25,40,.12)}
+.pnode:focus-visible{outline:2px solid var(--act);outline-offset:2px}
+
+/* Провода должны лежать НАД фоном контейнеров, но под карточками: иначе
+   непрозрачный фон блока закрашивает связи, и схема читается как набор
+   коробок без соединений. */
+.pwires{position:absolute;inset:0;pointer-events:none;z-index:1}
+.pwire{fill:none;stroke:#8E96A5;stroke-width:1.8;stroke-linecap:round}
+.pwire.back{stroke-dasharray:4 5;stroke:#A9B1BF}
+/* Міждоменні шини — світліші за рядкові: рядок читається першим, домени — другим. */
+.pwire.x{stroke:#9AA3B2;stroke-width:1.6}
+
+/* Подсветка по клику: схема гаснет, горит только выбранный процесс и его связи. */
+.pnode.unchanged{opacity:.55}
+.stage.is-hot .pnode{opacity:.14}
+.stage.is-hot .pwire{opacity:.08}
+.stage.is-hot .pnode.hot,.pnode.unchanged.hot{opacity:1;border-color:var(--act);box-shadow:0 2px 14px rgba(31,111,235,.2)}
+.stage.is-hot .pnode.near{opacity:1}
+.stage.is-hot .pwire.hot{opacity:1;stroke:var(--act);stroke-width:2}
+/* Тимчасові лінії міждоменних зв'язків: малюються тільки на час виділення,
+   тому пунктир — щоб їх не плутали з постійною схемою. */
+.stage.is-hot .pwire.tmp{opacity:1;stroke:var(--act);stroke-width:2;stroke-dasharray:6 4;fill:none}
+/* Наконечник — частина дроту: гасне і спалахує разом із ним, інакше при
+   виділенні лишаються яскраві стрілки від пригашених ліній. */
+.stage.is-hot .mxwires polygon{opacity:.08}
+.stage.is-hot .mxwires polygon.hot,.stage.is-hot .mxwires polygon.tmp{opacity:1;fill:var(--act)}
+.mxwires polygon.tmp{fill:var(--act)}
+
+/* Раскрытие: карточка растёт, содержимое появляется после. */
+.pnode .io{display:none;margin-top:7px;border-top:1px solid var(--rule);padding-top:6px}
+.pnode.open{z-index:20;box-shadow:0 8px 30px rgba(20,25,40,.18)}
+.pnode.open .io{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.io h4{margin:0 0 3px;font:600 9px/1 var(--mono);letter-spacing:.07em;
+  text-transform:uppercase;color:var(--ink-3)}
+.io ul{margin:0;padding-left:12px}
+.io li{font-size:10px;line-height:1.35;color:var(--ink-2)}
+
+.dropped{margin-top:var(--sp-md);border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:var(--sp-sm) var(--sp-md);background:var(--paper)}
+.dropped h3{margin:0 0 var(--sp-xs);font-size:13px}
+.dropped ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--ink-2)}
+.dropped li{margin-bottom:4px}
+
+.counts{display:flex;gap:var(--sp-md);flex-wrap:wrap;font-size:13px;color:var(--ink-2);
+  margin-bottom:var(--sp-sm)}
+.counts b{color:var(--ink)}
+.dlegend{display:flex;gap:var(--sp-md);flex-wrap:wrap;font-size:12px;color:var(--ink-2);
+  margin-top:var(--sp-sm)}
+.dlegend span{display:flex;align-items:center;gap:6px}
+.dlegend i{width:14px;height:14px;border-radius:3px;display:inline-block}
+/* Правило-переключатель должно стоять после базового: у них одна
+   специфичность, и побеждает то, что ниже. */
+.dlegend[hidden]{display:none}
+
+/* ── матриця домен × фокус-область (PMBOK 8) ─────────────────────────
+   Рядок — домен, колонка — фокус-область PLC. Вкладених рамок немає:
+   лише заголовки рядків і колонок. Дроти постійно — тільки всередині
+   рядка; міждоменні — за кліком. */
+/* Зазор між колонками — коридор для міждоменних шин, а не відступ. */
+.mx{display:grid;grid-template-columns:150px repeat(5,220px);gap:10px 48px;
+  padding:16px;position:relative;width:max-content}
+.mx .hd{background:var(--plc);border-radius:var(--r-md);padding:9px 10px;
+  font:600 13px/1.2 var(--sans);text-align:center}
+.mx .hd.par{grid-column:span 2;position:relative}
+.mx .hd.par small{display:block;font:500 9.5px/1 var(--mono);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);margin-top:4px}
+.mx .hd.sub{background:none;padding:0 0 2px;font:600 11px/1.2 var(--mono);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-3);min-height:0}
+.mx .rowhd{display:flex;align-items:center;padding:0 12px;border-radius:var(--r-md);
+  color:#fff;font:600 13px/1.2 var(--sans)}
+.mx .cellbox{display:flex;flex-direction:column;gap:8px;min-height:44px;
+  border-radius:var(--r-md);background:#F7F8FA;padding:6px}
+.mx .cellbox.void{background:transparent}
+.mx .pnode{position:relative;left:auto;top:auto;width:auto}
+.mxwires{position:absolute;inset:0;pointer-events:none;z-index:1}
+.mx .cellbox{position:relative;z-index:2}
+.mx .rowhd,.mx .hd{position:relative;z-index:2}

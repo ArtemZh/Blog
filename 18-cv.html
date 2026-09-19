@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<style>
+.cv{max-width:1060px;margin:0 auto;font-size:15px;line-height:1.6}
+.cv section{margin-bottom:var(--sp-xl)}
+.cv h2{padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.cv p{font-size:15px}
+.cv-head{display:flex;gap:28px;align-items:center;padding-bottom:var(--sp-lg);border-bottom:1px solid var(--rule)}
+.cv-head img{width:132px;height:132px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:1px solid var(--rule)}
+.cv-head h1{margin:6px 0 8px;font-size:27px}
+.cv-head .ct{font-size:14px;color:var(--ink-2);line-height:1.7}
+.cv-head .ct span{margin:0 8px;color:var(--ink-3)}
+.mail-btn{font:inherit;color:var(--act);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+@media print{.mail-btn,.cv-head .ct span,.cv-head .dl{display:none}}
+.cv p{max-width:none}
+.cv ul{margin:4px 0 8px;padding-left:22px;font-size:15px;color:var(--ink-2)}
+.cv li{margin-bottom:3px}
+.co{display:flex;align-items:baseline;gap:10px;font-size:20px;font-weight:700;color:var(--ink);
+  margin:var(--sp-lg) 0 2px;padding-top:var(--sp-sm);border-top:1px solid var(--rule)}
+.comp{border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper);padding:var(--sp-md) var(--sp-lg);margin-top:var(--sp-md)}
+.comp>.co{margin:0 0 2px;padding:0;border:0}
+.projs{display:flex;flex-direction:column;gap:var(--sp-sm);margin-top:var(--sp-md)}
+.proj{border:1px solid var(--rule);border-left:3px solid var(--act);background:var(--ground);border-radius:0 var(--r-md) var(--r-md) 0;padding:10px 14px}
+.proj>.pj{margin-top:0}
+.proj p:last-child,.proj ul:last-child{margin-bottom:0}
+.co small{font:600 13px/1 var(--mono);color:var(--ink-3)}
+.rl{color:var(--act);font-weight:600;font-size:15px;margin:0 0 4px}
+.pj{font-weight:600;font-size:16px;color:var(--ink);margin:var(--sp-sm) 0 4px}
+.mt{font-size:13px;color:var(--ink-3);margin:0!important}
+.mt b{font-weight:600}.mt b~b{margin-left:12px}
+.mt+p,.mt+ul{margin-top:6px}
+.edu small{font:600 12px/1 var(--mono);color:var(--ink-3)}
+.dom{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-sm);margin-top:var(--sp-sm)}
+.dom>div{border:1px solid var(--rule);border-radius:var(--r-md);padding:10px 12px;background:var(--paper);
+  font-size:14px;color:var(--ink-3)}
+.dom b{display:block;color:var(--ink);font-size:15px;margin-bottom:2px}
+.h3{font-weight:600;color:var(--ink);margin:var(--sp-md) 0 6px!important}
+.tl p{margin:0 0 6px;font-size:15px}
+.tl p b{color:var(--ink)}
+.dl{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);border-radius:var(--r-md);margin-top:10px;
+  padding:6px 12px;background:var(--paper);font-weight:600;font-size:13.5px;text-decoration:none;color:var(--act)}
+.dl:hover{border-color:var(--act);background:var(--act-soft)}
+@media(max-width:640px){.cv-head{flex-direction:column;align-items:flex-start}.dom{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="back" href="index.html">← Home</a>
+  <a class="brand" href="#top">CV</a>
+  <div class="readbar"><div class="trk" role="progressbar" aria-label="Прочитано"
+       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  </header>
+
+<main class="main" id="top">
+<article class="cv">
+  <header class="mast cv-head">
+    <img src="assets/cv-photo.jpg" alt="Artem Zhavrotskyi">
+    <div>
+      <div class="kicker">Artem Zhavrotskyi · CV</div>
+      <h1>Delivery Manager / Senior Technical Project Manager</h1>
+      <div class="ct">LinkedIn: <a href="https://www.linkedin.com/in/artemzhavrotskyi" target="_blank" rel="noopener">artemzhavrotskyi</a><span>|</span><button type="button" class="mail-btn" id="mailBtn">Show email</button></div>
+      <a class="dl" href="assets/Zhavrotskyi_CV.pdf" target="_blank" rel="noopener">CV as PDF ↗</a>
+    </div>
+  </header>
+
+  <section id="s-profile">
+  <h2>Profile</h2>
+  <p>Over more than 7+ years as a Delivery / Project Manager, I have covered all phases of the project lifecycle, managed teams of up to 40 people, and successfully overseen multiple projects simultaneously (Fixed-price, Dedicated Team, T&amp;M). My approach follows PMI (PMBOK 6, 7, 8 Standard+) and Agile best practices, with a deep understanding of PMO processes and hands-on use of tools such as Jira, Confluence, Power BI, and AI copilots. Strong communication skills and a structured approach enable me to collaborate effectively with stakeholders and vendors, achieving high-impact results.</p>
+  <p style="margin:0">Volunteer mentor — Ukrainian Armed Forces (open webinars, development of training programs).</p>
+  <p>Speaker at IAMPM — developing training courses for PM, Jira, Confluence, SQL.</p>
+  </section>
+
+  <section id="s-edu">
+  <h2>Education</h2>
+  <p class="edu" style="margin:0"><b>M.Sc., Radio Engineering</b> — National Technical University of Ukraine “KPI”, Radiotechnical Faculty. <small>2005</small></p>
+  <p class="edu"><b>M.Sc., Enterprise Management</b> — Kyiv Business Institute (“KPI”). <small>2005</small></p>
+  </section>
+
+  <section id="s-exp">
+  <h2>Work Experience</h2>
+  <div class="comp">
+  <p class="co">Brightgrove<small>2023 – Present</small></p>
+  <p class="rl">Technical Senior Project Manager → Delivery Manager</p>
+  <p class="mt"><b>Contractual Model:</b> Dedicated Team, T&amp;M, Fixed Price</p>
+  <p style="margin:0">Managing several projects simultaneously across Data Science, Embedded, Fintech, Logistics, and Real Estate domains.</p>
+  <p style="margin:0">Current workload:</p>
+  <ul><li>50% Delivery Management (with two subordinate PMs),</li><li>30% Direct Project Management,</li><li>20% PMO / Pre-sale.</li></ul>
+    <div class="projs">
+    <div class="proj">
+  <p class="pj">Project: Aazzur — Embedded Banking / BaaS Integration Platform</p>
+  <p class="mt"><b>Contractual Model:</b> Time &amp; Material</p>
+  <p class="mt"><b>Team:</b> PM / Delivery Manager, Tech Lead, 5× Java Backend Engineers (Spring Boot)</p>
+  <p class="mt"><b>Tech stack:</b> Java, Spring Boot, REST APIs, banking / card scheme integrations (incl. Mastercard)</p>
+  <p>Aazzur is a Berlin-based embedded finance orchestration platform enabling companies to rapidly integrate financial services — bank accounts, cards, loans, insurance, and investments — into their own products via APIs and modular, white-labeled “Smart Finance Blocks.” Leading the launch and scale-up of a new integration squad as a vendor delivery partner: forming and onboarding a 5-person Java / Spring Boot backend team alongside the client’s Tech Lead, defining the technical stack and delivery process, and driving expansion of platform integrations — including direct Mastercard integration work — from planning through quality oversight of delivered solutions.</p>
+    </div>
+    <div class="proj">
+  <p class="pj">Project: Onward — AI-Assisted Data Import Platform</p>
+  <p class="mt"><b>Contractual Model:</b> Time &amp; Material</p>
+  <p class="mt"><b>Team:</b> PM, Ruby Backend, Frontend (Ember.js), Node.js / AI Engineer, DevOps, QA</p>
+  <p class="mt"><b>Tech stack:</b> Ember.js, Ruby, Node.js, OpenAI API (Containers &amp; Responses), AWS (S3, SQS, EC2, CloudWatch, IAM), Heroku</p>
+  <p>Design and delivery of an AI-assisted data import solution integrated into the existing Onward Portal — automating ingestion of heterogeneous documents (PDF, DOC, DOCX, JSON, CSV, XLSX) via OpenAI for parsing, structural and data-level validation, preview / review, and asynchronous loading of Riders and Rides into the Ruby backend. Scope includes a Node.js importer microservice with agentic workflow, AWS-based infrastructure (S3 + SQS/DLQ, EC2, CloudWatch), rollback support, and Heroku-compatible deployment.</p>
+    </div>
+    <div class="proj">
+  <p class="pj">Project: AI Assistant for Pathologist — Private On-Premise LLM for Diagnostic Reporting</p>
+  <p class="mt"><b>Contractual Model:</b> Time &amp; Material</p>
+  <p class="mt"><b>Team:</b> PM, Tech Lead / Solution Architect, Backend &amp; AI Engineer, Android Developer, Delivery Coordinator</p>
+  <p class="mt"><b>Tech stack:</b> Python, Local LLM (Gemma family), RAG, Voice-to-Text (Polish), Android</p>
+  <p>Discovery and development of a private AI assistant for a pathologist that runs entirely on the customer’s own hardware (no software installed on hospital workstations) to generate, edit, and accumulate Polish-language diagnostic descriptions. Voice / text queries captured on an Android device are processed by a local LLM with RAG over the doctor’s prior diagnoses on an RTX 3090 server; generated text is then “typed” into any hospital system via Bluetooth / USB keyboard emulation — preserving one-way data transfer, full data privacy, and universality across multiple workstations. Scope includes a de-risking spike, local LLM setup, Polish Voice-to-Text, RAG over the knowledge base, Android app, training / ingestion web UI, and the workstation integration bridge.</p>
+    </div>
+    <div class="proj">
+  <p class="pj">Project: GEO Visibility Platform — AI-driven SEO Analytics Tool</p>
+  <p class="mt"><b>Contractual Model:</b> Time &amp; Material</p>
+  <p class="mt"><b>Team:</b> PM, Data / ML Lead, Data / ML Engineer</p>
+  <p class="mt"><b>Tech stack:</b> Python, OpenAI API, CLI, JSON / CSV</p>
+  <p>Development of an MVP tool designed to measure website visibility in generative AI search responses (e.g., ChatGPT). Automates persona generation, query execution, response parsing, and WCI metrics calculation with historical versioning based on provided RFP and prompt templates.</p>
+    </div>
+    <div class="proj">
+  <p class="pj">Project: IT System for River Mall</p>
+  <p class="mt"><b>Industry:</b> Retail <b>Duration:</b> 2019–2022, 2025–2026</p>
+  <p class="mt"><b>Role:</b> Solution Architect &amp; Project Manager <b>Team:</b> 3–25 (up to 5 teams)</p>
+  <p class="mt"><b>Project Type:</b> Time &amp; Materials, Fixed Price</p>
+  <p>Led a 3-year program to design and deliver River Mall’s IT ecosystem from scratch — network / server infrastructure, mobile app, Wi-Fi analytics, captive portal, financial system, and analytics platform — using hybrid Agile / Waterfall. Owned the 5-year roadmap, vendor analysis, tender documentation, and regular updates to ownership; integrated on-premises and cloud solutions for customer engagement, operations, and analytics.</p>
+  <ul>
+    <li><b>Infrastructure:</b> Designed and deployed LAN / server infrastructure from scratch on HPE Aruba (selected via tender); managed integrator work, documentation, and hiring of the in-house IT team incl. IT Director.</li>
+    <li><b>Solutions:</b> Mobile app with BLE navigation and location-triggered push; Wi-Fi analytics with heatmaps and movement tracking; custom captive portal; Zendesk-based tenant help desk; financial system and website; centralized DWH with 8 Power BI dashboards.</li>
+    <li><b>Security &amp; Results:</b> FortiGate with UTP; Aruba AirWave for network monitoring. Reduced equipment costs by 40% and integrated on-premises + cloud analytics via DWH and Power BI.</li>
+  </ul>
+    </div>
+    <div class="proj">
+  <p class="pj">Subproject: DWH Migration &amp; Modernization (DMS Stack, River Mall)</p>
+  <p class="mt"><b>Contractual Model:</b> Fixed Price</p>
+  <p class="mt"><b>Team:</b> PM, Power BI Engineer, Data Engineer, DevOps</p>
+  <p class="mt"><b>Tech stack:</b> Python, Dagster, PostgreSQL, MS SQL (legacy), MySQL, Power BI, Docker Compose, GitLab CI/CD</p>
+  <p>Modernization of River Mall's visitor analytics and financial reporting — migrating from a legacy MS SQL architecture to a centralized PostgreSQL DWH orchestrated with Dagster. Consolidates data from 1C (via a MySQL buffer), R-Stat counters (MSSQL), Hikvision counters (PostgreSQL), rental email exports, and legacy history (backfill). All business logic is computed inside the DWH; Power BI and a Telegram bot are read-only consumers of pre-aggregated data. Deployed via Docker Compose and GitLab CI/CD, with schema migrations managed through Alembic.</p>
+    </div>
+    <div class="proj">
+  <p class="pj">Honsel RivSmart eBZ Zero S</p>
+  <p class="mt"><b>Domain:</b> Embedded Development <b>Model:</b> T&amp;M, 6 FTE</p>
+  <ul>
+    <li>Led development of a compact tool for setting blind rivets, compliant with Industry 4.0 standards.</li>
+    <li>Drove migration from STM32F103 to STM32L496 to overcome memory limitations; personally conducted UAT to validate firmware performance and contributed to debugging.</li>
+    <li>Collaborated with Bosch engineers to align firmware with Industry 4.0 requirements, ensuring seamless battery integration and compliance with stringent quality standards.</li>
+  </ul>
+    </div>
+    <div class="proj">
+  <p class="pj">Nextrail</p>
+  <p class="mt"><b>Domain:</b> Data Science <b>Model:</b> Fixed Price, 5 FTE</p>
+  <ul>
+    <li>Managed simulation and validation of braking parameters for ETCS Gamma model trains, ensuring compliance with European railway standards (prEN 17997-1, DIN EN 16834).</li>
+    <li>Independently led the pre-sale process — crafting technical proposals and conducting technical interviews to build a high-performing team — while supervising dynamic brake testing.</li>
+    <li>Oversaw a mathematical braking model using Monte Carlo simulations to calculate correction factors (Kdry, Kwet), securing certification readiness under ETCS Baseline 3.</li>
+  </ul>
+    </div>
+    <div class="proj">
+  <p class="pj">PMO &amp; Pre-sale Contributions</p>
+  <ul>
+    <li>Established a PMO — introducing standardized processes, KPIs, and templates to enhance oversight and drive continuous improvement aligned with company strategy.</li>
+    <li>Led a $3M+ annual delivery portfolio across Embedded, Data Science, Logistics, and Real Estate, managing 2 Junior PMs and 40+ developers globally.</li>
+    <li>Spearheaded pre-sales for US and German clients, improving proposal win rate by 20% through tailored value propositions, market research, and roadmap visualizations.</li>
+    <li>Built trusted client partnerships, identifying cross-sell opportunities and preparing complex documents (PoC, MVP, SOW).</li>
+    <li>Mentored team members with personalized career plans; launched a 2023–2024 PM mentoring program that reduced external hiring costs by 15%.</li>
+  </ul>
+    </div>
+    <div class="proj">
+  <p class="pj">Key Achievements</p>
+  <ul>
+    <li><b>AI Domain Leadership:</b> Founded the ML / AI / Data Science vertical, securing a $50K project (5 FTE, 2 months) for a German manufacturer through strategic partnerships.</li>
+    <li><b>Agile Delivery Innovation:</b> Implemented an Agile Delivery Framework for 3 clients (3–22 FTE), increasing delivery-expertise demand in negotiations.</li>
+    <li><b>Process Optimization:</b> Conducted PMBOK-based audits across 12 projects, introducing project health reports and tech audit services.</li>
+    <li><b>Employee Risk Reduction:</b> Launched the ERR process, improving team retention and operational stability.</li>
+  </ul>
+    </div>
+    </div>
+  </div>
+
+  <div class="comp">
+  <p class="co">SoftServe<small>2022 – 2023</small></p>
+  <p class="rl">Middle Project Manager → Technical Middle Project Manager</p>
+  <p class="mt"><b>Contractual Model:</b> Dedicated Team, T&amp;M <b>Team Size:</b> 17</p>
+    <div class="projs">
+    <div class="proj">
+  <p class="pj">Client — NDA: ETL Library &amp; Data Analytics</p>
+  <p class="mt"><b>Domain:</b> Data Science <b>Model:</b> T&amp;M, 21 FTE</p>
+  <p style="margin:0">Managed multiple workstreams, delivering scalable data solutions and analytics tools to support decision-making.</p>
+  <ul>
+    <li><b>ETL Library:</b> Led creation of a Databricks-based ETL library to process large datasets, configuring clusters for scalability and validating data quality during UAT.</li>
+    <li><b>Dashboards:</b> Designed interactive Power BI dashboards with optimized KPI visualizations, enhancing stakeholder insight.</li>
+    <li><b>Release Management:</b> Coordinated release schedules and quality control across teams, ensuring stable deployments and timely updates.</li>
+  </ul>
+    </div>
+    <div class="proj">
+  <p class="pj">Smelting Furnace Optimization</p>
+  <p class="mt"><b>Domain:</b> Embedded / Data Science <b>Model:</b> T&amp;M, 4 FTE</p>
+  <p style="margin:0">Managed a solution to optimize smelting furnace operations by analyzing historical performance data and updating firmware configurations.</p>
+  <ul><li>Oversaw collection and analysis of historical sensor data per furnace to identify inefficiencies, enabling targeted firmware updates.</li></ul>
+    </div>
+    </div>
+  </div>
+
+  <div class="comp">
+  <p class="co">IWIS<small>2019 – 2021</small></p>
+  <p class="rl">Junior Project Manager → Middle Project Manager / Business Analyst</p>
+  <p class="mt"><b>Contractual Model:</b> Time &amp; Material, Fixed Price <b>Team Size:</b> 3–25</p>
+  <ul>
+    <li><b>IoT Sensor Monitoring (IoT, T&amp;M, 5 FTE):</b> Integrated ESP8266 with ATmega using nRF24 modules for wireless communication over SPI / UART, with exhaust-fan control and industrial temperature / humidity sensors via Modbus.</li>
+    <li><b>SoilSense IoT Monitoring (Agriculture, T&amp;M, 3 FTE):</b> PoC for an IoT solution optimizing agricultural processes — soil temperature and acidity at three depths, transmitted via LoRa, with a visualization platform recommending irrigation and fertilizer use.</li>
+    <li><b>Paypolitan Mobile App (Fintech, T&amp;M, 15 FTE):</b> Mobile application for working with cryptocurrencies, fintech, and blockchain.</li>
+    <li><b>Planet Kino IT Solutions (Retail IT, T&amp;M, 4 FTE):</b> Solution for showing session times and available seats on plasma TVs; developed WebOS-compatible animations and webhooks for remote updates, management, and reboots.</li>
+  </ul>
+  </div>
+
+  <div class="comp">
+  <p class="co">Terrasoft<small>2018</small></p>
+  <p class="rl">Project Coordinator / System Analyst</p>
+  <p class="mt"><b>Contractual Model:</b> Product Team <b>Team Size:</b> 7</p>
+  <ul>
+    <li>Organized and controlled the work of the BPM’online development Scrum team (full PLC).</li>
+    <li>Delivered 3 minor releases; developed prototype UX interfaces and product-line concepts; ran regular competitor research and usability testing.</li>
+  </ul>
+  </div>
+
+  <div class="comp">
+  <p class="co">UCRF — Ukrainian State Center of Radio Frequencies<small>2006 – 2018</small></p>
+    <div class="projs">
+    <div class="proj">
+  <p class="pj">Radio Spectrum Management System (RSMS) — Product Owner / Support Team Lead</p>
+  <p class="mt"><b>Dates:</b> 2013–2018 <b>Model:</b> Product Team + Vendor <b>Team:</b> 3–14</p>
+  <p>Owned implementation, customization, and ongoing development of the RSMS (ICS Manager / ICS Telecom) as Product Owner — driving migration and verification of data into the ICS Manager database and building custom screen forms and templates to align the system with departmental business processes. Hired and organized L1 / L2 / L3 support teams, ensuring reliable operational support of the platform.</p>
+    </div>
+    <div class="proj">
+  <p class="pj">DVB-T2 Radio Planning &amp; RSMS Migration — Engineer, Television &amp; Broadcasting Dept.</p>
+  <p class="mt"><b>Dates:</b> 2006–2013</p>
+  <p>Radio Planning Expert responsible for coverage calculation and radio planning for Ukraine’s DVB-T2 network, and EMC expert. Led migration from the legacy “Broadcasting” software to the RSMS as Product Owner — preparing specifications, managing export / import and data verification, and developing screen forms and templates — while ensuring departmental business processes were fully implemented. Also acted as Business Analyst and Firebird database administrator.</p>
+    </div>
+    </div>
+  </div>
+</section>
+
+  <section id="s-skills">
+  <h2>Techniques &amp; Tools — PMBOK 7/8 Performance Domains</h2>
+  <div class="dom">
+    <div><b>Stakeholders</b>Stakeholder analysis &amp; register, engagement planning, information distribution, meetings</div>
+    <div><b>Team</b>Team charter &amp; structure, servant leadership, conflict resolution, performance evaluation &amp; mentoring</div>
+    <div><b>Development Approach &amp; Life Cycle</b>Agile / Waterfall / Hybrid tailoring, approach selection by project context</div>
+    <div><b>Planning</b>Brainstorming, surveys, inspection &amp; observation, WBS, estimating, Critical Path, schedule compression, reserve analysis</div>
+    <div><b>Project Work</b>Change management, documentation / proposals / SRS, process analysis &amp; continuous improvement, knowledge management</div>
+    <div><b>Delivery</b>Plan creation, execution &amp; revision, day-to-day operations, quality audit, cause-and-effect diagram, incremental delivery</div>
+    <div><b>Measurement</b>KPI &amp; OKR tracking, reporting &amp; forecasting, gap analysis, NPS, P&amp;L / billing</div>
+    <div><b>Uncertainty</b>Probability &amp; impact matrix, risk audits, scenario &amp; contingency planning</div>
+    <div><b>Business Acumen &amp; AI-Augmented PM</b>Data-driven decision making; AI-assisted reporting, forecasting, and code-review workflows</div>
+    <div><b>Methodologies</b>Agile, Scrum, Kanban, Waterfall, Hybrid, SAFe</div>
+  </div>
+  <div class="tl">
+    <p class="h3">Tools &amp; Tech Stack</p>
+    <p><b>Delivery &amp; PM:</b> Jira, Confluence, Azure DevOps, MS Project, Miro, ServiceNow, MS Office, Zendesk</p>
+    <p><b>Data, BI &amp; Databases:</b> Power BI, SQL, Databricks, Dagster, PostgreSQL, MS SQL, MySQL, Firebird</p>
+    <p><b>Cloud &amp; DevOps:</b> AWS (S3, SQS, EC2, CloudWatch, IAM), Heroku, Docker Compose, Kubernetes, GitLab CI/CD, Git</p>
+    <p><b>AI &amp; ML:</b> OpenAI API, local LLMs (Gemma family), RAG, Voice-to-Text, AI copilots (Claude, ChatGPT), AI-assisted reporting &amp; code review</p>
+    <p><b>Engineering &amp; Infrastructure (domain exposure):</b> STM32, ESP8266 / ATmega, nRF24, Modbus, LoRa, HPE Aruba, FortiGate, Aruba AirWave</p>
+    <p class="h3">Standards, Domains &amp; Professional Development</p>
+    <p><b>Domain Standards:</b> Payments — PCI DSS / 3DS (familiarity); Industry 4.0; European railway ETCS (prEN 17997-1, DIN EN 16834); EMC</p>
+    <p><b>Professional Development:</b> PMI / PMBOK 6–7–8 Standard+ practitioner; Lean &amp; Agile-at-scale (SAFe); IAMPM speaker &amp; trainer (PM, Jira, Confluence, SQL); volunteer mentor</p>
+    <p class="h3">Languages</p>
+    <p>Ukrainian, Russian — native · English — upper-intermediate · Polish — intermediate</p>
+  </div>
+  </section>
+</article>
+</main>
+</div>
+
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/topbar.js?v=20260919091816"></script>
+<script>
+/* Email не лежить у розмітці: частини закодовані й збираються лише після кліку —
+   парсери, що читають HTML, адреси не бачать. */
+(function(){
+  var b=document.getElementById('mailBtn'); if(!b) return;
+  b.addEventListener('click',function(){
+    var d=function(c){return c.map(function(n){return String.fromCharCode(n-3)}).join('')};
+    var u=d([100,117,119,104,112,108,124,125,107]), h=d([106,112,100,108,111,49,102,114,112]);
+    var a=document.createElement('a'); a.href='mai'+'lto:'+u+'\u0040'+h; a.textContent=u+'\u0040'+h;
+    b.replaceWith(a);
+  });
+})();
+</script>
+</body>
+</html>

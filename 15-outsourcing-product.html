@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Outsourcing and product">Аутсорс і продукт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<link rel="stylesheet" href="shared/map.css?v=20260919091816">
+<link rel="stylesheet" href="shared/bridge.css?v=20260919091816">
+</head>
+<body data-lang-reload>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top" data-en="Outsourcing and product">Аутсорс і продукт</a>
+  <div class="readbar"><div class="trk" role="progressbar" aria-label="Прочитано / Read"
+       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  <p class="note" data-en="The same management apparatus whether the customer is outside or inside the company.">Той самий апарат управління, коли замовник зовні і коли він усередині компанії.</p>
+</header>
+
+<main class="main" id="top">
+  <header class="mast wrap">
+    <div class="kicker" data-en="Two contexts · one process">Два контексти · один процес</div>
+    <h1 data-en="Outsourcing and product">Аутсорс і продукт</h1>
+    <p class="lede" data-en="In outsourcing the work is brought by the client; in product it arrives as a feature request. After that the mechanics are the same: remove the unknown, estimate, fix the scope, build, accept. What changes is not the steps but who decides and in what form the decision is written down.">В аутсорсі роботу приносить клієнт, у продукті — feature request. Далі механіка
+      однакова: зняти невідоме, оцінити, зафіксувати обсяг, зробити, прийняти. Змінюються не кроки,
+      а те, хто ухвалює рішення і в якій формі воно записане.</p>
+  </header>
+
+  <section id="s-flow">
+    <h2 data-en="How a feature moves inside a product">Як фіча рухається всередині продукту</h2>
+    <p data-en="Three lanes. On top, stages as boxes: the work that is happening. Below, gates as amber capsules: not work but a decision — you cannot pass with a condition still open. Solid arrows are forward movement. At the bottom, three returns.">Три доріжки. Зверху етапи прямокутниками: робота, яка йде. Нижче гейти
+      бурштиновими капсулами: це не робота, а рішення, і пройти далі з незакритою умовою не можна.
+      Суцільні стрілки — рух уперед. Внизу три повернення.</p>
+    <div class="br" id="flow"></div>
+    <p class="br-cap" data-en="Grey return is a change of specification or scope. The red one from Gate 3 is a defect QA found at acceptance: it never reached a user and is fixed in the same sprint. The red one from Release is a defect that surfaced in production, so it is raised again and goes through triage as a new request.">Сірий поворот — зміна специфікації або скоупу. Червоний від Гейта 3 — баг, який
+      знайшов QA на прийманні: до користувача він не дійшов і лагодиться в тому ж спринті. Червоний
+      від релізу — дефект, що сплив уже на проді, тому заводиться заново і проходить тріаж як новий запит.</p>
+  </section>
+
+  <section id="s-plc">
+    <h2 data-en="Where outsourcing attaches to this">Де до цього під'єднується аутсорс</h2>
+    <p data-en="A product lives longer than any project. Its life cycle runs from concept to sunset, and projects live inside it — each with its own start and end. Some are done in-house, and one of them is handed to a vendor. That hand-off is the moment when everything described in diagram 13 begins: pre-sale, contract, delivery cycle, acceptance.">Продукт живе довше за будь-який проєкт. Його життєвий цикл іде від задуму до згортання,
+      а проєкти живуть усередині нього — кожен зі своїм початком і кінцем. Частину роблять власною
+      командою, а один із них віддають вендору. Саме ця передача — момент, з якого починається все,
+      що описує <a href="13-delivery-framework.html">схема 13</a>: пресейл, договір, цикл поставки, приймання.</p>
+    <div class="br" id="plc"></div>
+    <p class="br-cap" data-en="The x axis is time, so the bars have different lengths: a project lasts as long as it lasts. Inside the first one its own life cycle is opened up — initiating, planning, executing with monitoring, closing. The vendor lane sits on the same axis, which is why you can see that pre-sale starts before the project officially does and warranty runs after acceptance. The amber arrow down is scope handed outside; the one back up is the increment returning into the product.">Вісь X — час, тому смуги різної довжини: проєкт триває стільки, скільки триває. У першому розкрито його власний життєвий цикл — ініціація, планування, виконання з контролем, закриття. Доріжка вендора стоїть на тій самій осі, тому видно: пресейл починається ще до офіційного старту проєкту, а гарантія тягнеться після приймання. Бурштинова стрілка вниз — обсяг, переданий назовні; зворотна — інкремент, що повертається в продукт.</p>
+  </section>
+
+  <section id="s-gates">
+    <h2 data-en="Three points you cannot skip">Три точки, які не можна проскочити</h2>
+    <p data-en="&lt;b&gt;Gate 1 &quot;Do we take it?&quot;&lt;/b&gt; — product decides whether the feature is worth the quarter. Without it, discovery burns time on ideas nobody intended to build. In outsourcing this is the go / no-go at qualification."><b>Гейт 1 «Берём?»</b> — продукт вирішує, чи варта фіча кварталу. Без нього discovery з'їдає
+      час на ідеях, які ніхто не збирався робити. В аутсорсі це go / no-go на кваліфікації.</p>
+    <p data-en="&lt;b&gt;Gate 2 &quot;Contracts&quot;&lt;/b&gt; — the only blocking gate for parallel development: scope is fixed, estimates are given by every team, open questions have owners and dates. In outsourcing this is the contract and the SOW; the only difference is that a signature replaces the product decision."><b>Гейт 2 «Контракти»</b> — єдиний блокуючий гейт для паралельної розробки: обсяг зафіксовано,
+      оцінки дані всіма командами, відкриті питання мають власників і дати. В аутсорсі це договір
+      і SOW; різниця лише в тому, що підпис замінює рішення продукту.</p>
+    <p data-en="&lt;b&gt;Gate 3 &quot;Acceptance&quot;&lt;/b&gt; — every criterion has been run on the real device. In outsourcing it is client acceptance. A scope change after Gate 2 sends the feature back to it, rather than &quot;we will agree as we go&quot;."><b>Гейт 3 «Приймання»</b> — усі критерії прогнані на реальному пристрої. В аутсорсі —
+      приймання клієнтом. Зміна обсягу після Гейта 2 повертає фічу назад до нього, а не «домовляємось
+      по ходу».</p>
+  </section>
+
+  <section id="s-pmi">
+    <h2 data-en="What we take from PMI and what it turns into">Що беремо з PMI і у що це перетворюється</h2>
+    <p data-en="PMI gives a good list of what is easy to forget. But inside a product company each of its artefacts has to collapse into something the team already uses, otherwise it will not live.">PMI дає добрий перелік того, про що легко забути. Але кожен його артефакт у продуктовій
+      компанії має схлопнутися в те, чим команда вже користується, інакше він не житиме.</p>
+    <table class="pmi-table" id="pmi"></table>
+  </section>
+
+  <section id="s-reqs">
+    <h2 data-en="Requirements with explicit assumptions">Вимоги з явними допущеннями</h2>
+    <p id="reqs-note"></p>
+    <div class="reqs" id="reqs"></div>
+    <p class="note" data-en="The example is the requirements section of a test assignment for a Technical Project Manager (changing a device status remotely).">Приклад — розділ вимог із тестового завдання на Technical Project Manager
+      (віддалена зміна статусу пристрою).</p>
+  </section>
+</main>
+</div>
+
+<script src="shared/lang.js?v=20260919091816"></script>
+<script src="shared/bridge-data.js?v=20260919091816"></script>
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/topbar.js?v=20260919091816"></script>
+<script src="shared/bridge.js?v=20260919091816"></script>
+<script>document.getElementById('reqs-note').textContent = window.BRIDGE.reqs.note;</script>
+</body>
+</html>

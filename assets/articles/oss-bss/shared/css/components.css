@@ -1,0 +1,81 @@
+/* Компоненти, спільні для кількох статей: кейси з режимами, матриця повноважень.
+   Перенесено з agentic/css/page.css без змін. */
+
+/* ── кейси ─────────────────────────────────────────────── */
+.case__top{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.mode,.single{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 7px;border-radius:5px;border:1px solid var(--line)}
+/* Режим агента — наростання тону: спостерігає < рекомендує < діє. */
+.mode[data-mode="observe"]{color:var(--g500)}
+.mode[data-mode="recommend"]{color:var(--g700);border-color:var(--g300)}
+.mode[data-mode="act"]{color:#fff;background:var(--ink);border-color:var(--ink)}
+.mode[data-mode="infra"],.mode[data-mode="assist"]{color:var(--g700);border-style:dashed}
+.single{color:var(--g500);border-style:dashed}
+.case__r{margin-top:10px !important;font-size:12.5px !important;color:var(--g500) !important}
+
+/* ── матриця повноважень ───────────────────────────────── */
+.auth{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+.au{display:grid;grid-template-columns:minmax(180px,1.6fr) repeat(3,minmax(0,1fr));gap:4px}
+.au__h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g700);
+  padding:6px 8px;text-align:center}
+.au__h:first-child{text-align:left}
+.au__row{text-align:left;border:1px solid transparent;border-radius:var(--r);background:none;
+  padding:9px 10px;font-size:13.5px;color:var(--ink);cursor:pointer}
+.au__row:hover,.au__row.on{border-color:var(--signal)}
+.au__c{display:flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--r);
+  background:var(--surface-2);min-height:38px;cursor:pointer}
+.au__c.on{background:var(--surface)}
+.au__c .dot{width:10px;height:10px;border-radius:50%;display:block}
+.au__c .lbl{display:none;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--g700)}
+.au__c[data-level="auto"] .dot{background:var(--paper);border:1.5px solid var(--g700)}
+.au__c[data-level="confirm"] .dot{background:var(--g500)}
+.au__c[data-level="deny"] .dot{background:var(--ink);border-radius:2px}
+.auth .card h3{font-size:16px}
+.auth .card p{margin-top:6px}
+@media (max-width:980px){.auth{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){
+  .au{grid-template-columns:1fr auto}
+  .au__h{display:none}
+  .au__c:not(.is-set){display:none}
+  .au__c.is-set{padding:0 10px;background:none}
+  .au__c .lbl{display:inline}
+}
+
+
+/* ── посилання назад у шапці ─────────────────────────────── */
+.back{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--g500);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--signal)}
+
+/* На телефоні в шапці лишаємо одне посилання назад — інакше перемикач мов виїжджає за край. */
+@media (max-width:560px){.back+.back{display:none}}
+
+/* ── 04 безпека ───────────────────────────────────────────── */
+.safe ul{margin:10px 0 0;padding-left:17px;font-size:13px;line-height:1.55;color:var(--g700)}
+.safe li+li{margin-top:3px}
+
+/* ── 05 етапи ─────────────────────────────────────────────── */
+.roll{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+.ro-bar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.ro{position:relative;text-align:left;padding:12px 12px 14px;border:1px solid var(--line-soft);border-radius:var(--r);
+  background:var(--paper);cursor:pointer;color:var(--ink);box-shadow:var(--lift-sm);transition:border-color .15s ease}
+.ro i{display:block;font-style:normal;font-family:var(--mono);font-size:10px;color:var(--g300)}
+.ro b{display:block;margin-top:4px;font-size:13px;font-weight:600;line-height:1.25}
+/* Пройдені етапи — сіра смуга знизу, поточний — чорнило. Прогрес читається без кольору. */
+.ro::after{content:"";position:absolute;left:10px;right:10px;bottom:6px;height:2px;border-radius:2px;background:var(--line-soft)}
+.ro.is-done::after{background:var(--g300)}
+.ro.on{border-color:var(--signal)}
+.ro.on::after{background:var(--ink)}
+@media (max-width:980px){.roll{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){.ro-bar{grid-template-columns:minmax(0,1fr)}}
+
+.roll dl{margin:0}
+.roll dt{margin-top:10px;font-size:12.5px;font-weight:600}
+.roll dd{margin:2px 0 0;font-size:13px;line-height:1.5;color:var(--g700)}
+.roll .card h3{font-size:17px}
+
+/* ── 06 метрики ───────────────────────────────────────────── */
+.metric h3{font-size:15px}
+.m__trap{margin-top:10px !important;font-size:12.5px !important;color:var(--g500) !important}
+.m__trap b{color:var(--g700);font-weight:600}
+

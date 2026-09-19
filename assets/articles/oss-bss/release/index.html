@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Робота з релізом</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/css/tokens.css">
+<link rel="stylesheet" href="../shared/css/base.css">
+<link rel="stylesheet" href="../shared/css/diagram.css">
+<link rel="stylesheet" href="../shared/css/components.css">
+<link rel="stylesheet" href="css/page.css?v=20260918102857">
+</head>
+<body>
+
+<header class="top">
+  <span class="top__title" data-i18n="ui.brand"></span>
+  <nav class="top__nav">
+    <a href="#basics" data-i18n="nav.1"></a>
+    <a href="#cycles" data-i18n="nav.2"></a>
+    <a href="#plan" data-i18n="nav.3"></a>
+    <a href="#strat" data-i18n="nav.4"></a>
+    <a href="#path-sec" data-i18n="nav.5"></a>
+    <a href="#metrics" data-i18n="nav.6"></a>
+    <a href="#refs" data-i18n="nav.7"></a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="hero__kicker" data-i18n="hero.kicker"></div>
+    <h1 data-i18n="hero.title"></h1>
+    <p data-i18n-html="hero.lead"></p>
+    <div class="specs">
+      <div><b data-i18n="hero.s1.b"></b><span data-i18n="hero.s1.s"></span></div>
+      <div><b data-i18n="hero.s2.b"></b><span data-i18n="hero.s2.s"></span></div>
+      <div><b data-i18n="hero.s3.b"></b><span data-i18n="hero.s3.s"></span></div>
+      <div><b data-i18n="hero.s4.b"></b><span data-i18n="hero.s4.s"></span></div>
+    </div>
+  </div>
+
+  <!-- 01 ─────────────────────────────────────────────── -->
+  <section id="basics">
+    <div class="sec__head">
+      <span class="sec__num">01</span>
+      <h2 data-i18n="s1.h"></h2>
+      <p data-i18n="s1.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s1.lead"></p>
+    <div class="rvd">
+      <div class="rvd__box">
+        <div class="toggles" id="rvdBar"></div>
+        <div class="rvd__lanes" id="rvd"></div>
+      </div>
+      <div class="card" id="rvdCard"></div>
+    </div>
+    <div class="note" data-i18n-html="s1.note"></div>
+  </section>
+
+  <!-- 02 ─────────────────────────────────────────────── -->
+  <section id="cycles">
+    <div class="sec__head">
+      <span class="sec__num">02</span>
+      <h2 data-i18n="s2.h"></h2>
+      <p data-i18n="s2.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s2.lead"></p>
+    <div class="lcs" id="lc"></div>
+    <h3 class="sub" data-i18n="s2.table.h"></h3>
+    <div class="appr" id="appr"></div>
+  </section>
+
+  <!-- 03 ─────────────────────────────────────────────── -->
+  <section id="roles">
+    <div class="sec__head">
+      <span class="sec__num">03</span>
+      <h2 data-i18n="s3.h"></h2>
+      <p data-i18n="s3.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s3.lead"></p>
+    <div class="roles">
+      <div class="rm" id="roleBar"></div>
+      <div class="card" id="roleCard"></div>
+    </div>
+  </section>
+
+  <!-- 04 ─────────────────────────────────────────────── -->
+  <section id="plan">
+    <div class="sec__head">
+      <span class="sec__num">04</span>
+      <h2 data-i18n="s4.h"></h2>
+      <p data-i18n="s4.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s4.lead"></p>
+    <div class="cal-wrap">
+      <div class="cal" id="cal"></div>
+      <div class="card" id="calCard"></div>
+    </div>
+    <div class="cols cols--3" style="margin-top:22px">
+      <div class="card card--soft"><span class="kicker" data-i18n="s4.o1.k"></span><h3 data-i18n="s4.o1.t"></h3><p data-i18n-html="s4.o1.b"></p></div>
+      <div class="card card--soft"><span class="kicker" data-i18n="s4.o2.k"></span><h3 data-i18n="s4.o2.t"></h3><p data-i18n-html="s4.o2.b"></p></div>
+      <div class="card card--soft"><span class="kicker" data-i18n="s4.o3.k"></span><h3 data-i18n="s4.o3.t"></h3><p data-i18n-html="s4.o3.b"></p></div>
+    </div>
+  </section>
+
+  <!-- 05 ─────────────────────────────────────────────── -->
+  <section id="strat">
+    <div class="sec__head">
+      <span class="sec__num">05</span>
+      <h2 data-i18n="s5.h"></h2>
+      <p data-i18n="s5.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s5.lead"></p>
+    <h3 class="sub" data-i18n="s5.semver.h"></h3>
+    <p class="lead lead--sm" data-i18n-html="s5.semver.lead"></p>
+    <div class="sv" id="semver"></div>
+    <h3 class="sub" data-i18n="s5.types.h"></h3>
+    <div class="cols cols--4">
+      <div class="card card--soft"><h3 data-i18n="s5.t1.t"></h3><p data-i18n-html="s5.t1.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s5.t2.t"></h3><p data-i18n-html="s5.t2.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s5.t3.t"></h3><p data-i18n-html="s5.t3.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s5.t4.t"></h3><p data-i18n-html="s5.t4.b"></p></div>
+    </div>
+    <h3 class="sub" data-i18n="s5.strat.h"></h3>
+    <div class="toggles" id="stBar"></div>
+    <div class="st">
+      <div class="st__viz" id="stViz"></div>
+      <div class="card" id="stCard"></div>
+    </div>
+  </section>
+
+  <!-- 06 ─────────────────────────────────────────────── -->
+  <section id="ready">
+    <div class="sec__head">
+      <span class="sec__num">06</span>
+      <h2 data-i18n="s6.h"></h2>
+      <p data-i18n="s6.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s6.lead"></p>
+    <div class="cols cols--2">
+      <div class="card"><span class="kicker" data-i18n="s6.levels.k"></span><ol class="tl" id="levels"></ol></div>
+      <div class="card"><span class="kicker" data-i18n="s6.types.k"></span><ul class="tl" id="types"></ul></div>
+    </div>
+    <h3 class="sub" data-i18n="s6.gate.h"></h3>
+    <div class="roll roll--6">
+      <div class="ro-bar" id="readyBar"></div>
+      <div class="card" id="readyCard"></div>
+    </div>
+  </section>
+
+  <!-- 07 ─────────────────────────────────────────────── -->
+  <section id="path-sec">
+    <div class="sec__head">
+      <span class="sec__num">07</span>
+      <h2 data-i18n="s7.h"></h2>
+      <p data-i18n="s7.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s7.lead"></p>
+    <div id="flowBox" class="wide">
+      <div class="flows toggles"></div>
+      <div id="path"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 ─────────────────────────────────────────────── -->
+  <section id="docs">
+    <div class="sec__head">
+      <span class="sec__num">08</span>
+      <h2 data-i18n="s8.h"></h2>
+      <p data-i18n="s8.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s8.lead"></p>
+    <div class="toggles" id="docBar"></div>
+    <div class="cols cols--3" id="docList"></div>
+  </section>
+
+  <!-- 09 ─────────────────────────────────────────────── -->
+  <section id="metrics">
+    <div class="sec__head">
+      <span class="sec__num">09</span>
+      <h2 data-i18n="s9.h"></h2>
+      <p data-i18n="s9.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s9.lead"></p>
+    <h3 class="sub" data-i18n="dora.throughput"></h3>
+    <div class="cols cols--3" id="doraT"></div>
+    <h3 class="sub" data-i18n="dora.instability"></h3>
+    <div class="cols cols--3" id="doraI"></div>
+    <div class="note" data-i18n-html="s9.note"></div>
+  </section>
+
+  <!-- 10 ─────────────────────────────────────────────── -->
+  <section id="cases">
+    <div class="sec__head">
+      <span class="sec__num">10</span>
+      <h2 data-i18n="s10.h"></h2>
+      <p data-i18n="s10.p"></p>
+    </div>
+    <div class="cols cols--2" id="caseList"></div>
+  </section>
+
+  <!-- 11 ─────────────────────────────────────────────── -->
+  <section id="work">
+    <div class="sec__head">
+      <span class="sec__num">11</span>
+      <h2 data-i18n="s11.h"></h2>
+      <p data-i18n="s11.p"></p>
+    </div>
+    <h3 class="sub" data-i18n="s11.act.h"></h3>
+    <div class="cols cols--3" id="activity"></div>
+    <h3 class="sub" data-i18n="s11.tools.h"></h3>
+    <p class="lead lead--sm" data-i18n-html="s11.tools.lead"></p>
+    <div class="tools" id="tools"></div>
+    <h3 class="sub" data-i18n="s11.trends.h"></h3>
+    <div class="cols cols--2">
+      <div class="card card--soft"><h3 data-i18n="s11.tr1.t"></h3><p data-i18n-html="s11.tr1.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s11.tr2.t"></h3><p data-i18n-html="s11.tr2.b"></p></div>
+    </div>
+    <div class="note" data-i18n-html="s11.outro"></div>
+  </section>
+
+  <!-- 12 ─────────────────────────────────────────────── -->
+  <section id="refs">
+    <div class="sec__head">
+      <span class="sec__num">12</span>
+      <h2 data-i18n="s12.h"></h2>
+      <p data-i18n="s12.p"></p>
+    </div>
+    <h3 class="sub" data-i18n="s12.check.h"></h3>
+    <ol class="check">
+      <li data-i18n-html="s12.c1"></li><li data-i18n-html="s12.c2"></li><li data-i18n-html="s12.c3"></li>
+      <li data-i18n-html="s12.c4"></li><li data-i18n-html="s12.c5"></li><li data-i18n-html="s12.c6"></li>
+      <li data-i18n-html="s12.c7"></li>
+    </ol>
+    <h3 class="sub" data-i18n="s12.gloss.h"></h3>
+    <input class="search" id="glossSearch" type="search" data-i18n-ph="s12.gloss.ph">
+    <div class="gloss" id="gloss"></div>
+    <h3 class="sub" data-i18n="s12.src.h"></h3>
+    <ul class="src">
+      <li><a href="https://www.axelos.com/certifications/itil-service-management" target="_blank" rel="noopener" data-i18n="src.itil">AXELOS — ITIL 4 (практики Release management, Deployment management, Change enablement)</a></li>
+      <li><a href="https://www.pmi.org/disciplined-agile/lifecycle" target="_blank" rel="noopener" data-i18n="src.da-life">PMI — Disciplined Agile: життєві цикли</a></li>
+      <li><a href="https://www.pmi.org/disciplined-agile/people/roles-on-da-teams" target="_blank" rel="noopener" data-i18n="src.da-roles">PMI — Disciplined Agile: ролі в командах</a></li>
+      <li><a href="https://scrumguides.org/scrum-guide.html" target="_blank" rel="noopener">The Scrum Guide (2020)</a></li>
+      <li><a href="https://framework.scaledagile.com/release-train-engineer" target="_blank" rel="noopener">SAFe — Release Train Engineer</a></li>
+      <li><a href="https://businessmap.io/blog/kanban-roles" target="_blank" rel="noopener">Businessmap — Kanban roles (SRM, SDM)</a></li>
+      <li><a href="https://semver.org/lang/uk/" target="_blank" rel="noopener">Semantic Versioning 2.0.0</a></li>
+      <li><a href="https://martinfowler.com/bliki/BlueGreenDeployment.html" target="_blank" rel="noopener">Martin Fowler — Blue Green Deployment</a></li>
+      <li><a href="https://martinfowler.com/bliki/CanaryRelease.html" target="_blank" rel="noopener">Danilo Sato — Canary Release</a></li>
+      <li><a href="https://martinfowler.com/articles/feature-toggles.html" target="_blank" rel="noopener">Pete Hodgson — Feature Toggles</a></li>
+      <li><a href="https://sre.google/sre-book/release-engineering/" target="_blank" rel="noopener">Google SRE Book — Release Engineering</a></li>
+      <li><a href="https://dora.dev/guides/dora-metrics/" target="_blank" rel="noopener">DORA — Software delivery performance metrics</a></li>
+      <li><a href="https://dora.dev/insights/dora-metrics-history/" target="_blank" rel="noopener">DORA — History of the software delivery metrics</a></li>
+      <li><a href="https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf" target="_blank" rel="noopener">CrowdStrike — Channel File 291 Root Cause Analysis (2024)</a></li>
+      <li><a href="https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/" target="_blank" rel="noopener">Microsoft — Helping our customers through the CrowdStrike outage</a></li>
+      <li><a href="https://www.sec.gov/newsroom/press-releases/2013-222" target="_blank" rel="noopener">SEC — Knight Capital charged for violations of market access rule (2013)</a></li>
+      <li><a href="https://blog.chromium.org/2021/03/speeding-up-release-cycle.html" target="_blank" rel="noopener">Chromium Blog — Speeding up Chrome's release cycle (2021)</a></li>
+      <li><a href="https://www.chromium.org/getting-involved/dev-channel/" target="_blank" rel="noopener">Chromium — Release channels</a></li>
+      <li><a href="https://www.parasoft.com/resources/case-studies/inovytec-achieves-fda-certification-with-customized-static-code-analysis-solution/" target="_blank" rel="noopener">Parasoft — Inovytec achieves FDA certification</a></li>
+      <li><a href="https://www.prnewswire.com/news-releases/inovytecs-ventway-sparrow-line-of-ventilators-receives-fda-510k-clearance-to-market-301220199.html" target="_blank" rel="noopener">PR Newswire — Ventway Sparrow receives FDA 510(k) clearance (2021)</a></li>
+    </ul>
+    <div class="foot" data-i18n="ui.foot"></div>
+  </section>
+
+</main>
+
+<script src="copy.js?v=20260918102857"></script>
+<script src="../shared/js/i18n.js"></script>
+<script src="data/path.js"></script>
+<script src="data/content.js"></script>
+<script src="../shared/js/diagram-engine.js"></script>
+<script src="../shared/js/scenarios.js"></script>
+<script src="js/sections.js"></script>
+<script src="js/app.js"></script>
+<script src="../shared/js/toc.js?v=20260918102857"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+/* Схема «Аутсорс і продукт» — мова оформлення з Busy Bar: світлий аркуш,
+   плашка етапу, бурштинова капсула гейта, червоний пунктир повернення.
+   Кольори живуть у токенах, тут лише ролі. */
+.br{background:var(--ground);border:1px solid var(--rule);border-radius:var(--r-lg);
+  padding:var(--sp-md) var(--sp-sm);box-shadow:var(--lift-sm);overflow-x:auto}
+/* Схема масштабується шириною сторінки: горизонтальний скрол лишається
+   тільки для справді вузьких екранів. */
+.br > svg{display:block;width:100%;height:auto;min-width:680px}
+
+.br .bx{fill:var(--sunk);stroke:var(--rule)}
+/* Ролі плашок: фаза продукту — світліша, проєкт — звичайна,
+   проєкт у вендора і вся вендорська доріжка — бурштинова рамка. */
+.br .bx.ph{fill:var(--paper-2)}
+.br .bx.prj{fill:var(--sunk)}
+.br .bx.vend{fill:var(--warm);stroke:var(--amber)}
+.br .bx.ven{fill:var(--warm);stroke:var(--amber);stroke-opacity:.6}
+.br .rl{stroke:var(--rule)}
+.br .mu{fill:var(--ink-3)}
+.br .mus{stroke:var(--ink-3)}
+.br .pl{fill:var(--paper-2);stroke:var(--rule-2)}
+.br .plt{fill:var(--ink-2)}
+.br .lane{letter-spacing:.09em;font-weight:600}
+.br .st{fill:var(--ink-3)}
+.br .gt{fill:var(--warm);stroke:var(--amber)}
+.br .am{stroke:var(--amber)}
+.br .amf{fill:var(--amber)}
+.br .sg{stroke:var(--signal-ink)}
+/* обведення підпису кольором аркуша: текст читається поверх ліній */
+.br .halo{stroke:var(--ground);stroke-width:3px;paint-order:stroke;stroke-linejoin:round}
+
+.br-cap{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:var(--sp-sm)}
+
+/* PMI → продуктова форма */
+.pmi-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:var(--sp-sm)}
+.pmi-table th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--ink-3);font-weight:600;padding:0 10px 8px;border-bottom:1px solid var(--rule)}
+.pmi-table td{padding:9px 10px;border-bottom:1px solid var(--rule-2);vertical-align:top;color:var(--ink-2)}
+.pmi-table td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+
+/* вимоги з допущеннями */
+.reqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--sp-md);
+  margin-top:var(--sp-sm)}
+.req{border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:var(--r-md);
+  padding:var(--sp-sm) var(--sp-md);background:var(--paper)}
+.req h4{margin:0 0 5px;font-size:13px}
+.req p{margin:0;font-size:12.5px;color:var(--ink-2)}

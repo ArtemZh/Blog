@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OSS і BSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/css/tokens.css">
+<link rel="stylesheet" href="shared/css/base.css">
+<link rel="stylesheet" href="shared/css/diagram.css">
+</head>
+<body>
+
+<header class="top">
+  <span class="top__title" data-i18n="ui.brand"></span>
+  <span class="top__doc" data-i18n="ui.doc"></span>
+  <nav class="top__nav">
+    <a href="#basics" data-i18n="nav.1"></a>
+    <a href="#oda" data-i18n="nav.2"></a>
+    <a href="#etom-sec" data-i18n="nav.3"></a>
+    <a href="#exchange" data-i18n="nav.4"></a>
+    <a href="#vendors" data-i18n="nav.5"></a>
+    <a href="#ai" data-i18n="nav.6"></a>
+    <a href="#refs" data-i18n="nav.7"></a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="hero__kicker" data-i18n="hero.kicker"></div>
+    <h1 data-i18n="hero.title"></h1>
+    <p data-i18n-html="hero.lead"></p>
+    <div class="specs">
+      <div><b data-i18n="hero.s1.b"></b><span data-i18n="hero.s1.s"></span></div>
+      <div><b data-i18n="hero.s2.b"></b><span data-i18n="hero.s2.s"></span></div>
+      <div><b data-i18n="hero.s3.b"></b><span data-i18n="hero.s3.s"></span></div>
+      <div><b data-i18n="hero.s4.b"></b><span data-i18n="hero.s4.s"></span></div>
+    </div>
+  </div>
+
+  <!-- 01 ─────────────────────────────────────────────── -->
+  <section id="basics">
+    <div class="sec__head">
+      <span class="sec__num">01</span>
+      <h2 data-i18n="s1.h"></h2>
+      <p data-i18n="s1.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s1.lead"></p>
+    <div class="cols cols--2">
+      <div class="card"><span class="kicker">BSS</span><h3 data-i18n="s1.bss.t"></h3><p data-i18n-html="s1.bss.b"></p></div>
+      <div class="card"><span class="kicker">OSS</span><h3 data-i18n="s1.oss.t"></h3><p data-i18n-html="s1.oss.b"></p></div>
+    </div>
+    <h3 class="sub" data-i18n="s1.pyr.h"></h3>
+    <div class="pyr" id="pyr"></div>
+    <div class="note" id="pyrNote"></div>
+    <div class="note" data-i18n-html="s1.blur"></div>
+  </section>
+
+  <!-- 02 ─────────────────────────────────────────────── -->
+  <section id="oda">
+    <div class="sec__head">
+      <span class="sec__num">02</span>
+      <h2 data-i18n="s2.h"></h2>
+      <p data-i18n="s2.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s2.lead"></p>
+    <div class="oda">
+      <div class="oda__stack" id="odaStack"></div>
+      <div class="card oda__detail" id="odaDetail"></div>
+    </div>
+  </section>
+
+  <!-- 03 ─────────────────────────────────────────────── -->
+  <section id="etom-sec">
+    <div class="sec__head">
+      <span class="sec__num">03</span>
+      <h2 data-i18n="s3.h"></h2>
+      <p data-i18n="s3.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s3.lead"></p>
+    <div class="cols cols--3" style="margin-bottom:26px">
+      <div class="card card--soft"><span class="kicker" data-i18n="s3.a1.k"></span><h3 data-i18n="s3.a1.t"></h3><p data-i18n="s3.a1.b"></p></div>
+      <div class="card"><span class="kicker" data-i18n="s3.a2.k"></span><h3 data-i18n="s3.a2.t"></h3><p data-i18n="s3.a2.b"></p></div>
+      <div class="card card--soft"><span class="kicker" data-i18n="s3.a3.k"></span><h3 data-i18n="s3.a3.t"></h3><p data-i18n="s3.a3.b"></p></div>
+    </div>
+    <div class="toggles" id="etomToggles">
+      <button type="button" data-hl="bss" data-i18n="s3.hl.bss"></button>
+      <button type="button" data-hl="oss" data-i18n="s3.hl.oss"></button>
+    </div>
+    <div class="etom" id="etom">
+      <div class="etom__grid" id="etomGrid"></div>
+      <div class="card etom__side" id="etomSide"></div>
+    </div>
+    <div class="note" data-i18n-html="s3.honest"></div>
+  </section>
+
+  <!-- 04 ─────────────────────────────────────────────── -->
+  <section id="exchange">
+    <div class="sec__head">
+      <span class="sec__num">04</span>
+      <h2 data-i18n="s4.h"></h2>
+      <p data-i18n="s4.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s4.lead"></p>
+    <div id="flowBox" class="wide">
+      <div class="flows toggles"></div>
+      <div id="landscape"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+      </div>
+    </div>
+
+    <h3 class="sub" data-i18n="s4.mech.h"></h3>
+    <div class="cols cols--4">
+      <div class="card"><span class="kicker" data-i18n="s4.m1.k"></span><h3 data-i18n="s4.m1.t"></h3><p data-i18n-html="s4.m1.b"></p></div>
+      <div class="card"><span class="kicker" data-i18n="s4.m2.k"></span><h3 data-i18n="s4.m2.t"></h3><p data-i18n-html="s4.m2.b"></p></div>
+      <div class="card"><span class="kicker" data-i18n="s4.m3.k"></span><h3 data-i18n="s4.m3.t"></h3><p data-i18n-html="s4.m3.b"></p></div>
+      <div class="card"><span class="kicker" data-i18n="s4.m4.k"></span><h3 data-i18n="s4.m4.t"></h3><p data-i18n-html="s4.m4.b"></p></div>
+    </div>
+
+    <h3 class="sub" data-i18n="s4.pain.h"></h3>
+    <div class="cols cols--2">
+      <div class="card card--soft"><h3 data-i18n="s4.p1.t"></h3><p data-i18n="s4.p1.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s4.p2.t"></h3><p data-i18n="s4.p2.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s4.p3.t"></h3><p data-i18n="s4.p3.b"></p></div>
+      <div class="card card--soft"><h3 data-i18n="s4.p4.t"></h3><p data-i18n="s4.p4.b"></p></div>
+    </div>
+  </section>
+
+  <!-- 05 ─────────────────────────────────────────────── -->
+  <section id="vendors">
+    <div class="sec__head">
+      <span class="sec__num">05</span>
+      <h2 data-i18n="s5.h"></h2>
+      <p data-i18n="s5.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s5.lead"></p>
+    <div class="toggles" id="vendorBar"></div>
+    <div class="vendor">
+      <div id="vendorMap"></div>
+      <div class="card vendor__card" id="vendorCard"></div>
+    </div>
+    <div class="legend">
+      <span><i class="lg lg--full"></i><em data-i18n="s5.lg.full"></em></span>
+      <span><i class="lg lg--part"></i><em data-i18n="s5.lg.part"></em></span>
+      <span><i class="lg lg--ctx"></i><em data-i18n="s5.lg.ctx"></em></span>
+    </div>
+    <div class="note" data-i18n-html="s5.others"></div>
+  </section>
+
+  <!-- 06 ─────────────────────────────────────────────── -->
+  <section id="ai">
+    <div class="sec__head">
+      <span class="sec__num">06</span>
+      <h2 data-i18n="s6.h"></h2>
+      <p data-i18n="s6.p"></p>
+    </div>
+    <a class="card promo" href="agentic/index.html">
+      <span class="kicker" data-i18n="s6.promo.k"></span>
+      <h3 data-i18n="s6.promo.t"></h3>
+      <p data-i18n-html="s6.lead"></p>
+      <span class="promo__go" data-i18n="s6.promo.go"></span>
+    </a>
+  </section>
+
+  <!-- 07 ─────────────────────────────────────────────── -->
+  <section id="refs">
+    <div class="sec__head">
+      <span class="sec__num">07</span>
+      <h2 data-i18n="s7.h"></h2>
+      <p data-i18n="s7.p"></p>
+    </div>
+    <h3 class="sub" data-i18n="s7.check.h"></h3>
+    <ol class="check">
+      <li data-i18n-html="s7.c1"></li><li data-i18n-html="s7.c2"></li><li data-i18n-html="s7.c3"></li>
+      <li data-i18n-html="s7.c4"></li><li data-i18n-html="s7.c5"></li><li data-i18n-html="s7.c6"></li>
+      <li data-i18n-html="s7.c7"></li>
+    </ol>
+    <h3 class="sub" data-i18n="s7.gloss.h"></h3>
+    <input class="search" id="glossSearch" type="search" data-i18n-ph="s7.gloss.ph">
+    <div class="gloss" id="gloss"></div>
+    <h3 class="sub" data-i18n="s7.src.h"></h3>
+    <ul class="src">
+      <li><a href="https://www.tmforum.org/oda/about-oda" target="_blank" rel="noopener">TM Forum — Open Digital Architecture</a></li>
+      <li><a href="https://www.tmforum.org/open-digital-architecture/process-framework-etom/" target="_blank" rel="noopener">TM Forum — Business Process Framework (eTOM)</a></li>
+      <li><a href="https://www.tmforum.org/open-digital-architecture/implementation/open-apis/" target="_blank" rel="noopener">TM Forum — Open APIs</a></li>
+      <li><a href="https://www.tmforum.org/open-digital-architecture/components-canvas/" target="_blank" rel="noopener">TM Forum — ODA Components &amp; Canvas</a></li>
+      <li><a href="https://osl.etsi.org/hypo/documentation/architecture/tmf-api/" target="_blank" rel="noopener">ETSI OpenSlice — TMF API</a></li>
+      <li><a href="https://www.ericsson.com/en/news/2025/6/evolved-ericsson-ossbss-portfolio-to-ignite-csp-business-and-operational-transformation" target="_blank" rel="noopener">Ericsson — evolved OSS/BSS portfolio (2025)</a></li>
+      <li><a href="https://rcrwireless.com/20260626/ai/ericsson-ai-agents-oss-bss-stack" target="_blank" rel="noopener">RCR Wireless — Ericsson AI agents in OSS/BSS (2026)</a></li>
+      <li><a href="https://www.ericsson.com/en/portfolio/cloud-software-and-services/network-management-and-automation/ericsson-network-manager" target="_blank" rel="noopener">Ericsson — Ericsson Network Manager</a></li>
+      <li><a href="https://carrier.huawei.com/en/products/wireless-network/mae" target="_blank" rel="noopener">Huawei — iMaster MAE</a></li>
+      <li><a href="https://www.huawei.com/en/news/2026/3/mwc-ai-agents-operation" target="_blank" rel="noopener">Huawei — Agentic BSS, AUTINOps (MWC 2026)</a></li>
+      <li><a href="https://www.accessnewswire.com/newsroom/en/computers-technology-and-internet/mwc-2026-amdocs-unveils-ces26-an-agent-driven-bss-oss-network-sui-1142366" target="_blank" rel="noopener">Amdocs — CES26 (MWC 2026)</a></li>
+      <li><a href="https://www.nokia.com/newsroom/nokia-advances-autonomous-networks-portfolio-with-upgraded-agentic-ai-capabilities-dtw26-a/" target="_blank" rel="noopener">Nokia — autonomous networks, DTW26</a></li>
+      <li><a href="https://carrier.huawei.com/en/products/fixed-network/imaster-nce-fbb" target="_blank" rel="noopener">Huawei — iMaster NCE</a></li>
+      <li><a href="https://inform.tmforum.org/features-and-opinion/huaweis-next-generation-bss-agility-and-openness-help-carriers-develop-5g-services" target="_blank" rel="noopener">TM Forum Inform — Huawei next-generation BSS</a></li>
+      <li><a href="https://www.amdocs.com/products-services/aos" target="_blank" rel="noopener">Amdocs — aOS</a></li>
+      <li><a href="https://investors.amdocs.com/news-releases/news-release-details/first-quarter-results-fiscal-2026" target="_blank" rel="noopener">Amdocs — Q1 FY2026 (Matrixx)</a></li>
+      <li><a href="https://www.netcracker.com/blog/netcracker-digital-platform-provides-comprehensive-bss-oss-for-csps" target="_blank" rel="noopener">Netcracker — Digital BSS/OSS</a></li>
+      <li><a href="https://www.netcracker.com/portfolio/products/netcracker-agentic-ai-solution" target="_blank" rel="noopener">Netcracker — Agentic AI Solution</a></li>
+    </ul>
+    <div class="foot" data-i18n="ui.foot"></div>
+  </section>
+
+</main>
+
+<script src="copy.js?v=20260918102857"></script>
+<script src="shared/js/i18n.js"></script>
+<script src="data/landscape.js"></script>
+<script src="data/flows.js"></script>
+<script src="data/etom.js"></script>
+<script src="data/vendors.js"></script>
+<script src="shared/js/diagram-engine.js"></script>
+<script src="shared/js/scenarios.js"></script>
+<script src="js/sections.js"></script>
+<script src="js/app.js"></script>
+<script src="shared/js/toc.js?v=20260918102857"></script>
+</body>
+</html>

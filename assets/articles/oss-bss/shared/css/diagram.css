@@ -1,0 +1,212 @@
+/* ═══════════════════════════════ схеми ══════════════════════
+   Полотно фіксованої ширини масштабується під контейнер. Дроти й смуги —
+   у SVG під картками, картки — HTML поверх: текст лишається текстом. */
+.fit{position:relative;width:100%;overflow:hidden}
+.stage{
+  position:absolute;left:0;top:0;transform-origin:top left;
+  border:1px solid var(--line-soft);border-radius:var(--r-lg);background:var(--paper);
+  box-shadow:var(--lift-sm);
+}
+.stage svg.wires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0}
+
+.band{fill:#FCFCFD;stroke:var(--line-soft);stroke-width:1}
+.band--strip{fill:var(--surface);stroke:none}
+.band-label{font-family:var(--mono);font-size:10.5px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;fill:var(--g500)}
+.strip-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;fill:var(--g300)}
+/* Підписи груп — на тому ж рядку, що й назва смуги: один рівень заголовків. */
+.grp-label{font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;fill:var(--g700)}
+.band-toggle{pointer-events:auto;cursor:pointer;outline:none}
+.band-toggle:hover .band-label,.band-toggle:focus-visible .band-label{fill:var(--ink)}
+.band-plus{font-family:var(--mono);font-size:13px;font-weight:500;fill:var(--signal)}
+
+.wire{stroke:var(--wire);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  transition:stroke .16s ease,opacity .2s ease}
+.wire.is-chain{stroke:var(--signal)}
+.api{font-family:var(--mono);font-size:9.5px;font-weight:500;fill:var(--signal)}
+.api-bg{fill:var(--paper)}
+.arrow{fill:var(--wire)}
+.arrow--hot{fill:var(--signal)}
+.arrow--past{fill:var(--g700)}
+
+.node{
+  position:absolute;z-index:1;display:flex;flex-direction:column;justify-content:center;
+  text-align:left;border:1px solid var(--line-soft);border-radius:var(--r);
+  background:var(--paper);padding:7px 11px;cursor:pointer;box-shadow:var(--lift-sm);
+  color:var(--ink);transition:border-color .15s ease,opacity .2s ease,box-shadow .15s ease;
+}
+.node:hover,.node.is-open{border-color:var(--signal);box-shadow:var(--lift)}
+.node:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.node b{display:block;font-size:12.5px;font-weight:600;line-height:1.2}
+.node i{display:block;margin-top:2px;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--g300);font-style:normal;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Розмір означає одне — вагу вузла в історії. Опорні вузли вищі й мають
+   темну рамку; сигнал на них не йде, бо на них не треба тиснути. */
+.node--key{border-color:var(--g700);box-shadow:0 0 0 3px rgba(18,27,54,.06),var(--lift-sm)}
+.node--key b{font-size:13.5px}
+.node--key i{color:var(--g700)}
+.node--sum{align-items:center;text-align:center;background:var(--surface-2)}
+.node--sum b{font-size:15px}
+.node--sum::after{content:"+";position:absolute;right:12px;top:9px;
+  font-family:var(--mono);font-size:14px;color:var(--signal)}
+
+/* Сценарій: поточний крок — сигнал, пройдені — чорнило, попереду — пунктир.
+   Непричетне притухає, але лишається читабельним: схема не має зникати. */
+.stage.is-flow .node{opacity:.42}
+.stage.is-flow .wire{opacity:.3}
+/* пройдене — чорнило: суцільна темна рамка */
+.stage.is-flow .node.is-past{opacity:1;border-color:var(--g700)}
+.stage.is-flow .node.is-hot{opacity:1;border-color:var(--signal);box-shadow:0 0 0 3px rgba(226,88,34,.14),var(--lift)}
+/* попереду — той самий шлях, але пунктиром: видно, куди все йде далі */
+.stage.is-flow .node.is-next{opacity:.92;border-style:dashed;border-color:var(--g300)}
+.stage.is-flow .wire.is-past{opacity:1;stroke:var(--g700)}
+.stage.is-flow .wire.is-next{opacity:.7;stroke:var(--g300);stroke-dasharray:3 5}
+.stage.is-flow .wire.is-hot{opacity:1;stroke:var(--signal);stroke-width:2}
+
+/* Точка руху даних: їде дротом активного кроку від джерела до приймача. */
+.dot{fill:var(--signal);stroke:var(--paper);stroke-width:1}
+.dot--hot{fill:var(--signal)}
+.dots{pointer-events:none}
+
+/* Контекст (канали, мережа): не частина порівняння, тому не гасне,
+   а стоїть тихою сірою підкладкою без рамки й тіні. */
+.node--ctx{background:var(--surface);border-color:transparent;box-shadow:none;cursor:default}
+.node--ctx b{color:var(--g700)}
+.node--ctx:hover{border-color:transparent;box-shadow:none}
+.stage.is-cover .node.node--ctx{opacity:1}
+
+/* Рішення людини в сценарії: подвійна рамка й підпис над карткою. */
+.stage.is-flow .node.is-human{opacity:1;border-color:var(--ink);box-shadow:0 0 0 3px var(--paper),0 0 0 4px var(--ink)}
+.stage.is-flow .node.is-human::before{content:attr(data-badge);position:absolute;left:10px;top:-9px;
+  padding:1px 6px;background:var(--ink);color:#fff;border-radius:4px;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase}
+
+/* Згода клієнта: та сама позначка, але пунктирна рамка — рішення не за оператором. */
+.stage.is-flow .node.is-client{opacity:1;border:1px dashed var(--ink);box-shadow:0 0 0 3px var(--paper)}
+.stage.is-flow .node.is-client::before{content:attr(data-badge);position:absolute;left:10px;top:-9px;
+  padding:1px 6px;background:var(--paper);color:var(--ink);border:1px solid var(--ink);border-radius:4px;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase}
+
+/* Вузол вимкненого шляху: на місці, але тихий — як контекст. */
+.stage .node.is-off{background:var(--surface);border-color:transparent;box-shadow:none}
+.stage .node.is-off b{color:var(--g300)}
+.stage .node.is-off i{color:var(--line)}
+
+/* Покриття вендора: одна змінна — покриває чи ні. */
+.stage.is-cover .node{opacity:.22}
+.stage.is-cover .node.is-cover{opacity:1;border-color:var(--g700)}
+.stage.is-cover .node.is-part{opacity:1;border-style:dashed;border-color:var(--g300)}
+
+/* Схема обміну ширша за колонку тексту: дротам потрібне місце. */
+.wide{position:relative;width:min(1500px,calc(100vw - 32px));left:50%;transform:translateX(-50%)}
+.toggles button.ghost{color:var(--g700)}
+
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
+.legend span{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--g500)}
+.legend em{font-style:normal}
+.lg{display:block;width:26px;height:14px;border-radius:4px;background:var(--paper)}
+.lg--full{border:1px solid var(--g700)}
+.lg--part{border:1px dashed var(--g300)}
+.lg--ctx{background:var(--surface)}
+
+/* Хмарка біля вузла. */
+.pop{
+  position:absolute;z-index:7;width:290px;pointer-events:none;
+  border:1px solid var(--line);border-radius:var(--r-md);
+  background:rgba(255,255,255,.9);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);
+  padding:12px 14px;box-shadow:var(--lift);
+  opacity:0;transform:translateY(4px);transition:opacity .14s ease,transform .14s ease;
+}
+.pop.is-on{opacity:1;transform:none}
+.pop.is-pin{pointer-events:auto;border-color:var(--g300)}
+.pop__k{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--g300);margin-bottom:5px}
+.pop__t{display:block;font-size:14px;font-weight:600;line-height:1.25;margin-bottom:6px}
+.pop__b{display:block;font-size:12.5px;line-height:1.55;color:var(--g700)}
+.pop__apis{display:block;margin-top:8px}
+
+/* Сценарії. Панель кроку стоїть над схемою — див. коментар у розмітці. */
+.flows{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+/* Кнопка сценарію — програвач: play до запуску, stop під час показу (як у DWH). */
+.flows button.play{display:inline-flex;align-items:center;gap:8px}
+.ico{width:11px;height:11px;flex:0 0 auto;fill:currentColor;display:block}
+.flows button .ico--stop{display:none}
+.flows button.on .ico--play{display:none}
+.flows button.on .ico--stop{display:block}
+.steps{
+  margin:0 0 14px;border:1px solid var(--line-soft);border-radius:var(--r-md);background:var(--paper);
+  padding:13px 15px;display:grid;grid-template-columns:auto 1fr auto;gap:10px 16px;align-items:center;
+  box-shadow:var(--lift-sm);min-height:66px;
+}
+.steps__n{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--g300);min-width:64px}
+/* Доріжка кроків: скільки їх, який зараз, що пройдено, що попереду. */
+.steps__track{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.steps.has-ctrl{grid-template-columns:auto 1fr}
+.steps.is-idle .steps__track{display:none}
+.steps__ctrl{display:flex;gap:6px;align-items:center;padding-right:8px;margin-right:2px;border-right:1px solid var(--line-soft)}
+.steps__cells{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.steps__play{width:34px;height:34px;border:1px solid var(--signal);border-radius:var(--r);background:var(--signal);color:#fff;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center}
+.steps__play svg{width:12px;height:12px;fill:currentColor}
+.steps__play:disabled{opacity:.35;cursor:default}
+.steps__cell{position:relative;font-family:var(--mono);font-size:10.5px;line-height:1;
+  min-width:26px;height:22px;padding:0 6px;border:1px solid var(--line);border-radius:6px;
+  background:var(--paper);color:var(--g300);cursor:pointer;
+  transition:border-color .15s ease,background .15s ease,color .15s ease}
+.steps__cell:hover{border-color:var(--signal);color:var(--signal)}
+.steps__cell.is-done{border-color:var(--g700);color:var(--g700)}
+.steps__cell.is-now{border-color:var(--signal);background:var(--signal);color:#fff}
+/* крапка = крок, де потрібна згода клієнта або рішення людини */
+.steps__cell.has-human::after,.steps__cell.has-client::after{content:'';position:absolute;
+  top:-3px;right:-3px;width:6px;height:6px;border-radius:50%;background:var(--ink)}
+.steps__cell.has-client::after{background:var(--paper);border:1px solid var(--ink)}
+.steps__t{font-size:13.5px;line-height:1.55;color:var(--g700)}
+.steps__t b{color:var(--ink)}
+.steps__nav{display:flex;gap:6px}
+.steps__nav button{font-family:var(--mono);font-size:12px;width:34px;height:34px;
+  border:1px solid var(--line);border-radius:var(--r);background:var(--paper);color:var(--g700);cursor:pointer}
+.steps__nav button:hover:not(:disabled){border-color:var(--signal);color:var(--signal)}
+.steps__nav button:disabled{opacity:.35;cursor:default}
+@media (max-width:620px){.steps,.steps.has-ctrl{grid-template-columns:1fr}.steps__nav{justify-content:flex-end}}
+
+/* ── вузька розкладка ─────────────────────────────────────
+   Полотно 1120 px на телефоні стало б дрібним шрифтом. Там схема
+   перетворюється на стрічку шарів із тих самих даних. */
+.list{display:none}
+@media (max-width:760px){
+  .fit{display:none}
+  .list{display:flex;flex-direction:column;gap:10px}
+}
+.list__band{border:1px solid var(--line-soft);border-radius:var(--r-lg);padding:12px;background:#FCFCFD}
+.list__band>.kicker{display:block;margin-bottom:8px}
+.list__grp{margin-top:8px}
+.list__grp>.kicker{display:block;margin:6px 0 6px;color:var(--g700)}
+.list__node{display:block;width:100%;text-align:left;border:1px solid var(--line-soft);
+  border-radius:var(--r);background:var(--paper);padding:9px 11px;margin-top:6px;cursor:pointer;color:var(--ink)}
+.list__node b{font-size:13.5px;font-weight:600}
+.list__node p{display:none;margin:6px 0 0;font-size:13px;line-height:1.5;color:var(--g700)}
+.list__node.on{border-color:var(--signal)}
+.list__node.on p{display:block}
+.list__node.is-hot{border-color:var(--signal)}
+.list__node.is-dim{opacity:.35}
+.list__strip{text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--g300);padding:2px 0}
+
+@media (prefers-reduced-motion:reduce){
+  .node,.wire,.pop{transition:none}
+  /* без руху: точки не їдуть, але крок читається кольором дроту,
+     доріжкою кроків і підсвіткою карток — сценарій лишається зрозумілим */
+  .dot{display:none}
+}
+
+/* Сценарій-напрям (L4, майбутнє): маршрут пунктиром, вузли — пунктирною рамкою.
+   Довгий штрих у кольорі маршруту — не плутати з блідим «попереду» (3 5). */
+/* сценарій-напрям (L4): позначка на самому полотні, лінії лишаються звичайними */
+.stage.is-future::after{content:attr(data-future);position:absolute;top:10px;right:12px;z-index:5;
+  font:600 10px/1 var(--mono,monospace);letter-spacing:.08em;text-transform:uppercase;color:var(--signal,#EA5212);
+  border:1px solid currentColor;border-radius:999px;padding:5px 9px;background:var(--paper,#fff)}

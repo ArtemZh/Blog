@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery Framework — duties &amp; responsibilities of PM/PC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
+<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<link rel="stylesheet" href="shared/framework.css?v=20260919091816">
+<style>
+/* Довідкова карта PMBOK 6: зображення на всю ширину колонки, клік — оригінал 3324×4070. */
+.ref-map{margin:var(--sp-md,20px) 0;max-width:880px}
+.ref-map a{display:block;border:1px solid var(--rule);border-radius:var(--r-lg,16px);overflow:hidden;
+  background:#fff;padding:14px;cursor:zoom-in}
+.ref-map a:hover{border-color:var(--act)}
+.ref-map img{display:block;width:100%;height:auto}
+.ref-map figcaption{margin-top:8px;font-size:12.5px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="topbar">
+  <a class="brand" href="#top">Delivery Framework</a>
+  <div class="readbar"><div class="trk" role="progressbar" aria-label="Read"
+       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  <p class="note">An adaptation for outsourced delivery. The edition switch shows what belongs to the standard.</p>
+</header>
+
+<main class="main" id="top">
+
+  <header class="mast wrap">
+    <div class="kicker">Pre-sale → delivery → closure</div>
+    <h1>Agile Delivery Framework</h1>
+    <p class="lede">PMBOK describes what a project needs; it does not say who in a delivery company does it,
+      or what happens before the contract is signed. This is PMBOK&nbsp;8 adapted to how outsourced delivery
+      actually runs: pre-sale and discovery in front of the project, a delivery cycle that follows the team's
+      real approach, and every duty mapped to the role and grade that owns it.</p>
+  </header>
+
+  <section id="s-map">
+    <h2>The map</h2>
+    <p>Read it left to right, as a deal becomes a project. Pre-sale stands outside the project
+      bracket — there is no project yet, only an estimate that has to be sold. Inside the bracket the
+      standard's Focus Areas and domains keep their places; what is added is what the standard leaves to
+      practice: who owns each piece of work, how the delivery cycle is run, and which artefacts each phase
+      leaves behind. Colour shows the owner, position on the timeline shows the phase — hover a card for
+      its links, click for the description and the PMBOK reference.</p>
+
+    <div class="controls">
+      <div class="ctl"><span class="ctl-label">Edition</span>
+        <div class="seg" id="ed-seg" role="group" aria-label="PMBOK edition"></div></div>
+      <div class="ctl ctl-fw"><span class="ctl-label">Iteration approach</span>
+        <div class="seg" id="fw-seg" role="group" aria-label="Delivery approach"></div></div>
+    </div>
+    <p class="note" id="ed-note"></p>
+
+    <div class="zoomframe"><div class="zoomwrap" id="zoomwrap"><div class="zoomstage" id="zoomstage"><div id="fw-wrap">
+      <div class="fw" id="fw" data-discovery="on">
+        <svg class="wires" id="wires" aria-hidden="true">
+          <defs>
+            <!-- markerUnits="userSpaceOnUse": иначе размер наконечника умножается
+                 на толщину линии, и у тонких связей остриё пропадает вовсе. -->
+            <marker id="arrow" viewBox="0 0 16 16" refX="15" refY="8" markerWidth="16" markerHeight="16"
+                    markerUnits="userSpaceOnUse" orient="auto">
+              <path d="M0,1 L15.5,8 L0,15 z" fill="#5C6675"/></marker>
+            <marker id="arrow-back" viewBox="0 0 16 16" refX="15" refY="8" markerWidth="16" markerHeight="16"
+                    markerUnits="userSpaceOnUse" orient="auto">
+              <path d="M0,1 L15.5,8 L0,15 z" fill="#8A93A2"/></marker>
+            <marker id="arrow-dk" viewBox="0 0 16 16" refX="15" refY="8" markerWidth="16" markerHeight="16"
+                    markerUnits="userSpaceOnUse" orient="auto">
+              <path d="M0,1 L15.5,8 L0,15 z" fill="#2E4460"/></marker>
+          </defs>
+        </svg>
+
+        <div class="side pre" style="grid-column:1">Pre-sale</div>
+        <div class="pre" id="pre"></div>
+        <div class="side disco" style="grid-column:3">Discovery — optional phase</div>
+        <div class="disc" id="disc"></div>
+        <div class="side proc" style="grid-column:5">Project Management Process</div>
+        <div class="proc-layer" id="proc"></div>
+      </div>
+
+      <div class="fw" id="fw-art" style="margin-top:14px">
+        <div class="side art" style="grid-column:1">Pre-sale artefacts</div>
+        <div id="art-pre" style="grid-column:2"></div>
+        <div class="side disco" style="grid-column:3">Discovery artefacts</div>
+        <div id="art-disc" style="grid-column:4"></div>
+        <div class="side art" style="grid-column:5">Artefacts</div>
+        <div class="proc-layer" id="art-proc" style="grid-column:6"></div>
+      </div>
+    </div></div></div></div>
+    <div class="fw-list" id="fw-list"></div>
+    <p class="note" style="margin-top:var(--sp-sm)">PMBOK&nbsp;8 references are to the Guide unless marked as the Standard.</p>
+
+    <div class="legend">
+      <div class="item"><span class="sw" style="background:var(--plc)"></span>
+        <span><strong>PLC</strong> — project life cycle. In PMBOK&nbsp;8 the five process groups return
+        as <em>Focus Areas</em>.</span></div>
+      <div class="item"><span class="sw" style="background:var(--g-any)"></span>
+        <span>Can be <strong>managed</strong> by: Junior PM (Project Coordinator) / Middle / Senior PM</span></div>
+      <div class="item"><span class="sw" style="background:var(--g-senior)"></span>
+        <span>Can be managed <strong>only</strong> by: Middle / Senior PM</span></div>
+      <div class="item"><span class="sw" style="background:var(--g-po)"></span>
+        <span>Managed by <strong>Product Owner / Business Analyst</strong></span></div>
+      <div class="item"><span class="sw" style="background:rgba(60,90,130,.16);border:1px solid rgba(60,90,130,.32)"></span>
+        <span>Owned by <strong>Sales / Account Management</strong> — pre-sale only</span></div>
+      <div class="item"><span class="sw" style="background:rgba(14,124,158,.14);border:1px solid rgba(14,124,158,.3)"></span>
+        <span>Owned by <strong>Solution Architect</strong> — discovery, design, delivery pipeline</span></div>
+      <div class="item"><span class="sw" style="background:var(--a-any)"></span>
+        <span>Artefact — can be <strong>created</strong> by: Junior PM (PC) / Middle / Senior PM</span></div>
+      <div class="item"><span class="sw" style="background:var(--a-senior)"></span>
+        <span>Artefact — can be created <strong>only</strong> by: Middle / Senior PM</span></div>
+    </div>
+
+    <div class="triggers">
+      <h3>When the estimate confidence gate fails and discovery is inserted</h3>
+      <ul id="trig-list"></ul>
+    </div>
+  </section>
+
+  <section id="s-iteration">
+    <h2>Why the cycle changes shape</h2>
+    <p>The delivery cycle is not ten fixed boxes with different captions. Each approach has its own
+      structure, and the switcher redraws it from the source rather than relabelling it.</p>
+    <p><strong>Scrum</strong> is a loop of four events around three artifacts. The Increment can be
+      delivered as soon as it meets the Definition of Done — the Sprint Review inspects the outcome but is
+      not a release gate, and there is no UAT or Definition of Ready in the Scrum Guide.
+      <strong>Kanban</strong> has no iteration at all: work flows from the commitment point to the delivery
+      point under WIP limits, and a set of cadences — from the daily Kanban Meeting to the quarterly
+      Strategy Review — keeps it steered. <strong>SAFe</strong> nests two loops: team iterations inside a
+      Planning Interval that ends with an Innovation and Planning iteration and Inspect &amp; Adapt, while
+      release is decoupled from that rhythm through the Continuous Delivery Pipeline.
+      <strong>Incremental waterfall</strong> runs sequential phases with an acceptance gate and repeats
+      them per increment.</p>
+    <p>What stays the same is the frame around the cycle: the Release Backlog feeds it and Release
+      management takes its output, so nothing outside the block moves.</p>
+  </section>
+
+  <section id="s-discovery">
+    <h2>Discovery is a branch, not a stage</h2>
+    <p>Pre-sale ends with a proposal when the estimate rests on a scope somebody can actually describe.
+      When it does not — when there are more assumptions than requirements and the spread is too wide to
+      trade on — the right move is not a padded number but a short paid discovery. That is why it hangs off
+      a decision gate in a dashed frame and loops back into estimation rather than sitting in the flow.</p>
+    <p>The gate has three ways out, and all three are drawn: a narrowed estimate that goes to proposal, a
+      switch from fixed price to T&amp;M because the uncertainty survived, and walking away. Without the
+      third one the gate is decorative.</p>
+  </section>
+
+  <section id="s-pmbok8">
+    <h2>Six versus eight</h2>
+    <p>The edition switch is the honest way to show what is the standard and what is ours. In the sixth
+      edition view the disciplines are as originally drawn. Switch to the eighth and four things move:
+      Cost becomes <strong>Finance</strong> — no longer only spend but the financial viability of the
+      result; Procurement narrows to <strong>Sourcing strategy</strong>, planned once, with execution
+      moving into resources; Communications folds into <strong>Stakeholders</strong>; and
+      <strong>Governance</strong> appears as a band running through everything.</p>
+    <p>Quality is the interesting one. In the eighth edition it stops being a knowledge area altogether.
+      It does not disappear — it becomes the principle <em>Embed Quality Into Processes and Deliverables</em>
+      and the process <em>Manage Quality Assurance</em> inside Governance (so it sits in the Governance band
+      here, not in a box of its own), while the delivery cycle keeps verifying it every round. Quality stopped being a column and became a property of everything, which
+      is exactly what the standard wanted to say.</p>
+    <p class="note">What never switches: the grade legend, the artefacts layer and pre-sale. PMBOK says nothing about who is senior enough to own a document.</p>
+  </section>
+
+  <section id="s-pmbok6">
+    <h2>How this looked in PMBOK 6</h2>
+    <p>This is the full PMBOK 6 process map: 49 processes in five process groups, colored by knowledge area
+      and linked by their main inputs and outputs. As a reference it is accurate and, in its own way,
+      elegant — every dependency the standard describes is there.</p>
+    <figure class="ref-map">
+      <a href="assets/pmbok6-process-map.png" target="_blank" rel="noopener"
+         title="Open the full-size map in a new tab">
+        <img src="assets/pmbok6-process-map.png" width="3324" height="4070" loading="lazy"
+             alt="PMBOK 6 process map: 49 processes across Initiating, Planning, Executing, Monitoring and Controlling, and Closing, colored by knowledge area and linked by inputs and outputs">
+      </a>
+      <figcaption>PMBOK 6 process map (reference) · click to open full size.
+        Based on the <em>PMBOK® Guide – Sixth Edition</em>, PMI.</figcaption>
+    </figure>
+    <p>It is also hard to read. For a client, it answers a question they did not ask: they want to know what
+      happens next, who owns it and when they will see a result, not how 49 processes feed each other. And
+      even for a project manager who has not worked with PMI methodology, a map this dense takes real time to
+      decode before it helps with a single decision.</p>
+    <p>That is why the framework above keeps the standard underneath but shows only what a team and a client
+      act on: phases, owners by grade and the artifacts that change hands. The full map stays useful — as a
+      reference for whoever maintains the process, not as the picture we lead with.</p>
+  </section>
+
+</main>
+</div>
+
+<script src="shared/framework-data.js?v=20260919091816"></script>
+<script src="shared/nav.js?v=20260919091816"></script>
+<script src="shared/topbar.js?v=20260919091816"></script>
+<script src="shared/framework.js?v=20260919091816"></script>
+<script src="shared/framework-hints.js?v=20260919091816"></script>
+<script src="shared/framework-ui.js?v=20260919091816"></script>
+<script>
+(function () {
+  var ul = document.getElementById('trig-list');
+  window.PRESALE.gate.triggers.forEach(function (t) {
+    var li = document.createElement('li'); li.textContent = t; ul.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>

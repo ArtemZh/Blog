@@ -1,0 +1,171 @@
+/* Компоненти статті 5. Спільне (етапи, метрики, кейси) — у shared/. */
+.lead--sm{font-size:14px;margin-bottom:14px}
+
+/* ── 01 розгорнуто ≠ випущено ─────────────────────────────── */
+.rvd{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start;margin-bottom:18px}
+.rvd__lanes{border:1px solid var(--line-soft);border-radius:var(--r-lg);padding:16px;background:var(--surface-2)}
+.rvd__lane{display:grid;grid-template-columns:150px minmax(0,1fr) 170px;gap:12px;align-items:center;
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--r);padding:12px}
+.rvd__k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g700)}
+.rvd__who{font-size:12px;color:var(--g500);line-height:1.35}
+.rvd__cells{display:flex;gap:8px}
+.rvd__c{font-family:var(--mono);font-size:12px;padding:8px 12px;border-radius:var(--r);border:1px dashed var(--line);color:var(--g300);min-width:64px;text-align:center}
+.rvd__c.is-on{border-style:solid;border-color:var(--g300);color:var(--g700)}
+.rvd__c.is-new{border-color:var(--ink);color:#fff;background:var(--ink)}
+.rvd__flag{display:flex;align-items:center;gap:10px;margin:10px 0 10px 162px;font-size:12.5px;color:var(--g700)}
+.rvd__sw{width:34px;height:20px;border-radius:10px;background:var(--line);position:relative;flex:0 0 auto}
+.rvd__sw i{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .15s}
+.rvd__sw.on{background:var(--signal)}
+.rvd__sw.on i{left:17px}
+@media (max-width:980px){.rvd{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){.rvd__lane{grid-template-columns:minmax(0,1fr)}.rvd__flag{margin-left:0}}
+
+/* ── 02 життєві цикли: чотири схеми ─────────────────────────── */
+.lcs{display:grid;gap:18px;margin-bottom:26px}
+.lcd{border:1px solid var(--line-soft);border-radius:var(--r-lg);background:var(--paper);padding:18px 18px 4px}
+.lcd__head h3{font-size:17px;margin:4px 0 4px}
+.lcd__head p{margin:0;font-size:13.5px;line-height:1.5;color:var(--g700)}
+.lcd__body{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px;align-items:center;margin-top:14px}
+.lcd--line .lcd__body{grid-template-columns:minmax(0,1fr)}
+.lcd--wheel .lcd__body{grid-template-columns:minmax(0,380px) minmax(0,1fr)}
+.lcd__fig{border:1px solid var(--line-soft);border-radius:var(--r);background:var(--surface-2);padding:10px;overflow-x:auto}
+.lcd__svg{display:block;width:100%;height:auto;min-width:520px;font-family:var(--sans)}
+.lcd__svg--sq{min-width:280px;max-width:380px;margin:0 auto}
+.lcd--line .lcd__svg{min-width:560px;max-width:760px;margin:0 auto}
+.lcd__steps{margin:0;padding-left:22px;font-size:13px;line-height:1.5;color:var(--g700)}
+.lcd--line .lcd__steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;padding-left:0;list-style:none;counter-reset:s}
+.lcd--line .lcd__steps li{counter-increment:s}
+.lcd--line .lcd__steps li::before{content:counter(s,decimal-leading-zero);display:block;font-family:var(--mono);font-size:10px;color:var(--g300)}
+.lcd__steps li{padding:4px 6px;border-radius:6px;cursor:default;transition:background .15s}
+.lcd__steps li+li{margin-top:2px}
+.lcd__steps li b{color:var(--ink);font-weight:600}
+.lcd__steps li.is-hl{background:var(--surface)}
+.lcd__steps li.is-hl b{color:var(--signal)}
+.lcd .note{margin-top:14px}
+
+.lcd__edge{fill:none;stroke:var(--g500);stroke-width:1.5}
+.lcd__edge--dash{stroke:var(--g300);stroke-dasharray:4 4}
+.lcd__tip{fill:var(--g500)}
+.lcd__lab{font-size:11.5px;fill:var(--g700)}
+.lcd__node circle{fill:var(--ink);stroke:var(--paper);stroke-width:2;transition:stroke .15s}
+.lcd__node text{fill:#fff;font-size:11.5px;font-weight:600;text-anchor:middle}
+.lcd__node .lcd__under{fill:var(--ink);font-size:13px}
+.lcd--line .lcd__node text:not(.lcd__under){font-family:var(--mono);font-size:11px;font-weight:500}
+.lcd__node--drop circle{fill:var(--g500)}
+.lcd__node--core text{font-size:13px}
+.lcd__node,.lcd__pill,.lcd__band{cursor:pointer}
+.lcd__node.is-hl circle{stroke:var(--signal);stroke-width:4}
+.lcd__node.is-hl .lcd__under{fill:var(--signal)}
+.lcd__pill rect{fill:var(--paper);stroke:var(--g300);stroke-width:1.2;transition:stroke .15s}
+.lcd__pill text{font-size:12px;font-weight:600;fill:var(--ink);text-anchor:middle}
+.lcd__pill--key rect{fill:var(--ink);stroke:var(--ink)}
+.lcd__pill--key text{fill:#fff}
+.lcd__pill.is-hl rect{stroke:var(--signal);stroke-width:2.5}
+.lcd__loop{fill:none;stroke:var(--ink);stroke-width:14;stroke-linecap:round;opacity:.9}
+.lcd__loop--ops{stroke:var(--g300)}
+.lcd--infinity .lcd__tip{fill:#fff}
+.lcd__side{font-family:var(--mono);font-size:11px;letter-spacing:.14em;fill:var(--g500);text-anchor:middle}
+.lcd__band{fill:none;stroke:var(--surface);stroke-width:30;transition:stroke .15s}
+.lcd__band.is-hl{stroke:var(--line)}
+@media (max-width:980px){.lcd__body,.lcd--wheel .lcd__body{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.lcd--line .lcd__steps{grid-template-columns:minmax(0,1fr)}}
+
+.appr{display:grid;gap:4px}
+.appr__h,.appr__r{display:grid;grid-template-columns:180px minmax(0,1fr) minmax(0,1.2fr) minmax(0,.8fr);gap:14px;padding:10px 12px}
+.appr__h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g700);padding-bottom:2px}
+.appr__r{border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper)}
+.appr__r b{font-size:13.5px;font-weight:600}
+.appr__r b i{display:block;margin-top:3px;font-style:normal;font-family:var(--mono);font-size:10px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;color:var(--g500)}
+.appr__r span{font-size:13px;line-height:1.5;color:var(--g700)}
+@media (max-width:860px){.appr__h{display:none}.appr__r{grid-template-columns:minmax(0,1fr);gap:4px}}
+
+/* ── 03 ролі ──────────────────────────────────────────────── */
+.roles{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:18px;align-items:start}
+.rm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rm__b{text-align:left;padding:12px;border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper);
+  cursor:pointer;color:var(--ink);box-shadow:var(--lift-sm);transition:border-color .15s ease}
+.rm__b:hover,.rm__b.on{border-color:var(--signal)}
+.rm__b b{display:block;font-size:14px;font-weight:600}
+.rm__b span{display:block;margin-top:3px;font-size:12px;color:var(--g500)}
+.roles dl,.st dl,.roll dl{margin:0}
+.roles dt,.st dt{margin-top:10px;font-size:12.5px;font-weight:600}
+.roles dd,.st dd{margin:2px 0 0;font-size:13px;line-height:1.5;color:var(--g700)}
+.roles .card h3{font-size:17px}
+@media (max-width:980px){.roles{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:520px){.rm{grid-template-columns:minmax(0,1fr)}}
+
+/* ── 04 календар ──────────────────────────────────────────── */
+.cal-wrap{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+.cal{overflow-x:auto;border:1px solid var(--line-soft);border-radius:var(--r-lg);padding:12px;background:var(--surface-2)}
+.cal__head,.cal__lane{display:grid;grid-template-columns:120px repeat(var(--w),minmax(52px,1fr));gap:4px;min-width:620px}
+.cal__head span{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--g500);padding:0 2px 6px}
+.cal__lane{margin-top:6px;grid-auto-flow:column;align-items:stretch}
+.cal__k{grid-column:1;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--g700);align-self:center}
+.cal__it{grid-row:1;text-align:left;font-size:12px;line-height:1.25;padding:9px 8px;border-radius:var(--r);border:1px solid var(--line);
+  background:var(--paper);color:var(--ink);cursor:pointer;transition:border-color .15s}
+.cal__it:hover,.cal__it.on{border-color:var(--signal)}
+/* Заборонені періоди — штрихування: читається без кольору. */
+.cal__it[data-kind="blackout"],.cal__it[data-kind="freeze"]{background:repeating-linear-gradient(135deg,var(--surface) 0 6px,var(--paper) 6px 12px)}
+.cal__it[data-kind="gonogo"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.cal__it[data-kind="gonogo"].on{border-color:var(--signal);box-shadow:0 0 0 2px var(--signal)}
+@media (max-width:980px){.cal-wrap{grid-template-columns:minmax(0,1fr)}}
+
+/* ── 05 SemVer і стратегії ────────────────────────────────── */
+.sv{display:grid;gap:6px}
+.sv__r{display:grid;grid-template-columns:minmax(0,1.1fr) auto minmax(0,1fr);gap:12px;align-items:center;padding:10px 12px;
+  border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper)}
+.sv__q{font-size:13.5px}
+.sv__opts{display:flex;gap:4px}
+.sv__o{font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:7px 9px;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--paper);color:var(--g500);cursor:pointer}
+.sv__o:hover{color:var(--ink);border-color:var(--g300)}
+.sv__o.on{border-color:var(--ink);color:var(--ink)}
+.sv__o.is-ans{background:var(--ink);border-color:var(--ink);color:#fff}
+.sv__a{font-size:12.5px;line-height:1.45;color:var(--g700)}
+.sv__r.is-no .sv__a b{color:var(--signal)}
+@media (max-width:820px){.sv__r{grid-template-columns:minmax(0,1fr)}}
+
+.st{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+.st__viz{border:1px solid var(--line-soft);border-radius:var(--r-lg);padding:16px;background:var(--surface-2)}
+.st__users{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--g700);
+  padding:10px;border:1px solid var(--line);border-radius:var(--r);background:var(--paper);text-align:center}
+.st__split{display:grid;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--g300)}
+.st__lane{display:grid;grid-template-columns:140px minmax(0,1fr) 48px;gap:10px;align-items:center}
+.st__k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--g700)}
+.st__bar{height:14px;border-radius:7px;background:var(--paper);border:1px solid var(--line-soft);overflow:hidden}
+.st__bar i{display:block;height:100%;background:var(--g300);transition:width .25s ease}
+.st__lane--new .st__bar i{background:var(--ink)}
+.st__lane b{font-family:var(--mono);font-size:12px;text-align:right}
+.st__srv{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:12px}
+.st__srv span{font-family:var(--mono);font-size:10px;text-align:center;padding:6px 0;border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--g500)}
+.st__srv span.is-new{background:var(--ink);border-color:var(--ink);color:#fff}
+.st__ctl{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:14px}
+.st__step{font-family:var(--mono);font-size:10px;padding:7px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--paper);color:var(--g500);cursor:pointer}
+.st__step:hover{color:var(--ink)}
+.st__step.on{border-color:var(--signal);color:var(--signal)}
+.st .card h3{font-size:17px}
+@media (max-width:980px){.st{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:520px){.st__lane{grid-template-columns:minmax(0,1fr) 44px}.st__lane .st__k{grid-column:1/-1}.st__srv{grid-template-columns:repeat(4,1fr)}}
+
+/* ── 06 тестування ────────────────────────────────────────── */
+.tl{margin:10px 0 0;padding-left:18px;font-size:13px;line-height:1.55;color:var(--g700)}
+.tl li+li{margin-top:5px}
+.tl b{color:var(--ink);font-weight:600}
+.roll--6 .ro-bar{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:620px){.roll--6 .ro-bar{grid-template-columns:minmax(0,1fr)}}
+
+/* ── 08 документи ─────────────────────────────────────────── */
+.doc h3{font-size:15px}
+
+/* ── 10 кейси ─────────────────────────────────────────────── */
+.case__l{margin-top:10px !important;font-size:13px !important;color:var(--g700) !important}
+.case__l b{color:var(--ink)}
+
+/* ── 11 інструменти ───────────────────────────────────────── */
+.tools{display:grid;gap:4px}
+.tools__r{display:grid;grid-template-columns:190px minmax(0,1.2fr) minmax(0,1fr);gap:14px;padding:10px 12px;
+  border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper)}
+.tools__r b{font-size:13.5px;font-weight:600}
+.tools__r span{font-size:13px;line-height:1.5;color:var(--g700)}
+.tools__ex{font-family:var(--mono);font-size:11px !important;color:var(--g500) !important}
+@media (max-width:760px){.tools__r{grid-template-columns:minmax(0,1fr);gap:4px}}
