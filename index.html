@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20260919091816">
-<link rel="stylesheet" href="shared/style.css?v=20260919091816">
+<link rel="stylesheet" href="shared/tokens.css?v=20260922144732">
+<link rel="stylesheet" href="shared/style.css?v=20260922144732">
 <style>
 /* ── Хаб: один екран ────────────────────────────────────────────────────────
    Три смуги: знайомство · підходи · статті. Висоти й відступи від висоти
@@ -66,14 +66,17 @@ html[lang="en"] .item .en{display:none}
   display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:var(--C);row-gap:var(--G)}
 .htree .cell{position:relative;min-width:0}
 .htree .c13{grid-column:2}.htree .c15{grid-column:4}
-.htree .c14{grid-column:1}.htree .c16a{grid-column:2}.htree .c16{grid-column:3}
+.htree .c26{grid-column:1}.htree .c14{grid-column:2}.htree .c16a{grid-column:3}.htree .c16{grid-column:4}
 .htree .c16 .lbl{visibility:hidden}
 .htree .c16a .lbl{overflow:visible;width:calc(200% + var(--C))}
+.htree .c14 .lbl{visibility:hidden}
+.htree .c26 .lbl{overflow:visible;width:calc(200% + var(--C))}
 .htree .c15::before{content:"";position:absolute;left:calc(-100% - 2 * var(--C));width:calc(100% + 2 * var(--C));
   top:calc(var(--lh) + var(--ih) / 2);height:1.5px;background:var(--rule-2)}
 .htree .c13::after{content:"";position:absolute;left:50%;top:100%;width:1.5px;height:calc(var(--G) / 2);background:var(--rule-2)}
 .htree .kid::before{content:"";position:absolute;top:calc(-1 * var(--G) / 2);height:1.5px;background:var(--rule-2)}
-.htree .c14::before{left:50%;right:calc(-1 * var(--C) / 2)}
+.htree .c26::before{left:50%;right:calc(-1 * var(--C) / 2)}
+.htree .c14::before{left:calc(-1 * var(--C) / 2);right:calc(-1 * var(--C) / 2)}
 .htree .c16a::before{left:calc(-1 * var(--C) / 2);right:calc(-1 * var(--C) / 2)}
 .htree .c16::before{left:calc(-1 * var(--C) / 2);right:50%}
 .htree .kid::after{content:"";position:absolute;left:50%;top:calc(-1 * var(--G) / 2);width:1.5px;
@@ -146,7 +149,9 @@ html[lang="en"] .item .en{display:none}
         <a class="item" href="13-delivery-framework.html" data-hv="13-delivery-framework.html"><span><span class="tt"><span class="n">13</span><span data-en="Delivery Framework">Delivery Framework</span></span><p data-en="PM and PC duties by grade"><span class="en">EN</span> Обовʼязки PM і PC за грейдами</p></span></a></div>
       <div class="cell c15"><p class="lbl" data-en="At the same level">На тому ж рівні</p>
         <a class="item" href="15-outsourcing-product.html" data-hv="15-outsourcing-product.html"><span><span class="tt"><span class="n">15</span><span data-en="Outsourcing vs product">Аутсорс і продукт</span></span><p data-en="Service vs product work">Сервісна й продуктова робота</p></span></a></div>
-      <div class="cell kid c14"><p class="lbl" data-en="What it stands on">На чому це стоїть</p>
+      <div class="cell kid c26"><p class="lbl" data-en="What it stands on">На чому це стоїть</p>
+        <a class="item" href="26-competencies.html" data-hv="26-competencies.html"><span><span class="tt"><span class="n">26</span><span data-en="PM competencies">Компетенції PM</span></span><p data-en="Techniques and artifacts: from SDLC to GenAI">Техніки й артефакти: від SDLC до GenAI</p></span></a></div>
+      <div class="cell kid c14"><p class="lbl">&nbsp;</p>
         <a class="item" href="14d-pmbok8-focus.html" data-hv="14d-pmbok8-focus.html"><span><span class="tt"><span class="n">14d</span><span data-en="PMBOK 8 Focus View">PMBOK 8 Focus View</span></span><p data-en="Phases × domains, inputs and outputs"><span class="en">EN</span> Фази × домени, входи й виходи</p></span></a></div>
       <div class="cell kid c16a"><p class="lbl" data-en="How to visualize portfolio management">Як візуалізувати керування портфелем</p>
         <a class="item" href="16a-portfolio-accounts.html" data-hv="16a-portfolio-accounts.html"><span><span class="tt"><span class="n">16a</span><span data-en="Portfolio &amp; accounts">Портфель і акаунти</span></span><p data-en="Accounts, margin, plans">Акаунти, маржа, плани</p></span></a></div>
@@ -173,8 +178,8 @@ html[lang="en"] .item .en{display:none}
 </main>
 </div>
 
-<script src="shared/lang.js?v=20260919091816"></script>
-<script src="shared/nav.js?v=20260919091816"></script>
-<script src="shared/hub-visuals.js?v=20260919091816"></script>
+<script src="shared/lang.js?v=20260922144732"></script>
+<script src="shared/nav.js?v=20260922144732"></script>
+<script src="shared/hub-visuals.js?v=20260922144732"></script>
 </body>
 </html>

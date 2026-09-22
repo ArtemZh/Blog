@@ -15,6 +15,7 @@
     { g: 2, n: '16a', f: '16a-portfolio-accounts.html', t: t('Портфель і акаунти', 'Portfolio and accounts') },
     { g: 2, n: '16', f: '16-jira-dashboard.html',      t: t('Jira-дашборд', 'Jira dashboard') },
     { g: 2, n: '15', f: '15-outsourcing-product.html', t: t('Аутсорс і продукт', 'Outsourcing and product') },
+    { g: 3, n: '26', f: '26-competencies.html',        t: t('Компетенції PM', 'PM competencies') },
     { g: 3, n: '14d', f: '14d-pmbok8-focus.html',       t: 'PMBOK 8 Focus View' },
     { g: 4, n: '24', f: '24-dwh.html',                 t: t('Дані та керування ними', 'Data and its governance') },
     { g: 4, n: '19', f: '19-oss-bss.html',             t: t('OSS і BSS', 'OSS and BSS') },
