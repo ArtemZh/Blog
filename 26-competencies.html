@@ -7,24 +7,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20260922144732">
-<link rel="stylesheet" href="shared/style.css?v=20260922144732">
+<link rel="stylesheet" href="shared/tokens.css?v=20260922155855">
+<link rel="stylesheet" href="shared/style.css?v=20260922155855">
 <style>
 /* ── сторінка компетенцій ──────────────────────────────────────────────
    Зміст ліворуч липкий, розділи однакової будови: суть → схема →
    техніки → артефакти → пастки. Терміни лишаються англійською. */
-.comp-wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:var(--sp-xl);align-items:start}
-.toc{position:sticky;top:76px;font-size:13px}
-.toc ol{list-style:none;margin:0;padding:0;counter-reset:s}
-.toc li{counter-increment:s;margin-bottom:2px}
-.toc a{display:block;padding:7px 10px;border-radius:var(--r-md);text-decoration:none;color:var(--ink-2);
-  border-left:2px solid transparent}
-.toc a::before{content:counter(s);font:600 10.5px/1 var(--mono);color:var(--ink-3);margin-right:8px}
-.toc a:hover{background:var(--paper-2);color:var(--ink)}
-.toc a.on{background:var(--act-soft);border-left-color:var(--act);color:var(--ink)}
-.toc .tnote{margin-top:var(--sp-md);font-size:11.5px;line-height:1.5;color:var(--ink-3)}
-
-.sec{scroll-margin-top:84px;padding-top:var(--sp-md)}
+.comp-wrap{max-width:none}
+/* Розділи — праворуч у хедері, як .top__nav у статті 21. */
+.topbar .toc{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap;counter-reset:s}
+.topbar .toc a{counter-increment:s;font-size:12px;padding:5px 9px;border-radius:var(--r-sm);
+  text-decoration:none;color:var(--ink-3);border:1px solid transparent;white-space:nowrap}
+.topbar .toc a::before{content:counter(s);font:600 9.5px/1 var(--mono);color:var(--ink-3);margin-right:6px}
+.topbar .toc a:hover{color:var(--ink);border-color:var(--rule)}
+.topbar .toc a.on{color:var(--act);background:var(--act-soft)}
+.topbar .toc a.on::before{color:var(--act)}
+@media(max-width:1100px){.topbar .toc{display:none}}
+.sec{scroll-margin-top:72px;padding-top:var(--sp-md)}
 .sec + .sec{border-top:1px solid var(--rule);margin-top:var(--sp-xl)}
 .sec h2{font-size:23px;letter-spacing:-.02em;margin-bottom:6px}
 .sec h2 .num{font:600 12px/1 var(--mono);color:var(--act);display:block;margin-bottom:6px}
@@ -36,6 +35,13 @@
 .part span{font-size:12.5px;color:var(--ink-3);line-height:1.45}
 
 table.t{width:100%;border-collapse:collapse;font-size:13px;margin-top:var(--sp-xs)}
+table.p{width:100%;border-collapse:collapse;font-size:12.5px;margin:var(--sp-xs) 0 var(--sp-sm)}
+table.p th{text-align:left;font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);padding:0 10px 7px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
+table.p td{padding:7px 10px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+table.p td:first-child{color:var(--ink);font-weight:600;width:250px}
+table.p td:last-child{color:var(--ink-3);width:250px}
+@media(max-width:820px){table.p td:first-child,table.p td:last-child{width:auto}}
 table.t th{text-align:left;font:600 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
   color:var(--ink-3);padding:0 10px 8px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
 table.t td{padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
@@ -72,23 +78,68 @@ table.t td.ex{color:var(--ink-3)}
 .cwt{font:500 9.5px var(--mono);fill:var(--ink-3)}
 .cstage.is-hot .cw.is-dim,.cstage.is-hot .chead.is-dim,.cstage.is-hot .cwt.is-dim{opacity:.12}
 .cstage.is-hot .cw.is-hot{stroke:var(--act)}.cstage.is-hot .chead.is-hot{fill:var(--act)}
-.cpop{position:absolute;width:260px;background:var(--ground);border:1px solid var(--rule-2);border-radius:var(--r-md);
-  box-shadow:var(--lift-sm);padding:11px 13px;z-index:8;display:none}
-.cpop.on{display:block}
-.cpop b{font-size:13px;display:block}
-.cpop i{display:block;font:500 10px/1.3 var(--mono);color:var(--ink-3);font-style:normal;margin:2px 0 6px}
-.cpop p{margin:0;font-size:12.5px;line-height:1.5;color:var(--ink-2);max-width:none}
+.clist{display:grid;grid-template-columns:190px minmax(0,1fr);gap:0 18px;margin:12px 0 0;font-size:12.5px;
+  border-top:1px solid var(--rule);padding-top:10px}
+.clist dt{font-weight:600;color:var(--ink);padding:5px 0}
+.clist dt span{display:block}
+.clist dt span{font:500 10px/1.3 var(--mono);color:var(--ink-3);margin-top:2px}
+.clist dd{margin:0;padding:5px 0;color:var(--ink-2);line-height:1.5}
+@media(max-width:760px){.clist{grid-template-columns:1fr}}
 .chint{font-size:11.5px;color:var(--ink-3);margin:0}
-@media(max-width:1000px){ .comp-wrap{grid-template-columns:1fr} .toc{position:static} }
+
+/* ── сценарій на схемі (механіка DWH) ───────────────────────────────── */
+.cscen{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px}
+.cs-b,.cs-n{border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);border-radius:var(--r-sm);
+  cursor:pointer;font:500 11px/1 var(--mono);padding:0;height:24px;min-width:24px}
+.cs-b:hover,.cs-n:hover{border-color:var(--act);color:var(--ink)}
+.cs-b.on,.cs-n.on{background:var(--act);border-color:var(--act);color:#fff}
+.cs-nums{display:flex;gap:4px;margin-left:4px}
+.cs-cap{flex:1 1 260px;font-size:12.5px;line-height:1.45;color:var(--ink-2);min-height:18px}
+.cstage.is-flow .cnode{opacity:.22}
+.cstage.is-flow .cw,.cstage.is-flow .chead,.cstage.is-flow .cwt{opacity:.12}
+.cstage.is-flow .cnode.is-lit{opacity:1;border-color:var(--act);background:var(--act-soft)}
+.cstage.is-flow .cw.is-lit{opacity:1;stroke:var(--act);stroke-width:2}
+.cstage.is-flow .chead.is-lit{opacity:1;fill:var(--act)}
+
+/* ── підрозділи з входами й виходами ────────────────────────────────── */
+.sub{border-top:1px solid var(--rule);margin-top:var(--sp-md);padding-top:var(--sp-sm)}
+.sub h3{margin-top:0;font-size:14.5px;display:flex;align-items:baseline;gap:8px}
+.sub h4.sh,.sec h4.sh{font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);margin:var(--sp-md) 0 var(--sp-xs)}
+table.t td.pr{font:500 11px/1.35 var(--mono);color:var(--ink-3);width:150px}
+@media(max-width:820px){table.t td.pr{width:auto}}
+.sub h3 em{font:500 10px/1 var(--mono);color:var(--ink-3);font-style:normal;letter-spacing:.05em;text-transform:uppercase}
+.sub > p{font-size:13px;color:var(--ink-2);margin:2px 0 0;max-width:80ch}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-sm);margin:var(--sp-sm) 0}
+.io div{border:1px solid var(--rule);border-radius:var(--r-md);padding:9px 12px;background:var(--paper)}
+.io b{display:block;font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.io ul{margin:0;padding-left:15px;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+.tt{font-size:12.5px;color:var(--ink-2);margin:0 0 4px}
+.tt b{color:var(--ink)}
+@media(max-width:760px){.io{grid-template-columns:1fr}}
+
+/* ── таби підходів (01) ─────────────────────────────────────────────── */
+.apg{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-sm);margin-top:var(--sp-sm)}
+.tpan{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--paper);padding:12px 14px}
+.tpan h4{margin:0 0 8px;font-size:13.5px}
+@media(max-width:760px){.apg{grid-template-columns:1fr}}
+.tpan dl{display:grid;grid-template-columns:104px minmax(0,1fr);gap:5px 10px;margin:0;font-size:12.5px}
+.tpan dt{font:600 10px/1.5 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.tpan dd{margin:0;color:var(--ink-2)}
 </style>
 </head>
 <body>
 <div class="page">
 <header class="topbar">
-  <a class="back" href="index.html">← Головна</a>
   <a class="brand" href="#top">Компетенції PM</a>
-  <div class="readbar"><div class="trk" role="progressbar" aria-label="Прочитано"
-       aria-valuemin="0" aria-valuemax="100"><div class="fil"></div></div></div>
+  <nav class="toc" aria-label="Розділи">
+    <a href="#s1">Methodologies</a>
+    <a href="#s2">PM Core</a>
+    <a href="#s3">Communications</a>
+    <a href="#s4">Business</a>
+    <a href="#s5">Monitoring</a>
+    <a href="#s6">GenAI</a>
+  </nav>
 </header>
 
 <main class="main" id="top">
@@ -98,36 +149,62 @@ table.t td.ex{color:var(--ink-3)}
     <p class="lede">Шість областей, якими користується delivery-менеджер щодня: від вибору підходу до розробки
       до роботи з GenAI. У кожній — з чого вона складається, які техніки застосовуються, які артефакти
       лишаються після роботи й де найчастіше ламається. Терміни залишені англійською: у такому вигляді
-      вони стоять у стандарті й у більшості інструментів.</p>
+      вони стоять у стандарті й у більшості інструментів. Схеми інтерактивні: наведення підсвічує ланцюг звʼязків,
+      а пояснення блоків — текстом під кожною схемою.</p>
   </header>
 
   <div class="comp-wrap">
-    <nav class="toc" aria-label="Зміст">
-      <ol>
-        <li><a href="#s1">Development Methodologies</a></li>
-        <li><a href="#s2">Project Management Core</a></li>
-        <li><a href="#s3">Communications and Leadership</a></li>
-        <li><a href="#s4">Business Management</a></li>
-        <li><a href="#s5">Monitoring and Control</a></li>
-        <li><a href="#s6">GenAI Productivity</a></li>
-      </ol>
-      <p class="tnote">Схеми інтерактивні: наведення підсвічує ланцюг звʼязків, клік по блоку відкриває пояснення.</p>
-    </nav>
-
     <div>
 <!-- ── 1 ─────────────────────────────────────────────────────────────── -->
 <section class="sec" id="s1">
   <h2><span class="num">01</span>Development Methodologies</h2>
-  <p>Перше рішення проєкту — не план, а <b>development approach</b>: як саме продукт створюватиметься
-    й оновлюватиметься протягом життєвого циклу. PMBOK 7 описує спектр від predictive до adaptive, і вибір
-    залежить від двох речей: наскільки певні вимоги й скільки коштує помилка. SDLC (software development
-    life cycle) — це послідовність технічних етапів усередині цього підходу, а не його синонім.</p>
+  <p>Перше рішення проєкту — <b>development approach</b>: як продукт створюється й оновлюється. SDLC — технічні етапи всередині цього підходу, framework — організація роботи команди. Три різні речі, які в розмовах постійно змішують.</p>
+  <h3>З чого складається</h3>
+  <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Визначення life cycle</td><td>Розбиття проєкту на фази з gate-рішенням між ними.</td><td>Опис життєвого циклу в плані</td></tr>
+    <tr><td>Вибір development approach</td><td>Predictive, iterative, incremental, adaptive або hybrid.</td><td>Обґрунтоване рішення в плані</td></tr>
+    <tr><td>Tailoring</td><td>Адаптація процесів, ролей і артефактів під проєкт.</td><td>Перелік того, що застосовуємо й чому</td></tr>
+    <tr><td>Визначення cadence</td><td>Ритм поставки й приймання результату.</td><td>Release plan, календар релізів</td></tr>
+    <tr><td>Вибір framework</td><td>Як організована щоденна робота команди.</td><td>Робочі домовленості, події, ролі</td></tr>
+    </tbody></table>
 
-  <div class="parts">
-    <div class="part"><b>SDLC</b><span>Вимоги → дизайн → розробка → тестування → впровадження → супровід. Етапи однакові в будь-якому підході, різниться лише те, скільки разів вони повторюються.</span></div>
-    <div class="part"><b>Project life cycle</b><span>Фази проєкту з gate-перевіркою між ними: рішення «продовжувати чи ні» ухвалюється на межі фази, а не в кінці.</span></div>
-    <div class="part"><b>Development approach</b><span>Predictive, iterative, incremental, adaptive і hybrid як поєднання. Записується в плані як окреме рішення з обґрунтуванням.</span></div>
-    <div class="part"><b>Cadence</b><span>Ритм поставки: одна велика передача, релізи за розкладом чи безперервний потік.</span></div>
+  <h3>Чотири підходи</h3>
+  <p class="tt">Профіль кожного: коли обирати, з яким ритмом, як приймається результат і де сидить ризик.</p>
+  <div class="apg">
+  <div class="tpan"><h4>Predictive</h4><dl>
+    <dt>Коли обирати</dt><dd>Вимоги відомі й стабільні, зміна дорога: будівництво, міграція з фіксованим обсягом, сертифікований продукт.</dd>
+    <dt>Cadence</dt><dd>Одна поставка в кінці або кілька фазових передач.</dd>
+    <dt>Вимоги</dt><dd>Зафіксовані на початку, зміна — лише через Change Request.</dd>
+    <dt>Приймання</dt><dd>Одноразове, за scope baseline і критеріями приймання.</dd>
+    <dt>Де ризик</dt><dd>У припущеннях: помилка у вимогах виявляється в кінці, коли переробка найдорожча.</dd>
+    <dt>Приклад</dt><dd>Заміна білінгової системи з фіксованою датою відключення старої.</dd>
+  </dl></div>
+  <div class="tpan"><h4>Iterative</h4><dl>
+    <dt>Коли обирати</dt><dd>Рішення не очевидне: потрібно кілька проходів по тому самому обсягу.</dd>
+    <dt>Cadence</dt><dd>Одна поставка після серії ітерацій-прототипів.</dd>
+    <dt>Вимоги</dt><dd>Відомі в загальному, уточнюються в кожній ітерації.</dd>
+    <dt>Приймання</dt><dd>Прототип перевіряється, фінальний продукт приймається один раз.</dd>
+    <dt>Де ризик</dt><dd>Ітерації можуть тривати нескінченно, якщо немає критерію «досить».</dd>
+    <dt>Приклад</dt><dd>UX робочого місця оператора: три-чотири проходи макетів із тестами на користувачах.</dd>
+  </dl></div>
+  <div class="tpan"><h4>Incremental</h4><dl>
+    <dt>Коли обирати</dt><dd>Цінність можна віддавати частинами, і кожна частина працює самостійно.</dd>
+    <dt>Cadence</dt><dd>Кілька поставок за планом релізів.</dd>
+    <dt>Вимоги</dt><dd>Відомі, але порядок реалізації гнучкий.</dd>
+    <dt>Приймання</dt><dd>Кожен інкремент приймається окремо.</dd>
+    <dt>Де ризик</dt><dd>Інтеграція частин і технічний борг між релізами.</dd>
+    <dt>Приклад</dt><dd>Портал самообслуговування: спершу рахунки, потім оплата, потім заявки.</dd>
+  </dl></div>
+  <div class="tpan"><h4>Adaptive</h4><dl>
+    <dt>Коли обирати</dt><dd>Вимоги нестабільні, зворотний звʼязок дешевий і швидкий.</dd>
+    <dt>Cadence</dt><dd>Кожна ітерація або безперервний потік.</dd>
+    <dt>Вимоги</dt><dd>Backlog, що постійно перевпорядковується.</dd>
+    <dt>Приймання</dt><dd>На кожному review; критерії — DoD.</dd>
+    <dt>Де ризик</dt><dd>Відсутність спільної картини: без roadmap команда бачить лише спринт.</dd>
+    <dt>Приклад</dt><dd>Новий цифровий сервіс: гіпотези перевіряються релізами раз на два тижні.</dd>
+  </dl></div>
   </div>
 
   <div class="cbox" data-comp="approach"></div>
@@ -135,380 +212,572 @@ table.t td.ex{color:var(--ink-3)}
 
   <h3>Техніки</h3>
   <table class="t">
-    <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад із практики</th></tr></thead>
-    <tbody>
-      <tr><td>Tailoring<small>вибір і адаптація підходу</small></td>
-        <td>Підбір підходу, процесів і артефактів під конкретний проєкт: розмір, критичність, зрілість команди, вимоги регулятора.</td>
-        <td class="ex">Embedded-проєкт із сертифікацією: вимоги фіксовані документом, а прошивка розробляється ітераціями — hybrid.</td></tr>
-      <tr><td>Agile release planning<small>PMI, Tools and Techniques</small></td>
-        <td>Верхньорівневий графік релізів на 3–6 місяців із product roadmap: скільки ітерацій входить у реліз і що буде готове наприкінці кожної.</td>
-        <td class="ex">Замовник бачить не «спринт 7», а «у травні зʼявиться оплата карткою».</td></tr>
-      <tr><td>Story mapping<small>карта історій</small></td>
-        <td>Розкладання функціональності за кроками користувача, щоб вибрати мінімальний зріз, який уже корисний.</td>
-        <td class="ex">Перший інкремент для порталу — «зареєструватись і побачити рахунок», решта — далі.</td></tr>
-      <tr><td>Backlog refinement<small>уточнення черги</small></td>
-        <td>Регулярний розбір верхівки backlog: оцінка, залежності, критерії приймання. Захищає ітерацію від роботи «наосліп».</td>
-        <td class="ex">Година на тиждень із BA і tech lead замість авралу в перший день спринту.</td></tr>
-      <tr><td>Definition of Ready / Done<small>DoR / DoD</small></td>
-        <td>Домовленість, коли задачу можна брати в роботу і коли вона справді готова: тести, code review, документація, деплой.</td>
-        <td class="ex">Без DoD «готово» означає різне для розробника, QA й замовника — і приймання зривається.</td></tr>
-      <tr><td>WSJF<small>weighted shortest job first</small></td>
-        <td>Порядок у черзі за співвідношенням цінності й розміру, а не за гучністю запиту.</td>
-        <td class="ex">Аргумент у розмові зі стейкхолдером: чому його задача йде третьою, а не першою.</td></tr>
-    </tbody>
-  </table>
+      <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Tailoring<small>вибір і адаптація</small></td><td>Підбір процесів, ролей і артефактів під розмір, критичність, зрілість команди й вимоги регулятора.</td><td class="ex">Embedded із сертифікацією: вимоги фіксовані документом, прошивка розробляється ітераціями.</td></tr>
+      <tr><td>Approach selection criteria<small>чотири питання</small></td><td>Чи певні вимоги, скільки коштує помилка, що дозволяє регулятор, чи готовий замовник брати участь.</td><td class="ex">Дає письмове обґрунтування вибору замість «у нас Agile».</td></tr>
+      <tr><td>Agile release planning<small>PMI, Tools and Techniques</small></td><td>Верхньорівневий графік релізів на 3–6 місяців разом із product roadmap.</td><td class="ex">Замовник бачить «у травні — оплата карткою», а не «спринт 7».</td></tr>
+      <tr><td>Roadmapping<small>карта цінності</small></td><td>Напрям продукту в часі без дат окремих задач.</td><td class="ex">Розмова зі спонсором про напрям, а не про беклог.</td></tr>
+      <tr><td>Story mapping<small>карта історій</small></td><td>Розкладання функцій за кроками користувача, щоб вибрати мінімальний корисний зріз.</td><td class="ex">Перший інкремент порталу — «зареєструватись і побачити рахунок».</td></tr>
+      <tr><td>Backlog refinement<small>уточнення черги</small></td><td>Регулярний розбір верхівки: оцінка, залежності, критерії приймання.</td><td class="ex">Година на тиждень замість авралу в перший день спринту.</td></tr>
+      <tr><td>Iteration planning<small>планування ітерації</small></td><td>Вибір обсягу ітерації за реальною capacity команди.</td><td class="ex">Захищає від «візьмемо, а там побачимо».</td></tr>
+      <tr><td>Definition of Ready / Done<small>DoR / DoD</small></td><td>Домовленість, коли задачу можна брати в роботу і коли вона справді готова.</td><td class="ex">Без DoD «готово» означає різне для розробника, QA й замовника.</td></tr>
+      <tr><td>WSJF<small>weighted shortest job first</small></td><td>Порядок черги за співвідношенням цінності й розміру, а не за гучністю запиту.</td><td class="ex">Аргумент, чому задача йде третьою, а не першою.</td></tr>
+      <tr><td>Retrospective<small>зміна процесу</small></td><td>Зміна способу роботи за даними ітерації, а не за відчуттям.</td><td class="ex">Один експеримент на ітерацію з критерієм успіху.</td></tr>
+      </tbody></table>
+
+  <h3>Agile Frameworks</h3>
+  <p class="tt">Framework — конкретна реалізація adaptive-підходу: ролі, події, артефакти. Підхід відповідає на «як розробляємо», framework — на «як організовані».</p>
+  <table class="t">
+      <thead><tr><th>Framework</th><th>Ритм і механіка</th><th>Коли доречний</th></tr></thead>
+      <tbody>
+      <tr><td>Scrum</td><td>Спринти фіксованої довжини, три ролі, чотири події, Product Backlog і Increment.</td><td class="ex">Одна команда з продуктом і замовником, готовим брати участь у review.</td></tr>
+      <tr><td>Kanban</td><td>Потік без спринтів: візуалізація, ліміт WIP, керування cycle time.</td><td class="ex">Підтримка й потік дрібних запитів, де планувати спринт немає сенсу.</td></tr>
+      <tr><td>Scrumban</td><td>Події Scrum плюс ліміти WIP із Kanban.</td><td class="ex">Команда веде і розвиток, і підтримку одночасно.</td></tr>
+      <tr><td>XP<small>extreme programming</small></td><td>TDD, pair programming, continuous integration, малі релізи.</td><td class="ex">Коли вузьке місце — технічна якість, а не планування.</td></tr>
+      <tr><td>SAFe / LeSS</td><td>Масштабування на кілька команд: спільне планування, єдиний backlog, синхронні релізи.</td><td class="ex">Один продукт, 5+ команд, спільні залежності.</td></tr>
+      </tbody></table>
 
   <h3>Артефакти</h3>
-  <table class="t">
-    <thead><tr><th>Артефакт</th><th>Що це і хто веде</th><th>Коли оновлюється</th></tr></thead>
-    <tbody>
-      <tr><td>Development Approach and Life Cycle Description</td>
-        <td>Розділ плану: обраний підхід, фази, gate-и, обґрунтування вибору. Веде PM.</td><td class="ex">На старті й за зміни підходу.</td></tr>
-      <tr><td>Release Plan</td><td>Зміст і дати найближчих релізів. Веде PM разом із Product Owner.</td><td class="ex">Після кожного релізу або зміни пріоритетів.</td></tr>
-      <tr><td>Product Backlog</td><td>Упорядкована черга робіт із оцінками. Веде Product Owner.</td><td class="ex">Постійно, формально — на refinement.</td></tr>
-      <tr><td>Sprint Backlog і Increment</td><td>Обсяг ітерації й результат, який можна показати. Веде команда.</td><td class="ex">Кожну ітерацію.</td></tr>
-      <tr><td>DoR / DoD</td><td>Узгоджені критерії готовності. Веде команда, затверджує PM.</td><td class="ex">На ретроспективі, коли правило перестало працювати.</td></tr>
-    </tbody>
-  </table>
-
-  <div class="trap"><b>Пастка.</b> «У нас Agile» як відповідь на питання про підхід. Agile — це набір практик,
-    а не підхід до розробки: якщо контракт Fixed Price, обсяг зафіксований, а приймання одноразове, то
-    підхід у вас predictive зі спринтами всередині. Це нормально — але це треба назвати своїм імʼям і
-    описати в плані, інакше зміни ітерацій пізніше стануть суперечкою про обсяг.</div>
+  <p class="tt">Development Approach and Life Cycle Description · Release Plan · Product Backlog ·
+    Sprint Backlog і Increment · DoR / DoD · Roadmap.</p>
+  <div class="trap"><b>Пастка.</b> «У нас Agile» як відповідь на питання про підхід. Agile — набір практик, а не підхід до розробки: якщо контракт Fixed Price, обсяг зафіксований, а приймання одноразове, підхід у вас predictive зі спринтами всередині. Це нормально — але це треба назвати своїм імʼям і описати в плані.</div>
 </section>
 
-<!-- ── 2 ─────────────────────────────────────────────────────────────── -->
 <section class="sec" id="s2">
   <h2><span class="num">02</span>Project Management Core</h2>
-  <p>Ядро — це сім областей, які тримають проєкт разом. У PMI Process Groups вони розкладені по процесах,
-    у PMBOK 7 — по performance domains, але робота однакова: домовитись про обсяг, розкласти його в час
-    і гроші, побачити ризики раніше, ніж вони стануть проблемами, і не дати якості піти в борг.</p>
-
-  <div class="parts">
-    <div class="part"><b>Project and Program Management</b><span>Проєкт дає результат, програма — вигоду від групи повʼязаних проєктів, портфель — вибір, що взагалі робити. Benefits живуть на рівні програми.</span></div>
-    <div class="part"><b>Integration</b><span>Project Charter, Project Management Plan, Perform Integrated Change Control. Те, що звʼязує решту областей.</span></div>
-    <div class="part"><b>Scope</b><span>Collect Requirements, Define Scope, Create WBS, Validate і Control Scope.</span></div>
-    <div class="part"><b>Schedule</b><span>Define Activities, Sequence, Estimate Durations, Develop Schedule, Control Schedule.</span></div>
-    <div class="part"><b>Cost</b><span>Estimate Costs, Determine Budget, Control Costs і резерви.</span></div>
-    <div class="part"><b>Risk</b><span>Plan, Identify, Qualitative і Quantitative Analysis, Plan Responses, Implement, Monitor.</span></div>
-    <div class="part"><b>Quality</b><span>Plan Quality Management, Manage Quality, Control Quality і cost of quality.</span></div>
+  <p>Сім областей, які тримають проєкт разом. Кожна нижче — окремий підрозділ: з яких процесів складається, що кожен процес робить і що лишає на виході, якими техніками це роблять і які артефакти ведуть.</p>
+  <div class="sub">
+    <h3>Project and Program Management <em>рівні управління</em></h3>
+    <p>Проєкт дає результат, програма — вигоду від групи повʼязаних проєктів, портфель — вибір, що робити взагалі. Benefits міряються на рівні програми, і майже завжди — після закриття проєкту.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Business case</td><td>Обґрунтування: проблема, варіанти, вигода, вартість.</td><td>Затверджений business case</td></tr>
+    <tr><td>Відбір у портфель</td><td>Порівняння ініціатив за цінністю, ризиком і ресурсом.</td><td>Рішення «беремо / не беремо»</td></tr>
+    <tr><td>Керування залежностями</td><td>Звʼязки між проєктами програми з власником на кожній.</td><td>Dependency register</td></tr>
+    <tr><td>Governance і gate-огляди</td><td>Рішення про продовження на межі фази за критеріями.</td><td>Протокол gate-огляду</td></tr>
+    <tr><td>Реалізація benefits</td><td>Вимірювання вигоди після передачі результату.</td><td>Benefits realization report</td></tr>
+    </tbody></table>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Business case analysis<small>обґрунтування</small></td><td>Порівняння варіантів за вартістю, вигодою й ризиком, включно з варіантом «нічого не робити».</td><td class="ex">Варіант «нічого не робити» часто найдорожчий — і це треба показати цифрою.</td></tr>
+      <tr><td>Benefits mapping<small>ланцюг вигоди</small></td><td>Звʼязок «результат → зміна в роботі → вигода → метрика».</td><td class="ex">«Портал» не вигода; вигода — мінус 20% звернень у контакт-центр за півроку.</td></tr>
+      <tr><td>Benefits realization<small>після закриття</small></td><td>Вимірювання вигоди тоді, коли проєкт уже закритий.</td><td class="ex">Проєкт закритий, вигоду міряє власник продукту за узгодженою метрикою.</td></tr>
+      <tr><td>Portfolio prioritisation<small>scoring model</small></td><td>Єдина шкала для всіх ініціатив: цінність, ризик, ресурс.</td><td class="ex">Проєкт зупиняють не тому, що поганий, а тому, що третій на тих самих людей.</td></tr>
+      <tr><td>Stage-gate review<small>gate</small></td><td>Формальне рішення на межі фази за наперед визначеними критеріями.</td><td class="ex">Gate без критеріїв перетворюється на презентацію.</td></tr>
+      <tr><td>Dependency management<small>залежності</small></td><td>Реєстр залежностей між проєктами з власником і датою.</td><td class="ex">Міграція даних не стартує, поки сусідній проєкт не віддасть API.</td></tr>
+      <tr><td>Program governance<small>повноваження</small></td><td>Хто ухвалює які рішення на рівні програми.</td><td class="ex">Ескалація має адресу, а не «керівництво».</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Business Case · Benefits Management Plan · Program Roadmap · Dependency Register · Gate Review Records.</p>
   </div>
 
-  <div class="cbox" data-comp="change"></div>
-  <p class="chint">Шлях запиту на зміну: від джерела до оновлених baselines і плану. Пунктиром — повернення нової норми в роботу.</p>
-
-  <h3>Техніки</h3>
-  <table class="t">
-    <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад із практики</th></tr></thead>
+  <div class="sub">
+    <h3>Project Integration Management <em>те, що звʼязує решту</em></h3>
+    <p>Єдина область, якою володіє лише PM: звести плани областей в один, керувати змінами й закрити проєкт. Саме тут живе Perform Integrated Change Control.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
     <tbody>
-      <tr><td>Decomposition → WBS<small>scope</small></td>
-        <td>Розбиття результатів на work packages, якими можна керувати й які можна оцінити. WBS описує <i>результати</i>, а не список дій.</td>
-        <td class="ex">Якщо пакет неможливо оцінити чи прийняти — він завеликий і ділиться далі.</td></tr>
-      <tr><td>Requirements Traceability Matrix<small>RTM</small></td>
-        <td>Звʼязок кожної вимоги з результатом, тестом і бізнес-ціллю. Показує, що впаде, якщо вимогу прибрати.</td>
-        <td class="ex">Аргумент у суперечці про «маленьку зміну»: видно, що вона тягне за собою три тести й інтеграцію.</td></tr>
-      <tr><td>Precedence Diagramming Method і Critical Path<small>schedule</small></td>
-        <td>Мережа залежностей і найдовший шлях через неї: визначає найкоротшу можливу тривалість і те, де запас часу дорівнює нулю.</td>
-        <td class="ex">Затримка задачі поза критичним шляхом не зсуває дату — це перша річ, яку варто перевірити перед ескалацією.</td></tr>
-      <tr><td>Crashing і fast tracking<small>стиснення розкладу</small></td>
-        <td>Скорочення тривалості: crashing — додати ресурси за найменшу ціну, fast tracking — паралелити те, що йшло послідовно (ціною ризику й переробок).</td>
-        <td class="ex">Перед демо замовнику: додати QA (crashing) чи почати інтеграцію до завершення розробки (fast tracking).</td></tr>
-      <tr><td>Three-point estimating<small>PERT</small></td>
-        <td>Оцінка через оптимістичну, найімовірнішу й песимістичну величину замість однієї цифри — дає діапазон, а не ілюзію точності.</td>
-        <td class="ex">Оцінка інтеграції з банком: 5 / 12 / 30 днів — і розмова одразу переходить на ризики.</td></tr>
-      <tr><td>Reserve analysis<small>резерви</small></td>
-        <td>Contingency reserve — гроші й час на відомі ризики, всередині cost baseline. Management reserve — на невідоме, поза baseline, витрачається з дозволу спонсора.</td>
-        <td class="ex">Коли «резерв» не розділений, перший же інцидент зʼїдає бюджет, і PM лишається без важеля.</td></tr>
-      <tr><td>Probability and impact matrix<small>qualitative risk</small></td>
-        <td>Пріоритезація ризиків за ймовірністю й впливом за єдиною шкалою організації.</td>
-        <td class="ex">Матриця відсікає «ризики», які насправді є задачами: у них імовірність 100%.</td></tr>
-      <tr><td>EMV і decision tree<small>quantitative risk</small></td>
-        <td>Грошова оцінка невизначеності: очікувана вартість наслідку й порівняння сценаріїв рішення.</td>
-        <td class="ex">Вибір між власною командою й вендором рахується разом із вартістю затримки.</td></tr>
-      <tr><td>Monte Carlo simulation<small>quantitative risk</small></td>
-        <td>Моделювання тисяч проходів розкладу чи бюджету: дає ймовірність укластися в дату, а не одну цифру.</td>
-        <td class="ex">«Шанс зустріти 30 червня — 40%» звучить у розмові зі спонсором переконливіше за «встигнемо».</td></tr>
-      <tr><td>Cost of quality<small>COQ</small></td>
-        <td>Порівняння витрат на запобігання й оцінку з вартістю відмов усередині й після передачі.</td>
-        <td class="ex">Година code review дешевша за годину розбору інциденту на проді — і це можна показати в грошах.</td></tr>
-    </tbody>
-  </table>
+    <tr><td>Develop Project Charter</td><td>Дає проєкту право на існування й повноваження PM.</td><td>Project Charter</td></tr>
+    <tr><td>Develop Project Management Plan</td><td>Зводить subsidiary plans і baselines в один план.</td><td>Project Management Plan</td></tr>
+    <tr><td>Direct and Manage Project Work</td><td>Виконання плану й створення результатів.</td><td>Deliverables, work performance data</td></tr>
+    <tr><td>Manage Project Knowledge</td><td>Використання наявних знань і фіксація нових.</td><td>Lessons Learned Register</td></tr>
+    <tr><td>Monitor and Control Project Work</td><td>Порівняння факту з планом і прогноз.</td><td>Work performance reports, Change Requests</td></tr>
+    <tr><td>Perform Integrated Change Control</td><td>Оцінка впливу змін і рішення щодо них.</td><td>Ухвалені зміни, Change Log</td></tr>
+    <tr><td>Close Project or Phase</td><td>Формальне закриття, передача, архів.</td><td>Final report, закриті контракти</td></tr>
+    </tbody></table>
+    <div class="cbox" data-comp="change"></div>
+    <p class="chint">Сценарій: шлях запиту на зміну від джерела до нової норми. ▶ програє, ← → крокують, номери відкривають крок. Клік поза схемою — стоп.</p>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Expert judgment<small>експертна оцінка</small></td><td>Залучення людей із досвідом там, де даних ще немає.</td><td class="ex">Оцінка інтеграції з банком без історії — це експерт, а не формула.</td></tr>
+      <tr><td>Data gathering<small>brainstorming, focus groups, interviews, checklists</small></td><td>Збір вхідних даних різної глибини під тип рішення.</td><td class="ex">Чеклист старту проєкту знімає половину типових пропусків.</td></tr>
+      <tr><td>Facilitation і kick-off workshop<small>спільний старт</small></td><td>Спільне розуміння цілі, меж і повноважень на початку.</td><td class="ex">Питання «хто приймає результат» краще зняти на старті, ніж на прийманні.</td></tr>
+      <tr><td>Meeting management<small>зустрічі</small></td><td>Порядок денний, рішення й власники в протоколі.</td><td class="ex">Зустріч без рішення в протоколі не відбулась.</td></tr>
+      <tr><td>PMIS<small>project management information system</small></td><td>Середовище, де живуть план, задачі й звітність.</td><td class="ex">Одна система-джерело для статусу, решта лише читають.</td></tr>
+      <tr><td>Knowledge і information management<small>знання</small></td><td>Передача знання між людьми й збереження документів.</td><td class="ex">Ротація людини без передачі знання — це ризик, а не HR-подія.</td></tr>
+      <tr><td>Alternatives analysis<small>варіанти</small></td><td>Порівняння варіантів рішення за критеріями.</td><td class="ex">Три варіанти з ціною й ризиком замість одного «так треба».</td></tr>
+      <tr><td>Cost-benefit analysis<small>вигода проти витрат</small></td><td>Чи вартий результат витрат на нього.</td><td class="ex">Автоматизація звіту на 2 години на місяць не окупає тижня розробки.</td></tr>
+      <tr><td>Variance, trend і root cause analysis<small>аналіз відхилень</small></td><td>Розмір відхилення, динаміка й причина.</td><td class="ex">Причина відставання — черга до тестового середовища, а не «повільна розробка».</td></tr>
+      <tr><td>Decision making<small>voting, autocratic, MCDA</small></td><td>Спосіб ухвалення рішення обирається свідомо, а не за звичкою.</td><td class="ex">MCDA для вибору вендора, autocratic — у кризі.</td></tr>
+      <tr><td>Change control tools<small>інструменти змін</small></td><td>Форма запиту, реєстр і робочий процес узгодження.</td><td class="ex">Зміна без форми не існує.</td></tr>
+      <tr><td>Configuration management<small>версійність</small></td><td>Яка редакція плану й документів чинна.</td><td class="ex">Команда працює за планом v4, а замовник цитує v2.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Project Charter · Project Management Plan · Change Log · Issue Log · Assumption Log · Lessons Learned Register · Final Report.</p>
+  </div>
 
-  <h3>Артефакти</h3>
-  <table class="t">
-    <thead><tr><th>Артефакт</th><th>Що це і хто веде</th><th>Коли оновлюється</th></tr></thead>
+  <div class="sub">
+    <h3>Project Scope Management <em>межі роботи</em></h3>
+    <p>Зібрати вимоги, описати обсяг, розкласти його на керовані пакети й не дати обсягу розповзтися.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
     <tbody>
-      <tr><td>Project Charter</td><td>Документ, що дає проєкту право на існування й повноваження PM. Видає спонсор.</td><td class="ex">Один раз; зміни — через Change Request.</td></tr>
-      <tr><td>Project Management Plan</td><td>Зведений план із усіх subsidiary plans і baselines. Веде PM.</td><td class="ex">Після кожної ухваленої зміни.</td></tr>
-      <tr><td>Scope / Schedule / Cost baseline</td><td>Затверджені обсяг, розклад і бюджет. Разом — Performance Measurement Baseline.</td><td class="ex">Лише через Integrated Change Control.</td></tr>
-      <tr><td>Requirements Documentation і RTM</td><td>Вимоги з критеріями приймання та їх простеження. Веде BA або PM.</td><td class="ex">Під час уточнення вимог.</td></tr>
-      <tr><td>Risk Register і Risk Report</td><td>Перелік ризиків із власником, відповіддю й статусом; звіт — загальна картина.</td><td class="ex">Щотижня і після кожної значної події.</td></tr>
-      <tr><td>Issue Log</td><td>Проблеми, що вже сталися, із власником і датою розвʼязання. Веде PM.</td><td class="ex">Постійно.</td></tr>
-      <tr><td>Change Log</td><td>Усі запити на зміну з рішенням. Веде PM.</td><td class="ex">Після кожного рішення CCB.</td></tr>
-      <tr><td>Quality Metrics і Quality Report</td><td>Що саме міряємо і що показали виміри. Веде QA-лід разом із PM.</td><td class="ex">За ритмом релізів.</td></tr>
-      <tr><td>Lessons Learned Register</td><td>Висновки, придатні до повторного використання. Веде PM, поповнює команда.</td><td class="ex">Протягом проєкту, не лише в кінці.</td></tr>
-    </tbody>
-  </table>
+    <tr><td>Plan Scope Management</td><td>Домовляється, як збираємо вимоги й приймаємо обсяг.</td><td>Scope і Requirements Management Plan</td></tr>
+    <tr><td>Collect Requirements</td><td>Перетворює потреби стейкхолдерів на вимоги.</td><td>Requirements Documentation, RTM</td></tr>
+    <tr><td>Define Scope</td><td>Описує, що входить і що не входить.</td><td>Project Scope Statement</td></tr>
+    <tr><td>Create WBS</td><td>Розкладає результати на work packages.</td><td>WBS + Dictionary → scope baseline</td></tr>
+    <tr><td>Validate Scope</td><td>Формальне приймання результатів замовником.</td><td>Accepted Deliverables</td></tr>
+    <tr><td>Control Scope</td><td>Тримає обсяг у межах baseline.</td><td>Work performance information, Change Requests</td></tr>
+    </tbody></table>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Interviews</td><td class="pr">Collect Requirements</td><td>Індивідуальна розмова з носієм потреби.</td><td class="ex">Те, чого людина не скаже при керівнику, зʼявляється саме тут.</td></tr>
+      <tr><td>Focus groups</td><td class="pr">Collect Requirements</td><td>Модерована група користувачів або експертів.</td><td class="ex">Показує конфлікт очікувань між ролями.</td></tr>
+      <tr><td>Facilitated workshops</td><td class="pr">JAD, QFD</td><td>Спільна сесія, що завершується домовленістю, а не переліком побажань.</td><td class="ex">Два дні воркшопу знімають місяць уточнень поштою.</td></tr>
+      <tr><td>Questionnaires and surveys</td><td class="pr">Collect Requirements</td><td>Швидкий збір від великої аудиторії.</td><td class="ex">Коли користувачів сотні й інтервʼю неможливі.</td></tr>
+      <tr><td>Benchmarking</td><td class="pr">Collect Requirements</td><td>Порівняння з практикою інших організацій чи продуктів.</td><td class="ex">Аргумент «ринок робить так» замість смаку.</td></tr>
+      <tr><td>Document analysis</td><td class="pr">Collect Requirements</td><td>Вимоги з наявних регламентів, договорів, логів.</td><td class="ex">Регуляторні вимоги живуть у документах, а не в головах.</td></tr>
+      <tr><td>Brainstorming</td><td class="pr">Collect Requirements</td><td>Генерація ідей без критики на першому проході.</td><td class="ex">Перший крок перед структуризацією.</td></tr>
+      <tr><td>Nominal group technique</td><td class="pr">Collect Requirements</td><td>Генерація плюс голосування за пріоритет.</td><td class="ex">Знімає домінування найгучнішого учасника.</td></tr>
+      <tr><td>Affinity diagram</td><td class="pr">Collect Requirements</td><td>Групування великої кількості вимог у теми.</td><td class="ex">Після воркшопу з 200 карток.</td></tr>
+      <tr><td>Mind mapping</td><td class="pr">Collect Requirements</td><td>Карта звʼязків між вимогами.</td><td class="ex">Видно дублікати й прогалини.</td></tr>
+      <tr><td>Multicriteria decision analysis</td><td class="pr">Collect Requirements</td><td>Вибір за зваженими критеріями.</td><td class="ex">Пріоритет вимог із урахуванням вартості й ризику.</td></tr>
+      <tr><td>Voting</td><td class="pr">unanimity, majority, plurality</td><td>Спосіб ухвалення групового рішення.</td><td class="ex">Про спосіб домовляються до голосування, а не після.</td></tr>
+      <tr><td>Observation / job shadowing</td><td class="pr">Collect Requirements</td><td>Спостереження за реальною роботою користувача.</td><td class="ex">Користувач робить не те, що описує словами.</td></tr>
+      <tr><td>Prototypes</td><td class="pr">Collect Requirements</td><td>Макет замість текстового опису.</td><td class="ex">Правки на макеті коштують годину, на проді — тиждень.</td></tr>
+      <tr><td>Context diagram</td><td class="pr">Collect Requirements</td><td>Межі системи й зовнішні учасники.</td><td class="ex">Показує інтеграції, про які забули.</td></tr>
+      <tr><td>Requirements Traceability Matrix</td><td class="pr">RTM</td><td>Вимога → результат → тест → бізнес-ціль.</td><td class="ex">Видно, що впаде, якщо вимогу прибрати.</td></tr>
+      <tr><td>Product analysis</td><td class="pr">Define Scope</td><td>Розбір продукту на функції й компоненти.</td><td class="ex">Переклад «хочемо портал» у перелік можливостей.</td></tr>
+      <tr><td>Alternatives analysis</td><td class="pr">Define Scope</td><td>Варіанти реалізації одного результату.</td><td class="ex">Купити, зробити або налаштувати наявне.</td></tr>
+      <tr><td>Decomposition → WBS</td><td class="pr">Create WBS</td><td>Розбиття результатів (не дій) на work packages.</td><td class="ex">Пакет неможливо оцінити чи прийняти — він завеликий і ділиться далі.</td></tr>
+      <tr><td>Rolling wave planning</td><td class="pr">Create WBS</td><td>Детально найближче, крупно далеке.</td><td class="ex">Наступний квартал — пакетами, далі — фазами.</td></tr>
+      <tr><td>Inspection</td><td class="pr">Validate Scope</td><td>Формальна перевірка результату проти критеріїв приймання.</td><td class="ex">Демо без підписаного приймання — це показ, а не передача обсягу.</td></tr>
+      <tr><td>Variance і trend analysis</td><td class="pr">Control Scope</td><td>Скільки обсягу додалось і куди це рухається.</td><td class="ex">Burn-up показує +30% обсягу, якого ніхто не ухвалював.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Scope Management Plan · Requirements Documentation · RTM · Project Scope Statement · WBS + Dictionary · Scope Baseline · Accepted Deliverables.</p>
+  </div>
 
-  <div class="trap"><b>Пастка.</b> Baseline, яку «оновлюють», щоб звіт був зеленим. Після третього такого
-    оновлення порівнювати вже нема з чим: відхилення дорівнює нулю завжди, а проєкт спізнюється на квартал.
-    Базова лінія змінюється лише через ухвалену зміну, і в Change Log має лишитись слід.</div>
+  <div class="sub">
+    <h3>Project Schedule Management <em>обсяг у часі</em></h3>
+    <p>Перетворити пакети робіт у мережу активностей, оцінити тривалості й тримати дату.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Plan Schedule Management</td><td>Визначає правила: одиниці, пороги відхилень, інструмент.</td><td>Schedule Management Plan</td></tr>
+    <tr><td>Define Activities</td><td>Розкладає work packages на активності.</td><td>Activity List, Milestone List</td></tr>
+    <tr><td>Sequence Activities</td><td>Будує залежності між активностями.</td><td>Project Schedule Network Diagram</td></tr>
+    <tr><td>Estimate Activity Durations</td><td>Оцінює тривалості з діапазоном.</td><td>Duration Estimates, Basis of Estimates</td></tr>
+    <tr><td>Develop Schedule</td><td>Зводить мережу й оцінки в розклад із датами.</td><td>Schedule Baseline, Project Schedule</td></tr>
+    <tr><td>Control Schedule</td><td>Порівнює факт із baseline і прогнозує.</td><td>Schedule Forecasts, Change Requests</td></tr>
+    </tbody></table>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Decomposition до активностей</td><td class="pr">Define Activities</td><td>Від пакета до роботи, яку можна доручити людині.</td><td class="ex">Активність довша за два тижні зазвичай ховає невизначеність.</td></tr>
+      <tr><td>Rolling wave planning</td><td class="pr">Define Activities</td><td>Деталізація хвилями, у міру наближення робіт.</td><td class="ex">Наступний реліз детально, річний план — по мілстоунах.</td></tr>
+      <tr><td>Precedence Diagramming Method</td><td class="pr">Sequence Activities</td><td>Типи звʼязків FS, SS, FF, SF у мережі.</td><td class="ex">Тестування стартує через 2 дні після початку розробки (SS + lag).</td></tr>
+      <tr><td>Dependency determination</td><td class="pr">Sequence Activities</td><td>Mandatory, discretionary, external, internal — звідки береться залежність.</td><td class="ex">Discretionary-залежність можна прибрати й виграти тиждень.</td></tr>
+      <tr><td>Leads and lags</td><td class="pr">Sequence Activities</td><td>Випередження й затримка між роботами.</td><td class="ex">Бетон тужавіє 7 днів — це lag, а не простій команди.</td></tr>
+      <tr><td>Analogous estimating</td><td class="pr">Estimate Durations</td><td>Оцінка за схожим проєктом.</td><td class="ex">Швидко й грубо, коли WBS ще немає.</td></tr>
+      <tr><td>Parametric estimating</td><td class="pr">Estimate Durations</td><td>Оцінка за ставкою на одиницю обсягу.</td><td class="ex">N звітів × 3 дні на звіт.</td></tr>
+      <tr><td>Three-point estimating</td><td class="pr">PERT</td><td>Оптимістична, найімовірніша й песимістична оцінка замість однієї.</td><td class="ex">5 / 12 / 30 днів — і розмова одразу переходить на ризики.</td></tr>
+      <tr><td>Bottom-up estimating</td><td class="pr">Estimate Durations</td><td>Сума оцінок знизу по активностях.</td><td class="ex">Точніше, але дорожче; для baseline.</td></tr>
+      <tr><td>Reserve analysis</td><td class="pr">Estimate Durations</td><td>Час на відомі ризики всередині розкладу.</td><td class="ex">Буфер на інтеграцію, а не «накинемо 20% усюди».</td></tr>
+      <tr><td>Schedule network analysis</td><td class="pr">Develop Schedule</td><td>Розрахунок мережі загалом: ранні й пізні дати.</td><td class="ex">Основа для критичного шляху.</td></tr>
+      <tr><td>Critical Path Method</td><td class="pr">Develop Schedule</td><td>Найдовший шлях і float: де запас часу нульовий.</td><td class="ex">Затримка поза критичним шляхом не зсуває дату.</td></tr>
+      <tr><td>Resource levelling</td><td class="pr">Develop Schedule</td><td>Вирівнювання під доступність людей; дата може зсунутись.</td><td class="ex">Один інтегратор на три задачі — розклад неможливий, а не «напружений».</td></tr>
+      <tr><td>Resource smoothing</td><td class="pr">Develop Schedule</td><td>Вирівнювання в межах float; дата не зсувається.</td><td class="ex">Згладити пік, не чіпаючи дедлайн.</td></tr>
+      <tr><td>What-if scenario analysis</td><td class="pr">Develop Schedule</td><td>Прорахунок сценаріїв «що буде, якщо».</td><td class="ex">Що станеться з датою, якщо середовище дадуть на два тижні пізніше.</td></tr>
+      <tr><td>Monte Carlo simulation</td><td class="pr">Develop Schedule</td><td>Розподіл імовірних дат завершення.</td><td class="ex">«Шанс зустріти 30 червня — 40%».</td></tr>
+      <tr><td>Crashing</td><td class="pr">Compression</td><td>Скорочення тривалості додатковими ресурсами за найменшу ціну за день.</td><td class="ex">Додати QA перед демо замовнику.</td></tr>
+      <tr><td>Fast tracking</td><td class="pr">Compression</td><td>Паралелізація послідовних робіт ціною ризику переробок.</td><td class="ex">Почати інтеграцію до завершення розробки.</td></tr>
+      <tr><td>Agile release planning</td><td class="pr">Develop Schedule</td><td>Розклад релізів для команд на adaptive-підході.</td><td class="ex">Дата релізу фіксована, обсяг гнучкий.</td></tr>
+      <tr><td>Iteration burndown</td><td class="pr">Control Schedule</td><td>Залишок роботи в ітерації.</td><td class="ex">Рання ознака, що спринт не закриється.</td></tr>
+      <tr><td>Earned schedule</td><td class="pr">Control Schedule</td><td>Відставання в одиницях часу, а не грошей.</td><td class="ex">Зрозуміліше замовнику, ніж SV у гривнях.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Schedule Management Plan · Activity List · Milestone List · Network Diagram · Duration Estimates · Schedule Baseline · Project Schedule · Schedule Forecasts.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Project Cost Management <em>обсяг у грошах</em></h3>
+    <p>Оцінити вартість, скласти бюджет у часі й керувати витратами разом із резервами.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Plan Cost Management</td><td>Правила: одиниці, точність оцінок, пороги, звітність.</td><td>Cost Management Plan</td></tr>
+    <tr><td>Estimate Costs</td><td>Оцінює вартість робіт із діапазоном.</td><td>Cost Estimates, Basis of Estimates</td></tr>
+    <tr><td>Determine Budget</td><td>Зводить оцінки в бюджет, розподілений у часі.</td><td>Cost Baseline, Funding Requirements</td></tr>
+    <tr><td>Control Costs</td><td>Порівнює факт із baseline і прогнозує.</td><td>Cost Forecasts, Change Requests</td></tr>
+    </tbody></table>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Analogous estimating</td><td class="pr">Estimate Costs</td><td>Оцінка за схожим проєктом.</td><td class="ex">Оцінка міграції за кількістю таблиць, коли деталей ще немає.</td></tr>
+      <tr><td>Parametric estimating</td><td class="pr">Estimate Costs</td><td>Ставка × обсяг.</td><td class="ex">Людино-день за роллю × кількість днів.</td></tr>
+      <tr><td>Bottom-up estimating</td><td class="pr">Estimate Costs</td><td>Сума оцінок по work packages.</td><td class="ex">База для cost baseline після затвердження WBS.</td></tr>
+      <tr><td>Three-point estimating</td><td class="pr">Estimate Costs</td><td>Діапазон замість однієї цифри.</td><td class="ex">Показує невизначеність спонсору чесно.</td></tr>
+      <tr><td>Cost of quality</td><td class="pr">Estimate Costs</td><td>Витрати на запобігання й оцінку проти вартості відмов.</td><td class="ex">Година code review дешевша за годину розбору інциденту на проді.</td></tr>
+      <tr><td>Reserve analysis</td><td class="pr">Determine Budget</td><td>Contingency (відомі ризики, у baseline) проти management reserve (невідоме, поза baseline).</td><td class="ex">Нерозділений резерв зʼїдається першим інцидентом, і PM лишається без важеля.</td></tr>
+      <tr><td>Cost aggregation</td><td class="pr">Determine Budget</td><td>Згортання витрат по WBS до бюджету.</td><td class="ex">Дає вартість пакетів, а не «загалом по проєкту».</td></tr>
+      <tr><td>Historical relationships</td><td class="pr">Determine Budget</td><td>Регресія за даними минулих проєктів.</td><td class="ex">Працює лише на однорідних проєктах.</td></tr>
+      <tr><td>Funding limit reconciliation</td><td class="pr">Determine Budget</td><td>Узгодження витрат із лімітами фінансування по періодах.</td><td class="ex">Бюджет є, але не в цьому кварталі.</td></tr>
+      <tr><td>Financing</td><td class="pr">Determine Budget</td><td>Залучення зовнішніх коштів на довгий проєкт.</td><td class="ex">Поетапне фінансування під мілстоуни.</td></tr>
+      <tr><td>Earned value analysis</td><td class="pr">Control Costs</td><td>PV, EV, AC і похідні SV, CV, SPI, CPI.</td><td class="ex">SPI 0.94 при CPI 1.02 — відстаємо за часом, не перевитрачаємо.</td></tr>
+      <tr><td>Forecasting</td><td class="pr">EAC, ETC, VAC</td><td>Прогноз вартості завершення за поточним темпом або з новими припущеннями.</td><td class="ex">EAC показує перевитрату за два місяці до того, як вона стане фактом.</td></tr>
+      <tr><td>To-complete performance index</td><td class="pr">Control Costs</td><td>Який темп потрібен, щоб укластися в бюджет.</td><td class="ex">TCPI 1.3 при CPI 0.9 — план уже нереальний.</td></tr>
+      <tr><td>Variance і trend analysis</td><td class="pr">Control Costs</td><td>Розмір відхилення й напрям руху.</td><td class="ex">Одна точка нічого не означає, важливий третій місяць поспіль.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Cost Management Plan · Cost Estimates · Basis of Estimates · Cost Baseline · Funding Requirements · Cost Forecasts.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Project Risk Management <em>невизначеність</em></h3>
+    <p>Побачити ризик раніше, ніж він стане issue, і мати відповідь із власником, а не обіцянку.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Plan Risk Management</td><td>Правила: шкали, категорії, ролі, пороги.</td><td>Risk Management Plan</td></tr>
+    <tr><td>Identify Risks</td><td>Знаходить ризики й формулює їх через причину й наслідок.</td><td>Risk Register, Risk Report</td></tr>
+    <tr><td>Perform Qualitative Risk Analysis</td><td>Пріоритезує за ймовірністю й впливом.</td><td>Оновлений Risk Register</td></tr>
+    <tr><td>Perform Quantitative Risk Analysis</td><td>Рахує сукупний вплив у грошах і часі.</td><td>Кількісний аналіз, обґрунтовані резерви</td></tr>
+    <tr><td>Plan Risk Responses</td><td>Обирає відповіді й власників.</td><td>Ухвалені відповіді, Change Requests</td></tr>
+    <tr><td>Implement Risk Responses</td><td>Виконує заплановані відповіді.</td><td>Work performance data</td></tr>
+    <tr><td>Monitor Risks</td><td>Стежить за змінами й ефективністю відповідей.</td><td>Оновлені реєстри, Risk Audits</td></tr>
+    </tbody></table>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Brainstorming</td><td class="pr">Identify Risks</td><td>Груповий пошук ризиків без ранньої критики.</td><td class="ex">Перший захід на новому проєкті.</td></tr>
+      <tr><td>Checklists</td><td class="pr">Identify Risks</td><td>Перелік типових ризиків організації.</td><td class="ex">Швидко, але не замінює мислення.</td></tr>
+      <tr><td>Prompt lists</td><td class="pr">PESTLE, TECOP, VUCA</td><td>Підказки за категоріями зовнішнього середовища.</td><td class="ex">Витягує ризики, про які команда не думає.</td></tr>
+      <tr><td>Interviews</td><td class="pr">Identify Risks</td><td>Ризики від експертів і стейкхолдерів індивідуально.</td><td class="ex">Те, чого не кажуть у групі.</td></tr>
+      <tr><td>Root cause analysis</td><td class="pr">Identify Risks</td><td>Від проблеми до причини, від причини — до інших ризиків.</td><td class="ex">Одна причина породжує кілька ризиків одразу.</td></tr>
+      <tr><td>Assumption and constraint analysis</td><td class="pr">Identify Risks</td><td>Кожне припущення — джерело ризику.</td><td class="ex">«Вважаємо, що API буде до травня» — це ризик, а не факт.</td></tr>
+      <tr><td>SWOT</td><td class="pr">Identify Risks</td><td>Сильні й слабкі сторони, можливості й загрози.</td><td class="ex">Балансує перелік: не лише загрози.</td></tr>
+      <tr><td>Document analysis</td><td class="pr">Identify Risks</td><td>Ризики з договорів, планів і логів.</td><td class="ex">Умови контракту часто містять найбільший ризик.</td></tr>
+      <tr><td>Risk probability and impact assessment</td><td class="pr">Qualitative</td><td>Оцінка кожного ризику за шкалою організації.</td><td class="ex">Єдина шкала замість «високий, на мою думку».</td></tr>
+      <tr><td>Probability and impact matrix</td><td class="pr">Qualitative</td><td>Пріоритет за двома вимірами.</td><td class="ex">Відсікає «ризики» з імовірністю 100% — це задачі.</td></tr>
+      <tr><td>Risk data quality assessment</td><td class="pr">Qualitative</td><td>Чи надійні дані, на яких стоїть оцінка.</td><td class="ex">Ризик на чутках не планується.</td></tr>
+      <tr><td>Risk categorization</td><td class="pr">RBS</td><td>Групування ризиків за джерелом.</td><td class="ex">Видно, що 60% ризиків — інтеграції.</td></tr>
+      <tr><td>Risk urgency assessment</td><td class="pr">Qualitative</td><td>Як швидко потрібно реагувати.</td><td class="ex">Ризик із вікном у тиждень іде першим.</td></tr>
+      <tr><td>Sensitivity analysis</td><td class="pr">tornado diagram</td><td>Який фактор найбільше впливає на результат.</td><td class="ex">Курс валюти проти продуктивності команди.</td></tr>
+      <tr><td>Decision tree і EMV</td><td class="pr">Quantitative</td><td>Грошова оцінка сценаріїв рішення.</td><td class="ex">Своя команда чи вендор — разом із вартістю затримки.</td></tr>
+      <tr><td>Influence diagrams</td><td class="pr">Quantitative</td><td>Графічна модель залежностей у рішенні.</td><td class="ex">Коли факторів більше трьох.</td></tr>
+      <tr><td>Monte Carlo simulation</td><td class="pr">Quantitative</td><td>Сукупний вплив ризиків на дату й бюджет.</td><td class="ex">Дає резерв, обґрунтований числом, а не відчуттям.</td></tr>
+      <tr><td>Стратегії для загроз</td><td class="pr">avoid, transfer, mitigate, accept, escalate</td><td>Вибір типу відповіді під конкретну загрозу.</td><td class="ex">Ризик регуляторної зміни ескалюється, а не «мітигується».</td></tr>
+      <tr><td>Стратегії для можливостей</td><td class="pr">exploit, share, enhance, accept</td><td>Робота з позитивним ризиком.</td><td class="ex">Можливість закрити два проєкти одним компонентом.</td></tr>
+      <tr><td>Contingent response strategies</td><td class="pr">план Б</td><td>Відповідь із тригером, що вмикається за умови.</td><td class="ex">«Якщо до 1 травня немає API — вмикаємо заглушку».</td></tr>
+      <tr><td>Reserve analysis</td><td class="pr">Monitor Risks</td><td>Чи вистачає резерву на залишкові ризики.</td><td class="ex">Резерв тане швидше за прогрес — сигнал.</td></tr>
+      <tr><td>Risk audits</td><td class="pr">Monitor Risks</td><td>Перевірка ефективності самого процесу роботи з ризиками.</td><td class="ex">Реєстр є, відповідей немає — типова знахідка.</td></tr>
+      <tr><td>Technical performance analysis</td><td class="pr">Monitor Risks</td><td>Порівняння технічних показників із плановими.</td><td class="ex">Продуктивність нижча за вимогу — ризик уже спрацював.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Risk Management Plan · Risk Register · Risk Report · Issue Log · Assumption Log.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Project Quality Management <em>придатність результату</em></h3>
+    <p>Домовитись, що таке «якісно», вбудувати це в процес і перевіряти результат — а не сподіватись на тестування в кінці.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Plan Quality Management</td><td>Визначає стандарти, метрики й спосіб перевірки.</td><td>Quality Management Plan, Quality Metrics</td></tr>
+    <tr><td>Manage Quality</td><td>Робить процес здатним давати потрібну якість.</td><td>Quality Reports, Change Requests</td></tr>
+    <tr><td>Control Quality</td><td>Перевіряє результат на відповідність.</td><td>Quality Control Measurements, Verified Deliverables</td></tr>
+    </tbody></table>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Cost-benefit analysis</td><td class="pr">Plan Quality</td><td>Чи окупається обраний рівень контролю.</td><td class="ex">Не все треба тестувати однаково глибоко.</td></tr>
+      <tr><td>Cost of quality</td><td class="pr">Plan Quality</td><td>Prevention, appraisal, internal і external failure.</td><td class="ex">Показує ціну відмови в грошах, а не в емоціях.</td></tr>
+      <tr><td>Benchmarking</td><td class="pr">Plan Quality</td><td>Порівняння з іншими продуктами чи командами.</td><td class="ex">Скільки дефектів на реліз вважається нормою в галузі.</td></tr>
+      <tr><td>Design of experiments</td><td class="pr">Plan Quality</td><td>Керована зміна факторів для пошуку оптимуму.</td><td class="ex">Підбір конфігурації під навантаження.</td></tr>
+      <tr><td>Logical data model</td><td class="pr">Plan Quality</td><td>Модель даних як джерело вимог до якості.</td><td class="ex">Суперечності в даних видно до написання коду.</td></tr>
+      <tr><td>Matrix diagrams</td><td class="pr">Plan Quality</td><td>Звʼязки між факторами якості.</td><td class="ex">Вимога → метрика → спосіб перевірки.</td></tr>
+      <tr><td>Mind mapping</td><td class="pr">Plan Quality</td><td>Карта аспектів якості.</td><td class="ex">Швидкий спосіб не забути нефункціональні вимоги.</td></tr>
+      <tr><td>Flowcharts</td><td class="pr">Manage Quality</td><td>Процес як схема: де саме зʼявляється дефект.</td><td class="ex">Дефект народжується на передачі між командами.</td></tr>
+      <tr><td>Checklists і check sheets</td><td class="pr">Control Quality</td><td>Фіксований перелік перевірок і підрахунок дефектів.</td><td class="ex">Дані для Pareto беруться саме звідси.</td></tr>
+      <tr><td>Cause-and-effect</td><td class="pr">Ishikawa</td><td>Структурований пошук причин за категоріями.</td><td class="ex">Шість категорій замість «людський фактор».</td></tr>
+      <tr><td>5 whys</td><td class="pr">Manage Quality</td><td>Послідовне «чому» до справжньої причини.</td><td class="ex">Причина падінь релізу — відсутність CI, а не неуважність.</td></tr>
+      <tr><td>Histograms</td><td class="pr">Control Quality</td><td>Розподіл дефектів за типами.</td><td class="ex">Видно, де зосереджена маса проблем.</td></tr>
+      <tr><td>Pareto</td><td class="pr">Control Quality</td><td>20% причин дають 80% дефектів.</td><td class="ex">Чим зайнятись першим.</td></tr>
+      <tr><td>Scatter diagrams</td><td class="pr">Control Quality</td><td>Звʼязок двох змінних.</td><td class="ex">Дефекти проти розміру змін у релізі.</td></tr>
+      <tr><td>Control charts</td><td class="pr">Control Quality</td><td>Стабільність процесу: межі контролю проти меж специфікації.</td><td class="ex">Сім точок поспіль з одного боку — зсув, а не шум.</td></tr>
+      <tr><td>Statistical sampling</td><td class="pr">Control Quality</td><td>Перевірка вибірки замість суцільної.</td><td class="ex">Коли перевірити все фізично неможливо.</td></tr>
+      <tr><td>Quality audits</td><td class="pr">Manage Quality</td><td>Перевірка процесу, а не продукту.</td><td class="ex">Code review формально є, фактично — одна людина «за всіх».</td></tr>
+      <tr><td>Design for X</td><td class="pr">Manage Quality</td><td>Якість, закладена в дизайн: testability, reliability.</td><td class="ex">Дешевше, ніж перевіряти постфактум.</td></tr>
+      <tr><td>Problem solving</td><td class="pr">Manage Quality</td><td>Структурований розбір дефекту до усунення причини.</td><td class="ex">Інакше дефект повертається наступного релізу.</td></tr>
+      <tr><td>Inspection</td><td class="pr">Control Quality</td><td>Перевірка результату на відповідність вимогам.</td><td class="ex">Основний інструмент Control Quality.</td></tr>
+      <tr><td>Testing and product evaluations</td><td class="pr">Control Quality</td><td>Обʼєктивна перевірка за метриками якості.</td><td class="ex">Критерій приймання без метрики не перевіряється взагалі.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Quality Management Plan · Quality Metrics · Quality Report · Test and Evaluation Documents · Quality Control Measurements · Verified Deliverables.</p>
+  </div>
+  <div class="trap"><b>Пастка.</b> Baseline, яку «оновлюють», щоб звіт був зеленим. Після третього такого оновлення порівнювати вже нема з чим: відхилення завжди нуль, а проєкт спізнюється на квартал. Базова лінія змінюється лише через ухвалену зміну, і в Change Log має лишитись слід.</div>
 </section>
 
-<!-- ── 3 ─────────────────────────────────────────────────────────────── -->
 <section class="sec" id="s3">
   <h2><span class="num">03</span>Communications and Leadership</h2>
-  <p>Комунікації — найбільша частина роботи PM за часом. Вони не зводяться до статус-звіту: це рішення про те,
-    хто яку інформацію отримує, у якому вигляді й як часто, плюс робота з командою — від складу до конфліктів.
-    PMI розділяє це на Communications Management і Resource Management, але на практиці це одна щоденна робота.</p>
-
-  <div class="parts">
-    <div class="part"><b>Plan Communications Management</b><span>Хто, що, коли, яким каналом і хто відповідає. Кількість каналів росте як n(n−1)/2 — тому «повідомити всіх» не працює.</span></div>
-    <div class="part"><b>Manage Communications</b><span>Збір, створення й розповсюдження інформації: звіти, зустрічі, ескалації.</span></div>
-    <div class="part"><b>Monitor Communications</b><span>Перевірка, чи інформація дійшла й спрацювала: чи ухвалено рішення, яких ми просили.</span></div>
-    <div class="part"><b>Team</b><span>Acquire Resources, Develop Team, Manage Team: склад, зростання, конфлікти, продуктивність.</span></div>
+  <p>Дві області PMI, одна щоденна робота: доставити інформацію тому, хто ухвалює рішення, і зібрати команду, здатну це зробити.</p>
+  <div class="sub">
+    <h3>Project Communications Management <em>інформація й рішення</em></h3>
+    <p>Хто яку інформацію отримує, у якому вигляді й як часто — щоб рішення ухвалювались вчасно. Кількість каналів росте як n(n−1)/2, тому «повідомити всіх» не працює.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Plan Communications Management</td><td>Складає матрицю «хто · що · коли · канал · відповідальний».</td><td>Communications Management Plan</td></tr>
+    <tr><td>Manage Communications</td><td>Створює й розповсюджує інформацію.</td><td>Project Communications</td></tr>
+    <tr><td>Monitor Communications</td><td>Перевіряє, чи інформація дійшла й спрацювала.</td><td>Work performance information, Change Requests</td></tr>
+    </tbody></table>
+    <div class="cbox" data-comp="comms"></div>
+    <p class="chint">Від сирих даних до аудиторії: що перетворює дані на звіт і який канал кому підходить.</p>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Communication requirements analysis</td><td class="pr">Plan Comms</td><td>Кому яка інформація потрібна для рішень; решта розсилок прибирається.</td><td class="ex">Звіт на 12 людей перетворюється на дашборд і короткий лист двом.</td></tr>
+      <tr><td>Communication technology</td><td class="pr">Plan Comms</td><td>Вибір засобу за терміновістю, чутливістю й розподіленістю команди.</td><td class="ex">Чутливе не йде в загальний канал.</td></tr>
+      <tr><td>Communication models</td><td class="pr">Plan Comms</td><td>Sender-receiver із шумом і зворотним звʼязком.</td><td class="ex">Пояснює, чому «я ж писав» не працює.</td></tr>
+      <tr><td>Communication methods</td><td class="pr">push / pull / interactive</td><td>Доставити, дати доступ або домовитись.</td><td class="ex">Погані новини проговорюються, лист фіксує домовленість.</td></tr>
+      <tr><td>Communication styles assessment</td><td class="pr">Manage Comms</td><td>Як саме говорити з конкретною аудиторією.</td><td class="ex">Спонсору — рішення, команді — деталі.</td></tr>
+      <tr><td>Cultural і political awareness</td><td class="pr">Manage Comms</td><td>Врахування контексту й інтересів.</td><td class="ex">Те саме речення читається по-різному в різних країнах.</td></tr>
+      <tr><td>Active listening</td><td class="pr">Manage Comms</td><td>Підтвердження почутого замість збільшення кількості слів.</td><td class="ex">Переказ вимоги своїми словами економить тиждень переробок.</td></tr>
+      <tr><td>Meeting management</td><td class="pr">Manage Comms</td><td>Порядок денний, рішення й власники в протоколі.</td><td class="ex">Зустріч без рішення в протоколі не відбулась.</td></tr>
+      <tr><td>Feedback</td><td class="pr">Monitor Comms</td><td>Перевірка, чи повідомлення дійшло до адресата.</td><td class="ex">Питання «що ти зробиш після цього листа?».</td></tr>
+      <tr><td>PMIS і reporting</td><td class="pr">Manage Comms</td><td>Дашборди й звіти під аудиторію з одного джерела даних.</td><td class="ex">Один набір даних, різні зрізи.</td></tr>
+      <tr><td>Stakeholder engagement assessment matrix</td><td class="pr">вхід із 04</td><td>Хто з ким і як має спілкуватись.</td><td class="ex">Комунікації плануються з реєстру, а не з памʼяті.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Communications Management Plan · Project Communications · Work Performance Reports · Протоколи рішень.</p>
   </div>
 
-  <div class="cbox" data-comp="comms"></div>
-  <p class="chint">Від сирих даних до аудиторії: що перетворює дані на звіт і який канал кому підходить.</p>
-
-  <h3>Техніки</h3>
-  <table class="t">
-    <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад із практики</th></tr></thead>
+  <div class="sub">
+    <h3>Project HR Management <em>люди й команда</em></h3>
+    <p>Область Resource Management у частині людей: спланувати ролі, набрати команду, розвинути її й керувати продуктивністю та конфліктами. У матричній структурі PM має вплив, а не адміністративну владу — тому повноваження фіксуються письмово.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
     <tbody>
-      <tr><td>Communication requirements analysis<small>аналіз потреб</small></td>
-        <td>Визначення, кому яка інформація справді потрібна для рішень; решта розсилок прибирається.</td>
-        <td class="ex">Тижневий звіт на 12 людей перетворюється на дашборд і короткий лист двом.</td></tr>
-      <tr><td>Push / pull / interactive<small>методи комунікації</small></td>
-        <td>Вибір способу під зміст: доставити (push), дати доступ (pull), домовитись (interactive).</td>
-        <td class="ex">Погані новини не надсилаються листом — вони проговорюються, а лист фіксує домовленість.</td></tr>
-      <tr><td>Active listening<small>PMI, power skills</small></td>
-        <td>Підтвердження почутого й зняття барʼєрів: зменшує кількість непорозумінь, а не кількість слів.</td>
-        <td class="ex">Переказ вимоги своїми словами на зустрічі економить тиждень переробок.</td></tr>
-      <tr><td>Tuckman ladder<small>розвиток команди</small></td>
-        <td>Модель стадій: forming, storming, norming, performing, adjourning. Пояснює, чому нова команда спершу повільніша.</td>
-        <td class="ex">Не міняти склад за два тижні до релізу: команда повертається на storming.</td></tr>
-      <tr><td>Ground rules і Team Charter<small>домовленості</small></td>
-        <td>Явні правила роботи: години перетину, формат рев'ю, як ескалюємо, що означає «готово».</td>
-        <td class="ex">Розподілена команда в трьох часових поясах: дві години перетину фіксуються в хартії.</td></tr>
-      <tr><td>Conflict management<small>розвʼязання конфліктів</small></td>
-        <td>Вибір способу: collaborate/problem solve як основний, compromise — коли час дорожчий, force — лише в кризі.</td>
-        <td class="ex">Суперечка про архітектуру розвʼязується експериментом із критерієм, а не старшинством.</td></tr>
-      <tr><td>RACI<small>responsibility assignment matrix</small></td>
-        <td>Хто виконує, хто відповідає, з ким консультуються, кого інформують. Один Accountable на рядок.</td>
-        <td class="ex">Два Accountable на приймання — і приймання не відбувається взагалі.</td></tr>
-    </tbody>
-  </table>
-
-  <h3>Артефакти</h3>
-  <table class="t">
-    <thead><tr><th>Артефакт</th><th>Що це і хто веде</th><th>Коли оновлюється</th></tr></thead>
-    <tbody>
-      <tr><td>Communications Management Plan</td><td>Матриця «хто · що · коли · канал · відповідальний». Веде PM.</td><td class="ex">На старті й за зміни складу стейкхолдерів.</td></tr>
-      <tr><td>Team Charter</td><td>Правила роботи команди, ухвалені командою. Веде команда.</td><td class="ex">На старті й на ретроспективах.</td></tr>
-      <tr><td>Resource Management Plan</td><td>Ролі, повноваження, план набору й вивільнення, навчання. Веде PM.</td><td class="ex">За зміни складу.</td></tr>
-      <tr><td>RACI / RAM</td><td>Розподіл відповідальності за пакетами робіт. Веде PM.</td><td class="ex">Під час планування й реорганізацій.</td></tr>
-      <tr><td>Work Performance Reports</td><td>Статус-звіти й дашборди під аудиторію. Веде PM.</td><td class="ex">За узгодженим ритмом.</td></tr>
-      <tr><td>Team Performance Assessment</td><td>Оцінка ефективності команди: компетенції, плинність, згуртованість.</td><td class="ex">Періодично, у рамках Develop Team.</td></tr>
-    </tbody>
-  </table>
-
-  <div class="trap"><b>Пастка.</b> Звіт заради звіту. Якщо після документа ніхто нічого не вирішує, він не
-    потрібен — або потрібен іншій аудиторії й в іншому вигляді. Найкоротший тест: яке рішення має ухвалити
-    читач і чи є в звіті все для цього рішення.</div>
+    <tr><td>Plan Resource Management</td><td>Ролі, повноваження, план набору й вивільнення, навчання.</td><td>Resource Management Plan, Team Charter</td></tr>
+    <tr><td>Estimate Activity Resources</td><td>Скільки й яких людей та матеріалів потрібно.</td><td>Resource Requirements, RBS</td></tr>
+    <tr><td>Acquire Resources</td><td>Отримує людей у проєкт.</td><td>Project Team Assignments, Resource Calendars</td></tr>
+    <tr><td>Develop Team</td><td>Підвищує компетенції й згуртованість.</td><td>Team Performance Assessment</td></tr>
+    <tr><td>Manage Team</td><td>Продуктивність, конфлікти, зміни складу.</td><td>Change Requests, оновлення плану</td></tr>
+    </tbody></table>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Hierarchical charts</td><td class="pr">OBS, RBS</td><td>Структура підрозділів і ресурсів.</td><td class="ex">Видно, з ким домовлятись про конкретну людину.</td></tr>
+      <tr><td>Responsibility assignment matrix</td><td class="pr">RACI</td><td>Хто виконує, відповідає, кого консультують, кого інформують.</td><td class="ex">Два Accountable на приймання — і приймання не відбувається взагалі.</td></tr>
+      <tr><td>Text-oriented role descriptions</td><td class="pr">Plan Resource</td><td>Детальний опис ролі з повноваженнями.</td><td class="ex">Захист від «це не моя робота».</td></tr>
+      <tr><td>Pre-assignment</td><td class="pr">Acquire Resources</td><td>Люди, закріплені за проєктом ще до старту.</td><td class="ex">Часто умова тендеру або програми.</td></tr>
+      <tr><td>Negotiation</td><td class="pr">Acquire Resources</td><td>Домовленість із функціональними керівниками.</td><td class="ex">Основний спосіб отримати людей у матриці.</td></tr>
+      <tr><td>Acquisition</td><td class="pr">Acquire Resources</td><td>Наймання ззовні, коли всередині компетенції немає.</td><td class="ex">Довго — закладається в розклад як ризик.</td></tr>
+      <tr><td>Virtual teams</td><td class="pr">Acquire Resources</td><td>Розподілена робота з явними правилами.</td><td class="ex">Текст для статусу, відео для суперечки.</td></tr>
+      <tr><td>Multicriteria decision analysis</td><td class="pr">Acquire Resources</td><td>Вибір людей за критеріями: доступність, досвід, вартість.</td><td class="ex">Прозорий вибір замість «бери кого дадуть».</td></tr>
+      <tr><td>Colocation</td><td class="pr">Develop Team</td><td>Спільний простір на складному етапі.</td><td class="ex">Тиждень разом на старті інтеграції.</td></tr>
+      <tr><td>Training</td><td class="pr">Develop Team</td><td>Закриття прогалини в компетенціях.</td><td class="ex">Дешевше за наймання, якщо є час.</td></tr>
+      <tr><td>Individual і team assessments</td><td class="pr">Develop Team</td><td>Оцінка сильних сторін і динаміки команди.</td><td class="ex">Основа для розподілу ролей.</td></tr>
+      <tr><td>Recognition and rewards</td><td class="pr">Develop Team</td><td>Мотивація, узгоджена з культурою організації.</td><td class="ex">Публічна подяка за підхоплений інцидент працює краще за річну премію.</td></tr>
+      <tr><td>Ground rules і Team Charter</td><td class="pr">Develop Team</td><td>Правила роботи, ухвалені самою командою.</td><td class="ex">Три часові пояси — дві години перетину фіксуються в хартії.</td></tr>
+      <tr><td>Tuckman ladder</td><td class="pr">Develop Team</td><td>Forming, storming, norming, performing, adjourning.</td><td class="ex">Не міняти склад за два тижні до релізу — команда повертається на storming.</td></tr>
+      <tr><td>Conflict management</td><td class="pr">Manage Team</td><td>Collaborate, compromise, smooth, withdraw, force.</td><td class="ex">Суперечка про архітектуру знімається експериментом, а не старшинством.</td></tr>
+      <tr><td>Influencing</td><td class="pr">Manage Team</td><td>Рух через аргумент і довіру без владних важелів.</td><td class="ex">Основний інструмент PM у матриці.</td></tr>
+      <tr><td>Emotional intelligence</td><td class="pr">Manage Team</td><td>Читання стану команди й власного.</td><td class="ex">Раннє виявлення вигорання.</td></tr>
+      <tr><td>Leadership і теорії мотивації</td><td class="pr">Manage Team</td><td>Що саме рухає конкретною людиною.</td><td class="ex">Комусь потрібен виклик, комусь — стабільність.</td></tr>
+      <tr><td>Resource histogram</td><td class="pr">Plan Resource</td><td>Завантаження людей у часі.</td><td class="ex">Аналітик на 180% у травні — це нездійсненно, а не «напружено».</td></tr>
+      <tr><td>Resource levelling</td><td class="pr">Plan Resource</td><td>Вирівнювання під доступність.</td><td class="ex">Дата зсувається свідомо, а не раптом.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Resource Management Plan · Team Charter · Resource Requirements · RBS · Project Team Assignments · Resource Calendars · RACI / RAM · Team Performance Assessment.</p>
+  </div>
+  <div class="trap"><b>Пастка.</b> Звіт заради звіту. Якщо після документа ніхто нічого не вирішує, він не потрібен — або потрібен іншій аудиторії й в іншому вигляді. Тест: яке рішення має ухвалити читач і чи є в звіті все для цього рішення.</div>
 </section>
 
-<!-- ── 4 ─────────────────────────────────────────────────────────────── -->
 <section class="sec" id="s4">
   <h2><span class="num">04</span>Business Management</h2>
-  <p>Тут проєкт стикається з грошима й інтересами: хто зацікавлений у результаті, хто може його зупинити
-    і що саме сторони одна одній зобовʼязані за договором. Дві області: Stakeholder Management і Procurement
-    Management — на практиці вони перетинаються в кожній розмові про обсяг.</p>
-
-  <div class="parts">
-    <div class="part"><b>Identify Stakeholders</b><span>Хто впливає на проєкт і на кого впливає він. Реєстр ведеться з першого дня, бо пізні стейкхолдери — найдорожчі.</span></div>
-    <div class="part"><b>Plan і Manage Engagement</b><span>Який рівень залучення потрібен від кожного і що робиться, щоб його досягти.</span></div>
-    <div class="part"><b>Plan Procurement</b><span>Make-or-buy, тип контракту, критерії вибору постачальника, SOW.</span></div>
-    <div class="part"><b>Conduct і Control Procurements</b><span>Вибір вендора, керування відносинами, зміни, претензії й закриття контракту.</span></div>
+  <p>Тут проєкт стикається з інтересами й грошима: хто може його зупинити і що саме сторони одна одній зобовʼязані за договором.</p>
+  <div class="sub">
+    <h3>Project Stakeholders Management <em>інтереси й вплив</em></h3>
+    <p>Виявити всіх, хто впливає на проєкт або залежить від нього, і привести рівень залучення до потрібного. Пізній стейкхолдер — найдорожчий.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Identify Stakeholders</td><td>Знаходить і класифікує стейкхолдерів.</td><td>Stakeholder Register</td></tr>
+    <tr><td>Plan Stakeholder Engagement</td><td>Визначає потрібний рівень залучення й дії для нього.</td><td>Stakeholder Engagement Plan</td></tr>
+    <tr><td>Manage Stakeholder Engagement</td><td>Працює з очікуваннями й опором.</td><td>Change Requests, оновлення Issue Log</td></tr>
+    <tr><td>Monitor Stakeholder Engagement</td><td>Перевіряє, чи залучення справді змінюється.</td><td>Work performance information</td></tr>
+    </tbody></table>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Stakeholder analysis</td><td class="pr">Identify</td><td>Інтереси, вплив і очікування кожного.</td><td class="ex">Реєстр ведеться з першого дня, бо пізні стейкхолдери найдорожчі.</td></tr>
+      <tr><td>Document analysis</td><td class="pr">Identify</td><td>Стейкхолдери з договорів, оргструктури, регламентів.</td><td class="ex">Регулятор і внутрішній аудит не приходять самі.</td></tr>
+      <tr><td>Questionnaires and surveys</td><td class="pr">Identify</td><td>Збір очікувань великої аудиторії.</td><td class="ex">Коли користувачів сотні.</td></tr>
+      <tr><td>Power / interest grid</td><td class="pr">Identify</td><td>Кого залучати щільно, кого тримати в курсі, за ким стежити.</td><td class="ex">Високий вплив і низький інтерес — джерело пізнього «ні».</td></tr>
+      <tr><td>Salience model</td><td class="pr">Identify</td><td>Power, urgency, legitimacy — три виміри замість двох.</td><td class="ex">Регулятор легітимний і терміновий навіть без формального впливу.</td></tr>
+      <tr><td>Directions of influence</td><td class="pr">Identify</td><td>Вгору, вниз, назовні, вбік.</td><td class="ex">Різні напрями вимагають різних способів комунікації.</td></tr>
+      <tr><td>Prioritization</td><td class="pr">Plan Engagement</td><td>З ким працювати першим за обмеженого часу PM.</td><td class="ex">Залучати всіх однаково неможливо.</td></tr>
+      <tr><td>Stakeholder engagement assessment matrix</td><td class="pr">Plan Engagement</td><td>Unaware, resistant, neutral, supportive, leading проти бажаного рівня.</td><td class="ex">Розрив перетворюється на план дій, а не на відчуття.</td></tr>
+      <tr><td>Mind mapping</td><td class="pr">Plan Engagement</td><td>Карта звʼязків між стейкхолдерами.</td><td class="ex">Видно, хто на кого реально впливає.</td></tr>
+      <tr><td>Ground rules</td><td class="pr">Manage Engagement</td><td>Правила взаємодії: коли й як ескалюємо.</td><td class="ex">Знімає особисті образи з робочих питань.</td></tr>
+      <tr><td>Negotiation</td><td class="pr">Manage Engagement</td><td>Пошук домовленості замість тиску.</td><td class="ex">Підтримка купується врахуванням чужого KPI.</td></tr>
+      <tr><td>Political awareness</td><td class="pr">Manage Engagement</td><td>Розуміння неформальних інтересів.</td><td class="ex">Формальна схема рідко збігається з реальною.</td></tr>
+      <tr><td>Feedback і observation</td><td class="pr">Monitor Engagement</td><td>Чи змінилось ставлення насправді.</td><td class="ex">«Підтримую» на словах і зрив зустрічей — це resistant.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Stakeholder Register · Stakeholder Engagement Plan · Issue Log.</p>
   </div>
 
-  <div class="cbox" data-comp="contract"></div>
-  <p class="chint">Три типи контрактів: де сидить ризик і чим у кожному керує PM.</p>
-
-  <h3>Техніки</h3>
-  <table class="t">
-    <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад із практики</th></tr></thead>
+  <div class="sub">
+    <h3>Contract Obligations <em>project procurement management</em></h3>
+    <p>Що купуємо, за яким типом контракту, хто несе ризик і як закриваємо. Обовʼязки сторін живуть у SOW і в умовах договору, а не в переписці.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Процес</th><th>Що робить</th><th>Головний вихід</th></tr></thead>
     <tbody>
-      <tr><td>Stakeholder analysis<small>power / interest grid</small></td>
-        <td>Класифікація за впливом та інтересом: кого залучати щільно, кого тримати в курсі, за ким лише стежити.</td>
-        <td class="ex">Керівник суміжного департаменту з низьким інтересом, але високим впливом — класичне джерело пізнього «ні».</td></tr>
-      <tr><td>Salience model<small>power · urgency · legitimacy</small></td>
-        <td>Три виміри замість двох: додає терміновість і легітимність вимоги.</td>
-        <td class="ex">Регулятор має легітимність і терміновість навіть без формального впливу на проєкт.</td></tr>
-      <tr><td>Stakeholder engagement assessment matrix<small>PMI, T&amp;T</small></td>
-        <td>Порівняння поточного рівня залучення (unaware, resistant, neutral, supportive, leading) з бажаним.</td>
-        <td class="ex">Матриця показує розрив і робить роботу зі стейкхолдером планом, а не відчуттям.</td></tr>
-      <tr><td>Make-or-buy analysis<small>procurement</small></td>
-        <td>Рішення, робити самим чи купувати: порівняння вартості, часу, компетенцій і ризиків.</td>
-        <td class="ex">Інтеграція з платіжним провайдером: власна розробка проти готового рішення з підпискою.</td></tr>
-      <tr><td>Source selection analysis<small>вибір постачальника</small></td>
-        <td>Критерії вибору: найнижча ціна, лише кваліфікація, якість і ціна разом, або ціна життєвого циклу.</td>
-        <td class="ex">Критерії фіксуються до отримання пропозицій — інакше вони підлаштуються під фаворита.</td></tr>
-      <tr><td>Bidder conferences<small>тендер</small></td>
-        <td>Спільна зустріч із претендентами, щоб усі отримали однакове розуміння вимог.</td>
-        <td class="ex">Усі питання й відповіді розсилаються всім — інакше це привід оскаржити результат.</td></tr>
-      <tr><td>Claims administration<small>претензії</small></td>
-        <td>Робота зі спірними змінами: фіксація, оцінка, переговори, ескалація за умовами договору.</td>
-        <td class="ex">Усні домовленості, не оформлені як зміна, і стають претензіями наприкінці проєкту.</td></tr>
-      <tr><td>Procurement audits<small>аудит закупівель</small></td>
-        <td>Перевірка процесу закупівлі й виконання контракту: що спрацювало, що треба виправити в наступному.</td>
-        <td class="ex">Джерело для оновлення шаблонів SOW у PMO.</td></tr>
-    </tbody>
-  </table>
-
-  <h3>Артефакти</h3>
-  <table class="t">
-    <thead><tr><th>Артефакт</th><th>Що це і хто веде</th><th>Коли оновлюється</th></tr></thead>
-    <tbody>
-      <tr><td>Stakeholder Register</td><td>Перелік стейкхолдерів: роль, вплив, очікування, ставлення. Веде PM.</td><td class="ex">З першого дня, далі — за появи нових.</td></tr>
-      <tr><td>Stakeholder Engagement Plan</td><td>Що робимо, щоб змінити рівень залучення. Веде PM.</td><td class="ex">Після кожної значної зміни в оточенні.</td></tr>
-      <tr><td>Procurement Management Plan</td><td>Як закуповуємо: типи контрактів, ролі, метрики вендора. Веде PM із закупівлями.</td><td class="ex">На старті й перед новим тендером.</td></tr>
-      <tr><td>SOW / Terms of Reference</td><td>Опис того, що купуємо, і критерії приймання. Веде PM.</td><td class="ex">До тендеру; зміни — через додаток.</td></tr>
-      <tr><td>Agreements</td><td>Підписані договори з умовами оплати, змін і розірвання.</td><td class="ex">Через формальні додатки.</td></tr>
-      <tr><td>Claims і Procurement Documentation</td><td>Листування, акти, претензії — доказова база.</td><td class="ex">Постійно, зберігається до закриття.</td></tr>
-    </tbody>
-  </table>
-
-  <div class="trap"><b>Пастка.</b> Fixed Price із нечітким SOW. Виконавець закладає резерв у ціну, замовник
-    вважає, що «це ж очевидно входить», і кожна дрібниця стає переговорами. Якщо обсяг насправді невідомий —
-    це або T&amp;M із лімітом, або Fixed Price лише на першу фазу з чітким результатом.</div>
+    <tr><td>Plan Procurement Management</td><td>Make-or-buy, тип контракту, критерії вибору, SOW.</td><td>Procurement Management Plan, SOW, Bid Documents</td></tr>
+    <tr><td>Conduct Procurements</td><td>Вибір постачальника й підписання договору.</td><td>Selected Sellers, Agreements</td></tr>
+    <tr><td>Control Procurements</td><td>Керування виконанням, змінами, претензіями, закриттям.</td><td>Closed Procurements, Change Requests</td></tr>
+    </tbody></table>
+    <div class="cbox" data-comp="contract"></div>
+    <p class="chint">Три типи контрактів: де сидить ризик і чим у кожному керує PM.</p>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Make-or-buy analysis</td><td class="pr">Plan Procurement</td><td>Робити самим чи купувати: вартість, час, компетенції, ризик.</td><td class="ex">Інтеграція з платіжним провайдером: власна розробка проти готового рішення.</td></tr>
+      <tr><td>Market research</td><td class="pr">Plan Procurement</td><td>Хто є на ринку і за які гроші.</td><td class="ex">До тендеру, а не після першої пропозиції.</td></tr>
+      <tr><td>Source selection analysis</td><td class="pr">Plan Procurement</td><td>Критерій вибору: найнижча ціна, лише кваліфікація, якість і ціна, ціна життєвого циклу.</td><td class="ex">Критерії фіксуються до отримання пропозицій, інакше підлаштуються під фаворита.</td></tr>
+      <tr><td>Fixed Price: FFP</td><td class="pr">тип контракту</td><td>Фіксована ціна; ризик перевитрати — у виконавця.</td><td class="ex">Потребує чіткого SOW, інакше кожна дрібниця стає переговорами.</td></tr>
+      <tr><td>Fixed Price: FPIF</td><td class="pr">тип контракту</td><td>Фіксована ціна плюс заохочення за показник.</td><td class="ex">Ділить вигоду від економії між сторонами.</td></tr>
+      <tr><td>Fixed Price: FP-EPA</td><td class="pr">тип контракту</td><td>Фіксована ціна з коригуванням на інфляцію чи курс.</td><td class="ex">Довгі міжнародні контракти.</td></tr>
+      <tr><td>Time and Materials</td><td class="pr">тип контракту</td><td>Оплата за час і матеріали; ризик — у замовника.</td><td class="ex">Потрібен ліміт «не більше ніж» і регулярний перегляд.</td></tr>
+      <tr><td>Cost-reimbursable: CPFF, CPIF, CPAF</td><td class="pr">тип контракту</td><td>Відшкодування витрат плюс фіксована, заохочувальна або преміальна винагорода.</td><td class="ex">Коли обсяг справді невідомий: дослідження, R&amp;D.</td></tr>
+      <tr><td>Bidder conferences</td><td class="pr">Conduct Procurements</td><td>Однакове розуміння вимог усіма претендентами.</td><td class="ex">Питання й відповіді розсилаються всім — інакше це привід оскаржити результат.</td></tr>
+      <tr><td>Proposal evaluation</td><td class="pr">Conduct Procurements</td><td>Оцінка пропозицій за зваженими критеріями.</td><td class="ex">Захищає від «обрали знайомих».</td></tr>
+      <tr><td>Negotiation</td><td class="pr">Conduct Procurements</td><td>Узгодження умов до підписання.</td><td class="ex">Після підпису переговорна позиція зникає.</td></tr>
+      <tr><td>Contract change control</td><td class="pr">Control Procurements</td><td>Зміна обсягу лише через додаток із ціною й датою.</td><td class="ex">«Зробіть заодно» без додатка стає претензією в кінці.</td></tr>
+      <tr><td>Claims administration</td><td class="pr">Control Procurements</td><td>Фіксація, оцінка, переговори й ескалація спірних змін.</td><td class="ex">Листування — це доказова база.</td></tr>
+      <tr><td>Performance reviews</td><td class="pr">Control Procurements</td><td>Регулярна оцінка виконавця за метриками договору.</td><td class="ex">SLA без вимірювання не існує.</td></tr>
+      <tr><td>Inspections і audits</td><td class="pr">Control Procurements</td><td>Перевірка робіт і процесів виконавця.</td><td class="ex">Право на аудит прописується заздалегідь.</td></tr>
+      <tr><td>Earned value за контрактом</td><td class="pr">Control Procurements</td><td>Контроль вартості робіт підрядника.</td><td class="ex">Особливо для FPIF і cost-plus.</td></tr>
+      <tr><td>Records management</td><td class="pr">Control Procurements</td><td>Єдиний архів документів закупівлі.</td><td class="ex">Через рік памʼятає лише архів.</td></tr>
+      <tr><td>Procurement closure</td><td class="pr">Control Procurements</td><td>Формальне закриття, приймання, фінальні платежі.</td><td class="ex">Незакритий контракт — відкрите зобовʼязання.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Procurement Management Plan · SOW / Terms of Reference · Bid Documents · Source Selection Criteria · Agreements · Claims і Procurement Documentation · Closed Procurements.</p>
+  </div>
+  <div class="trap"><b>Пастка.</b> Fixed Price із нечітким SOW. Виконавець закладає резерв у ціну, замовник вважає, що «це ж очевидно входить», і кожна дрібниця стає переговорами. Якщо обсяг невідомий — це або T&amp;M із лімітом, або Fixed Price лише на першу фазу з чітким результатом.</div>
 </section>
 
-<!-- ── 5 ─────────────────────────────────────────────────────────────── -->
 <section class="sec" id="s5">
   <h2><span class="num">05</span>Monitoring and Control</h2>
-  <p>Контроль — це не спостереження, а порівняння з базовою лінією й дія. PMI розрізняє work performance
-    <b>data</b> (сирі виміри), <b>information</b> (дані в контексті базової лінії) і <b>reports</b> (готовий
-    документ для рішення). Більшість проблем зі звітністю — це data, яку подали замість information.</p>
-
-  <div class="parts">
-    <div class="part"><b>Що міряємо</b><span>Обсяг, час, гроші, якість, ризики й залучення — кожна область має власні метрики й пороги.</span></div>
-    <div class="part"><b>Earned Value Management</b><span>PV, EV, AC і похідні: SV, CV, SPI, CPI, EAC, ETC, VAC.</span></div>
-    <div class="part"><b>Потокові метрики</b><span>Burn-up, cumulative flow, cycle time, throughput, WIP.</span></div>
-    <div class="part"><b>Інструменти</b><span>Jira для потоку, фінансова система для витрат, Power BI чи власний дашборд — щоб звести це разом.</span></div>
+  <p>Контроль — не спостереження, а порівняння з базовою лінією й дія. PMI розрізняє work performance <b>data</b> (сирі виміри), <b>information</b> (дані в контексті baseline) і <b>reports</b> (документ для рішення). Більшість проблем зі звітністю — це data, подана замість information.</p>
+  <div class="sub">
+    <h3>Measurement and Analysis <em>що і як міряємо</em></h3>
+    <p>Метрика має відповідати на питання рішення. Дві системи координат: EVM у грошах для проєкту з baseline і потокові метрики для команди, що працює ітераціями.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Крок</th><th>Що робить</th><th>Вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Збір data</td><td>Сирі виміри з трекера, CI, фінансової системи.</td><td>Work Performance Data</td></tr>
+    <tr><td>Перетворення на information</td><td>Порівняння з baseline і контекст.</td><td>Work Performance Information</td></tr>
+    <tr><td>Звітність</td><td>Документ під рішення конкретної аудиторії.</td><td>Work Performance Reports</td></tr>
+    <tr><td>Прогноз</td><td>Що буде за поточного темпу.</td><td>Forecasts: EAC, ETC, дата завершення</td></tr>
+    <tr><td>Дія</td><td>Корегування або запит на зміну.</td><td>Change Requests: corrective, preventive, defect repair</td></tr>
+    </tbody></table>
+    <div class="cbox" data-comp="measure"></div>
+    <p class="chint">Одна затримка в трьох системах координат: що показує кожна й чого в ній не видно.</p>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Крок</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Earned value analysis</td><td class="pr">information</td><td>PV, EV, AC і похідні SV, CV, SPI, CPI в одних одиницях.</td><td class="ex">SPI 0.94 при CPI 1.02 — розмова про дати, не про бюджет.</td></tr>
+      <tr><td>Forecasting</td><td class="pr">прогноз</td><td>EAC, ETC, VAC за поточним темпом або з новими припущеннями.</td><td class="ex">EAC показує перевитрату за два місяці до бухгалтерії.</td></tr>
+      <tr><td>To-complete performance index</td><td class="pr">прогноз</td><td>Який темп потрібен до кінця, щоб укластися.</td><td class="ex">Показує, коли план уже нереальний.</td></tr>
+      <tr><td>Variance analysis</td><td class="pr">information</td><td>Розмір відхилення й його причина.</td><td class="ex">Причина — черга до тестового середовища.</td></tr>
+      <tr><td>Trend analysis</td><td class="pr">information</td><td>Напрям руху, а не одна точка.</td><td class="ex">Cycle time росте третій спринт поспіль — сигнал.</td></tr>
+      <tr><td>Control charts</td><td class="pr">information</td><td>Стабільність процесу: шум проти справжнього зсуву.</td><td class="ex">Вихід за межу контролю — привід зупинитись.</td></tr>
+      <tr><td>Burn-down / burn-up</td><td class="pr">information</td><td>Залишок роботи і зростання обсягу.</td><td class="ex">Burn-down «гарний», burn-up показує +30% обсягу.</td></tr>
+      <tr><td>Cumulative flow diagram</td><td class="pr">information</td><td>Де накопичується робота.</td><td class="ex">Смуга «в тестуванні» товщає — вузьке місце знайдено.</td></tr>
+      <tr><td>Cycle time і lead time</td><td class="pr">information</td><td>Скільки триває задача від старту й від запиту.</td><td class="ex">Замовник відчуває lead time, команда міряє cycle time.</td></tr>
+      <tr><td>Throughput</td><td class="pr">information</td><td>Скільки задач завершено за період.</td><td class="ex">Стабільніший показник за velocity в story points.</td></tr>
+      <tr><td>WIP і ліміти</td><td class="pr">дія</td><td>Скільки роботи в процесі одночасно.</td><td class="ex">Ліміт 3 скорочує cycle time без жодного нового ресурсу.</td></tr>
+      <tr><td>Escaped defects</td><td class="pr">information</td><td>Дефекти, що дійшли до продакшену.</td><td class="ex">Метрика якості процесу, а не окремої людини.</td></tr>
+      <tr><td>Inspection</td><td class="pr">Validate Scope</td><td>Формальне приймання результатів проти критеріїв.</td><td class="ex">Демо без підписаного приймання — показ, а не передача обсягу.</td></tr>
+      <tr><td>Root cause analysis відхилень</td><td class="pr">дія</td><td>Причина, а не симптом.</td><td class="ex">Інакше та сама затримка повториться наступного місяця.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Performance Measurement Baseline · Work Performance Data / Information / Reports · Project Health Report · Forecasts · Accepted Deliverables · Change Requests.</p>
   </div>
 
-  <div class="cbox" data-comp="measure"></div>
-  <p class="chint">Одна затримка в трьох системах координат: що показує кожна й чого в ній не видно.</p>
-
-  <h3>Техніки</h3>
-  <table class="t">
-    <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад із практики</th></tr></thead>
+  <div class="sub">
+    <h3>Tools <em>де живуть дані</em></h3>
+    <p>Жодна система не покриває все: потік у трекері, гроші у фінансовій системі, зведення — у BI. Правило одне: у кожної метрики одне джерельне джерело, решта лише читають.</p>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Metrics dictionary<small>словник</small></td><td>Визначення кожної метрики й її джерела.</td><td class="ex">«Готово» в дашборді й у команді означає те саме.</td></tr>
+      <tr><td>Data sources map<small>карта джерел</small></td><td>Звідки береться кожна цифра звіту.</td><td class="ex">Питання «звідки це» має відповідь за 10 секунд.</td></tr>
+      <tr><td>Автоматичні вигрузки<small>автоматизація</small></td><td>Заміна ручного збирання даних.</td><td class="ex">Ручний звіт застаріває в момент відправлення.</td></tr>
+      <tr><td>Ритм звітності<small>ритм</small></td><td>Що щодня, що щотижня, що щомісяця.</td><td class="ex">Не всі метрики потрібні щодня.</td></tr>
+      </tbody></table>
+    <h4 class="sh">Інструменти</h4>
+    <table class="p">
+    <thead><tr><th>Інструмент</th><th>Що з нього беремо</th><th>Чого в ньому немає</th></tr></thead>
     <tbody>
-      <tr><td>Earned value analysis<small>EVM</small></td>
-        <td>Порівняння плану, освоєного обсягу й фактичних витрат у одних одиницях — грошах.</td>
-        <td class="ex">SPI 0.94 і CPI 1.02: відстаємо за часом, але не перевитрачаємо — розмова про дати, не про бюджет.</td></tr>
-      <tr><td>Forecasting<small>EAC, ETC, VAC</small></td>
-        <td>Прогноз вартості й дати завершення за поточним темпом або з урахуванням нових припущень.</td>
-        <td class="ex">EAC показує перевитрату за два місяці до того, як вона стане фактом у бухгалтерії.</td></tr>
-      <tr><td>Variance analysis<small>відхилення</small></td>
-        <td>Порівняння факту з базовою лінією й пошук причини, а не лише розміру відхилення.</td>
-        <td class="ex">Відставання на два тижні через чергу до тестового середовища — це не проблема розробки.</td></tr>
-      <tr><td>Trend analysis<small>тренд</small></td>
-        <td>Погляд на динаміку: стає краще чи гірше. Одна точка нічого не означає.</td>
-        <td class="ex">Cycle time росте третій спринт поспіль — сигнал, навіть якщо спринт «закрився».</td></tr>
-      <tr><td>Control charts<small>quality</small></td>
-        <td>Чи процес стабільний: межі контролю проти меж специфікації, правило семи точок поспіль.</td>
-        <td class="ex">Дефекти в межах контролю — це шум; вихід за межу — привід зупинитись і розібратись.</td></tr>
-      <tr><td>Burn-up і cumulative flow<small>agile-метрики</small></td>
-        <td>Видно і темп, і зростання обсягу, і етап, де накопичується робота.</td>
-        <td class="ex">Burn-down «гарний», а burn-up показує, що обсяг зріс на 30% — саме тому дата не рухається.</td></tr>
-      <tr><td>Inspection і Validate Scope<small>приймання</small></td>
-        <td>Формальне приймання результатів замовником проти критеріїв приймання.</td>
-        <td class="ex">Демо без підписаного приймання — це показ, а не передача обсягу.</td></tr>
-    </tbody>
-  </table>
-
-  <h3>Артефакти</h3>
-  <table class="t">
-    <thead><tr><th>Артефакт</th><th>Що це і хто веде</th><th>Коли оновлюється</th></tr></thead>
-    <tbody>
-      <tr><td>Performance Measurement Baseline</td><td>Scope, schedule і cost baselines разом — база для порівняння.</td><td class="ex">Лише через ухвалену зміну.</td></tr>
-      <tr><td>Work Performance Data / Information / Reports</td><td>Сирі виміри → дані в контексті → звіт для рішення. Веде PM.</td><td class="ex">За ритмом звітності.</td></tr>
-      <tr><td>Project Health Report</td><td>Статус за напрямами (обсяг, час, бюджет, ризики, команда) з рішеннями, яких потребує замовник.</td><td class="ex">Щотижня або щомісяця.</td></tr>
-      <tr><td>Forecasts</td><td>EAC, ETC, прогнозна дата завершення з припущеннями.</td><td class="ex">Разом зі звітом.</td></tr>
-      <tr><td>Accepted Deliverables</td><td>Формально прийняті результати — підстава для оплати.</td><td class="ex">Після кожного приймання.</td></tr>
-      <tr><td>Change Requests із Monitoring</td><td>Corrective action, preventive action, defect repair.</td><td class="ex">За результатами аналізу відхилень.</td></tr>
-    </tbody>
-  </table>
-
-  <div class="trap"><b>Пастка.</b> Зелений статус до останнього тижня. Зазвичай це не брехня, а відсутність
-    базової лінії й прогнозу: команда чесно каже «працюємо», і це правда. Прогноз (EAC, дата за поточним
-    темпом) перетворює відчуття на цифру, яку можна оскаржити.</div>
+    <tr><td>Jira / Azure DevOps</td><td>Потік робіт: статуси, cycle time, throughput, WIP, burn-up.</td><td>Грошей і собівартості</td></tr>
+    <tr><td>Фінансова система</td><td>Actual Cost, зобовʼязання за контрактами, оплати.</td><td>Готовності обсягу: витрачено ≠ зроблено</td></tr>
+    <tr><td>MS Project / Primavera</td><td>Мережа залежностей, критичний шлях, schedule baseline.</td><td>Живого стану задач</td></tr>
+    <tr><td>Power BI / дашборд</td><td>Зведення джерел в одну картину для рішення.</td><td>Власних даних: помилка в джерелі стає красивою помилкою</td></tr>
+    <tr><td>Confluence / реєстри</td><td>Рішення, ризики, issues, lessons learned.</td><td>Контролю виконання</td></tr>
+    </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Metrics Dictionary · Data sources map · Dashboard і звіти · реєстри ризиків, issues й рішень.</p>
+  </div>
+  <div class="trap"><b>Пастка.</b> Зелений статус до останнього тижня. Зазвичай це не брехня, а відсутність базової лінії й прогнозу: команда чесно каже «працюємо», і це правда. Прогноз (EAC, дата за поточним темпом) перетворює відчуття на цифру, яку можна оскаржити.</div>
 </section>
 
-<!-- ── 6 ─────────────────────────────────────────────────────────────── -->
 <section class="sec" id="s6">
   <h2><span class="num">06</span>GenAI Productivity</h2>
-  <p>GenAI змінює не роботу PM, а швидкість чернеток. Модель добре робить структуру, формулювання й перший
-    прохід аналізу; вона не відповідає за рішення й не має доказової сили. Робоче правило просте: усе, що
-    згенеровано, лишається чернеткою, доки людина не звірила це з джерелом.</p>
-
-  <div class="parts">
-    <div class="part"><b>Чернетка</b><span>Перший варіант артефакта: реєстр ризиків, SOW, протокол, план комунікацій за шаблоном.</span></div>
-    <div class="part"><b>Аналіз</b><span>Зведення даних, пошук суперечностей між документами, порівняння варіантів.</span></div>
-    <div class="part"><b>Перевірка</b><span>Модель як рецензент: знайти дірки у власному плані, питання до вимог, неузгодженості.</span></div>
-    <div class="part"><b>Автоматизація</b><span>Повторювані дії: підсумки зустрічей, статуси з трекера, переклад, підготовка даних.</span></div>
+  <p>Остання область — не про інструмент, а про спосіб роботи: що можна доручити моделі, що не можна відпускати з рук і як це лишити перевірюваним.</p>
+  <div class="sub">
+    <h3>GenAI у роботі PM <em>швидкість плюс відповідальність</em></h3>
+    <p>Модель дає швидкість на чернетці й аналізі; відповідальність за факти лишається на людині. Тому процес будується навколо перевірки, а не навколо промпта.</p>
+    <h4 class="sh">З чого складається</h4>
+    <table class="p">
+    <thead><tr><th>Крок</th><th>Що робить</th><th>Вихід</th></tr></thead>
+    <tbody>
+    <tr><td>Підготовка джерел</td><td>Вибір і очищення документів, з яких працює модель.</td><td>Набір джерел без чутливих даних</td></tr>
+    <tr><td>Промпт</td><td>Роль, задача, формат, обмеження.</td><td>Відтворюваний запит</td></tr>
+    <tr><td>Чернетка</td><td>Перший варіант артефакта.</td><td>Draft із позначками походження</td></tr>
+    <tr><td>Перевірка людиною</td><td>Факти, цифри, суперечності.</td><td>Вичитаний артефакт</td></tr>
+    <tr><td>Публікація</td><td>Артефакт із вказаними джерелами.</td><td>Готовий документ</td></tr>
+    </tbody></table>
+    <div class="cbox" data-comp="genai"></div>
+    <p class="chint">Ланцюг від джерела до артефакта: де саме людина зобовʼязана втрутитись.</p>
+    <h4 class="sh">Техніки</h4>
+    <table class="t">
+      <thead><tr><th>Техніка</th><th>Крок</th><th>Що дає</th><th>Приклад</th></tr></thead>
+      <tbody>
+      <tr><td>Role і format prompting</td><td class="pr">промпт</td><td>Задати роль, формат і обмеження відповіді.</td><td class="ex">«Реєстр ризиків таблицею, 8 рядків, колонки: ризик, імовірність, вплив, власник».</td></tr>
+      <tr><td>Grounding у документ</td><td class="pr">промпт</td><td>Відповідь лише з наданого джерела.</td><td class="ex">Різко знижує кількість вигаданих фактів.</td></tr>
+      <tr><td>Chain of checks</td><td class="pr">перевірка</td><td>Окремий прохід моделі як рецензента власного тексту.</td><td class="ex">Знаходить дірки у власному плані.</td></tr>
+      <tr><td>Порівняння двох джерел</td><td class="pr">аналіз</td><td>Пошук суперечностей між документами.</td><td class="ex">SOW проти технічних вимог.</td></tr>
+      <tr><td>Red-teaming власного плану</td><td class="pr">аналіз</td><td>Модель шукає, де план зламається.</td><td class="ex">Дешевша версія ризик-воркшопу перед справжнім.</td></tr>
+      <tr><td>Provenance marks</td><td class="pr">публікація</td><td>Позначка, що написала модель, а що людина.</td><td class="ex">Правило перегляду перед публікацією.</td></tr>
+      <tr><td>Redaction of sensitive data</td><td class="pr">джерела</td><td>Прибирання персональних і комерційних даних до запиту.</td><td class="ex">Договір іде в модель без імен і сум.</td></tr>
+      <tr><td>«Цифра без джерела не публікується»</td><td class="pr">правило</td><td>Жодного числа без посилання на джерело.</td><td class="ex">Головний запобіжник проти правдоподібного тексту.</td></tr>
+      <tr><td>Оцінка результату</td><td class="pr">ритм</td><td>Чи скоротився час на артефакт і чи не зросли переробки.</td><td class="ex">Інакше це віра, а не продуктивність.</td></tr>
+      </tbody></table>
+    <p class="tt"><b>Артефакти:</b> Prompt library · Draft-артефакти з позначками походження · Checklist вичитки · Правила роботи з даними.</p>
   </div>
-
-  <div class="cbox" data-comp="genai"></div>
-  <p class="chint">Ланцюг від джерела до артефакта: де саме людина зобовʼязана втрутитись.</p>
-
-  <h3>Техніки</h3>
-  <table class="t">
-    <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад із практики</th></tr></thead>
-    <tbody>
-      <tr><td>Промпт із роллю, контекстом і форматом</td>
-        <td>Три обовʼязкові частини: хто відповідає, на яких даних, у якому вигляді результат. Плюс межі: чого не робити.</td>
-        <td class="ex">«Роль: PM. Дані: цей SOW. Формат: таблиця ризиків із колонкою джерела. Якщо джерела немає — пиши “немає”.»</td></tr>
-      <tr><td>Робота з документом як джерелом<small>замість памʼяті моделі</small></td>
-        <td>Модель відповідає лише за наданим документом, а не за загальними знаннями — різко менше вигаданого.</td>
-        <td class="ex">Питання до договору ставляться до самого файлу договору, а не «за памʼяттю».</td></tr>
-      <tr><td>Few-shot на власних артефактах</td>
-        <td>Два-три приклади ваших реальних документів задають формат і тон краще за будь-який опис.</td>
-        <td class="ex">Приклад статус-звіту з PMO — і наступні звіти виходять у тому ж форматі.</td></tr>
-      <tr><td>Помітки походження<small>provenance marks</small></td>
-        <td>Кожен блок тексту позначений: перевірений факт із джерелом, гіпотеза, власне судження, потребує переробки.</td>
-        <td class="ex">Вичитка перетворюється на список: подивитись треба лише те, що позначене як неперевірене.</td></tr>
-      <tr><td>Перевірка за джерелом<small>traceability</small></td>
-        <td>Правило: цифра без посилання не йде у звіт. Посилання — рядок у трекері, пункт договору, розділ стандарту.</td>
-        <td class="ex">У health-звіті кожна цифра має шлях до системи, звідки вона взята.</td></tr>
-      <tr><td>Модель як рецензент<small>червона команда</small></td>
-        <td>Попросити знайти слабкі місця у власному документі: пропущені ризики, суперечності, нечіткі критерії приймання.</td>
-        <td class="ex">Перед відправленням SOW замовнику: «знайди формулювання, які можна тлумачити двояко».</td></tr>
-      <tr><td>Бібліотека промптів у PMO</td>
-        <td>Промпти як артефакт організації: ті самі формати звітів і перевірок у всіх PM.</td>
-        <td class="ex">Новий PM отримує не лише шаблон документа, а й спосіб його швидко заповнити.</td></tr>
-    </tbody>
-  </table>
-
-  <h3>Артефакти</h3>
-  <table class="t">
-    <thead><tr><th>Артефакт</th><th>Що це і хто веде</th><th>Коли оновлюється</th></tr></thead>
-    <tbody>
-      <tr><td>Чернетка артефакта з позначками</td><td>Реєстр ризиків, SOW, план — із позначкою походження на кожному блоці. Веде PM.</td><td class="ex">До перевірки людиною.</td></tr>
-      <tr><td>Бібліотека промптів</td><td>Набір перевірених промптів під типові документи. Веде PMO.</td><td class="ex">Коли зʼявляється кращий варіант.</td></tr>
-      <tr><td>Протокол рішень</td><td>Підсумок зустрічі з рішеннями й власниками, звірений учасниками.</td><td class="ex">Після кожної зустрічі.</td></tr>
-      <tr><td>Правила використання AI</td><td>Що можна передавати моделі, а що ні: персональні дані, код замовника, комерційна таємниця.</td><td class="ex">За зміни політики або інструментів.</td></tr>
-    </tbody>
-  </table>
-
-  <div class="trap"><b>Пастка.</b> Правдоподібний текст замість перевіреного. Абзац, який модель вигадала,
-    виглядає рівно так само впевнено, як факт із договору. Саме тому потрібні позначки походження й правило
-    «цифра без джерела не публікується» — інакше економія часу на чернетці повертається втричі на розборі.</div>
-
-  <p class="src">Як це виглядає в роботі — на сторінках
-    <a href="17-ai.html">AI slop helper</a> і <a href="21-support-chat.html">Чат-бот підтримки</a>.</p>
+  <div class="trap"><b>Пастка.</b> Правдоподібний текст замість перевіреного. Абзац, який модель вигадала, виглядає рівно так само впевнено, як факт із договору. Саме тому потрібні позначки походження й правило «цифра без джерела не публікується» — інакше економія часу на чернетці повертається втричі на розборі.</div>
 </section>
 
 <p class="src">Джерела: PMI, <i>Process Groups: A Practice Guide</i> (2023) — розділи 4–8 (процеси за Process Groups),
@@ -521,10 +790,10 @@ table.t td.ex{color:var(--ink-3)}
 </main>
 </div>
 
-<script src="shared/nav.js?v=20260922144732"></script>
-<script src="shared/topbar.js?v=20260922144732"></script>
-<script src="shared/comp-data.js?v=20260922144732"></script>
-<script src="shared/comp.js?v=20260922144732"></script>
+<script src="shared/nav.js?v=20260922155855"></script>
+<script src="shared/topbar.js?v=20260922155855"></script>
+<script src="shared/comp-data.js?v=20260922155855"></script>
+<script src="shared/comp.js?v=20260922155855"></script>
 <script>
 /* Підсвітка поточного розділу у змісті */
 (function () {

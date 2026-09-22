@@ -77,10 +77,6 @@
     fit.appendChild(stage);
     host.appendChild(fit);
 
-    var pop = document.createElement('div');
-    pop.className = 'cpop';
-    stage.appendChild(pop);
-
     /* ── дроти ─────────────────────────────────────────────────────────
        Вихід з боку, що дивиться на ціль; якщо колонки сусідні — пряма,
        інакше через коридор між колонками. Лінія не перетинає чужу картку:
@@ -162,7 +158,7 @@
       return null;
     }
 
-    var missed = [];
+    var missed = [], wireEl = {};
     links.forEach(function (L) {
       var A = box[L.from], B = box[L.to];
       if (!A || !B) { missed.push(L.from + ' → ' + L.to + ' (немає вузла)'); return; }
@@ -172,6 +168,7 @@
       var p = el('path', { class: 'cw' + (L.kind ? ' w-' + L.kind : ''), d: d });
       p.dataset.a = L.from; p.dataset.b = L.to;
       svg.appendChild(p);
+      wireEl[L.from + '>' + L.to] = p;
       /* наконечник малюємо самі: marker-end масштабується зі stroke і зникає */
       var n1 = pts[pts.length - 2], n2 = pts[pts.length - 1];
       var dx = n2.x - n1.x, dy = n2.y - n1.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len;
@@ -227,18 +224,6 @@
         p.classList.toggle('is-dim', !on);
       });
     }
-    function showPop(n, d) {
-      pop.innerHTML = '<b>' + esc(n.t) + '</b>' + (n.s ? '<i>' + esc(n.s) + '</i>' : '') +
-        '<p>' + n.b + '</p>';
-      pop.classList.add('on');
-      var b = box[n.id], w = 260;
-      var left = b.x + b.w + 12;
-      if (left + w > stage.offsetWidth - 8) left = Math.max(8, b.x - w - 12);
-      pop.style.left = left + 'px';
-      pop.style.top = Math.max(8, Math.min(b.y - 6, stage.offsetHeight - pop.offsetHeight - 8)) + 'px';
-      void d;
-    }
-    function hidePop() { pop.classList.remove('on'); }
 
     stage.addEventListener('mouseover', function (e) {
       var d = e.target.closest('.cnode'); if (!d || pinned) return;
@@ -251,17 +236,137 @@
     });
     stage.addEventListener('click', function (e) {
       var d = e.target.closest('.cnode');
-      if (!d) { pinned = null; mark(null); hidePop(); return; }
+      if (!d) { pinned = null; mark(null); return; }
       e.stopPropagation();
       var id = d.id.slice(2);
-      if (pinned === id) { pinned = null; mark(null); hidePop(); return; }
-      pinned = id; mark(id); showPop(byId[id], d);
+      if (pinned === id) { pinned = null; mark(null); return; }
+      pinned = id; mark(id);
     });
     stage.addEventListener('keydown', function (e) {
       var d = e.target.closest('.cnode'); if (!d) return;
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); d.click(); }
-      if (e.key === 'Escape') { pinned = null; mark(null); hidePop(); }
+      if (e.key === 'Escape') { pinned = null; mark(null); }
     });
+
+
+    /* Пояснення блоків — текстом під схемою, а не у спливаючому вікні. */
+    var list = document.createElement('dl');
+    list.className = 'clist';
+    nodes.forEach(function (n) {
+      list.innerHTML += '<dt>' + esc(n.t) + (n.s ? ' <span>' + esc(n.s) + '</span>' : '') + '</dt>' +
+                        '<dd>' + n.b + '</dd>';
+    });
+
+    /* ── сценарій (механіка DWH): крок = дріт + підпис, решта гасне ──── */
+    var sc = data.scenario;
+    if (sc && sc.steps && sc.steps.length) {
+      var bar = document.createElement('div');
+      bar.className = 'cscen';
+      var nums = sc.steps.map(function (_, i) {
+        return '<button type="button" class="cs-n" data-i="' + i + '">' + (i + 1) + '</button>';
+      }).join('');
+      bar.innerHTML =
+        '<button type="button" class="cs-b cs-play" aria-label="Програти">▶</button>' +
+        '<button type="button" class="cs-b cs-prev" aria-label="Попередній крок">←</button>' +
+        '<button type="button" class="cs-b cs-next" aria-label="Наступний крок">→</button>' +
+        '<span class="cs-nums">' + nums + '</span>' +
+        '<span class="cs-cap"></span>';
+      host.appendChild(bar);
+
+      var cur = -1, timer = null, playing = false;
+      var playB = bar.querySelector('.cs-play'), cap = bar.querySelector('.cs-cap');
+
+      function clearScen() {
+        stage.classList.remove('is-flow');
+        [].forEach.call(stage.querySelectorAll('.is-lit'), function (n) { n.classList.remove('is-lit'); });
+        [].forEach.call(svg.querySelectorAll('.is-lit'), function (n) { n.classList.remove('is-lit'); });
+        svg.querySelectorAll('path').forEach(function (p) {
+          p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; p.style.transition = '';
+        });
+      }
+      function litNode(id) { var d = document.getElementById('c-' + id); if (d) d.classList.add('is-lit'); }
+      function litWire(a, b, animate) {
+        var p = wireEl[a + '>' + b]; if (!p) return;
+        p.classList.add('is-lit');
+        var h = [].filter.call(svg.querySelectorAll('polygon'), function (t) {
+          return t.dataset.a === a && t.dataset.b === b;
+        })[0];
+        if (h) h.classList.add('is-lit');
+        var off = false;
+        try { off = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+        if (animate && !off) {
+          var len = p.getTotalLength();
+          p.style.transition = 'none';
+          p.style.strokeDasharray = len; p.style.strokeDashoffset = len;
+          p.getBoundingClientRect();
+          p.style.transition = 'stroke-dashoffset .38s linear';
+          p.style.strokeDashoffset = 0;
+        }
+      }
+      function draw(i, animate) {
+        clearScen();
+        stage.classList.add('is-flow');
+        cur = i;
+        for (var k = 0; k <= i; k++) {
+          var st = sc.steps[k];
+          (st.n || []).forEach(litNode);
+          if (st.w) {
+            var ws = Array.isArray(st.w[0]) ? st.w : [st.w];
+            ws.forEach(function (pair) {
+              litNode(pair[0]); litNode(pair[1]);
+              litWire(pair[0], pair[1], animate && k === i);
+            });
+          }
+        }
+        cap.textContent = sc.steps[i].d;
+        [].forEach.call(bar.querySelectorAll('.cs-n'), function (b) {
+          b.classList.toggle('on', +b.dataset.i === i);
+        });
+      }
+      function stop() {
+        playing = false; clearTimeout(timer); timer = null;
+        playB.textContent = '▶'; playB.classList.remove('on');
+      }
+      function reset() { stop(); cur = -1; clearScen(); cap.textContent = ''; 
+        [].forEach.call(bar.querySelectorAll('.cs-n'), function (b) { b.classList.remove('on'); }); }
+      function tick() {
+        timer = setTimeout(function () {
+          if (cur >= sc.steps.length - 1) { stop(); return; }
+          draw(cur + 1, true); tick();
+        }, 1700);
+      }
+      function play() {
+        playing = true; playB.textContent = '❙❙'; playB.classList.add('on');
+        draw(cur >= sc.steps.length - 1 ? 0 : cur + 1, true); tick();
+      }
+      playB.addEventListener('click', function (e) { e.stopPropagation(); playing ? stop() : play(); });
+      bar.querySelector('.cs-prev').addEventListener('click', function (e) {
+        e.stopPropagation(); stop(); draw(Math.max(0, cur - 1), false);
+      });
+      bar.querySelector('.cs-next').addEventListener('click', function (e) {
+        e.stopPropagation(); stop(); draw(Math.min(sc.steps.length - 1, cur + 1), true);
+      });
+      bar.addEventListener('click', function (e) {
+        var b = e.target.closest('.cs-n'); if (!b) return;
+        e.stopPropagation(); stop(); draw(+b.dataset.i, true);
+      });
+      stage.addEventListener('click', function (e) { e.stopPropagation(); });
+      document.addEventListener('click', function (e) {
+        if (bar.contains(e.target) || stage.contains(e.target)) return;
+        reset();
+      });
+      window.addEventListener('keydown', function (e) {
+        if (!stage.classList.contains('is-flow')) return;
+        if (e.key === 'ArrowRight') { stop(); draw(Math.min(sc.steps.length - 1, cur + 1), true); }
+        if (e.key === 'ArrowLeft') { stop(); draw(Math.max(0, cur - 1), false); }
+        if (e.key === 'Escape') reset();
+      });
+    }
+
+    /* Порядок: схема → керування сценарієм → підпис → пояснення блоків. */
+    var after = host.nextElementSibling;
+    if (after && after.classList.contains('chint')) after.parentNode.insertBefore(list, after.nextSibling);
+    else host.appendChild(list);
 
     return { stage: stage, svg: svg, box: box, nodes: nodes, links: links, missed: missed };
   }
@@ -277,7 +382,6 @@
       var s = made[k].stage;
       s.classList.remove('is-hot');
       [].forEach.call(s.querySelectorAll('.is-hot,.is-dim'), function (n) { n.classList.remove('is-hot', 'is-dim'); });
-      var p = s.querySelector('.cpop'); if (p) p.classList.remove('on');
     });
   });
 
