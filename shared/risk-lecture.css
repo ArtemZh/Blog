@@ -1,0 +1,142 @@
+/* Сторінка 27 «Управління ризиками»: вкладки й елементи лекції.
+   Картинки слайдів перемальовані розміткою в кольорах сайту. */
+.tabsw{display:flex;border:1px solid var(--rule);border-radius:var(--r-md);overflow:hidden;flex:0 0 auto}
+.tabsw button{border:0;background:var(--paper);font:500 12.5px/1 var(--sans);color:var(--ink-2);padding:8px 13px;cursor:pointer}
+.tabsw button + button{border-left:1px solid var(--rule)}
+.tabsw button.on{background:var(--act);color:#fff}
+body[data-tab="lecture"] #app, body[data-tab="app"] #lecture{display:none}
+body[data-tab="lecture"] #appToc, body[data-tab="app"] #lecToc{display:none}
+.topbar .toc a[data-n]::before{content:attr(data-n)}
+
+.sec h3 small{font:500 10.5px/1 var(--mono);color:var(--ink-3);margin-left:6px;letter-spacing:.04em}
+.quote{border-left:3px solid var(--act);padding:8px 14px;background:var(--act-soft);border-radius:0 var(--r-md) var(--r-md) 0;
+  font-size:14.5px;color:var(--ink)}
+.cmp2,.cmp3,.cmp4{display:grid;gap:var(--sp-sm);margin:var(--sp-sm) 0}
+.cmp2{grid-template-columns:repeat(2,minmax(0,1fr))}.cmp3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cmp4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.cc{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--paper);padding:11px 13px;font-size:13px;color:var(--ink-2)}
+.cc b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:5px}
+.cc ul{margin:0;padding-left:16px;line-height:1.55}.cc p{margin:0;max-width:none}
+.cc.bad{border-top:3px solid var(--c-clay)}.cc.good{border-top:3px solid var(--c-green)}.cc.opp{border-top:3px solid var(--c-gold)}
+@media(max-width:900px){.cmp3,.cmp4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.cmp2,.cmp3,.cmp4{grid-template-columns:1fr}}
+ul.dl{padding-left:18px;font-size:13.5px;line-height:1.6;color:var(--ink-2);max-width:80ch}
+ol.steps5{padding-left:20px;font-size:13.5px;line-height:1.6;color:var(--ink-2);max-width:80ch}
+ol.steps5 li{margin-bottom:4px}
+
+.fig{margin:var(--sp-md) 0;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--ground);padding:18px}
+.fig figcaption{margin-top:12px;font-size:12px;color:var(--ink-3)}
+
+/* ризик ≠ issue */
+.tl{display:grid;grid-template-columns:1fr 110px 1fr;gap:10px;align-items:stretch}
+.tl-side{display:flex;flex-direction:column;gap:8px}
+.tl-card,.tl-tool{border-radius:var(--r-md);padding:10px 12px;text-align:center;font-size:12.5px}
+.tl-card b,.tl-tool b{display:block;font-size:13.5px;color:var(--ink)}
+.tl-card span,.tl-tool span{color:var(--ink-3)}
+.tl-card.risk{border:1.5px solid var(--c-gold);background:var(--c-gold-s)}
+.tl-card.issue{border:1.5px solid var(--c-clay);background:var(--c-clay-s)}
+.tl-tool{border:1px solid var(--rule);background:var(--paper)}
+.tl-mid{border-left:2px dashed var(--c-clay);margin:0 auto;display:flex;align-items:center}
+.tl-mid span{writing-mode:vertical-rl;transform:rotate(180deg);font:600 10.5px var(--mono);color:var(--c-clay);padding:4px}
+@media(max-width:620px){.tl{grid-template-columns:1fr}.tl-mid{border-left:0;border-top:2px dashed var(--c-clay);width:100%}.tl-mid span{writing-mode:initial;transform:none}}
+
+/* Figure 2-46 */
+.quad4{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-sm);margin:var(--sp-sm) 0}
+.quad4 div{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--paper);padding:11px 13px}
+.quad4 b{font-size:13.5px}.quad4 i{display:block;font:500 10.5px/1.3 var(--mono);color:var(--ink-3);font-style:normal;margin:2px 0 5px}
+.quad4 p{margin:0;font-size:12.5px;color:var(--ink-2)}
+.quad4 div:nth-child(2){border-color:var(--act)}
+
+/* причина → подія → ефект */
+.chain3{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr;align-items:center}
+.ch{border-radius:var(--r-md);padding:12px;text-align:center;font-size:12.5px;background:var(--paper)}
+.ch em{display:block;font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;font-style:normal;margin-bottom:6px}
+.ch b{display:block;font-size:14px}.ch span{color:var(--ink-3)}
+.ch.cause{border:1.5px solid var(--c-blue)}.ch.cause em{color:var(--c-blue)}
+.ch.event{border:1.5px solid var(--c-gold);background:var(--c-gold-s)}.ch.event em{color:var(--c-gold)}
+.ch.effect{border:1.5px solid var(--c-clay);background:var(--c-clay-s)}.ch.effect em{color:var(--c-clay)}
+.arr{text-align:center;font-size:20px;color:var(--ink)}
+.trig{margin:10px auto 0;width:max-content;max-width:100%;border:1.5px dashed var(--ink-3);border-radius:999px;padding:7px 16px;font-size:12.5px;color:var(--ink-2)}
+.trig span{margin-right:6px;color:var(--ink-3)}
+@media(max-width:620px){.chain3{grid-template-columns:1fr}.arr{transform:rotate(90deg)}}
+
+/* процеси */
+.pflow{display:grid;grid-template-columns:4fr 1.2fr 1.2fr;gap:10px}
+.pg em{display:block;font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;font-style:normal;color:var(--ink-3);
+  background:var(--act-soft);border-radius:var(--r-sm);padding:6px 8px;margin-bottom:8px;text-align:center}
+.row6{display:flex;gap:6px}
+.pb{flex:1;border:1.5px solid var(--ink);border-radius:var(--r-md);background:var(--paper);padding:10px 6px;text-align:center;font-size:12px;font-weight:600}
+.pb small{display:block;font-weight:400;color:var(--ink-3);font-size:10.5px;margin-top:2px}
+.pb.hl{border-color:var(--c-gold);background:var(--c-gold-s)}
+@media(max-width:900px){.pflow{grid-template-columns:1fr}.row6{flex-wrap:wrap}.pb{flex:1 1 40%}}
+
+/* дерево рішень */
+.tree{display:grid;grid-template-columns:130px 1fr;gap:16px;align-items:center}
+.tr-root{background:var(--ink);color:var(--ground);border-radius:var(--r-md);padding:12px;text-align:center;font-size:12.5px;font-weight:600}
+.tr-br{display:flex;flex-direction:column;gap:12px}
+.tr-opt{display:grid;grid-template-columns:150px 1fr 140px;gap:12px;align-items:center}
+.tr-l b{display:block;font-size:13px}.tr-l span{font-size:12px;color:var(--ink-3)}
+.tr-out{display:flex;flex-direction:column;gap:6px}
+.o{border-radius:var(--r-md);padding:6px 10px;font-size:12px;font-weight:600;background:var(--paper)}
+.o span{display:block;font-weight:400;color:var(--ink-3)}
+.o.bad{border:1.5px solid var(--c-clay);color:var(--c-clay)}.o.ok{border:1.5px solid var(--c-green);color:var(--c-green)}
+.tr-emv{border:1.5px solid var(--rule-2);border-radius:var(--r-md);padding:10px;text-align:center;background:var(--paper)}
+.tr-emv b{display:block;font-size:14px}.tr-emv span{font-size:11.5px;color:var(--ink-3)}
+.tr-emv.win{border-color:var(--act);background:var(--act-soft)}
+@media(max-width:760px){.tree,.tr-opt{grid-template-columns:1fr}}
+
+/* дзеркало стратегій */
+.mirror{display:grid;grid-template-columns:1fr 150px 1fr;gap:8px 10px;align-items:center}
+.mh,.mc{border-radius:var(--r-md);padding:9px 12px;text-align:center;font-size:13px;background:var(--paper)}
+.mh{font-weight:700;letter-spacing:.02em}
+.mh.bad,.mc.bad{border:1.5px solid var(--c-clay)}.mh.bad{background:var(--c-clay-s)}
+.mh.good,.mc.good{border:1.5px solid var(--c-green)}.mh.good{background:var(--c-green-s)}
+.mm{font-size:11px;color:var(--ink-3);text-align:center;font-style:italic}
+@media(max-width:620px){.mirror{grid-template-columns:1fr 1fr}.mm,.mh-mid{grid-column:1/-1}}
+
+/* життєвий цикл */
+.life{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.lf{border:1.5px solid var(--ink);border-radius:var(--r-md);background:var(--paper);padding:10px 12px;font-size:13px;font-weight:600;text-align:center}
+.lf small{display:block;font-weight:400;color:var(--ink-3);font-size:11px}
+.lf.bad{border-color:var(--c-clay);background:var(--c-clay-s)}.lf.good{border-color:var(--c-green);background:var(--c-green-s)}
+.la{color:var(--ink-3)}
+.lf-end{display:flex;flex-direction:column;gap:6px}
+
+/* версії реєстру, зони, кейси */
+.regv{display:flex;gap:4px;margin:6px 0}
+.regv span{font:600 10px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:6px 9px;border-radius:var(--r-sm);
+  border:1px solid var(--rule);color:var(--ink-3)}
+.regv span.on{background:var(--act);border-color:var(--act);color:#fff}
+.zn{font-size:12px;font-weight:600;padding:3px 8px;border-radius:var(--r-sm)}
+.zn.z1{background:var(--c-green-s);color:var(--c-green)}.zn.z2{background:var(--warm);color:var(--signal-ink)}
+.zn.z3{background:var(--c-gold-s);color:var(--c-gold)}.zn.z4{background:var(--c-clay-s);color:var(--c-clay)}
+.case{border:1px solid var(--rule);border-left:3px solid var(--c-blue);border-radius:0 var(--r-md) var(--r-md) 0;
+  background:var(--paper);padding:12px 15px;margin:var(--sp-md) 0;font-size:13px;line-height:1.55;color:var(--ink-2)}
+.case b:first-child{color:var(--ink)}
+.case .src{display:block;margin-top:6px;font-size:11.5px}
+
+/* матриця P×I і графіки */
+.pim{display:grid;grid-template-columns:28px repeat(5,minmax(0,1fr));gap:3px;max-width:520px;margin:0 auto}
+.pim div{aspect-ratio:1.6;display:flex;align-items:center;justify-content:center;border-radius:4px;font:600 12px var(--mono)}
+.pim .ax{background:none;color:var(--ink-3);aspect-ratio:auto}
+.pim .k1{background:var(--c-green-s);color:var(--c-green)}.pim .k2{background:var(--warm);color:var(--signal-ink)}
+.pim .k3{background:var(--c-gold-s);color:var(--c-gold)}.pim .k4{background:var(--c-clay-s);color:var(--c-clay)}
+.pim-cap{display:flex;justify-content:space-between;max-width:520px;margin:6px auto 0;font:500 11px var(--mono);color:var(--ink-3)}
+svg.chart{width:100%;height:auto;display:block}
+svg.chart text{font:500 11px var(--mono);fill:var(--ink-3)}
+
+/* блок 14 — кейси */
+#app .c14q,#app .c14done{margin:10px 0;font-size:13.5px}
+#app .c14opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+#app .c14opts .btn{text-align:left}
+#app .c14ok,#app .c14no,#app .c14warn{margin-top:6px;padding:7px 10px;border-radius:var(--r-sm);font-size:13px}
+#app .c14ok{background:var(--c-green-s)}#app .c14no{background:var(--c-clay-s)}#app .c14warn{background:var(--c-gold-s)}
+#app .c14real{margin-top:6px;font-size:13px;color:var(--ink-2)}
+#app .c14src{margin-top:10px;font-size:11.5px;color:var(--ink-3)}
+#app .blk{scroll-margin-top:72px}
+
+/* 15 блоків додатку — один рядок, гортається вбік. */
+#appToc{flex-wrap:nowrap;overflow-x:auto;min-width:0;scrollbar-width:none}
+#appToc::-webkit-scrollbar{display:none}
+.topbar{flex-wrap:nowrap}
+.topbar .brand{white-space:nowrap}

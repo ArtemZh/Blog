@@ -363,10 +363,24 @@
       });
     }
 
-    /* Порядок: схема → керування сценарієм → підпис → пояснення блоків. */
+    /* Кроки сценарію — ще й текстом, щоб читати без кліків. */
+    if (sc && sc.steps && sc.steps.length) {
+      var ol = document.createElement('ol');
+      ol.className = 'cslist';
+      sc.steps.forEach(function (st) {
+        var li = document.createElement('li');
+        li.textContent = st.d.replace(/^\d+\.\s*/, '');
+        ol.appendChild(li);
+      });
+      list.parentNode ? list.parentNode.insertBefore(ol, list) : null;
+      var olPending = ol;
+    }
+
+    /* Порядок: схема → керування → підпис → кроки → пояснення блоків. */
     var after = host.nextElementSibling;
     if (after && after.classList.contains('chint')) after.parentNode.insertBefore(list, after.nextSibling);
     else host.appendChild(list);
+    if (typeof olPending !== 'undefined' && olPending) list.parentNode.insertBefore(olPending, list);
 
     return { stage: stage, svg: svg, box: box, nodes: nodes, links: links, missed: missed };
   }

@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20260922144732">
-<link rel="stylesheet" href="shared/style.css?v=20260922144732">
+<link rel="stylesheet" href="shared/tokens.css?v=20260922211510">
+<link rel="stylesheet" href="shared/style.css?v=20260922211510">
 <style>
 /* ── Хаб: один екран ────────────────────────────────────────────────────────
    Три смуги: знайомство · підходи · статті. Висоти й відступи від висоти
@@ -83,7 +83,7 @@ html[lang="en"] .item .en{display:none}
   height:calc(var(--G) / 2);background:var(--rule-2)}
 
 /* статті: без мініатюр, 4 колонки; чернетки другим рядом, приглушені */
-.arts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.4vh,14px) clamp(12px,1.4vw,20px)}
+.arts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1.4vh,14px) clamp(12px,1.4vw,20px)}
 .arts .item{height:calc(var(--ih) - 6px)}
 .arts .item .hv-wrap{height:calc(var(--ih) - 22px)}
 .item.is-draft .hv-wrap{opacity:.75}
@@ -163,6 +163,7 @@ html[lang="en"] .item .en{display:none}
   <section class="band grow" id="s-articles">
     <h2 data-en="Articles">Статті</h2>
     <div class="arts">
+      <a class="item" href="27-risk-lecture.html" data-hv="27-risk-lecture.html"><span><span class="tt"><span class="n">27</span><span data-en="Risk lecture">Лекція: ризики</span></span><p data-en="PMBOK 8, real cases, interactive app">PMBOK 8, реальні кейси, практикум</p></span></a>
       <a class="item" href="24-dwh.html" data-hv="24-dwh.html"><span><span class="tt"><span class="n">24</span><span data-en="Data and its governance">Дані та керування ними</span></span><p data-en="Sources, DWH, data governance">Джерела, DWH, data governance</p></span></a>
       <a class="item" href="23-release.html" data-hv="23-release.html"><span><span class="tt"><span class="n">23</span><span data-en="Release management">Реліз-менеджмент</span></span><p data-en="Windows, strategies, Go/No-Go, DORA">Вікна, стратегії, Go/No-Go, DORA</p></span></a>
       <a class="item" href="17-ai.html" data-hv="17-ai.html"><span><span class="tt"><span class="n">17</span><span data-en="AI slop helper">AI slop helper</span></span><p data-en="Provenance marks inside the document">Помітки походження в документі</p></span></a>
@@ -178,8 +179,8 @@ html[lang="en"] .item .en{display:none}
 </main>
 </div>
 
-<script src="shared/lang.js?v=20260922144732"></script>
-<script src="shared/nav.js?v=20260922144732"></script>
-<script src="shared/hub-visuals.js?v=20260922144732"></script>
+<script src="shared/lang.js?v=20260922211510"></script>
+<script src="shared/nav.js?v=20260922211510"></script>
+<script src="shared/hub-visuals.js?v=20260922211510"></script>
 </body>
 </html>

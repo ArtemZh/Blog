@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Управління ризиками — лекція і практикум</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20260922211510">
+<link rel="stylesheet" href="shared/style.css?v=20260922211510">
+<style>
+/* ── сторінка компетенцій ──────────────────────────────────────────────
+   Зміст ліворуч липкий, розділи однакової будови: суть → схема →
+   техніки → артефакти → пастки. Терміни лишаються англійською. */
+.comp-wrap{max-width:none}
+/* Розділи — праворуч у хедері, як .top__nav у статті 21. */
+.topbar .toc{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap;counter-reset:s}
+.topbar .toc a{counter-increment:s;font-size:12px;padding:5px 9px;border-radius:var(--r-sm);
+  text-decoration:none;color:var(--ink-3);border:1px solid transparent;white-space:nowrap}
+.topbar .toc a::before{content:counter(s);font:600 9.5px/1 var(--mono);color:var(--ink-3);margin-right:6px}
+.topbar .toc a:hover{color:var(--ink);border-color:var(--rule)}
+.topbar .toc a.on{color:var(--act);background:var(--act-soft)}
+.topbar .toc a.on::before{color:var(--act)}
+@media(max-width:1100px){.topbar .toc{flex-wrap:nowrap;overflow-x:auto;min-width:0;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch}.topbar .toc::-webkit-scrollbar{display:none}
+  .topbar .brand{white-space:nowrap}}
+.sec{scroll-margin-top:72px;padding-top:var(--sp-md)}
+.sec + .sec{border-top:1px solid var(--rule);margin-top:var(--sp-xl)}
+.sec h2{font-size:23px;letter-spacing:-.02em;margin-bottom:6px}
+.sec h2 .num{font:600 12px/1 var(--mono);color:var(--act);display:block;margin-bottom:6px}
+.sec h3{font-size:15px;margin:var(--sp-lg) 0 var(--sp-xs)}
+.sec p{max-width:74ch}
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:var(--sp-sm);margin:var(--sp-sm) 0}
+.part{border:1px solid var(--rule);border-radius:var(--r-md);padding:11px 13px;background:var(--paper)}
+.part b{display:block;font-size:13.5px;margin-bottom:3px}
+.part span{font-size:12.5px;color:var(--ink-3);line-height:1.45}
+
+table.t{width:100%;border-collapse:collapse;font-size:13px;margin-top:var(--sp-xs)}
+table.p{width:100%;border-collapse:collapse;font-size:12.5px;margin:var(--sp-xs) 0 var(--sp-sm)}
+table.p th{text-align:left;font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);padding:0 10px 7px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
+table.p td{padding:7px 10px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+table.p td:first-child{color:var(--ink);font-weight:600;width:250px}
+table.p td:last-child{color:var(--ink-3);width:250px}
+@media(max-width:820px){table.p td:first-child,table.p td:last-child{width:auto}}
+table.p.p4 td:first-child{width:210px}
+table.p.p4 td.in{width:230px;color:var(--ink-3);font-size:12px}
+table.p.p4 td:last-child{width:210px}
+.subnav{display:flex;flex-wrap:wrap;gap:6px;margin:var(--sp-sm) 0 var(--sp-md)}
+.subnav a{font-size:12.5px;padding:5px 10px;border:1px solid var(--rule);border-radius:var(--r-md);
+  text-decoration:none;color:var(--ink-2);background:var(--paper)}
+.subnav a:hover{border-color:var(--act);color:var(--ink)}
+.sub{scroll-margin-top:72px}
+.trap.sm{font-size:12.5px;padding:9px 12px;margin-top:var(--sp-sm)}
+.cslist{margin:10px 0 0;padding-left:20px;font-size:12.5px;line-height:1.55;color:var(--ink-2)}
+.cslist li{margin-bottom:4px}
+table.t th{text-align:left;font:600 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);padding:0 10px 8px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
+table.t td{padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+table.t td:first-child{color:var(--ink);font-weight:600;width:210px}
+table.t td:first-child small{display:block;font:500 11px/1.3 var(--mono);color:var(--ink-3);font-weight:400;margin-top:2px}
+table.t td.ex{color:var(--ink-3)}
+@media(max-width:820px){ table.t td:first-child{width:auto} table.t,table.t tbody,table.t tr,table.t td{display:block;width:auto}
+  table.t thead{display:none} table.t tr{border-bottom:1px solid var(--rule);padding:8px 0} table.t td{border:0;padding:2px 0} }
+
+.trap{border-left:3px solid var(--signal-ink);background:var(--warm);border-radius:0 var(--r-md) var(--r-md) 0;
+  padding:11px 14px;margin-top:var(--sp-sm);font-size:13px;color:var(--ink-2)}
+.trap b{color:var(--ink)}
+.src{font-size:12px;color:var(--ink-3);margin-top:var(--sp-sm)}
+
+/* ── схеми (shared/comp.js) ──────────────────────────────────────────── */
+.cbox{border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--ground);padding:14px;
+  margin:var(--sp-md) 0 var(--sp-xs)}
+.cfit{overflow-x:auto}
+.cstage{position:relative;margin:0 auto}
+.cwires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.clane{position:absolute;top:0;font:600 10px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-3);text-align:center;padding-bottom:8px}
+.cnode{position:absolute;border:1px solid var(--rule);border-radius:var(--r-md);background:var(--paper);
+  padding:8px 10px;cursor:pointer;transition:border-color .15s,background .15s,opacity .15s;overflow:hidden}
+.cnode b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12.5px;line-height:1.25;letter-spacing:-.01em}
+.cnode i{display:block;font:500 10px/1.3 var(--mono);color:var(--ink-3);font-style:normal;margin-top:3px}
+.cnode:hover,.cnode:focus-visible{border-color:var(--act);background:var(--act-soft);outline:none}
+.cstage.is-hot .cnode.is-dim{opacity:.3}
+.cstage.is-hot .cnode.is-hot{border-color:var(--act)}
+.cw{fill:none;stroke:var(--rule-2);stroke-width:1.4;stroke-linejoin:round}
+.chead{fill:var(--rule-2)}
+.cw.w-loop{stroke:var(--c-teal);stroke-dasharray:5 4}.chead.w-loop{fill:var(--c-teal)}
+.cw.w-rule{stroke:var(--c-clay);stroke-dasharray:2 4}.chead.w-rule{fill:var(--c-clay)}
+.cwt{font:500 9.5px var(--mono);fill:var(--ink-3)}
+.cstage.is-hot .cw.is-dim,.cstage.is-hot .chead.is-dim,.cstage.is-hot .cwt.is-dim{opacity:.12}
+.cstage.is-hot .cw.is-hot{stroke:var(--act)}.cstage.is-hot .chead.is-hot{fill:var(--act)}
+.clist{display:grid;grid-template-columns:190px minmax(0,1fr);gap:0 18px;margin:12px 0 0;font-size:12.5px;
+  border-top:1px solid var(--rule);padding-top:10px}
+.clist dt{font-weight:600;color:var(--ink);padding:5px 0}
+.clist dt span{display:block}
+.clist dt span{font:500 10px/1.3 var(--mono);color:var(--ink-3);margin-top:2px}
+.clist dd{margin:0;padding:5px 0;color:var(--ink-2);line-height:1.5}
+@media(max-width:760px){.clist{grid-template-columns:1fr}}
+.chint{font-size:11.5px;color:var(--ink-3);margin:0}
+
+/* ── сценарій на схемі (механіка DWH) ───────────────────────────────── */
+.cscen{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px}
+.cs-b,.cs-n{border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);border-radius:var(--r-sm);
+  cursor:pointer;font:500 11px/1 var(--mono);padding:0;height:24px;min-width:24px}
+.cs-b:hover,.cs-n:hover{border-color:var(--act);color:var(--ink)}
+.cs-b.on,.cs-n.on{background:var(--act);border-color:var(--act);color:#fff}
+.cs-nums{display:flex;gap:4px;margin-left:4px}
+.cs-cap{flex:1 1 260px;font-size:12.5px;line-height:1.45;color:var(--ink-2);min-height:18px}
+.cstage.is-flow .cnode{opacity:.22}
+.cstage.is-flow .cw,.cstage.is-flow .chead,.cstage.is-flow .cwt{opacity:.12}
+.cstage.is-flow .cnode.is-lit{opacity:1;border-color:var(--act);background:var(--act-soft)}
+.cstage.is-flow .cw.is-lit{opacity:1;stroke:var(--act);stroke-width:2}
+.cstage.is-flow .chead.is-lit{opacity:1;fill:var(--act)}
+
+/* ── підрозділи з входами й виходами ────────────────────────────────── */
+.sub{border-top:1px solid var(--rule);margin-top:var(--sp-md);padding-top:var(--sp-sm)}
+.sub h3{margin-top:0;font-size:14.5px;display:flex;align-items:baseline;gap:8px}
+.sub h4.sh,.sec h4.sh{font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);margin:var(--sp-md) 0 var(--sp-xs)}
+table.t td.pr{font:500 11px/1.35 var(--mono);color:var(--ink-3);width:150px}
+@media(max-width:820px){table.t td.pr{width:auto}}
+.sub h3 em{font:500 10px/1 var(--mono);color:var(--ink-3);font-style:normal;letter-spacing:.05em;text-transform:uppercase}
+.sub > p{font-size:13px;color:var(--ink-2);margin:2px 0 0;max-width:80ch}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-sm);margin:var(--sp-sm) 0}
+.io div{border:1px solid var(--rule);border-radius:var(--r-md);padding:9px 12px;background:var(--paper)}
+.io b{display:block;font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.io ul{margin:0;padding-left:15px;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+.tt{font-size:12.5px;color:var(--ink-2);margin:0 0 4px}
+.tt b{color:var(--ink)}
+@media(max-width:760px){.io{grid-template-columns:1fr}}
+
+/* ── таби підходів (01) ─────────────────────────────────────────────── */
+.apg{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-sm);margin-top:var(--sp-sm)}
+.tpan{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--paper);padding:12px 14px}
+.tpan h4{margin:0 0 8px;font-size:13.5px}
+@media(max-width:760px){.apg{grid-template-columns:1fr}}
+.tpan dl{display:grid;grid-template-columns:104px minmax(0,1fr);gap:5px 10px;margin:0;font-size:12.5px}
+.tpan dt{font:600 10px/1.5 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.tpan dd{margin:0;color:var(--ink-2)}
+</style>
+<link rel="stylesheet" href="shared/risk-lecture.css?v=20260922211510">
+<link rel="stylesheet" href="shared/risk-app.css?v=20260922211510">
+</head>
+<body data-tab="lecture">
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top">Управління ризиками</a>
+  <div class="tabsw" role="tablist" aria-label="Вкладки">
+    <button type="button" data-tab="lecture" class="on" role="tab">Лекція</button>
+    <button type="button" data-tab="app" role="tab">Інтерактивний додаток</button>
+  </div>
+  <nav class="toc" id="lecToc" aria-label="Розділи лекції">
+    <a href="#l0">Вступ</a><a href="#l1">Що таке ризик</a><a href="#l2">Процес</a>
+    <a href="#l3">Аналіз</a><a href="#l4">Реагування</a><a href="#l5">Моніторинг</a>
+  </nav>
+  <nav class="toc" id="appToc" aria-label="Блоки додатку"></nav>
+</header>
+
+<main class="main" id="top">
+  <header class="mast wrap">
+    <div class="kicker">PMBOK® Guide 8th Edition · Risk Performance Domain · лекція</div>
+    <h1>Управління ризиками</h1>
+    <p class="lede">Як помітити проблему до того, як вона стала проблемою. Дві вкладки: <b>лекція</b> —
+      читати підряд, з реальними кейсами й доповненнями з PMBOK 8; <b>інтерактивний додаток</b> — те саме руками:
+      сортуємо, конструюємо, оцінюємо, симулюємо й ведемо живий реєстр ризиків навчального проєкту
+      «інтернет-магазин». Прогрес у додатку зберігається лише у вашому браузері.</p>
+  </header>
+
+  <div id="lecture" role="tabpanel">
+<section class="sec" id="l0">
+  <h2><span class="num">00</span>Вступ</h2>
+  <p>Лекція йде п’ятьма кроками: що таке ризик → процес → аналіз → реагування →
+    моніторинг. Практика по ходу: реєстр ризиків навчального проєкту «інтернет-магазин» у чотирьох версіях —
+    від опису до статусу. Ту саму практику можна пройти руками у вкладці «Інтерактивний додаток».</p>
+
+  <h3>Навіщо PM думати про те, чого ще немає</h3>
+  <div class="cmp3">
+    <div class="cc bad"><b>Без управління ризиками</b><ul><li>Команда реагує на пожежі</li><li>Резерви «з’їдені» непомітно</li><li>Клієнт дізнається про проблему останнім</li><li>Рішення ухвалюються в паніці</li></ul></div>
+    <div class="cc good"><b>З управлінням ризиками</b><ul><li>Відомо, що робити, коли щось стається</li><li>Резерв обґрунтований і прозорий</li><li>Сюрпризів для стейкхолдерів менше</li><li>Рішення — заздалегідь, у спокої</li></ul></div>
+    <div class="cc opp"><b>І ще — можливості</b><ul><li>Ризик буває позитивним</li><li>Раніше звільнився розробник</li><li>Партнер дає знижку на API</li><li>Їх теж варто «ловити» свідомо</li></ul></div>
+  </div>
+  <p>У PMBOK 8 мета домену — <b>project resilience</b>: передбачати, готуватися, реагувати й адаптуватися.
+    Принцип «оптимізуй реагування на ризики» з PMBOK 7 у восьмій редакції повністю переїхав у Risk Performance
+    Domain — тепер усе про ризики в одному місці.</p>
+</section>
+
+<section class="sec" id="l1">
+  <h2><span class="num">01</span>Що таке ризик</h2>
+  <p>Визначення, типи, анатомія, формулювання.</p>
+
+  <h3>Ризик за PMI</h3>
+  <p class="quote">Невизначена подія або умова, яка, якщо станеться, позитивно чи негативно вплине на одну чи
+    кілька цілей проєкту (програми, портфеля).</p>
+  <div class="cmp2">
+    <div class="cc bad"><b>Загроза (threat) — «−»</b><ul><li>Затримка, перевитрата, шкода репутації</li><li>Хочемо зменшити ймовірність і вплив</li><li>Приклад: платіжний провайдер змінить API за тиждень до релізу</li></ul></div>
+    <div class="cc good"><b>Можливість (opportunity) — «+»</b><ul><li>Економія, частка ринку, позитивний вплив на довкілля</li><li>Хочемо збільшити ймовірність і вплив</li><li>Приклад: готовий модуль доставки скоротить інтеграцію на 2 тижні</li></ul></div>
+  </div>
+  <p>Ключові слова визначення: «невизначена» (може й не статися) і «вплив на цілі» (якщо не впливає ні на що —
+    це не ризик, а просто факт).</p>
+
+  <h3>Ризик ≠ проблема (issue)</h3>
+  <figure class="fig">
+    <div class="tl">
+      <div class="tl-side"><div class="tl-card risk"><b>Ризик</b><span>може статися в майбутньому</span></div>
+        <div class="tl-tool"><b>Інструмент: реєстр ризиків</b><span>стратегія, власник, тригер, резерв на випадок</span></div></div>
+      <div class="tl-mid"><span>момент, коли подія сталася</span></div>
+      <div class="tl-side"><div class="tl-card issue"><b>Проблема (issue)</b><span>вже сталася, діяти зараз</span></div>
+        <div class="tl-tool"><b>Інструмент: журнал проблем</b><span>власник, дедлайн рішення, ескалація, change request</span></div></div>
+    </div>
+    <figcaption>Погано керований ризик перетворюється на проблему. Не кожна проблема була ризиком.</figcaption>
+  </figure>
+  <p>Питання-фільтр: <b>«Це вже сталося?»</b> Так → журнал проблем і дія сьогодні. Ні → реєстр ризиків і план на
+    випадок, якщо станеться.</p>
+
+  <h3>Чотири типи невизначеності <small>PMBOK 8 · Figure 2-46</small></h3>
+  <div class="quad4">
+    <div><b>Known–Known</b><i>відомі факти й вимоги</i><p>Не ризик — частина обсягу. «Магазин має приймати оплату карткою».</p></div>
+    <div><b>Known–Unknown</b><i>класичний ризик</i><p>Можемо оцінити P та I. «Провайдер може змінити API». → contingency reserve</p></div>
+    <div><b>Unknown–Known</b><i>прихований факт</i><p>Знання є у світі, але не в команди. «Нова вимога податкової, про яку ми не чули».</p></div>
+    <div><b>Unknown–Unknown</b><i>емерджентний ризик</i><p>Неможливо передбачити, «чорний лебідь». → management reserve і resilience</p></div>
+  </div>
+  <p>Робота PM — переводити «unknown–known» у «known–unknown»: питати експертів, читати регуляції, вчитися на
+    досвіді інших проєктів.</p>
+
+  <h3>Анатомія ризику: причина → подія → ефект</h3>
+  <figure class="fig">
+    <div class="chain3">
+      <div class="ch cause"><em>є сьогодні</em><b>Причина</b><span>факт або умова, що вже існує</span></div>
+      <div class="arr">→</div>
+      <div class="ch event"><em>невизначеність</em><b>Подія ризику</b><span>те, що може статися (або ні)</span></div>
+      <div class="arr">→</div>
+      <div class="ch effect"><em>можливий наслідок</em><b>Ефект</b><span>вплив на цілі: строки, бюджет, обсяг</span></div>
+    </div>
+    <div class="trig"><span>↑</span><b>Тригер</b> — сигнал, що подія наближається</div>
+  </figure>
+  <ul class="dl">
+    <li><b>Причина</b> вже існує. На неї діє стратегія Avoid.</li>
+    <li><b>Подія</b> невизначена. Mitigate зменшує її ймовірність.</li>
+    <li><b>Ефект</b> — наслідок для цілей. Mitigate і резерв зменшують вплив.</li>
+    <li><b>Тригер</b> — ранній сигнал, що подія наближається. Запускає план реагування.</li>
+  </ul>
+  <div class="trap"><b>Типова помилка.</b> Записати в реєстр причину («у нас немає тестувальника») замість
+    ризику. Причина — це факт; ризик — те, що через цей факт може статися.</div>
+
+  <h3>Як записати ризик</h3>
+  <p class="quote">Через &lt;причину&gt; може статися &lt;подія&gt;, що призведе до &lt;ефект на цілі&gt;.</p>
+  <p>Пишемо мовою клієнта: ризик має бути зрозумілим без усних пояснень. Ефект — завжди в термінах цілей:
+    строки, гроші, обсяг, якість, репутація.</p>
+  <table class="t">
+    <thead><tr><th>Погано</th><th>Чому</th><th>Добре</th></tr></thead>
+    <tbody>
+      <tr><td>«Проблеми з оплатою»</td><td>Немає причини, події й ефекту</td><td class="ex">Через те, що провайдер оголосив нову версію API, стара може бути вимкнена до релізу, що зсуне запуск оплати на 2–3 тижні</td></tr>
+      <tr><td>«Нема тестувальника»</td><td>Це причина, факт — не ризик</td><td class="ex">Через відсутність QA критичні дефекти можуть потрапити в прод, що призведе до втрати замовлень у перший тиждень</td></tr>
+      <tr><td>«Можливі затримки»</td><td>Розмито, неможливо оцінити</td><td class="ex">Через залежність від фіду каталогу постачальника імпорт товарів може затриматися, що зсуне наповнення на 1 тиждень</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Звідки беруться ризики в ІТ: категорії (RBS)</h3>
+  <div class="cmp4">
+    <div class="cc"><b>Технічні</b><ul><li>Нова або незнайома технологія</li><li>Інтеграції з третіми сторонами</li><li>Продуктивність і навантаження</li><li>Технічний борг</li></ul></div>
+    <div class="cc"><b>Обсяг і вимоги</b><ul><li>Неповна специфікація</li><li>Scope creep</li><li>Змінні пріоритети</li><li>Нечіткі критерії приймання</li></ul></div>
+    <div class="cc"><b>Люди й організація</b><ul><li>Ключова людина — «bus factor»</li><li>Перевантаження команди</li><li>Недоступність клієнта</li><li>Конфлікт пріоритетів</li></ul></div>
+    <div class="cc"><b>Зовнішні</b><ul><li>Регуляції й законодавство</li><li>Постачальники й підрядники</li><li>Ринок, валюта, конкуренти</li><li>Форс-мажор</li></ul></div>
+  </div>
+  <p><b>RBS</b> (Risk Breakdown Structure) — ієрархія категорій, як WBS, але для ризиків. Задається в плані
+    управління ризиками й допомагає нічого не пропустити. Корисні prompt lists для пошуку: <b>PESTLE</b>
+    (зовнішнє середовище), <b>TECOP</b> (технічні, екологічні, комерційні, операційні, політичні).</p>
+
+  <h3>Ключові поняття PMBOK 8</h3>
+  <table class="t">
+    <thead><tr><th>Поняття</th><th>Що це</th><th>Приклад</th></tr></thead>
+    <tbody>
+      <tr><td>Risk appetite</td><td>Скільки невизначеності організація готова прийняти заради вигоди</td><td class="ex">Стартап готовий ризикувати заради швидкого запуску</td></tr>
+      <tr><td>Risk threshold</td><td>Кількісна межа допустимого відхилення від цілі</td><td class="ex">Бюджет ±5% — низький апетит; ±10% — вищий</td></tr>
+      <tr><td>Risk exposure</td><td>Сукупний потенційний вплив усіх ризиків на цей момент</td><td class="ex">Сума EMV відкритих ризиків магазину — −5 100 $ (див. розділ 03)</td></tr>
+      <tr><td>Overall project risk</td><td>Вплив невизначеності на проєкт у цілому, не лише окремих ризиків</td><td class="ex">Якщо занадто високий — проєкт можуть змінити або закрити</td></tr>
+      <tr><td>Project resilience</td><td>Здатність поглинути удар і швидко відновитися</td><td class="ex">Резерви, запасні постачальники, модульна архітектура</td></tr>
+      <tr><td>Ambiguity</td><td>Неясність: незрозуміло, чого чекати чи як тлумачити</td><td class="ex">Розмита вимога — не завжди ризик, часто досить уточнити</td></tr>
+      <tr><td>Uncertainty</td><td>Брак розуміння подій, шляхів чи рішень; стосується ймовірностей</td><td class="ex">Невідомо, чи витримає платформа сезонне навантаження</td></tr>
+    </tbody>
+  </table>
+  <p>Threshold переводить «апетит» у рішення: поки відхилення в межах — PM діє сам, вийшло за межі — ескалація.
+    Ambiguity і uncertainty не завжди стають ризиками: коли зʼявляється інформація й залучаються експерти,
+    їх часто знімають спільним розв’язанням проблеми.</p>
+</section>
+
+<section class="sec" id="l2">
+  <h2><span class="num">02</span>Процес за PMBOK 8</h2>
+  <p>Шість процесів, ролі, пошук ризиків.</p>
+
+  <h3>Шість процесів Risk Performance Domain <small>PMBOK 8 · Figure 2-47</small></h3>
+  <figure class="fig">
+    <div class="pflow">
+      <div class="pg"><em>Планування</em>
+        <div class="row6"><div class="pb">Plan Risk Management</div><div class="pb">Identify Risks</div><div class="pb hl">Perform Risk Analysis<small>якісний + кількісний</small></div><div class="pb">Plan Risk Responses</div></div></div>
+      <div class="pg"><em>Виконання</em><div class="row6"><div class="pb">Implement Risk Responses</div></div></div>
+      <div class="pg"><em>Моніторинг і контроль</em><div class="row6"><div class="pb">Monitor Risks</div></div></div>
+    </div>
+    <figcaption>Цикл повторюється весь проєкт: Monitor Risks повертає до Identify і Implement — нова інформація дає нові ризики.</figcaption>
+  </figure>
+  <ul class="dl">
+    <li><b>Plan</b> — як працюватимемо з ризиками.</li>
+    <li><b>Identify</b> — шукаємо загрози й можливості.</li>
+    <li><b>Analyze</b> — оцінюємо якісно і, за потреби, кількісно.</li>
+    <li><b>Plan Responses</b> — обираємо стратегії та дії.</li>
+    <li><b>Implement</b> — виконуємо заплановане.</li>
+    <li><b>Monitor</b> — стежимо, переоцінюємо, шукаємо нові.</li>
+  </ul>
+  <p>Зміна порівняно з PMBOK 6: якісний і кількісний аналіз об’єднано в один процес <b>Perform Risk
+    Analysis</b>. Обидві техніки лишаються — змінилася лише структура.</p>
+
+  <h3>Входи, техніки й виходи кожного процесу <small>PMBOK 8 · Figures 2-48…2-53</small></h3>
+  <table class="t">
+    <thead><tr><th>Процес</th><th>Головні входи</th><th>Tools &amp; Techniques</th><th>Виходи</th></tr></thead>
+    <tbody>
+      <tr><td>Plan Risk Management</td><td>Project charter, project management plan, stakeholder register, EEF, OPA</td><td>Expert judgment, interviews, stakeholder analysis, meetings</td><td class="ex">Risk management plan</td></tr>
+      <tr><td>Identify Risks</td><td>Плани й baselines, assumption log, оцінки, issue log, lessons learned, угоди</td><td>Brainstorming, checklists, interviews, root cause, assumption and constraint analysis, SWOT, document analysis, prompt lists, facilitation, <b>artificial intelligence</b></td><td class="ex">Risk register, risk report, оновлення assumption і issue log</td></tr>
+      <tr><td>Perform Risk Analysis</td><td>Risk management plan, baselines, оцінки, risk register, stakeholder register</td><td>Expert judgment, interviews, facilitation, якісні й кількісні методи аналізу</td><td class="ex">Оновлені risk register і risk report</td></tr>
+      <tr><td>Plan Risk Responses</td><td>Risk register, risk report, розклад, team assignments, lessons learned</td><td>Стратегії для загроз, можливостей і overall risk, contingent responses, alternatives і cost-benefit analysis, MCDA</td><td class="ex">Change requests, оновлення плану й baselines, risk register</td></tr>
+      <tr><td>Implement Risk Responses</td><td>Risk management plan, risk register, risk report, lessons learned</td><td>Expert judgment, influencing, PMIS</td><td class="ex">Change requests, оновлення issue log і risk register</td></tr>
+      <tr><td>Monitor Risks</td><td>Risk management plan, risk register, issue log, work performance data і reports</td><td>Technical performance analysis, reserve analysis, audits, meetings</td><td class="ex">Work performance information, change requests, оновлення реєстрів і OPA</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Хто за що відповідає</h3>
+  <div class="cmp3">
+    <div class="cc"><b>Керівник проєкту</b><ul><li>Забезпечує, що процес існує і його дотримуються</li><li>Веде реєстр, модерує сесії</li><li>Ескалує те, що поза повноваженнями</li><li>Не закриває все на собі</li></ul></div>
+    <div class="cc"><b>Власник ризику</b><ul><li>Одна конкретна людина, не «команда»</li><li>Стежить за тригерами</li><li>Разом із PM розробляє план реагування</li><li>Запускає план, коли тригер спрацював</li></ul></div>
+    <div class="cc"><b>Команда і стейкхолдери</b><ul><li>Приносять ризики зі своєї експертизи</li><li>Виконують дії з реагування</li><li>Спонсор визначає апетит і пороги</li><li>Клієнт погоджує ризики на своєму боці</li></ul></div>
+  </div>
+  <p>Власником призначають того, хто найближче до джерела ризику й має важелі впливу: техлід — для
+    технічних, акаунт-менеджер — для договірних.</p>
+
+  <h3>Процес 1 · Plan Risk Management</h3>
+  <table class="t">
+    <thead><tr><th>Розділ плану</th><th>Що вирішуємо</th></tr></thead>
+    <tbody>
+      <tr><td>Стратегія і методологія</td><td>Наскільки глибоко працюємо, які інструменти, чи потрібен кількісний аналіз</td></tr>
+      <tr><td>Ролі та відповідальність</td><td>Хто веде реєстр, хто власники, хто погоджує ескалації</td></tr>
+      <tr><td>Бюджет і резерви</td><td>Як рахуємо contingency, хто розпоряджається management reserve</td></tr>
+      <tr><td>Частота (timing)</td><td>Коли переглядаємо: щотижня, на кожному спринті, на фазових воротах</td></tr>
+      <tr><td>Категорії (RBS)</td><td>Які групи ризиків перевіряємо</td></tr>
+      <tr><td>Шкали й матриця P×I</td><td>Що означає «висока ймовірність» і «критичний вплив» саме в цьому проєкті</td></tr>
+      <tr><td>Апетит і пороги</td><td>Допустимі відхилення, після яких ескалація</td></tr>
+      <tr><td>Звітність</td><td>Формат risk report, кому і як часто</td></tr>
+    </tbody>
+  </table>
+  <p>Для невеликого проєкту це 1–2 сторінки в Confluence. Масштаб плану — предмет tailoring.</p>
+
+  <h3>Tailoring: що підлаштовуємо під проєкт <small>PMBOK 8 · 2.7.3</small></h3>
+  <ul class="dl">
+    <li><b>Розмір і складність</b> — чи потрібен кількісний аналіз і окремий risk manager.</li>
+    <li><b>Апетит і поріг</b> — як обмеження організації звужують вибір реагування.</li>
+    <li><b>Цілісний погляд</b> — вплив і реагування на розклад, бюджет, обсяг і стейкхолдерів разом.</li>
+    <li><b>Стратегічна важливість</b> — проривні можливості й інновації несуть вищий ризик.</li>
+    <li><b>Development approach</b> — predictive, adaptive чи hybrid змінює ритм і інструменти.</li>
+    <li><b>Гнучкість реагування</b> — право змінювати стратегію без втрати цілей і з відкритою комунікацією.</li>
+    <li><b>Додаткові техніки</b> — GenAI й аналітика даних для пошуку й аналізу ризиків.</li>
+    <li><b>Resilience planning</b> — сценарії великих збоїв і зв’язок із business continuity організації.</li>
+  </ul>
+
+  <h3>Процес 2 · Identify Risks: як шукати</h3>
+  <div class="cmp4">
+    <div class="cc"><b>Мозковий штурм</b><p>Команда й експерти: спершу кількість, потім фільтр.</p></div>
+    <div class="cc"><b>Інтерв’ю</b><p>Досвідчені PM, техліди, клієнт — окремо, без групового тиску.</p></div>
+    <div class="cc"><b>Чеклисти</b><p>Ризики з минулих проєктів і lessons learned.</p></div>
+    <div class="cc"><b>Аналіз припущень</b><p>Кожне припущення з assumption log — потенційний ризик.</p></div>
+    <div class="cc"><b>Аналіз документів</b><p>Договір, специфікація, SLA: неясності й «дірки».</p></div>
+    <div class="cc"><b>Root cause analysis</b><p>«5 чому», діаграма Ісікави — від симптому до причини.</p></div>
+    <div class="cc"><b>SWOT</b><p>Слабкі сторони → загрози, сильні → можливості.</p></div>
+    <div class="cc"><b>Prompt lists і AI</b><p>PESTLE / TECOP; ШІ як генератор ідей — з перевіркою людиною.</p></div>
+  </div>
+  <p>Ідентифікація ніколи не буває повною з першого разу — PMBOK 8 прямо називає її ітеративною. Нова
+    інформація → нові ризики.</p>
+
+  <h3>Техніка: premortem — «уявімо, що проєкт провалився»</h3>
+  <ol class="steps5">
+    <li><b>Налаштування.</b> Команда знає план. Ведучий: «Минуло пів року. Проєкт — повний провал».</li>
+    <li><b>Тихе письмо.</b> 5–10 хвилин кожен сам пише, чому це сталося. Без обговорення.</li>
+    <li><b>По колу.</b> Кожен називає по одній причині, доки список не вичерпається.</li>
+    <li><b>Групування.</b> Об’єднуємо схожі, переводимо у формулу ризику.</li>
+    <li><b>Топ і дії.</b> Голосуємо за найзагрозливіші, одразу — власник і перша дія.</li>
+  </ol>
+  <p>Чому працює: знімає «оптимізм плану» — людям легше пояснити вже «сталий» провал, ніж критикувати план,
+    який усі щойно схвалили. Автор техніки — психолог Гері Кляйн. Тривалість — 45–60 хвилин. Найкращий
+    момент — одразу після затвердження плану, до старту розробки.</p>
+
+  <h3>Справжній ризик чи просто тривога?</h3>
+  <table class="t">
+    <thead><tr><th>Питання</th><th>Відповідь → куди</th></tr></thead>
+    <tbody>
+      <tr><td>Це вже сталося?</td><td>Так → це проблема, у журнал проблем</td></tr>
+      <tr><td>Це невизначено?</td><td>Ні, точно буде → це факт, плануємо як роботу</td></tr>
+      <tr><td>Впливає на цілі проєкту?</td><td>Ні → це не ризик проєкту</td></tr>
+      <tr><td>Можемо описати причину, подію й ефект?</td><td>Ні → це тривога; уточнюємо, збираємо інформацію</td></tr>
+      <tr><td>Можемо хоча б грубо оцінити P та I?</td><td>Так → у реєстр ризиків</td></tr>
+    </tbody>
+  </table>
+  <p>PMBOK 8 окремо підкреслює: важлива частина ідентифікації — відділити справжні ризики від занепокоєнь.
+    Інакше реєстр розростається й перестає працювати.</p>
+
+  <h3>Практика · реєстр ризиків V1: фіксуємо ризик</h3>
+  <div class="regv"><span class="on">Опис</span><span>Аналіз</span><span>Реагування</span><span>Моніторинг</span></div>
+  <table class="t">
+    <thead><tr><th>ID</th><th>Ризик (формула)</th><th>Тип</th><th>Категорія</th><th>Ефект</th></tr></thead>
+    <tbody>
+      <tr><td>R1</td><td>Через нову версію API платіжного провайдера стара може бути вимкнена до релізу</td><td>Загроза</td><td>Технічні</td><td class="ex">Запуск оплати зсувається на 2–3 тижні</td></tr>
+      <tr><td>R2</td><td>Через залежність від фіду постачальника імпорт каталогу може затриматися</td><td>Загроза</td><td>Зовнішні</td><td class="ex">Наповнення магазину −1 тиждень</td></tr>
+      <tr><td>R3</td><td>Через те, що дизайнер працює на двох проєктах, макети можуть надходити із запізненням</td><td>Загроза</td><td>Люди</td><td class="ex">Фронтенд простоює 3–5 днів на спринт</td></tr>
+      <tr><td>R4</td><td>Через пік навантаження в «чорну п’ятницю» сайт може не витримати трафік</td><td>Загроза</td><td>Технічні</td><td class="ex">Втрата продажів і репутації</td></tr>
+      <tr><td>O1</td><td>Завдяки готовому модулю доставки інтеграцію можна скоротити</td><td>Можливість</td><td>Технічні</td><td class="ex">Реліз на 2 тижні раніше</td></tr>
+    </tbody>
+  </table>
+  <p>Тип «загроза / можливість» пишемо явно: реєстр — не лише список неприємностей.</p>
+
+  <div class="case"><b>Реальний кейс · Healthcare.gov, 2013.</b> З липня 2011 по липень 2013 CMS отримала 18
+    задокументованих попереджень про проблеми проєкту. Через розмите керівництво їх не звели в одну картину —
+    ніхто не мав повного погляду, контингентних планів було мало. На запуску сайт отримав уп’ятеро більше
+    користувачів, ніж очікували. Урок для Identify: попередження без спільного реєстру й одного власника не
+    стають ризиками, з якими працюють.
+    <span class="src">Джерело: <a href="https://oig.hhs.gov/documents/evaluation/2981/OEI-06-14-00350-Complete%20Report.pdf" target="_blank" rel="noopener">HHS OIG, OEI-06-14-00350 (2016)</a>. Покроковий розбір — у додатку, блок 14.</span></div>
+</section>
+
+<section class="sec" id="l3">
+  <h2><span class="num">03</span>Аналіз ризиків</h2>
+  <p>Perform Risk Analysis: якісно і, коли ставки високі, кількісно.</p>
+
+  <h3>Якісний аналіз: домовляємося про шкали</h3>
+  <div class="cmp2">
+    <div class="cc"><b>Ймовірність: як оцінити</b><p>Експертна думка, історичні дані, аналогічні проєкти. Мета — відділити можливе від малоймовірного.</p></div>
+    <div class="cc"><b>Вплив: як оцінити</b><p>Щодо конкретних обмежень, якісно або в грошах і днях. Мета — відділити критичне від дрібниць. Беремо найгірший вимір.</p></div>
+  </div>
+  <table class="t">
+    <thead><tr><th>Бал</th><th>Ймовірність (P)</th><th>Вплив на строки</th><th>Вплив на бюджет</th><th>Вплив на обсяг / якість</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Дуже низька: &lt; 10%</td><td>&lt; 2 днів</td><td>&lt; 1%</td><td>Ледь помітно</td></tr>
+      <tr><td>2</td><td>Низька: 10–30%</td><td>2–5 днів</td><td>1–3%</td><td>Незначні функції</td></tr>
+      <tr><td>3</td><td>Середня: 30–50%</td><td>1–2 тижні</td><td>3–7%</td><td>Помітно для клієнта</td></tr>
+      <tr><td>4</td><td>Висока: 50–70%</td><td>2–4 тижні</td><td>7–15%</td><td>Ключова функція під загрозою</td></tr>
+      <tr><td>5</td><td>Дуже висока: &gt; 70%</td><td>&gt; 1 місяця</td><td>&gt; 15%</td><td>Продукт не досягає мети</td></tr>
+    </tbody>
+  </table>
+  <p>Шкали — частина плану управління ризиками. Без спільних визначень «висока ймовірність» у кожного своя, і
+    оцінки не можна порівнювати.</p>
+
+  <h3>Матриця ймовірність × вплив <small>severity = P × I</small></h3>
+  <figure class="fig"><div class="pim" id="pim"></div>
+    <figcaption>Межі зон — не закон природи, а рішення організації (апетит і пороги). Для можливостей будують дзеркальну матрицю.</figcaption></figure>
+  <table class="t">
+    <thead><tr><th>Зона</th><th>Score</th><th>Що робимо</th></tr></thead>
+    <tbody>
+      <tr><td><span class="zn z4">Критичний</span></td><td>15–25</td><td>Реагування одразу, контроль спонсора</td></tr>
+      <tr><td><span class="zn z3">Високий</span></td><td>8–14</td><td>Активна стратегія, власник, тригер</td></tr>
+      <tr><td><span class="zn z2">Середній</span></td><td>4–7</td><td>Mitigate або активне прийняття</td></tr>
+      <tr><td><span class="zn z1">Низький</span></td><td>1–3</td><td>Прийняти, переглядати періодично</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Приклад: оцінюємо ризики магазину</h3>
+  <table class="t">
+    <thead><tr><th>ID</th><th>Ризик</th><th>P</th><th>I</th><th>Score</th><th>Зона</th><th>Обґрунтування</th></tr></thead>
+    <tbody>
+      <tr><td>R1</td><td>Зміна API провайдера</td><td>3</td><td>4</td><td>12</td><td>Високий</td><td class="ex">Провайдер уже оголосив депрекацію, дати немає</td></tr>
+      <tr><td>R2</td><td>Затримка фіду постачальника</td><td>4</td><td>2</td><td>8</td><td>Високий</td><td class="ex">Минулого разу фід запізнився двічі</td></tr>
+      <tr><td>R3</td><td>Дизайнер на двох проєктах</td><td>3</td><td>2</td><td>6</td><td>Середній</td><td class="ex">Вплив обмежений: є UI-кіт</td></tr>
+      <tr><td>R4</td><td>Пік «чорної п’ятниці»</td><td>2</td><td>5</td><td>10</td><td>Високий</td><td class="ex">Запуск до сезону, навантаження не тестували</td></tr>
+      <tr><td>O1</td><td>Готовий модуль доставки</td><td>3</td><td>3</td><td>9</td><td>Високий (+)</td><td class="ex">Потрібна перевірка сумісності</td></tr>
+    </tbody>
+  </table>
+  <p>Крім P та I, PMBOK 8 радить дивитися на керованість, час настання впливу (близькі ризики — першими),
+    зв’язки з іншими ризиками й спільні причини. R1 і R4 обидва технічні й близькі до релізу — розглядаємо разом.
+    Оцінку робимо групою й фіксуємо обґрунтування — через місяць ніхто не згадає, чому поставили «4».</p>
+
+  <h3>Кількісний аналіз: EMV і дерево рішень</h3>
+  <p class="quote">EMV = P × I · загроза: «−», можливість: «+»</p>
+  <figure class="fig">
+    <div class="tree">
+      <div class="tr-root">Рішення:<br>платіжний шлюз</div>
+      <div class="tr-br">
+        <div class="tr-opt"><div class="tr-l"><b>A: новий провайдер</b><span>інтеграція 4 000 $</span></div>
+          <div class="tr-out"><div class="o bad">збій API 30%<span>втрати 10 000 $</span></div><div class="o ok">працює 70%<span>0 $</span></div></div>
+          <div class="tr-emv win"><b>A: 7 000 $</b><span>4 000 + 0,3 × 10 000</span></div></div>
+        <div class="tr-opt"><div class="tr-l"><b>B: перевірений</b><span>інтеграція 7 000 $</span></div>
+          <div class="tr-out"><div class="o bad">збій 5%<span>втрати 10 000 $</span></div><div class="o ok">працює 95%<span>0 $</span></div></div>
+          <div class="tr-emv"><b>B: 7 500 $</b><span>7 000 + 0,05 × 10 000</span></div></div>
+      </div>
+    </div>
+    <figcaption>Обираємо варіант з меншою очікуваною сумарною вартістю → A. Дешевший на старті ≠ дешевший у підсумку, але тут A виграє навіть із ризиком.</figcaption>
+  </figure>
+  <p>Сума EMV загроз ≈ обґрунтований contingency reserve. Кількісний аналіз потрібен не завжди — лише коли
+    ставки високі й є дані. Для більшості невеликих проєктів досить якісної матриці та EMV для топ-ризиків.</p>
+
+  <h3>Від EMV до резерву</h3>
+  <table class="t">
+    <thead><tr><th>Ризик</th><th>P</th><th>Вплив, $</th><th>EMV, $</th></tr></thead>
+    <tbody>
+      <tr><td>R1 Зміна API провайдера</td><td>40%</td><td>−6 000</td><td>−2 400</td></tr>
+      <tr><td>R2 Затримка фіду</td><td>60%</td><td>−2 000</td><td>−1 200</td></tr>
+      <tr><td>R4 Пік навантаження</td><td>20%</td><td>−15 000</td><td>−3 000</td></tr>
+      <tr><td>O1 Готовий модуль доставки</td><td>50%</td><td>+3 000</td><td>+1 500</td></tr>
+      <tr><td><b>Разом (exposure)</b></td><td></td><td></td><td><b>−5 100</b></td></tr>
+    </tbody>
+  </table>
+  <div class="cmp2">
+    <div class="cc"><b>Contingency reserve</b><p>Близько 5 000 $ — під відомі ризики (known–unknowns). Розпоряджається PM за правилами плану. Частина бюджету, що погоджується.</p></div>
+    <div class="cc"><b>Management reserve</b><p>Окремо, під непередбачене (unknown–unknowns). Виділяє й дозволяє використовувати керівництво, поза cost baseline.</p></div>
+  </div>
+  <p>Зв’язок із фінансами: від того, чи contingency всередині cost baseline, залежить, наскільки рано перевитрата
+    стане видимою в CV і CPI.</p>
+
+  <h3>Monte Carlo та аналіз чутливості</h3>
+  <figure class="fig"><svg id="mcChart" class="chart" viewBox="0 0 640 240" role="img" aria-label="Розподіл тривалості проєкту за 100 прогонами"></svg>
+    <figcaption>Розподіл тривалості за симуляціями: P50 ≈ 14 тижнів, P80 ≈ 15 тижнів.</figcaption></figure>
+  <div class="cmp2">
+    <div class="cc"><b>Monte Carlo</b><ul><li>Для кожної задачі — мін / ймовірно / макс</li><li>Тисячі випадкових прогонів</li><li>Результат: ймовірність укластися в дату</li></ul></div>
+    <div class="cc"><b>Аналіз чутливості (tornado)</b><ul><li>Який ризик найбільше хитає результат</li><li>Показує, куди вкладати зусилля</li><li>Смуги від найширшої до найвужчої</li></ul></div>
+  </div>
+  <p>Замість «зробимо за 12 тижнів» — «з імовірністю 80% укладемося в 15». Це чесніша розмова з клієнтом.
+    Симулятор — у додатку, блок 7.</p>
+
+  <h3>Практика · реєстр ризиків V2: додаємо аналіз</h3>
+  <div class="regv"><span>Опис</span><span class="on">Аналіз</span><span>Реагування</span><span>Моніторинг</span></div>
+  <table class="t">
+    <thead><tr><th>ID</th><th>Ризик</th><th>Тип</th><th>P</th><th>I</th><th>Score</th><th>EMV, $</th><th>Пріоритет</th></tr></thead>
+    <tbody>
+      <tr><td>R4</td><td>Пік навантаження «чорної п’ятниці»</td><td>Загроза</td><td>2</td><td>5</td><td>10</td><td>−3 000</td><td>1</td></tr>
+      <tr><td>R1</td><td>Зміна API платіжного провайдера</td><td>Загроза</td><td>3</td><td>4</td><td>12</td><td>−2 400</td><td>1</td></tr>
+      <tr><td>R2</td><td>Затримка фіду постачальника</td><td>Загроза</td><td>4</td><td>2</td><td>8</td><td>−1 200</td><td>2</td></tr>
+      <tr><td>O1</td><td>Готовий модуль доставки</td><td>Можливість</td><td>3</td><td>3</td><td>9</td><td>+1 500</td><td>2</td></tr>
+      <tr><td>R3</td><td>Дизайнер на двох проєктах</td><td>Загроза</td><td>3</td><td>2</td><td>6</td><td>—</td><td>3</td></tr>
+    </tbody>
+  </table>
+  <p>Пріоритет — рішення команди, не лише число: R4 має менший score, ніж R1, але більший EMV і жорсткий
+    дедлайн сезону.</p>
+
+  <div class="case"><b>Реальний кейс · Knight Capital, 2012.</b> Під час релізу новий код не скопіювали на один
+    із восьми серверів, а в роутері лишалась стара невикористовувана функція. За 45 хвилин система відправила
+    мільйони заявок, збиток — понад 460 млн $. Урок для Analysis: ризик із низькою ймовірністю й катастрофічним
+    впливом не можна лишати в «середній зоні» лише тому, що P×I дає невелике число — дивіться на вплив і на
+    час настання.
+    <span class="src">Джерело: <a href="https://www.sec.gov/files/litigation/admin/2013/34-70694.pdf" target="_blank" rel="noopener">SEC, Administrative Proceeding 34-70694 (2013)</a>.</span></div>
+</section>
+
+<section class="sec" id="l4">
+  <h2><span class="num">04</span>Реагування</h2>
+  <p>Стратегії, резерви, план дій.</p>
+
+  <h3>Десять стратегій: дзеркало загроз і можливостей</h3>
+  <figure class="fig">
+    <div class="mirror">
+      <div class="mh bad">Загрози (−)</div><div class="mh-mid"></div><div class="mh good">Можливості (+)</div>
+      <div class="mc bad">Escalate — передати вище</div><div class="mm">поза повноваженнями PM</div><div class="mc good">Escalate — передати вище</div>
+      <div class="mc bad">Avoid — усунути причину</div><div class="mm">ймовірність → 0 / → 100%</div><div class="mc good">Exploit — гарантувати</div>
+      <div class="mc bad">Transfer — передати третій стороні</div><div class="mm">залучаємо сторону ззовні</div><div class="mc good">Share — розділити з партнером</div>
+      <div class="mc bad">Mitigate — зменшити P та/або I</div><div class="mm">змінюємо P та I</div><div class="mc good">Enhance — збільшити P та/або I</div>
+      <div class="mc bad">Accept — прийняти</div><div class="mm">активно (резерв) або пасивно</div><div class="mc good">Accept — прийняти</div>
+    </div>
+    <figcaption>Стратегії для overall project risk — ті самі, але застосовуються до проєкту в цілому.</figcaption>
+  </figure>
+
+  <h3>Загрози: Escalate, Avoid, Transfer</h3>
+  <table class="t">
+    <thead><tr><th>Стратегія</th><th>Коли</th><th>Суть і способи</th><th>Приклад</th></tr></thead>
+    <tbody>
+      <tr><td>Escalate</td><td>Ризик поза обсягом проєкту або рішення поза повноваженнями PM</td><td>Передаємо на рівень програми, портфеля чи спонсора. Знімаємо з активного моніторингу лише тоді, коли власник погодився прийняти</td><td class="ex">Зміна податкового законодавства для всіх продуктів компанії</td></tr>
+      <tr><td>Avoid</td><td>Висока ймовірність і катастрофічний вплив, є ресурс змінити план</td><td>Усуваємо причину — ризик зникає. Змінити технологію, обсяг, підрядника, строк</td><td class="ex">Відмовитися від експериментального провайдера на користь перевіреного</td></tr>
+      <tr><td>Transfer</td><td>Третя сторона може взяти ризик краще за нас</td><td>Передаємо наслідки й відповідальність за реагування: страхування, гарантії, fixed price з підрядником, SLA</td><td class="ex">Хмарний хостинг з SLA і автоскейлом під навантаження</td></tr>
+    </tbody>
+  </table>
+  <div class="trap"><b>Transfer не прибирає ризик</b> — він лише перекладає наслідки, і зазвичай за гроші
+    (премія, націнка підрядника).</div>
+
+  <h3>Загрози: Mitigate і Accept</h3>
+  <div class="cmp2">
+    <div class="cc"><b>Mitigate — зменшити</b><ul><li>Коли: ризик будь-якого рівня, обмежений бюджет — найчастіша стратегія</li><li>Знижуємо ймовірність: прототип, spike, раннє тестування, резервна людина</li><li>Зменшуємо вплив: модульність, feature flags, план Б</li><li>Приклад R1: ізолювати інтеграцію за адаптером і перейти на нову версію API першим спринтом</li></ul></div>
+    <div class="cc"><b>Accept — прийняти</b><ul><li>Коли: низький чи середній ризик або реагування дорожче за наслідки</li><li>Активне прийняття: резерв часу чи грошей + contingency plan</li><li>Пасивне: нічого не робимо, періодично переглядаємо</li><li>Приклад R3: закласти 2 дні буфера на спринт, фронтенд бере задачі з UI-кітом</li></ul></div>
+  </div>
+  <p>Орієнтир із практики: Low/Low → прийняти; середні → зменшувати; High/High → уникати або ескалювати.
+    Але рішення завжди звіряємо з апетитом і вартістю.</p>
+
+  <h3>Можливості: Exploit, Share, Enhance</h3>
+  <table class="t">
+    <thead><tr><th>Стратегія</th><th>Суть</th><th>Приклад</th></tr></thead>
+    <tbody>
+      <tr><td>Exploit</td><td>Робимо так, щоб можливість точно реалізувалася: ймовірність → 100%</td><td class="ex">Залучити найсильнішого розробника, щоб закінчити до сезону</td></tr>
+      <tr><td>Share</td><td>Ділимося з тим, хто краще її використає: партнерство, розподіл вигоди</td><td class="ex">Спільна промоакція зі службою доставки</td></tr>
+      <tr><td>Enhance</td><td>Підвищуємо ймовірність і/або вигоду: додаткові ресурси, раннє рішення</td><td class="ex">O1: виділити день на перевірку сумісності модуля доставки до старту спринту</td></tr>
+    </tbody>
+  </table>
+  <p>Escalate й Accept працюють для можливостей так само, як для загроз. Прийняти можливість — скористатися,
+    якщо трапиться, не докладаючи зусиль заздалегідь.</p>
+
+  <h3>Як обрати стратегію</h3>
+  <ol class="steps5">
+    <li><b>Рішення в межах моїх повноважень і обсягу?</b> Ні → Escalate.</li>
+    <li><b>Можемо дешево прибрати причину?</b> Так, і ризик критичний → Avoid.</li>
+    <li><b>Хтось ззовні впорається краще?</b> Так → Transfer.</li>
+    <li><b>Вартість реагування &lt; EMV ризику?</b> Так → Mitigate.</li>
+    <li><b>Реагування дорожче за наслідки?</b> Так → Accept (активно чи пасивно).</li>
+  </ol>
+  <p>Одному ризику часто відповідає комбінація: зменшити ймовірність і водночас активно прийняти залишок із
+    резервом. Підбирач стратегії — у додатку, блок 8.</p>
+
+  <h3>Implement Risk Responses: конкретно, з власником і строком</h3>
+  <div class="cmp3">
+    <div class="cc"><b>Contingency plan</b><p>Що робимо, якщо тригер спрацював. R4: вмикаємо «легку» версію каталогу й чергу на оформлення.</p></div>
+    <div class="cc"><b>Fallback plan</b><p>Якщо й основний план не спрацював. R4: тимчасова сторінка-заглушка з формою передзамовлення.</p></div>
+    <div class="cc"><b>Вторинні й залишкові</b><p>Вторинний — новий ризик від самого реагування. Залишковий — те, що лишилося після нього.</p></div>
+  </div>
+  <table class="t">
+    <thead><tr><th>Погано</th><th>Добре</th></tr></thead>
+    <tbody>
+      <tr><td>«Стежити за API»</td><td class="ex">Техлід до п’ятниці підписується на changelog провайдера й додає перевірку версії в CI</td></tr>
+      <tr><td>«Поговорити з клієнтом»</td><td class="ex">PM у вівторок надсилає клієнту лист із ризиком R1 і двома варіантами дат</td></tr>
+      <tr><td>«Протестувати навантаження»</td><td class="ex">QA до кінця спринту 3 проводить навантажувальний тест на 5× трафік, звіт у Confluence</td></tr>
+    </tbody>
+  </table>
+  <p>Реагування часто породжує change request: зміна обсягу, строків чи бюджету проходить через Perform
+    Integrated Change Control.</p>
+
+  <h3>Практика · реєстр ризиків V3: власник, стратегія, тригер</h3>
+  <div class="regv"><span>Опис</span><span>Аналіз</span><span class="on">Реагування</span><span>Моніторинг</span></div>
+  <table class="t">
+    <thead><tr><th>ID</th><th>Ризик</th><th>Власник</th><th>Стратегія</th><th>Дії</th><th>Тригер</th></tr></thead>
+    <tbody>
+      <tr><td>R4</td><td>Пік навантаження</td><td>DevOps</td><td>Mitigate + Transfer</td><td>Навантажувальний тест 5×; хостинг з автоскейлом і SLA</td><td class="ex">Час відповіді &gt; 800 мс на тесті</td></tr>
+      <tr><td>R1</td><td>Зміна API провайдера</td><td>Техлід</td><td>Mitigate</td><td>Адаптер; міграція на нову версію у спринті 1</td><td class="ex">Дата депрекації &lt; 60 днів</td></tr>
+      <tr><td>R2</td><td>Затримка фіду</td><td>PM</td><td>Mitigate</td><td>Тестовий фід заздалегідь; ручний імпорт топ-100 товарів</td><td class="ex">Фід не отримано до дня D−10</td></tr>
+      <tr><td>O1</td><td>Модуль доставки</td><td>Техлід</td><td>Enhance</td><td>Перевірка сумісності за 1 день</td><td class="ex">Перевірка успішна</td></tr>
+      <tr><td>R3</td><td>Дизайнер на двох проєктах</td><td>PM</td><td>Accept (активно)</td><td>Буфер 2 дні на спринт</td><td class="ex">Макет запізнюється &gt; 2 днів</td></tr>
+    </tbody>
+  </table>
+  <p>Тригер — спостережуваний, вимірюваний сигнал. «Щось пішло не так» — не тригер; «час відповіді &gt; 800 мс» —
+    тригер.</p>
+
+  <div class="case"><b>Реальний кейс · TSB, 2018.</b> Банк переносив клієнтів на нову платформу, яку будував
+    постачальник групи. Дані перенеслись, але платформа одразу почала збоїти: постраждали всі відділення й
+    значна частина з 5,2 млн клієнтів, окремі проблеми тривали до грудня. Регулятори оштрафували банк на
+    48,65 млн £, клієнтам виплатили 32,7 млн £. Серед причин — керування ризиками аутсорсингу. Урок для
+    Responses: transfer передає роботу, але не відповідальність; потрібні власні критерії готовності й план відкату.
+    <span class="src">Джерело: <a href="https://www.fca.org.uk/news/press-releases/tsb-fined-48m-operational-resilience-failings" target="_blank" rel="noopener">FCA, 20.12.2022</a>.</span></div>
+</section>
+
+<section class="sec" id="l5">
+  <h2><span class="num">05</span>Моніторинг і контроль</h2>
+  <p>Monitor Risks: ризики живуть увесь проєкт.</p>
+
+  <h3>Життєвий цикл і статуси ризику</h3>
+  <figure class="fig">
+    <div class="life">
+      <div class="lf">Виявлено</div><span class="la">→</span><div class="lf">Оцінено</div><span class="la">→</span>
+      <div class="lf">Є план</div><span class="la">→</span><div class="lf">Під наглядом</div><span class="la">→</span>
+      <div class="lf-end"><div class="lf bad">Спрацював<small>→ стає issue</small></div><div class="lf good">Закрито<small>минув / усунуто</small></div></div>
+    </div>
+    <figcaption>Тригер спостерігається → запускаємо план реагування. Переоцінка на кожному рев’ю: P та I змінюються.</figcaption>
+  </figure>
+  <ul class="dl">
+    <li>Статус у реєстрі: Відкритий → Під наглядом → Спрацював → Закритий.</li>
+    <li>Спрацював → запускаємо план і заводимо запис у журналі проблем.</li>
+    <li>Закриваємо, коли вікно ризику минуло або причину усунуто.</li>
+  </ul>
+
+  <h3>Як моніторити на практиці</h3>
+  <div class="cmp3">
+    <div class="cc"><b>Регулярно</b><ul><li>Щотижневий огляд топ-ризиків (15 хв на статус-мітингу)</li><li>Переоцінка P та I</li><li>Нові ризики — з ретро, демо, листування</li><li>Оновлення risk report</li></ul></div>
+    <div class="cc"><b>Аналіз даних</b><ul><li>Technical performance analysis: чи досягаємо цільових метрик</li><li>Reserve analysis: скільки лишилося проти залишку ризиків</li><li>Тренд exposure: росте чи падає</li><li>Burndown ризиків</li></ul></div>
+    <div class="cc"><b>Періодично</b><ul><li>Аудит процесу: чи працюють стратегії</li><li>Фазові ворота / кінець релізу</li><li>Lessons learned у базу компанії</li><li>Ревізія апетиту зі спонсором</li></ul></div>
+  </div>
+  <div class="trap"><b>Сигнал проблеми:</b> у реєстрі нічого не змінювалося місяць. Реєстр, який не оновлюють,
+    гірший за відсутній — він створює ілюзію контролю.</div>
+
+  <h3>Ризики в Agile</h3>
+  <ul class="dl">
+    <li><b>Risk-adjusted backlog:</b> дії з реагування — задачі в беклозі поряд із фічами.</li>
+    <li><b>Ризиковані фічі — раніше:</b> spike, прототип, MVP.</li>
+    <li>Короткі ітерації самі по собі зменшують вплив.</li>
+    <li>Ризики обговорюємо на плануванні, дейлі, ретро.</li>
+    <li><b>ROAM</b>: Resolved / Owned / Accepted / Mitigated — сортування ризиків на PI Planning (SAFe).</li>
+  </ul>
+  <figure class="fig"><svg id="exChart" class="chart" viewBox="0 0 640 220" role="img" aria-label="Експозиція ризиків за спринтами"></svg>
+    <figcaption>Exposure за спринтами. Графік має спадати: якщо exposure росте спринт за спринтом — сигнал спонсору ще до того, як це стане видно в термінах і бюджеті.</figcaption></figure>
+
+  <h3>Практика · реєстр ризиків V4: статус і динаміка</h3>
+  <div class="regv"><span>Опис</span><span>Аналіз</span><span>Реагування</span><span class="on">Моніторинг</span></div>
+  <table class="t">
+    <thead><tr><th>ID</th><th>Ризик</th><th>Власник</th><th>Score (було → є)</th><th>Статус</th><th>Останнє оновлення</th></tr></thead>
+    <tbody>
+      <tr><td>R1</td><td>Зміна API провайдера</td><td>Техлід</td><td>12 → 4</td><td>Закритий</td><td class="ex">Міграцію завершено у спринті 1</td></tr>
+      <tr><td>R4</td><td>Пік навантаження</td><td>DevOps</td><td>10 → 6</td><td>Під наглядом</td><td class="ex">Тест 5× пройдено, 3× — у сезон</td></tr>
+      <tr><td>R2</td><td>Затримка фіду</td><td>PM</td><td>8 → 8</td><td>Спрацював</td><td class="ex">Фід не надійшов; запущено ручний імпорт, issue #14</td></tr>
+      <tr><td>O1</td><td>Модуль доставки</td><td>Техлід</td><td>9 → 15</td><td>Реалізується</td><td class="ex">Сумісність підтверджено</td></tr>
+      <tr><td>R5</td><td>Відпустка техліда в сезон</td><td>PM</td><td>новий: 9</td><td>Відкритий</td><td class="ex">Виявлено на ретро спринту 2</td></tr>
+    </tbody>
+  </table>
+  <p>Реєстр — живий документ: ризики закриваються, спрацьовують, з’являються нові. Повна інтерактивна версія —
+    у додатку, блок 10.</p>
+
+  <h3>Resilience: коли реєстр не допоможе</h3>
+  <p>Емерджентні ризики (unknown–unknowns) неможливо внести в реєстр заздалегідь. PMBOK 8 відповідає на це
+    не прогнозом, а стійкістю проєкту: здатністю поглинути удар і швидко відновитися. Інструменти —
+    management reserve, сценарне планування великих збоїв, узгодження з business continuity організації,
+    модульна архітектура, поетапні зміни, запасні постачальники.</p>
+  <div class="case"><b>Реальний кейс · CrowdStrike, липень 2024.</b> Оновлення правил виявлення загроз
+    (Channel File 291) пішло одразу на всі машини: датчик очікував 20 полів, отримав 21. Microsoft оцінила
+    кількість уражених Windows-пристроїв у 8,5 млн. Для більшості клієнтів це був ризик, якого не було в
+    жодному реєстрі. Після інциденту компанія запровадила поетапне розгортання й дала клієнтам контроль над
+    часом оновлень. Урок: resilience — staged rollout, контроль залежностей і відпрацьоване відновлення.
+    <span class="src">Джерело: <a href="https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf" target="_blank" rel="noopener">CrowdStrike, External Technical RCA (2024)</a>. Вправа — у додатку, блок 15.</span></div>
+
+  <h3>Звʼязки з іншими доменами PMBOK 8</h3>
+  <div class="cbox" data-comp="riskdom"></div>
+  <p class="chint">Ризик не живе окремо: резерви рахуються у Finance, ескалація йде через Governance, власники
+    ризиків — це Resources, а комунікація ризиків — Stakeholders.</p>
+
+  <h3>П’ять типових помилок</h3>
+  <table class="t">
+    <thead><tr><th>Помилка</th><th>Як виглядає</th><th>Лікування</th></tr></thead>
+    <tbody>
+      <tr><td>Реєстр «для галочки»</td><td>Заповнили на старті й забули</td><td class="ex">15 хвилин на ризики щотижня</td></tr>
+      <tr><td>Причини замість ризиків</td><td>«Немає QA» — це факт</td><td class="ex">Пишемо за формулою: причина → подія → ефект</td></tr>
+      <tr><td>«Команда» як власник</td><td>Відповідальність розмита — ніхто не стежить</td><td class="ex">Один власник на ризик</td></tr>
+      <tr><td>Лише загрози</td><td>Можливості ігноруються — втрачаємо вигоду</td><td class="ex">Дзеркальні стратегії</td></tr>
+      <tr><td>План без дій</td><td>«Стежити», «бути обережними»</td><td class="ex">Дія, виконавець і строк</td></tr>
+    </tbody>
+  </table>
+  <p>Ще одна пастка — «оптимізм планування»: команда впевнена, що цього разу все піде за планом. Premortem —
+    найкраща вакцина.</p>
+
+  <div class="case"><b>Реальний кейс · Denver International Airport, 1994.</b> Автоматизована багажна система
+    — нова технологія на критичному шляху відкриття аеропорту (контракт на 193 млн $). Механічні й програмні
+    збої: сумки завантажувались не туди, губилися маршрути, випадали з візків, і система застрягала. Відкриття
+    аеропорту відклали, а щоб відкритися, почали будувати запасну конвенційну систему — конвеєри, тягачі й
+    візки — приблизно за 51 млн $. Урок: коли нова технологія стоїть на критичному шляху, fallback потрібен
+    від початку, а не після провалу.
+    <span class="src">Джерело: <a href="https://www.gao.gov/products/rced-95-35br" target="_blank" rel="noopener">GAO/RCED-95-35BR, «New Denver Airport: Impact of the Delayed Baggage System» (1994)</a>.</span></div>
+
+  <h3>Висновки</h3>
+  <ul class="dl">
+    <li>Ризик — невизначена подія з впливом на цілі: і загроза, і можливість. Проблема — те, що вже сталося.</li>
+    <li>Формула: причина → подія → ефект. Тригер — ранній сигнал.</li>
+    <li>PMBOK 8: шість процесів, аналіз — один процес, що поєднує якісні й кількісні техніки.</li>
+    <li>Матриця P×I — для пріоритизації, EMV — для грошей і резервів.</li>
+    <li>Десять стратегій: п’ять для загроз, їх дзеркало — для можливостей; ті самі — для overall risk.</li>
+    <li>Для непередбачуваного — resilience, а не довший реєстр.</li>
+    <li>Управління ризиками — цикл від старту до закриття. PM забезпечує процес і розподіляє відповідальність,
+      а не закриває все сам.</li>
+  </ul>
+  <p class="quote">Питання для обговорення: який ризик вашого поточного проєкту ви можете записати за формулою
+    просто зараз?</p>
+</section>
+
+
+  </div>
+
+  <div id="app" role="tabpanel">
+    <div id="pop"></div>
+
+
+<section class="blk" id="b1" data-t="Ризик чи ні?">
+<div class="kick">Блок 1 · Розминка</div>
+<h2>Ризик, проблема, факт чи тривога?</h2>
+<p class="q">Клікніть на твердження, потім на кошик, куди воно належить. Перше, чого вчить <span class="hn" data-k="pmbok8">PMBOK 8</span> в ідентифікації, — відділити справжні ризики від усього іншого.</p>
+<div class="pool" id="b1pool"></div>
+<div class="buckets" id="b1b"></div>
+<div class="row" style="margin-top:12px"><span id="b1score" class="pill z1">0 / 10</span><button class="btn sm" id="b1reset">Почати знову</button></div>
+<div class="fb" id="b1fb"></div>
+<div class="insight"><b>Фільтр одним питанням:</b> «Це вже сталося?» Так — це <span class="hn" data-k="issue">проблема (issue)</span>, у журнал проблем і дія сьогодні. Ні, але невизначено і впливає на цілі — ризик. Точно станеться — факт, плануємо як роботу. Не можемо описати причину, подію та ефект — тривога, збираємо інформацію.</div>
+</section>
+
+<section class="blk" id="b2" data-t="Анатомія">
+<div class="kick">Блок 2 · Анатомія ризику</div>
+<h2>Конструктор формули ризику</h2>
+<p class="q">Оберіть по одному елементу в кожній колонці. Формула збереться знизу, а перевірка скаже, чи елементи логічно повʼязані.</p>
+<div class="anat" id="b2cols"></div>
+<div class="formula" id="b2f">Оберіть елементи…</div>
+<div class="fb" id="b2fb"></div>
+<div class="row" style="margin-top:10px"><button class="btn sm" id="b2rand">Перемішати та спробувати ще</button><button class="btn sm" id="b2add" disabled>+ Додати в реєстр (блок 10)</button></div>
+
+<h3>Погано → добре: клікніть на картку</h3>
+<div class="bw" id="b2bw"></div>
+
+<h3>Чотири типи невизначеності</h3>
+<p class="q">Оберіть ситуацію, потім квадрант (<span class="hn" data-k="fig246">Figure 2-46</span>).</p>
+<div class="pool" id="b2upool"></div>
+<div class="quad" id="b2quad" style="margin-top:10px"></div>
+<div class="fb" id="b2ufb"></div>
+<div class="insight"><b>Причина</b> — вже існує (на неї діє Avoid). <b>Подія</b> — невизначена (Mitigate зменшує ймовірність). <b>Ефект</b> — наслідок для цілей (Mitigate і резерв зменшують вплив). <b>Тригер</b> — ранній сигнал, що подія наближається.</div>
+</section>
+
+<section class="blk" id="b3" data-t="Процеси">
+<div class="kick">Блок 3 · Risk Performance Domain</div>
+<h2>Шість процесів PMBOK 8</h2>
+<p class="q">Клікніть процес, щоб побачити, навіщо він, коли, що на вході, які техніки і що на виході. Внизу — міні-перевірка на порядок.</p>
+<div class="chain" id="b3chain"></div>
+<div class="pdet card" id="b3det"></div>
+<h3>Розставте у правильному порядку</h3>
+<p class="q">Клікайте процеси в тому порядку, у якому вони вперше запускаються на проєкті.</p>
+<div class="pool" id="b3ord"></div>
+<div class="row" style="margin-top:8px"><div id="b3seq" class="q" style="margin:0">Ваша послідовність: —</div><button class="btn sm" id="b3r">Скинути</button></div>
+<div class="fb" id="b3fb"></div>
+<div class="insight"><b>Що змінилося:</b> у PMBOK 6 якісний і кількісний аналіз були двома окремими процесами. У PMBOK 8 це один процес <i>Perform Risk Analysis</i>, а обидві техніки лишаються всередині. Принцип «оптимізуй реагування на ризики» з PMBOK 7 теж переїхав у цей домен.</div>
+</section>
+
+<section class="blk" id="b4" data-t="Пошук">
+<div class="kick">Блок 4 · Identify Risks</div>
+<h2>Де шукати ризики: RBS-провідник і premortem</h2>
+<p class="q"><span class="hn" data-k="rbs">RBS</span> — це «WBS для ризиків». Оберіть категорію, щоб побачити типові ризики інтернет-магазину і питання, які варто поставити. Будь-який ризик можна одразу відправити в реєстр.</p>
+<div class="rbs"><div id="b4cats"></div><div id="b4list" class="card"></div></div>
+
+<h3>Premortem-тренажер</h3>
+<p class="q">Техніка психолога Гері Кляйна. Проведіть сесію самостійно або з командою: таймер, етапи і голосування — усе тут.</p>
+<div class="pm-board" id="b4st"></div>
+<div class="card" style="margin-top:10px" id="b4pm"></div>
+</section>
+
+<section class="blk" id="b5" data-t="Матриця P×I">
+<div class="kick">Блок 5 · Якісний аналіз</div>
+<h2>Матриця ймовірність × вплив</h2>
+<p class="q">Точки — ризики з вашого реєстру (блок 10). Клікніть на мітку ризику, потім на клітинку — і ризик переїде; реєстр оновиться. Повзунки нижче змінюють межі зон — так організація виражає свій <span class="hn" data-k="appetite">апетит до ризику</span>.</p>
+<div class="grid2">
+<div>
+<div class="mx" id="b5mx"></div>
+<div style="text-align:center;font-size:.8rem;color:var(--mut);max-width:520px;margin-top:4px">Вплив (I) →   ·   ↑ Ймовірність (P)</div>
+</div>
+<div>
+<div class="card">
+<div><b>Межі зон</b> <small class="q">(score = P × I)</small></div>
+<label>Критичний від <b id="t4v"></b><input type="range" min="6" max="25" id="t4"></label>
+<label>Високий від <b id="t3v"></b><input type="range" min="3" max="24" id="t3"></label>
+<label>Середній від <b id="t2v"></b><input type="range" min="2" max="23" id="t2"></label>
+<div class="row"><button class="btn sm" data-ap="low">Низький апетит (банк)</button><button class="btn sm" data-ap="std">Стандарт</button><button class="btn sm" data-ap="high">Високий апетит (стартап)</button></div>
+<div id="b5cnt" style="margin-top:10px"></div>
+</div>
+<div class="card" style="margin-top:10px" id="b5sel">Оберіть ризик на матриці.</div>
+</div>
+</div>
+<h3>Калькулятор шкал: що означає «4» саме тут?</h3>
+<p class="q">Введіть параметри ризику в реальних одиницях — побачите бал за кожним виміром. Беремо <b>найгірший</b> вимір впливу.</p>
+<div class="grid2">
+<div class="card">
+<label>Ймовірність, % <b id="scPv"></b><input type="range" id="scP" min="1" max="95" value="40"></label>
+<label>Затримка, днів <b id="scDv"></b><input type="range" id="scD" min="0" max="45" value="7"></label>
+<label>Перевитрата бюджету, % <b id="scBv"></b><input type="range" id="scB" min="0" max="25" value="2"></label>
+<label>Вплив на обсяг / якість
+<select id="scQ"><option value="1">Ледь помітно</option><option value="2">Незначні функції</option><option value="3" selected>Помітно для клієнта</option><option value="4">Ключова функція під загрозою</option><option value="5">Продукт не досягає мети</option></select></label>
+</div>
+<div class="card" id="scOut"></div>
+</div>
+<div class="insight"><b>Не лише P та I:</b> PMBOK 8 радить дивитися також на керованість, час настання (близькі ризики — першими), звʼязки між ризиками і спільні причини. Оцінку робимо групою і записуємо обґрунтування.</div>
+</section>
+
+<section class="blk" id="b6" data-t="EMV і резерви">
+<div class="kick">Блок 6 · Кількісний аналіз</div>
+<h2>EMV, резерви і дерево рішень</h2>
+<p class="q"><span class="hn" data-k="emv">EMV</span> = ймовірність × вплив у грошах. Значення беруться з реєстру — змінюйте тут, і реєстр оновиться.</p>
+<div class="scroll"><table class="t" id="b6t"></table></div>
+<div class="kpis" id="b6k"></div>
+<div class="grid2">
+<div class="card"><b>Бюджет проєкту</b>
+<label>Оцінка робіт, $ <input type="number" id="b6base" value="60000" step="1000"></label>
+<label>Management reserve, % від бюджету <b id="b6mrv"></b><input type="range" id="b6mr" min="0" max="15" value="5"></label>
+<label style="display:flex;gap:6px;align-items:center;margin-top:6px"><input type="checkbox" id="b6opp" checked> Зараховувати можливості (+EMV) у резерв</label>
+</div>
+<div class="card"><svg id="b6bar" viewBox="0 0 420 170" width="100%"></svg></div>
+</div>
+<div class="warn" style="margin-top:12px"><b>Contingency reserve</b> — під відомі ризики (<span class="hn" data-k="ku">known–unknowns</span>), частина <span class="hn" data-k="cb">cost baseline</span>, ним розпоряджається PM за правилами плану. <b>Management reserve</b> — під непередбачене (<span class="hn" data-k="uu">unknown–unknowns</span>), поза baseline, використання дозволяє керівництво.</div>
+
+<h3>Дерево рішень: який платіжний провайдер обрати?</h3>
+<p class="q">Змініть вартість і ризики варіантів — дерево перерахується. Обирається варіант з кращою очікуваною вартістю.</p>
+<div class="grid2">
+<div class="card">
+<b>A · Новий провайдер</b>
+<label>Вартість інтеграції, $ <input type="number" id="dA" value="4000" step="500"></label>
+<label>Ймовірність проблем, % <b id="dApv"></b><input type="range" id="dAp" min="0" max="90" value="30"></label>
+<label>Збиток при проблемі, $ <input type="number" id="dAi" value="10000" step="500"></label>
+<hr style="border:0;border-top:1px solid var(--line)">
+<b>B · Перевірений провайдер</b>
+<label>Вартість інтеграції, $ <input type="number" id="dB" value="7000" step="500"></label>
+<label>Ймовірність проблем, % <b id="dBpv"></b><input type="range" id="dBp" min="0" max="90" value="5"></label>
+<label>Збиток при проблемі, $ <input type="number" id="dBi" value="10000" step="500"></label>
+</div>
+<div class="card"><svg id="dtree" viewBox="0 0 440 260" width="100%"></svg><div id="dres"></div></div>
+</div>
+</section>
+
+<section class="blk" id="b7" data-t="Monte Carlo">
+<div class="kick">Блок 7 · Симуляція</div>
+<h2>Monte Carlo: «коли ми насправді закінчимо?»</h2>
+<p class="q">Кожна задача має оптимістичну, найімовірнішу і песимістичну оцінку. Симуляція тисячі разів «програє» проєкт і показує розподіл. Увімкніть ризики-події і дії з реагування — дивіться, як зсувається крива.</p>
+<div class="scroll"><table class="t" id="b7t"></table></div>
+<div class="grid2" style="margin-top:12px">
+<div class="card"><b>Ризики-події</b><div id="b7r"></div></div>
+<div class="card">
+<label>Кількість прогонів <select id="b7n"><option>500</option><option selected>2000</option><option>5000</option></select></label>
+<label>Дедлайн, тижнів <b id="b7dv"></b><input type="range" id="b7d" min="10" max="24" step="0.5" value="15"></label>
+<div class="row" style="margin-top:8px"><button class="btn pri" id="b7go">▶ Запустити симуляцію</button></div>
+<div id="b7k" style="margin-top:10px"></div>
+</div>
+</div>
+<svg id="b7h" viewBox="0 0 760 260" width="100%" style="margin-top:12px"></svg>
+<h3>Аналіз чутливості (tornado)</h3>
+<p class="q">Що найбільше «хитає» строк: наскільки кожна задача чи подія корелює з загальною тривалістю.</p>
+<svg id="b7tor" viewBox="0 0 760 220" width="100%"></svg>
+<div class="insight"><b>Як говорити з клієнтом:</b> замість «зробимо за 12 тижнів» — «з імовірністю 80% вкладемося в N тижнів». Сума «найімовірніших» оцінок майже завжди оптимістична: розподіли асиметричні, запізнитися можна сильніше, ніж випередити.</div>
+</section>
+
+<section class="blk" id="b8" data-t="Стратегії">
+<div class="kick">Блок 8 · Plan Risk Responses</div>
+<h2>Десять стратегій і як обрати</h2>
+<p class="q">Спершу — майстер вибору для загрози. Потім — вісім ситуацій: визначте стратегію.</p>
+<div class="grid2">
+<div id="b8wiz"></div>
+<div class="card" id="b8wres"><div class="q">Відповідайте на питання зліва по черзі.</div></div>
+</div>
+<h3>Ситуації</h3>
+<div class="sc-card" id="b8sc"></div>
+<div class="insight"><b>Дзеркало:</b> Avoid ↔ Exploit (ймовірність → 0 / → 100%), Transfer ↔ Share (залучаємо третю сторону), Mitigate ↔ Enhance (змінюємо P та I). Escalate та Accept — однакові для обох. Одному ризику часто відповідає комбінація: зменшити ймовірність і активно прийняти залишок з резервом.</div>
+</section>
+
+<section class="blk" id="b9" data-t="План дій">
+<div class="kick">Блок 9 · Implement Risk Responses</div>
+<h2>Перевірка якості плану реагування</h2>
+<p class="q">Напишіть дію з реагування — перевірка шукає дієслово дії, виконавця, строк і вимірюваність. Або візьміть приклад.</p>
+<div class="row" id="b9ex"></div>
+<textarea id="b9in" placeholder="Напр.: Техлід до пʼятниці підписується на changelog провайдера і додає перевірку версії API в CI"></textarea>
+<div class="grid2" style="margin-top:10px">
+<div class="card" id="b9out"></div>
+<div class="card">
+<b>Три рівні плану</b>
+<p style="margin:6px 0"><span class="pill z3">Contingency plan</span> що робимо, якщо тригер спрацював.</p>
+<p style="margin:6px 0"><span class="pill z4">Fallback plan</span> що робимо, якщо й основний план не допоміг.</p>
+<p style="margin:6px 0"><span class="pill opp">Вторинний / залишковий</span> <span class="hn" data-k="secondary">вторинний</span> — новий ризик від самого реагування; <span class="hn" data-k="residual">залишковий</span> — те, що лишилося після нього.</p>
+<div class="warn">Реагування часто породжує <b>change request</b>: зміна обсягу, строків чи бюджету проходить через Perform Integrated Change Control.</div>
+</div>
+</div>
+</section>
+
+<section class="blk" id="b10" data-t="Реєстр">
+<div class="kick">Блок 10 · Головний артефакт</div>
+<h2>Живий реєстр ризиків</h2>
+<p class="q">Чотири версії — як на слайдах: опис → аналіз → реагування → моніторинг. Score, зона і EMV рахуються автоматично, а під рядками зʼявляються підказки про типові помилки. Цей самий реєстр живить матрицю (блок 5) та EMV (блок 6).</p>
+<div class="tabs" id="b10tabs"></div>
+<div class="row">
+<button class="btn pri sm" id="b10add">+ Ризик</button>
+<button class="btn sm" id="b10addo">+ Можливість</button>
+<button class="btn sm" id="b10ex">Завантажити приклад</button>
+<button class="btn sm" id="b10clr">Очистити</button>
+<button class="btn sm" id="b10csv">⬇ Експорт CSV</button>
+<span style="flex:1"></span>
+<label class="row" style="gap:4px;font-size:.85rem">Фільтр <select id="b10f"><option value="all">усі</option><option value="z4">критичні</option><option value="z3">високі+</option><option value="open">не закриті</option><option value="opp">можливості</option><option value="iss">з зауваженнями</option></select></label>
+<label class="row" style="gap:4px;font-size:.85rem">Сортування <select id="b10s"><option value="id">ID</option><option value="score">score ↓</option><option value="emv">EMV ↓</option></select></label>
+</div>
+<div class="kpis" id="b10k"></div>
+<div class="scroll"><table class="t reg" id="b10t"></table></div>
+<div id="b10csvout" style="display:none;margin-top:10px"><textarea id="b10csvtxt" style="min-height:120px"></textarea><div class="q">Скопіюйте текст і вставте в Excel / Google Sheets (роздільник — крапка з комою).</div></div>
+</section>
+
+<section class="blk" id="b11" data-t="Симулятор">
+<div class="kick">Блок 11 · Monitor Risks</div>
+<h2>Симулятор: шість спринтів з ризиками</h2>
+<p class="q">Ви — PM інтернет-магазину. Кожен спринт щось відбувається. Ваші рішення змінюють резерв часу, резерв грошей, сумарну експозицію і довіру спонсора. Резерв часу — 10 днів, грошей — 5 000 $.</p>
+<div class="sim-top" id="b11k"></div>
+<div class="grid2">
+<div><div class="ev" id="b11ev"></div></div>
+<div><svg id="b11ch" viewBox="0 0 420 200" width="100%"></svg><div class="log" id="b11log"></div></div>
+</div>
+</section>
+
+<section class="blk" id="b12" data-t="Аудит">
+<div class="kick">Блок 12 · Антипатерни</div>
+<h2>Аудит чужого реєстру: знайдіть 8 помилок</h2>
+<p class="q">Цей реєстр заповнив новачок. Клікайте на клітинки, де бачите помилку. Промахи теж рахуються.</p>
+<div class="row"><span class="pill z3" id="b12s">Знайдено 0 / 8</span><span class="pill z1" id="b12m">Промахів: 0</span><button class="btn sm" id="b12show">Показати всі</button><button class="btn sm" id="b12r">Скинути</button></div>
+<div class="scroll" style="margin-top:10px"><table class="t aud" id="b12t"></table></div>
+<div id="b12log" style="margin-top:10px"></div>
+</section>
+
+<section class="blk" id="b14" data-t="Кейс-розбір">
+<div class="kick">Блок 14 · Реальні кейси</div>
+<h2>Кейс-розбір: що б ви зробили на місці PM?</h2>
+<p class="q">Чотири задокументовані випадки. Оберіть кейс, на кожному кроці виберіть реакцію — потім побачите, що сталося насправді і яку стратегію варто було застосувати. Факти — з офіційних розслідувань, джерело під кейсом.</p>
+<div class="row" id="b14tabs"></div>
+<div class="card" id="b14box" style="margin-top:12px"></div>
+</section>
+
+<section class="blk" id="b15" data-t="Overall risk">
+<div class="kick">Блок 15 · Overall project risk і resilience</div>
+<h2>Коли ризик — уже не окремий пункт реєстру, а весь проєкт</h2>
+<p class="q">PMBOK 8 розрізняє окремі ризики й <b>overall project risk</b> — вплив невизначеності на проєкт загалом. Якщо він вищий за поріг організації, рішення ухвалює спонсор: змінити проєкт або зупинити його.</p>
+<div class="grid2">
+ <div class="card">
+  <label>Сумарна експозиція, % від бюджету <b id="b15ev"></b><input type="range" id="b15e" min="0" max="40" value="12"></label>
+  <label>Risk threshold організації, % <b id="b15tv"></b><input type="range" id="b15t" min="2" max="25" value="10"></label>
+  <label>Скільки лишилось резерву, % від бюджету <b id="b15rv"></b><input type="range" id="b15r" min="0" max="20" value="6"></label>
+ </div>
+ <div class="card"><div id="b15res"></div></div>
+</div>
+
+<h3>Resilience: сценарій «чорного лебедя»</h3>
+<p class="q">Unknown-unknown не можна внести в реєстр заздалегідь. Можна підготувати проєкт так, щоб він пережив удар. Оберіть сценарій і запобіжники — побачите орієнтовний час відновлення.</p>
+<div class="row" id="b15sc"></div>
+<div class="grid2" style="margin-top:10px">
+ <div class="card" id="b15m"></div>
+ <div class="card"><div id="b15out"></div></div>
+</div>
+<div class="insight"><b>Стратегії для overall risk</b> ті самі, що й для окремих ризиків, але застосовуються до проєкту в цілому: змінити обсяг чи підхід (avoid), розділити з партнером (share / transfer), додати резерв і контрольні точки (mitigate), або свідомо прийняти — з рішенням спонсора.</div>
+</section>
+
+<section class="blk" id="b13" data-t="Шпаргалка">
+<div class="kick">Блок 13 · Підсумок</div>
+<h2>Шпаргалка та глосарій</h2>
+<input type="text" id="b13q" placeholder="Пошук терміна…" style="width:100%;margin-bottom:10px">
+<div class="gl" id="b13g"></div>
+</section>
+
+
+  </div>
+
+  <p class="src">Джерела: PMI, <i>PMBOK® Guide</i> 8th Edition (2025), розділ 2.7 Risk Performance Domain
+    (Figures 2-46…2-53, Tailoring Considerations). Кейси — з офіційних розслідувань: HHS OIG (Healthcare.gov),
+    SEC (Knight Capital), FCA і PRA (TSB), CrowdStrike RCA, GAO (Denver International Airport). Формулювання
+    стандарту — власний переказ для навчальних цілей.</p>
+</main>
+</div>
+
+<script>
+window.COMP_DATA = {
+  riskdom: {
+    lanes: [ { id: 'r', t: 'Risk' }, { id: 'd', t: 'Інші домени PMBOK 8' } ],
+    nodes: [
+      { id: 'risk', lane: 'r', row: 1, t: 'Risk Performance Domain', s: 'шість процесів',
+        b: 'Ризики, експозиція, резерви, стратегії й власники. Результат домену — resilience проєкту.' },
+      { id: 'fin', lane: 'd', row: 0, t: 'Finance', s: 'резерви',
+        b: 'Contingency reserve — у cost baseline під відомі ризики; management reserve — поза baseline, під непередбачене. EMV ризиків обґрунтовує розмір резерву.' },
+      { id: 'gov', lane: 'd', row: 1, t: 'Governance', s: 'пороги й ескалація',
+        b: 'Апетит і risk threshold задає організація. Коли відхилення виходить за поріг або рішення поза повноваженнями PM — Escalate на рівень спонсора, програми чи портфеля.' },
+      { id: 'res', lane: 'd', row: 2, t: 'Resources', s: 'власники ризиків',
+        b: 'Власник ризику — конкретна людина з важелями впливу. Дії з реагування потребують часу людей і потрапляють у team assignments.' },
+      { id: 'stk', lane: 'd', row: 3, t: 'Stakeholders', s: 'комунікація ризиків',
+        b: 'Спонсор визначає апетит, клієнт погоджує ризики на своєму боці, risk report іде аудиторіям за планом комунікацій.' }
+    ],
+    links: [ { from: 'risk', to: 'fin' }, { from: 'risk', to: 'gov' }, { from: 'risk', to: 'res' }, { from: 'risk', to: 'stk' } ]
+  }
+};
+</script>
+<script src="shared/nav.js?v=20260922211510"></script>
+<script src="shared/comp.js?v=20260922211510"></script>
+<script src="shared/risk-app.js?v=20260922211510"></script>
+<script src="shared/risk-extra.js?v=20260922211510"></script>
+<script src="shared/risk-page.js?v=20260922211510"></script>
+</body>
+</html>
