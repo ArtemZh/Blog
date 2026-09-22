@@ -96,6 +96,29 @@
     ex.appendChild(svgEl('text', { x: ax - 6, y: 16 }, 'Exposure'));
   }
 
+
+  /* Tornado зі прикладу лекції: база 14 тижнів, двосторонні смуги. */
+  var tc = document.getElementById('torChart');
+  if (tc) {
+    var F = [['R1 · API провайдера', 14, 17, 1], ['Бекенд (3–6 тиж)', 13, 16, 0], ['R2 · фід постачальника', 14, 15.5, 1],
+             ['Дизайн', 13.5, 15, 0], ['R3 · дизайнер на двох проєктах', 14, 14.5, 1]];
+    var base = 14, L = 210, Rr = 50, TW = 640, top = 34, bh = 36, lo = 12.5, hi = 17.5;
+    var X = function (v) { return L + (v - lo) / (hi - lo) * (TW - L - Rr); };
+    tc.appendChild(svgEl('line', { x1: X(base), y1: top - 12, x2: X(base), y2: top + F.length * bh, stroke: 'var(--ink)', 'stroke-width': 1.5 }));
+    tc.appendChild(svgEl('text', { x: X(base), y: top - 18, 'text-anchor': 'middle', style: 'fill:var(--ink);font-weight:700' }, 'база 14 тиж'));
+    F.forEach(function (f, i) {
+      var y = top + i * bh;
+      tc.appendChild(svgEl('text', { x: L - 10, y: y + 18, 'text-anchor': 'end', style: 'fill:var(--ink);font-family:var(--sans);font-size:12px' }, f[0]));
+      if (f[1] < base) tc.appendChild(svgEl('rect', { x: X(f[1]), y: y + 5, width: X(base) - X(f[1]), height: 20, rx: 2, fill: 'var(--c-green)', opacity: .75 }));
+      tc.appendChild(svgEl('rect', { x: X(base), y: y + 5, width: X(f[2]) - X(base), height: 20, rx: 2, fill: f[3] ? 'var(--c-clay)' : 'var(--act)', opacity: .85 }));
+      tc.appendChild(svgEl('text', { x: X(f[2]) + 6, y: y + 19 }, (f[2] - f[1]).toString().replace('.', ',') + ' тиж'));
+    });
+    for (var v = 13; v <= 17; v++) tc.appendChild(svgEl('text', { x: X(v), y: top + F.length * bh + 18, 'text-anchor': 'middle' }, v));
+    var ly = top + F.length * bh + 26;
+    tc.setAttribute('viewBox', '0 0 640 ' + ly);
+    tc.insertAdjacentHTML('afterend', '<div class="lgd"><span><i style="background:var(--c-green)"></i>фактор піде якнайкраще</span><span><i style="background:var(--act)"></i>оцінка задачі — найгірше</span><span><i style="background:var(--c-clay)"></i>ризик-подія сталася</span></div>');
+  }
+
   fromHash();
   spy();
 })();

@@ -122,7 +122,7 @@ ol.steps5 li{margin-bottom:4px}
 .pim .k1{background:var(--c-green-s);color:var(--c-green)}.pim .k2{background:var(--warm);color:var(--signal-ink)}
 .pim .k3{background:var(--c-gold-s);color:var(--c-gold)}.pim .k4{background:var(--c-clay-s);color:var(--c-clay)}
 .pim-cap{display:flex;justify-content:space-between;max-width:520px;margin:6px auto 0;font:500 11px var(--mono);color:var(--ink-3)}
-svg.chart{width:100%;height:auto;display:block}
+svg.chart{width:100%;max-width:720px;height:auto;display:block;margin:0 auto}
 svg.chart text{font:500 11px var(--mono);fill:var(--ink-3)}
 
 /* блок 14 — кейси */
@@ -140,3 +140,8 @@ svg.chart text{font:500 11px var(--mono);fill:var(--ink-3)}
 #appToc::-webkit-scrollbar{display:none}
 .topbar{flex-wrap:nowrap}
 .topbar .brand{white-space:nowrap}
+
+.lgd{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;margin-top:10px;font-size:12px;color:var(--ink-2)}
+.lgd i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+
+#app #b7sw,#app #b7tor{max-width:900px;display:block;margin-left:auto;margin-right:auto}

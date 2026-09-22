@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20260922211510">
-<link rel="stylesheet" href="shared/style.css?v=20260922211510">
+<link rel="stylesheet" href="shared/tokens.css?v=20260922213953">
+<link rel="stylesheet" href="shared/style.css?v=20260922213953">
 <style>
 /* ── сторінка компетенцій ──────────────────────────────────────────────
    Зміст ліворуч липкий, розділи однакової будови: суть → схема →
@@ -140,8 +140,8 @@ table.t td.pr{font:500 11px/1.35 var(--mono);color:var(--ink-3);width:150px}
 .tpan dt{font:600 10px/1.5 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
 .tpan dd{margin:0;color:var(--ink-2)}
 </style>
-<link rel="stylesheet" href="shared/risk-lecture.css?v=20260922211510">
-<link rel="stylesheet" href="shared/risk-app.css?v=20260922211510">
+<link rel="stylesheet" href="shared/risk-lecture.css?v=20260922213953">
+<link rel="stylesheet" href="shared/risk-app.css?v=20260922213953">
 </head>
 <body data-tab="lecture">
 <div class="page">
@@ -515,10 +515,51 @@ table.t td.pr{font:500 11px/1.35 var(--mono);color:var(--ink-3);width:150px}
     <figcaption>Розподіл тривалості за симуляціями: P50 ≈ 14 тижнів, P80 ≈ 15 тижнів.</figcaption></figure>
   <div class="cmp2">
     <div class="cc"><b>Monte Carlo</b><ul><li>Для кожної задачі — мін / ймовірно / макс</li><li>Тисячі випадкових прогонів</li><li>Результат: ймовірність укластися в дату</li></ul></div>
-    <div class="cc"><b>Аналіз чутливості (tornado)</b><ul><li>Який ризик найбільше хитає результат</li><li>Показує, куди вкладати зусилля</li><li>Смуги від найширшої до найвужчої</li></ul></div>
+    <div class="cc"><b>Аналіз чутливості (tornado)</b><ul><li>Який ризик найбільше хитає результат</li><li>Показує, куди вкладати зусилля</li><li>Смуги від найширшої до найвужчої</li><li>Детально — нижче</li></ul></div>
   </div>
   <p>Замість «зробимо за 12 тижнів» — «з імовірністю 80% укладемося в 15». Це чесніша розмова з клієнтом.
     Симулятор — у додатку, блок 7.</p>
+
+  <h3>Аналіз чутливості: tornado diagram</h3>
+  <p>Monte Carlo відповідає, <i>наскільки</i> невизначений результат: P50 — 14 тижнів, P80 — 15. Tornado відповідає,
+    <i>чому</i>: які фактори дають цей розкид і з якого варто починати. У PMBOK це техніка кількісного аналізу —
+    sensitivity analysis, а діаграму називають tornado через форму.</p>
+  <ol class="steps5">
+    <li><b>Модель результату.</b> Тривалість = сума задач + затримки від ризиків-подій. Базове значення — 14 тижнів.</li>
+    <li><b>Один фактор за раз.</b> Ставимо фактор в оптимістичне, потім у песимістичне значення; усі інші лишаються на базі.</li>
+    <li><b>Ширина смуги</b> — наскільки зсунувся результат між двома крайніми значеннями.</li>
+    <li><b>Сортуємо</b> від найширшої смуги вгорі до найвужчої внизу — виходить «торнадо».</li>
+  </ol>
+  <figure class="fig"><svg id="torChart" class="chart" viewBox="0 0 640 250" role="img" aria-label="Tornado-діаграма тривалості проєкту"></svg>
+    <figcaption>Інтернет-магазин, база 14 тижнів. Ліворуч — результат, якщо фактор піде якнайкраще, праворуч — якщо якнайгірше. Цифри умовні.</figcaption></figure>
+  <table class="t">
+    <thead><tr><th>Фактор</th><th>Найкраще</th><th>Найгірше</th><th>Розмах</th><th>Що робимо</th></tr></thead>
+    <tbody>
+      <tr><td>R1 · API провайдера</td><td>14</td><td>17</td><td>3 тиж</td><td class="ex">Mitigate: адаптер і міграція в спринті 1 — прибирає найбільший розкид</td></tr>
+      <tr><td>Бекенд (оцінка 3–6 тиж)</td><td>13</td><td>16</td><td>3 тиж</td><td class="ex">Spike на тиждень, щоб звузити діапазон оцінки, або декомпозиція</td></tr>
+      <tr><td>R2 · фід постачальника</td><td>14</td><td>15,5</td><td>1,5 тиж</td><td class="ex">Contingency plan: ручний імпорт топ-100 товарів</td></tr>
+      <tr><td>Дизайн</td><td>13,5</td><td>15</td><td>1,5 тиж</td><td class="ex">UI-кіт, ранні макети критичних екранів</td></tr>
+      <tr><td>R3 · дизайнер на двох проєктах</td><td>14</td><td>14,5</td><td>0,5 тиж</td><td class="ex">Активне прийняття з буфером — більше не варто</td></tr>
+    </tbody>
+  </table>
+  <div class="cmp3">
+    <div class="cc"><b>Який ризик найбільше хитає результат</b><p>Верхня смуга. Тут R1 і бекенд: кожен сам по собі зсуває дату на 3 тижні.</p></div>
+    <div class="cc"><b>Куди вкладати зусилля</b><p>Згори вниз. Робота з R3 унизу навіть в ідеалі дає пів тижня — займатися нею першою означає витрачати зусилля не там.</p></div>
+    <div class="cc"><b>Чому смуги несиметричні</b><p>Ризик-подія зсуває результат лише в один бік, а оцінки задач асиметричні: запізнитися можна сильніше, ніж випередити.</p></div>
+  </div>
+  <table class="t">
+    <thead><tr><th>Спосіб</th><th>Як рахується</th><th>Коли зручний</th></tr></thead>
+    <tbody>
+      <tr><td>Розмах (one-at-a-time)</td><td>Кожен фактор окремо від O до P, решта на базі</td><td class="ex">Швидко, без симуляції; добре пояснювати спонсору</td></tr>
+      <tr><td>Кореляція з Monte Carlo</td><td>Наскільки фактор рухається разом із загальним результатом у тисячах прогонів</td><td class="ex">Коли модель уже є; враховує всі фактори одночасно</td></tr>
+    </tbody>
+  </table>
+  <div class="trap"><b>Обмеження.</b> Tornado змінює фактори по одному, тож не показує, як повʼязані ризики підсилюють
+    одне одного: R1 і R4 обидва б'ють по релізу, і разом вони гірші, ніж сума смуг. І результат не кращий за
+    діапазони на вході: якщо O і P занижені «для гарного графіка», діаграма впевнено покаже не той фактор.</div>
+  <p>Для розмови з клієнтом: «Дату найбільше хитають API провайдера й бекенд. Ми вже мігруємо API в першому
+    спринті, а бекенд уточнимо тижневим spike — після цього прогноз звузиться». Інтерактивна версія — у
+    додатку, блок 7: змінюйте оцінки й вмикайте реагування, і смуги перераховуються.</p>
 
   <h3>Практика · реєстр ризиків V2: додаємо аналіз</h3>
   <div class="regv"><span>Опис</span><span class="on">Аналіз</span><span>Реагування</span><span>Моніторинг</span></div>
@@ -901,8 +942,12 @@ table.t td.pr{font:500 11px/1.35 var(--mono);color:var(--ink-3);width:150px}
 </div>
 <svg id="b7h" viewBox="0 0 760 260" width="100%" style="margin-top:12px"></svg>
 <h3>Аналіз чутливості (tornado)</h3>
-<p class="q">Що найбільше «хитає» строк: наскільки кожна задача чи подія корелює з загальною тривалістю.</p>
-<svg id="b7tor" viewBox="0 0 760 220" width="100%"></svg>
+<p class="q">Що найбільше «хитає» строк. Два способи порахувати: <b>розмах</b> — змінюємо один фактор від оптимістичного до песимістичного, решта на базі; <b>кореляція</b> — наскільки фактор рухається разом із загальною тривалістю в прогонах симуляції.</p>
+<div class="row" id="b7mode"><button type="button" class="btn sm pri" data-m="sw">Розмах (один фактор за раз)</button><button type="button" class="btn sm" data-m="co">Кореляція (з симуляції)</button></div>
+<div id="b7swBox"><svg id="b7sw" viewBox="0 0 760 200" width="100%" style="margin-top:8px"></svg></div>
+<div id="b7coBox" style="display:none"><svg id="b7tor" viewBox="0 0 760 220" width="100%" style="margin-top:8px"></svg><div class="q" id="b7coNote"></div></div>
+<div class="fb" id="b7tip" style="display:block"></div>
+<div class="insight"><b>Як читати.</b> Зверху — фактор, який дає найбільший розкид; з нього починаємо mitigation або уточнення оцінки. Розмах рахується без симуляції й одразу реагує на таблицю й перемикачі ризиків. Кореляція враховує все разом, але потребує прогонів. Обидва не показують, як повʼязані ризики підсилюють одне одного — це видно лише в розподілі Monte Carlo вище.</div>
 <div class="insight"><b>Як говорити з клієнтом:</b> замість «зробимо за 12 тижнів» — «з імовірністю 80% вкладемося в N тижнів». Сума «найімовірніших» оцінок майже завжди оптимістична: розподіли асиметричні, запізнитися можна сильніше, ніж випередити.</div>
 </section>
 
@@ -1045,10 +1090,10 @@ window.COMP_DATA = {
   }
 };
 </script>
-<script src="shared/nav.js?v=20260922211510"></script>
-<script src="shared/comp.js?v=20260922211510"></script>
-<script src="shared/risk-app.js?v=20260922211510"></script>
-<script src="shared/risk-extra.js?v=20260922211510"></script>
-<script src="shared/risk-page.js?v=20260922211510"></script>
+<script src="shared/nav.js?v=20260922213953"></script>
+<script src="shared/comp.js?v=20260922213953"></script>
+<script src="shared/risk-app.js?v=20260922213953"></script>
+<script src="shared/risk-extra.js?v=20260922213953"></script>
+<script src="shared/risk-page.js?v=20260922213953"></script>
 </body>
 </html>

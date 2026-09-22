@@ -274,11 +274,11 @@ const REV=[{n:"R1 · API провайдера вимкнуть",p:40,d:2,on:true
 function b7table(){let h="<tr><th>Задача</th><th>Оптимістично, тиж</th><th>Найімовірніше, тиж</th><th>Песимістично, тиж</th><th>Середнє (a+m+b)/3</th></tr>";
  TASKS.forEach((t,i)=>{h+="<tr><td><b>"+t[0]+"</b></td>"+[1,2,3].map(j=>"<td><input type='number' class='n' step='0.5' min='0.5' value='"+t[j]+"' data-i='"+i+"' data-j='"+j+"'></td>").join("")+"<td>"+((t[1]+t[2]+t[3])/3).toFixed(2)+"</td></tr>";});
  const sm=TASKS.reduce((a,t)=>a+t[2],0),mean=TASKS.reduce((a,t)=>a+(t[1]+t[2]+t[3])/3,0);
- h+="<tr><td><b>Разом</b></td><td></td><td><b>"+sm+"</b> ← «план»</td><td></td><td><b>"+mean.toFixed(2)+"</b></td></tr>";$("#b7t").innerHTML=h;
+ h+="<tr><td><b>Разом</b></td><td></td><td><b>"+sm+"</b> ← «план»</td><td></td><td><b>"+mean.toFixed(2)+"</b></td></tr>";$("#b7t").innerHTML=h;b7swing();
  $("#b7t").querySelectorAll("input").forEach(x=>x.onchange=e=>{const i=+e.target.dataset.i,j=+e.target.dataset.j;TASKS[i][j]=Math.max(0.5,+e.target.value||0.5);const t=TASKS[i];if(t[1]>t[2])t[2]=t[1];if(t[2]>t[3])t[3]=t[2];b7table();});}
 function b7risks(){const d=$("#b7r");d.innerHTML="";REV.forEach((r,i)=>{const w=el("div",{style:"padding:6px 0;border-bottom:1px solid var(--line)"});
  w.innerHTML="<label style='display:flex;gap:6px;align-items:center'><input type='checkbox' "+(r.on?"checked":"")+" data-a='on'><b>"+r.n+"</b></label><div style='font-size:.82rem;color:var(--mut);margin-left:22px'>P = "+(r.mit?r.mp:r.p)+"% · +"+(r.mit?r.md:r.d)+" тиж</div><label style='display:flex;gap:6px;align-items:center;margin-left:22px;font-size:.85rem'><input type='checkbox' "+(r.mit?"checked":"")+" data-a='mit'>реагування: "+r.mt+"</label>";
- w.querySelectorAll("input").forEach(c=>c.onchange=e=>{r[e.target.dataset.a]=e.target.checked;b7risks();});d.appendChild(w);});}
+ w.querySelectorAll("input").forEach(c=>c.onchange=e=>{r[e.target.dataset.a]=e.target.checked;b7risks();});d.appendChild(w);});b7swing();}
 function tri(a,m,b){const u=Math.random();const f=(m-a)/(b-a||1);return u<f?a+Math.sqrt(u*(b-a)*(m-a)):b-Math.sqrt((1-u)*(b-a)*(b-m));}
 let SIM=null;
 function b7run(){const N=+$("#b7n").value;const tot=[],cols=TASKS.map(()=>[]),rc=REV.map(()=>[]);
@@ -301,7 +301,38 @@ function b7draw(){const dl=+$("#b7d").value;$("#b7dv").textContent=dl;if(!SIM){$
  const items=TASKS.map((t,i)=>({n:t[0],c:corr(SIM.cols[i],SIM.tot)})).concat(REV.map((r,i)=>({n:r.n.split(" · ")[0]+" (подія)",c:r.on?corr(SIM.rc[i],SIM.tot):0}))).sort((a,b)=>b.c-a.c);
  let t="";const TW=760,bh=22;items.forEach((it,i)=>{const w=Math.max(0,it.c)*(TW-260);t+='<text x="180" y="'+(24+i*bh)+'" font-size="12" text-anchor="end" fill="var(--ink)">'+esc(it.n)+'</text><rect x="190" y="'+(12+i*bh)+'" width="'+w+'" height="16" rx="3" fill="'+(/подія/.test(it.n)?"var(--c-clay)":"var(--act)")+'"/><text x="'+(196+w)+'" y="'+(24+i*bh)+'" font-size="11" fill="var(--ink-3)">'+it.c.toFixed(2)+'</text>';});
  $("#b7tor").setAttribute("viewBox","0 0 760 "+(20+items.length*bh));$("#b7tor").innerHTML=t;}
-$("#b7go").onclick=b7run;$("#b7d").oninput=b7draw;b7table();b7risks();b7draw();
+
+/* Tornado «розмах»: кожен фактор від оптимістичного до песимістичного, решта — на базі.
+   База = сума найімовірніших оцінок + очікувана затримка від увімкнених ризиків. */
+let B7MODE="sw";
+function b7swing(){const svg=$("#b7sw");if(!svg)return;
+ const risks=REV.filter(r=>r.on).map(r=>({r,p:(r.mit?r.mp:r.p)/100,d:r.mit?r.md:r.d}));
+ const base=TASKS.reduce((a,t)=>a+t[2],0)+risks.reduce((a,x)=>a+x.p*x.d,0);
+ const items=TASKS.map(t=>({n:t[0],lo:base-(t[2]-t[1]),hi:base+(t[3]-t[2]),ev:false}))
+  .concat(risks.map(x=>({n:x.r.n.split(" · ")[0]+" · "+x.r.n.split(" · ")[1],lo:base-x.p*x.d,hi:base+(1-x.p)*x.d,ev:true,r:x.r})))
+  .map(i=>Object.assign(i,{w:i.hi-i.lo})).sort((a,b)=>b.w-a.w);
+ const W=760,L=250,R=40,bh=26,T=26,H=T+items.length*bh+30;
+ const mn=Math.min(...items.map(i=>i.lo)),mx=Math.max(...items.map(i=>i.hi));const pad=0.5;
+ const X=v=>L+(v-(mn-pad))/((mx+pad)-(mn-pad))*(W-L-R);
+ let g='<line x1="'+X(base)+'" y1="'+(T-8)+'" x2="'+X(base)+'" y2="'+(H-24)+'" stroke="var(--ink)" stroke-width="1.5"/>'+
+  '<text x="'+X(base)+'" y="'+(T-12)+'" font-size="11" text-anchor="middle" font-weight="700" fill="var(--ink)">база '+base.toFixed(1)+' тиж</text>';
+ items.forEach((it,i)=>{const y=T+i*bh;
+  g+='<text x="'+(L-10)+'" y="'+(y+14)+'" font-size="12" text-anchor="end" fill="var(--ink)">'+esc(it.n)+'</text>';
+  if(base-it.lo>0.001)g+='<rect x="'+X(it.lo)+'" y="'+(y+2)+'" width="'+(X(base)-X(it.lo))+'" height="17" rx="2" fill="var(--c-green)" opacity=".75"/>';
+  if(it.hi-base>0.001)g+='<rect x="'+X(base)+'" y="'+(y+2)+'" width="'+(X(it.hi)-X(base))+'" height="17" rx="2" fill="'+(it.ev?"var(--c-clay)":"var(--act)")+'" opacity=".85"/>';
+  g+='<text x="'+(X(it.hi)+6)+'" y="'+(y+14)+'" font-size="11" fill="var(--ink-3)">±'+it.w.toFixed(1)+'</text>';});
+ for(let v=Math.ceil(mn-pad);v<=Math.floor(mx+pad);v++)g+='<text x="'+X(v)+'" y="'+(H-8)+'" font-size="10" text-anchor="middle" fill="var(--ink-3)">'+v+'</text>';
+ svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.innerHTML=g;
+ const top=items[0];let tip="<b>Почніть з «"+esc(top.n)+"»</b>: розмах "+top.w.toFixed(1)+" тиж — найбільший у проєкті. ";
+ if(top.ev&&!top.r.mit){tip+="Увімкніть реагування «"+esc(top.r.mt)+"» — розмах цього ризику зменшиться до "+top.r.md.toFixed(1)+" тиж.";}
+ else if(top.ev)tip+="Реагування вже враховано; наступний кандидат — «"+esc((items[1]||top).n)+"».";
+ else tip+="Це оцінка задачі: звузьте діапазон (spike, прототип, декомпозиція) — зараз проєкт може закінчитися від "+top.lo.toFixed(1)+" до "+top.hi.toFixed(1)+" тиж лише через неї.";
+ $("#b7tip").innerHTML=tip;}
+function b7setMode(m){B7MODE=m;$$("#b7mode button").forEach(b=>b.classList.toggle("pri",b.dataset.m===m));
+ $("#b7swBox").style.display=m==="sw"?"":"none";$("#b7coBox").style.display=m==="co"?"":"none";
+ $("#b7coNote").textContent=SIM?"":"Спершу натисніть «Запустити симуляцію» вище — кореляцію рахуємо з прогонів.";}
+$("#b7mode").addEventListener("click",e=>{const b=e.target.closest("button[data-m]");if(b)b7setMode(b.dataset.m);});
+$("#b7go").onclick=()=>{b7run();b7setMode(B7MODE);};$("#b7d").oninput=b7draw;b7table();b7risks();b7draw();b7setMode("sw");
 
 /* ================= БЛОК 8 ================= */
 const WZ=[["Рішення в межах моїх повноважень і обсягу проєкту?",[["Так",1],["Ні",{r:"Escalate",d:"Передайте на рівень програми, портфеля чи спонсора. Знімаємо з активного моніторингу лише тоді, коли власник вищого рівня погодився прийняти ризик."}]]],
