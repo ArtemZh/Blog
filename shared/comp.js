@@ -249,12 +249,18 @@
     });
 
 
-    /* Пояснення блоків — текстом під схемою, а не у спливаючому вікні. */
-    var list = document.createElement('dl');
+    /* Пояснення блоків — текстом під схемою, згруповані за колонками схеми:
+       одна картка на колонку, щоб текст читався блоками, а не суцільним списком. */
+    var list = document.createElement('div');
     list.className = 'clist';
-    nodes.forEach(function (n) {
-      list.innerHTML += '<dt>' + esc(n.t) + (n.s ? ' <span>' + esc(n.s) + '</span>' : '') + '</dt>' +
-                        '<dd>' + n.b + '</dd>';
+    lanes.forEach(function (l) {
+      var own = nodes.filter(function (n) { return n.lane === l.id; });
+      if (!own.length) return;
+      var h = '<div class="clane-card"><h4>' + esc(l.t) + '</h4><dl>';
+      own.forEach(function (n) {
+        h += '<dt>' + esc(n.t) + (n.s ? ' <span>' + esc(n.s) + '</span>' : '') + '</dt><dd>' + n.b + '</dd>';
+      });
+      list.insertAdjacentHTML('beforeend', h + '</dl></div>');
     });
 
     /* ── сценарій (механіка DWH): крок = дріт + підпис, решта гасне ──── */

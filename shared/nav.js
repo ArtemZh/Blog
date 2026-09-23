@@ -16,6 +16,7 @@
     { g: 2, n: '16', f: '16-jira-dashboard.html',      t: t('Jira-дашборд', 'Jira dashboard') },
     { g: 2, n: '15', f: '15-outsourcing-product.html', t: t('Аутсорс і продукт', 'Outsourcing and product') },
     { g: 3, n: '26', f: '26-competencies.html',        t: t('Компетенції PM', 'PM competencies') },
+    { g: 3, n: '26b', f: '26b-competencies-pmbok8.html', t: t('Компетенції PM: PMBOK 7 і 8', 'PM competencies: PMBOK 7 vs 8') },
     { g: 3, n: '27', f: '27-risk-lecture.html',        t: t('Лекція: управління ризиками', 'Lecture: risk management') },
     { g: 3, n: '14d', f: '14d-pmbok8-focus.html',       t: 'PMBOK 8 Focus View' },
     { g: 4, n: '24', f: '24-dwh.html',                 t: t('Дані та керування ними', 'Data and its governance') },

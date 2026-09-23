@@ -786,6 +786,9 @@
      Рамка свого розміру не міняє — ні від зуму, ні від фокусу. */
   var Z = (function (wrap, stage) {
     var k = 1, tx = 0, ty = 0, MIN = 0.15, MAX = 3;
+    /* Користувач сам призумив чи посунув полотно — тоді кліки по блоках
+       більше не вписують схему заново, вигляд лишається там, де його лишили. */
+    var touched = false;
     wrap.style.overflow = 'hidden'; wrap.style.position = 'relative';
     stage.style.transformOrigin = '0 0';
     function put() { stage.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + k + ')'; }
@@ -807,9 +810,9 @@
       if (e.ctrlKey || e.metaKey) {
         // щипок дає дрібні дельти, коліщатко миші — великі кроки: швидкість різна
         var sp = Math.abs(e.deltaY) > 40 ? 0.0022 : 0.012;
-        at(k * Math.exp(-e.deltaY * sp), e.clientX, e.clientY); return;
+        touched = true; at(k * Math.exp(-e.deltaY * sp), e.clientX, e.clientY); return;
       }
-      tx -= e.deltaX; ty -= e.deltaY; put();
+      touched = true; tx -= e.deltaX; ty -= e.deltaY; put();
     }, { passive: false });
     var drag = null, moved = false;
     wrap.addEventListener('pointerdown', function (e) {
@@ -821,7 +824,7 @@
       var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
       if (!drag.on) {
         if (Math.hypot(dx, dy) < 4) return;
-        drag.on = true; moved = true; wrap.setPointerCapture(e.pointerId); wrap.style.cursor = 'grabbing';
+        drag.on = true; moved = true; touched = true; wrap.setPointerCapture(e.pointerId); wrap.style.cursor = 'grabbing';
       }
       tx = drag.tx + dx; ty = drag.ty + dy; put();
     });
@@ -831,7 +834,8 @@
     wrap.addEventListener('click', function (e) {
       if (!moved) return; moved = false; e.stopPropagation(); e.preventDefault();
     }, true);
-    return { fit: fitIn, get: function () { return k; },
+    return { fit: function () { touched = false; fitIn(); }, keep: put, touched: function () { return touched; },
+      get: function () { return k; },
       set: function (v) { var r = wrap.getBoundingClientRect(); at(v, r.left + r.width / 2, r.top + r.height / 2); } };
   })(fit, host);
 
@@ -852,9 +856,16 @@
   window.__fvZoom = function (refit, resized) {
     if (fit.clientWidth < 60) { setTimeout(function () { window.__fvZoom(refit, resized); }, 60); return; }
     if (resized || !frameH) sizeFrame();
-    if (refit) Z.fit(); else Z.set(Z.get());
+    /* Розмір вікна чи повний екран — вписуємо заново; клік по блоку після
+       ручного зуму — лишаємо вигляд користувача. */
+    if (resized) Z.fit();
+    else if (refit && !Z.touched()) Z.fit();
+    else Z.keep();
   };
   window.__fvZoom(true, true);
+  /* Кнопка «вписати»: повертає всю схему в рамку й знімає ручний зум. */
+  var fitBtn = document.getElementById('btn-fit');
+  if (fitBtn) fitBtn.addEventListener('click', function (e) { e.stopPropagation(); Z.fit(); });
   addEventListener('resize', function () { window.__fvZoom(true, true); });
   document.addEventListener('fullscreenchange', function () { setTimeout(function () { window.__fvZoom(true, true); }, 80); });
 

@@ -145,3 +145,7 @@ svg.chart text{font:500 11px var(--mono);fill:var(--ink-3)}
 .lgd i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 
 #app #b7sw,#app #b7tor{max-width:900px;display:block;margin-left:auto;margin-right:auto}
+/* Вузький екран: назва ховається, перемикач компактніший, розділи гортаються вбік. */
+#lecToc{min-width:0}
+@media(max-width:1100px){#lecToc{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}#lecToc::-webkit-scrollbar{display:none}}
+@media(max-width:560px){.topbar .brand{display:none}.tabsw button{padding:7px 9px;font-size:12px}.topbar{gap:8px}}

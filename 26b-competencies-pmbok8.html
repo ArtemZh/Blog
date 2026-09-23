@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Компетенції Project Manager — від SDLC до GenAI</title>
+<title>Компетенції PM — PMBOK 7 і PMBOK 8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -174,6 +174,42 @@ table.t th{white-space:normal}
 .main{padding-inline:clamp(16px,4vw,56px)}
 .mast,.comp-wrap,#lecture,#app,.main > .src{max-width:1180px;margin-left:auto;margin-right:auto}
 table.t,table.p,.clist,.cslist{max-width:none}
+
+/* ── режим порівняння з PMBOK 8 ─────────────────────────────────────── */
+.tabsw{display:flex;border:1px solid var(--rule);border-radius:var(--r-md);overflow:hidden;flex:0 0 auto}
+.tabsw button{border:0;background:var(--paper);font:500 12.5px/1 var(--sans);color:var(--ink-2);padding:8px 12px;cursor:pointer}
+.tabsw button + button{border-left:1px solid var(--rule)}
+.tabsw button.on{background:var(--act);color:#fff}
+.v8,.v8sum,.v8same{display:none}
+body.mode8 .v8sum{display:block;border:1px solid var(--rule);border-left:3px solid var(--act);border-radius:0 var(--r-lg) var(--r-lg) 0;
+  background:var(--paper);padding:14px 18px;margin:0 auto var(--sp-lg);max-width:1180px}
+body.mode8 .has8{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--sp-lg);align-items:start}
+body.mode8 .has8 > .v7-top{grid-column:1;grid-row:1}body.mode8 .has8 > aside.v8{grid-column:2;grid-row:1}
+body.mode8 .has8 > .v7-rest{grid-column:1/-1;grid-row:2}
+body.mode8 #s1.has8 > .v7-top{grid-row:2}body.mode8 #s1.has8 > aside.v8{grid-row:2}body.mode8 #s1.has8 > .v7-rest{grid-row:3}
+body.mode8 .has8 > .v8same{grid-column:2;grid-row:1}
+body.mode8 .has8 > h2{grid-column:1/-1}
+body.mode8 .v8{display:block;border:1px solid var(--rule);border-left:3px solid var(--act);
+  border-radius:0 var(--r-lg) var(--r-lg) 0;background:var(--paper);padding:14px 16px;font-size:13px}
+body.mode8 .v8same{display:inline-block;grid-column:2;font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);border:1px dashed var(--rule-2);border-radius:var(--r-sm);padding:7px 10px;align-self:start}
+.v8-k{font:600 10px/1.3 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--act);margin-bottom:6px}
+.v8-k b{color:var(--ink)}
+.v8 h4{font-size:15px;margin:0 0 6px}
+.v8 p{font-size:13px;color:var(--ink-2);margin:0 0 8px;max-width:none}
+.v8 table.t{font-size:12.5px;table-layout:auto}
+.v8 table.t td:first-child{width:auto;font-weight:500;color:var(--ink-3)}
+.v8 table.t td:nth-child(2){color:var(--ink);font-weight:600}
+.v8n{padding-left:16px;margin:8px 0 0;color:var(--ink-2);font-size:12.5px;line-height:1.5}
+.v8s{font-size:11.5px!important;color:var(--ink-3)!important;margin-top:8px!important}
+.st{display:inline-block;font:600 10px/1 var(--mono);letter-spacing:.04em;padding:4px 6px;border-radius:var(--r-sm);white-space:nowrap}
+.st.n{background:var(--act-soft);color:var(--act)}.st.r{background:var(--c-blue-s);color:var(--c-blue)}
+.st.m{background:var(--c-purple-s);color:var(--c-purple)}.st.v{background:var(--c-gold-s);color:var(--c-gold)}
+.st.s{background:var(--paper-2);color:var(--ink-3)}
+body.mode8 .mast,body.mode8 .comp-wrap,body.mode8 .main > .src{max-width:1600px}
+@media(max-width:1200px){body.mode8 .has8{display:block}body.mode8 .v8{position:static;max-height:none;margin-top:var(--sp-md)}
+  body.mode8 .v8same{margin-top:var(--sp-sm)}}
+@media(max-width:560px){.topbar .brand{display:none}.tabsw button{padding:7px 9px;font-size:12px}}
 /* ── EVM детально ───────────────────────────────────────────────────── */
 .evm{margin-top:var(--sp-md)}
 .evm-lede{font-size:13.5px;color:var(--ink-2);max-width:80ch}
@@ -223,6 +259,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
 <div class="page">
 <header class="topbar">
   <a class="brand" href="#top">Компетенції PM</a>
+  <div class="tabsw" id="v8sw" role="group" aria-label="Редакція PMBOK"><button type="button" data-v="7" class="on">PMBOK 7</button><button type="button" data-v="8">PMBOK 8</button></div>
   <nav class="toc" aria-label="Розділи">
     <a href="#s1">Methodologies</a>
     <a href="#s2">PM Core</a>
@@ -236,7 +273,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
 <main class="main" id="top">
   <header class="mast wrap">
     <div class="kicker">PMI Process Groups · PMBOK 7 · практика</div>
-    <h1>Компетенції Project Manager: техніки й артефакти</h1>
+    <h1>Компетенції Project Manager: PMBOK 7 і PMBOK 8</h1>
     <p class="lede">Шість областей, якими користується delivery-менеджер щодня: від вибору підходу до розробки
       до роботи з GenAI. У кожній — з чого вона складається, які техніки застосовуються, які артефакти
       лишаються після роботи й де найчастіше ламається. Терміни залишені англійською: у такому вигляді
@@ -244,11 +281,28 @@ table.t,table.p,.clist,.cslist{max-width:none}
       а пояснення блоків — текстом під кожною схемою.</p>
   </header>
 
+
+  <aside class="v8sum">
+    <div class="v8-k">PMBOK® Guide 8th Edition · що змінилось</div>
+    <table class="t">
+      <thead><tr><th>Було (PMBOK 6 / Process Groups)</th><th>Стало в PMBOK 8</th></tr></thead>
+      <tbody>
+        <tr><td>10 knowledge areas</td><td>7 performance domains: Governance, Scope, Schedule, Finance, Stakeholders, Resources, Risk</td></tr>
+        <tr><td>5 process groups</td><td>5 Focus Areas: Initiating, Planning, Executing, Monitoring and Controlling, Closing</td></tr>
+        <tr><td>49 процесів</td><td>40 процесів; входи, техніки й виходи вбудовані в домени</td></tr>
+        <tr><td>12 принципів PMBOK 7</td><td>6 принципів: Adopt a Holistic View, Focus on Value, Embed Quality, Be an Accountable Leader, Integrate Sustainability, Build an Empowered Culture</td></tr>
+        <tr><td>Quality, Communications, Procurement — окремі області</td><td>Quality — у Scope і Governance; Communications — у Stakeholders; Procurement — Plan Sourcing Strategy і Appendix X4</td></tr>
+        <tr><td>AI не згадується</td><td>Appendix X3 Artificial Intelligence; AI серед технік Identify Risks і в tailoring</td></tr>
+      </tbody>
+    </table>
+    <p class="v8s">Ліворуч у кожному підрозділі — як описано на сторінці; праворуч — як це виглядає в PMBOK 8. Переказ для навчальних цілей.</p>
+  </aside>
+
   <div class="comp-wrap">
     <div>
 <!-- ── 1 ─────────────────────────────────────────────────────────────── -->
-<section class="sec" id="s1">
-  <h2><span class="num">01</span>Development Methodologies</h2>
+<section class="sec has8" id="s1">
+  <h2><span class="num">01</span>Development Methodologies</h2><div class="v7 v7-top">
   <p>Перше рішення проєкту — <b>development approach</b>: як продукт створюється й оновлюється. SDLC — технічні етапи всередині цього підходу, framework — організація роботи команди. Три різні речі, які в розмовах постійно змішують.</p>
   <h3>З чого складається</h3>
   <table class="p p4">
@@ -259,7 +313,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Tailoring</td><td class="in">Обраний підхід, OPA організації, зрілість команди</td><td>Адаптація процесів, ролей і артефактів під проєкт.</td><td>Перелік того, що застосовуємо й чому</td></tr>
     <tr><td>Визначення cadence</td><td class="in">Підхід, потреба замовника в поставках</td><td>Ритм поставки й приймання результату.</td><td>Release plan, календар релізів</td></tr>
     <tr><td>Вибір framework</td><td class="in">Підхід, розмір команди, кількість команд</td><td>Як організована щоденна робота команди.</td><td>Робочі домовленості, події, ролі</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
 
   <h3>Чотири підходи</h3>
   <p class="tt">Профіль кожного: коли обирати, з яким ритмом, як приймається результат і де сидить ризик.</p>
@@ -341,13 +395,28 @@ table.t,table.p,.clist,.cslist{max-width:none}
       <tr><td>Roadmap</td><td>Напрям продукту в часі. Product Owner.</td><td class="ex">Щокварталу</td></tr>
       </tbody></table>
   <div class="trap"><b>Пастка.</b> «У нас Agile» як відповідь на питання про підхід. Agile — набір практик, а не підхід до розробки: якщо контракт Fixed Price, обсяг зафіксований, а приймання одноразове, підхід у вас predictive зі спринтами всередині. Це нормально — але це треба назвати своїм імʼям і описати в плані.</div>
+</div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Tailoring · Delivery Cadence</b></div>
+<h4>Tailoring став процесом, а не порадою</h4>
+<p>У PMBOK 8 вибір і адаптація підходу описані як процес із чотирьох кроків (розділ 3.4), а tailoring considerations є в кожному з семи доменів. Delivery cadence — окремий розділ; process groups перейменовані на Focus Areas.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Що змінилось</th></tr></thead><tbody>
+<tr><td>Tailoring як рекомендація</td><td>Select Initial Development Approach</td><td><span class="st n">нове</span></td></tr>
+<tr><td>—</td><td>Tailor for the Organization</td><td><span class="st n">нове</span></td></tr>
+<tr><td>—</td><td>Tailor for the Project</td><td><span class="st n">нове</span></td></tr>
+<tr><td>—</td><td>Implement Ongoing Improvement</td><td><span class="st n">нове</span></td></tr>
+<tr><td>Process groups</td><td>Focus Areas: Initiating, Planning, Executing, Monitoring and Controlling, Closing</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Cadence усередині підходу</td><td>Delivery Cadence — окремий розділ (4.4)</td><td><span class="st v">переїхало</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>Tailoring considerations — у кожному домені: що підлаштовувати саме в Scope, Schedule, Risk тощо.</li><li>Суть рішення не змінилась: підхід обирають за певністю вимог і ціною помилки.</li></ul>
+<p class="v8s">PMBOK 8: розділи 3.3–3.5, 4.4, 4.5.</p>
+</aside>
 </section>
 
 <section class="sec" id="s2">
   <h2><span class="num">02</span>Project Management Core</h2>
   <p>Сім областей, які тримають проєкт разом. Кожна нижче — окремий підрозділ: з яких процесів складається, що кожен процес бере на вході, що робить і що лишає на виході, якими техніками це роблять і які артефакти ведуть.</p>
   <nav class="subnav"><a href="#u-project-and-program-management">Project and Program Management</a><a href="#u-project-integration-management">Project Integration Management</a><a href="#u-project-scope-management">Project Scope Management</a><a href="#u-project-schedule-management">Project Schedule Management</a><a href="#u-project-cost-management">Project Cost Management</a><a href="#u-project-risk-management">Project Risk Management</a><a href="#u-project-quality-management">Project Quality Management</a></nav>
-  <div class="sub" id="u-project-and-program-management">
+  <div class="sub has8" id="u-project-and-program-management"><div class="v7 v7-top">
     <h3>Project and Program Management <em>рівні управління</em></h3>
     <p>Проєкт дає результат, програма — вигоду від групи повʼязаних проєктів, портфель — вибір, що робити взагалі. Benefits міряються на рівні програми, і майже завжди — після закриття проєкту.</p>
     <h4 class="sh">З чого складається</h4>
@@ -359,7 +428,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Керування залежностями</td><td class="in">Плани проєктів програми</td><td>Звʼязки між проєктами програми з власником на кожній.</td><td>Dependency register</td></tr>
     <tr><td>Governance і gate-огляди</td><td class="in">Критерії gate, статус фази</td><td>Рішення про продовження на межі фази за критеріями.</td><td>Протокол gate-огляду</td></tr>
     <tr><td>Реалізація benefits</td><td class="in">Benefits management plan, дані після передачі</td><td>Вимірювання вигоди після передачі результату.</td><td>Benefits realization report</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <table class="t">
       <thead><tr><th>Техніка</th><th>Що дає</th><th>Приклад</th></tr></thead>
       <tbody>
@@ -383,8 +452,20 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Проєкт закрили «успішно», а вигоду ніхто не міряв. Без власника benefits після передачі ніхто не знає, чи варто було починати.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Governance domain</b></div>
+<h4>Вигода й керування — у домені Governance</h4>
+<p>Звʼязок проєкту зі стратегією, вигодою й рішеннями організації PMBOK 8 зводить у домен Governance: створення цінності проєктом, моделі governance і метрики, за якими governance працює.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Що змінилось</th></tr></thead><tbody>
+<tr><td>Benefits на рівні програми</td><td>Project Value Creation (2.1.1)</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>Governance поза стандартом проєкту</td><td>Project Governance Models (2.1.2)</td><td><span class="st n">нове</span></td></tr>
+<tr><td>—</td><td>Metrics and Mechanisms for Effective Project Governance (2.1.3)</td><td><span class="st n">нове</span></td></tr>
+<tr><td>Принципи PMBOK 7 (12)</td><td>6 принципів, серед них Focus on Value і Adopt a Holistic View</td><td><span class="st m">обʼєднано</span></td></tr>
+</tbody></table>
+<p class="v8s">PMBOK 8: розділи 2.1.1–2.1.3, 3.3–3.4.</p>
+</aside>
+</div>
 
-  <div class="sub" id="u-project-integration-management">
+  <div class="sub has8" id="u-project-integration-management"><div class="v7 v7-top">
     <h3>Project Integration Management <em>те, що звʼязує решту</em></h3>
     <p>Єдина область, якою володіє лише PM: звести плани областей в один, керувати змінами й закрити проєкт. Саме тут живе Perform Integrated Change Control.</p>
     <h4 class="sh">З чого складається</h4>
@@ -398,7 +479,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Monitor and Control Project Work</td><td class="in">Work performance information, прогнози</td><td>Порівняння факту з планом і прогноз.</td><td>Work performance reports, Change Requests</td></tr>
     <tr><td>Perform Integrated Change Control</td><td class="in">Change Requests, план, baselines</td><td>Оцінка впливу змін і рішення щодо них.</td><td>Ухвалені зміни, Change Log</td></tr>
     <tr><td>Close Project or Phase</td><td class="in">Accepted deliverables, угоди, план</td><td>Формальне закриття, передача, архів.</td><td>Final report, закриті контракти</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <div class="cbox" data-comp="change"></div>
     <p class="chint">Сценарій: шлях запиту на зміну від джерела до нової норми. ▶ програє, ← → крокують, номери відкривають крок. Клік поза схемою — стоп.</p>
     <table class="t">
@@ -431,8 +512,26 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> «Маленькі» зміни без запиту. Кожна окремо дрібна, разом — місяць роботи, який не видно в Change Log і не можна захистити на прийманні.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Governance domain · 9 процесів</b></div>
+<h4>Integration Management → Governance</h4>
+<p>Окремої області Integration немає. Її процеси перейшли в Governance під новими назвами; туди ж додано рішення про джерела ресурсів і забезпечення якості.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Develop Project Charter</td><td>Initiate Project or Phase</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Develop Project Management Plan</td><td>Integrate and Align Project Plans</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Plan Procurement Management (частково)</td><td>Plan Sourcing Strategy</td><td><span class="st n">нове</span></td></tr>
+<tr><td>Direct and Manage Project Work</td><td>Manage Project Execution</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Manage Quality</td><td>Manage Quality Assurance</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>Manage Project Knowledge</td><td>Manage Project Knowledge</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Monitor and Control Project Work</td><td>Monitor and Control Project Performance</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Perform Integrated Change Control</td><td>Assess and Implement Changes</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Close Project or Phase</td><td>Close Project or Phase</td><td><span class="st s">без змін</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>Сценарій змін ліворуч лишається правильним: Change Request → оцінка → рішення → baselines. Змінилась назва процесу — Assess and Implement Changes.</li></ul>
+<p class="v8s">PMBOK 8: розділ 2.1.6, перелік процесів Governance.</p>
+</aside>
+</div>
 
-  <div class="sub" id="u-project-scope-management">
+  <div class="sub has8" id="u-project-scope-management"><div class="v7 v7-top">
     <h3>Project Scope Management <em>межі роботи</em></h3>
     <p>Зібрати вимоги, описати обсяг, розкласти його на керовані пакети й не дати обсягу розповзтися.</p>
     <h4 class="sh">З чого складається</h4>
@@ -445,7 +544,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Create WBS</td><td class="in">Scope statement, requirements documentation</td><td>Розкладає результати на work packages.</td><td>WBS + Dictionary → scope baseline</td></tr>
     <tr><td>Validate Scope</td><td class="in">Verified deliverables, scope baseline, RTM</td><td>Формальне приймання результатів замовником.</td><td>Accepted Deliverables</td></tr>
     <tr><td>Control Scope</td><td class="in">Scope baseline, work performance data</td><td>Тримає обсяг у межах baseline.</td><td>Work performance information, Change Requests</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <table class="t">
       <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
       <tbody>
@@ -548,8 +647,23 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Gold plating — команда робить більше, ніж просили, «бо так краще». Це теж зміна обсягу: вона коштує часу й не буде оплачена.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Scope domain · 6 процесів</b></div>
+<h4>Scope — разом із якістю</h4>
+<p>PMBOK 8 прямо включає якість у домен Scope. Два процеси перейменовано, контроль обʼєднано з моніторингом.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Plan Scope Management</td><td>Plan Scope Management</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Collect Requirements</td><td>Elicit and Analyze Requirements</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Define Scope</td><td>Define Scope</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Create WBS</td><td>Develop Scope Structure</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Control Scope</td><td>Monitor and Control Scope</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Validate Scope</td><td>Validate Scope</td><td><span class="st s">без змін</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>«Elicit and Analyze» — акцент не на зборі, а на виявленні й аналізі вимог.</li><li>«Scope Structure» — WBS лишається основним варіантом, але назва покриває й backlog-структуру для adaptive.</li><li>Scope creep у PMBOK 8: визначення в глосарії, метрика частки незапланованих результатів і requirements stability — у Check Results домену; project exclusions і timeboxing названі прямими засобами проти нього.</li></ul>
+<p class="v8s">PMBOK 8: розділ 2.2.2.</p>
+</aside>
+</div>
 
-  <div class="sub" id="u-project-schedule-management">
+  <div class="sub has8" id="u-project-schedule-management"><div class="v7 v7-top">
     <h3>Project Schedule Management <em>обсяг у часі</em></h3>
     <p>Перетворити пакети робіт у мережу активностей, оцінити тривалості й тримати дату.</p>
     <h4 class="sh">З чого складається</h4>
@@ -562,7 +676,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Estimate Activity Durations</td><td class="in">Activity list, resource calendars, ризики</td><td>Оцінює тривалості з діапазоном.</td><td>Duration Estimates, Basis of Estimates</td></tr>
     <tr><td>Develop Schedule</td><td class="in">Network diagram, оцінки, ресурси</td><td>Зводить мережу й оцінки в розклад із датами.</td><td>Schedule Baseline, Project Schedule</td></tr>
     <tr><td>Control Schedule</td><td class="in">Schedule baseline, work performance data</td><td>Порівнює факт із baseline і прогнозує.</td><td>Schedule Forecasts, Change Requests</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <table class="t">
       <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
       <tbody>
@@ -600,8 +714,22 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Оцінка, яка стала дедлайном. Найімовірніша цифра з PERT потрапляє в договір як зобовʼязання, і весь запас зникає ще до старту.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Schedule domain · 3 процеси</b></div>
+<h4>Шість процесів стали трьома</h4>
+<p>Робота над розкладом зведена в один процес Develop Schedule: активності, послідовність, тривалості й ресурси аналізуються разом. Техніки (CPM, PERT, compression) лишились.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Plan Schedule Management</td><td>Plan Schedule Management</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Define Activities</td><td>Develop Schedule</td><td><span class="st m">обʼєднано</span></td></tr>
+<tr><td>Sequence Activities</td><td>Develop Schedule</td><td><span class="st m">обʼєднано</span></td></tr>
+<tr><td>Estimate Activity Durations</td><td>Develop Schedule</td><td><span class="st m">обʼєднано</span></td></tr>
+<tr><td>Develop Schedule</td><td>Develop Schedule</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Control Schedule</td><td>Monitor and Control Schedule</td><td><span class="st r">перейменовано</span></td></tr>
+</tbody></table>
+<p class="v8s">PMBOK 8: розділ 2.3.2.</p>
+</aside>
+</div>
 
-  <div class="sub" id="u-project-cost-management">
+  <div class="sub has8" id="u-project-cost-management"><div class="v7 v7-top">
     <h3>Project Cost Management <em>обсяг у грошах</em></h3>
     <p>Оцінити вартість, скласти бюджет у часі й керувати витратами разом із резервами.</p>
     <h4 class="sh">З чого складається</h4>
@@ -612,7 +740,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Estimate Costs</td><td class="in">Scope baseline, розклад, ставки, ризики</td><td>Оцінює вартість робіт із діапазоном.</td><td>Cost Estimates, Basis of Estimates</td></tr>
     <tr><td>Determine Budget</td><td class="in">Cost estimates, розклад, угоди, ризики</td><td>Зводить оцінки в бюджет, розподілений у часі.</td><td>Cost Baseline, Funding Requirements</td></tr>
     <tr><td>Control Costs</td><td class="in">Cost baseline, funding requirements, work performance data</td><td>Порівнює факт із baseline і прогнозує.</td><td>Cost Forecasts, Change Requests</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <table class="t">
       <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
       <tbody>
@@ -642,8 +770,21 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Резерв, розмазаний по всіх оцінках. Коли його не видно окремо, його не можна ні захистити, ні проконтролювати.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Finance domain · 4 процеси</b></div>
+<h4>Cost Management → Finance</h4>
+<p>Домен ширший за витрати: PMBOK 8 говорить про фінанси проєкту — доходи, фінансування й вигоду, а не лише бюджет.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Plan Cost Management</td><td>Plan Financial Management</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Estimate Costs</td><td>Estimate Costs</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Determine Budget</td><td>Develop Budget</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Control Costs</td><td>Monitor and Control Finances</td><td><span class="st r">перейменовано</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>EVM, резерви й прогнози EAC / ETC лишаються інструментами домену.</li><li>Резерви на ризики — точка звʼязку Finance і Risk.</li></ul>
+<p class="v8s">PMBOK 8: розділ 2.4.2.</p>
+</aside>
+</div>
 
-  <div class="sub" id="u-project-risk-management">
+  <div class="sub has8" id="u-project-risk-management"><div class="v7 v7-top">
     <h3>Project Risk Management <em>невизначеність</em></h3>
     <p>Побачити ризик раніше, ніж він стане issue, і мати відповідь із власником, а не обіцянку.</p>
     <h4 class="sh">З чого складається</h4>
@@ -657,7 +798,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Plan Risk Responses</td><td class="in">Risk register, risk report, ресурси</td><td>Обирає відповіді й власників.</td><td>Ухвалені відповіді, Change Requests</td></tr>
     <tr><td>Implement Risk Responses</td><td class="in">Risk register, risk report, risk management plan</td><td>Виконує заплановані відповіді.</td><td>Work performance data</td></tr>
     <tr><td>Monitor Risks</td><td class="in">Risk register, work performance data, reports</td><td>Стежить за змінами й ефективністю відповідей.</td><td>Оновлені реєстри, Risk Audits</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <table class="t">
       <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
       <tbody>
@@ -696,8 +837,21 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Реєстр без власників і тригерів. Ризики записані, але ніхто не стежить за сигналом — і реєстр перетворюється на архів.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Risk domain · 6 процесів</b></div>
+<h4>Аналіз — один процес, мета — resilience</h4>
+<p>Якісний і кількісний аналіз обʼєднано в Perform Risk Analysis. Мета домену — стійкість проєкту: передбачати, готуватися, реагувати й адаптуватися.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Perform Qualitative Risk Analysis</td><td>Perform Risk Analysis</td><td><span class="st m">обʼєднано</span></td></tr>
+<tr><td>Perform Quantitative Risk Analysis</td><td>Perform Risk Analysis</td><td><span class="st m">обʼєднано</span></td></tr>
+<tr><td>—</td><td>Overall risk, project resilience, ambiguity і uncertainty як key concepts</td><td><span class="st n">нове</span></td></tr>
+<tr><td>—</td><td>Artificial intelligence серед технік Identify Risks</td><td><span class="st n">нове</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>Детально — у лекції <a href="27-risk-lecture.html">27 · Управління ризиками</a>.</li></ul>
+<p class="v8s">PMBOK 8: розділ 2.7.</p>
+</aside>
+</div>
 
-  <div class="sub" id="u-project-quality-management">
+  <div class="sub has8" id="u-project-quality-management"><div class="v7 v7-top">
     <h3>Project Quality Management <em>придатність результату</em></h3>
     <p>Домовитись, що таке «якісно», вбудувати це в процес і перевіряти результат — а не сподіватись на тестування в кінці.</p>
     <h4 class="sh">З чого складається</h4>
@@ -707,7 +861,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Plan Quality Management</td><td class="in">Вимоги, stakeholder register, стандарти</td><td>Визначає стандарти, метрики й спосіб перевірки.</td><td>Quality Management Plan, Quality Metrics</td></tr>
     <tr><td>Manage Quality</td><td class="in">Quality management plan, quality metrics</td><td>Робить процес здатним давати потрібну якість.</td><td>Quality Reports, Change Requests</td></tr>
     <tr><td>Control Quality</td><td class="in">Deliverables, quality metrics, ухвалені зміни</td><td>Перевіряє результат на відповідність.</td><td>Quality Control Measurements, Verified Deliverables</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <table class="t">
       <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
       <tbody>
@@ -744,6 +898,19 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Якість, перевірена лише наприкінці. Дефекти знаходять тоді, коли їх уже найдорожче виправляти.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Принцип · Governance · Scope</b></div>
+<h4>Окремої області Quality немає</h4>
+<p>Якість у PMBOK 8 — принцип «Embed Quality Into Processes and Deliverables», а її процеси розійшлись по доменах.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Куди переїхало</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Plan Quality Management</td><td>Define Scope — там створюється quality management plan</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>Manage Quality</td><td>Manage Quality Assurance — Governance</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>Control Quality</td><td>Monitor and Control Scope — quality reports, verified deliverables</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>—</td><td>Принцип Embed Quality Into Processes and Deliverables (3.5)</td><td><span class="st n">нове</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>Техніки якості (audits, control charts, Pareto, cost of quality) лишаються — змінилось лише, де вони живуть.</li></ul>
+<p class="v8s">PMBOK 8: розділи 2.1.6, 2.2.2.3, Figure 2-18, 3.5.</p>
+</aside>
+</div>
   <div class="trap"><b>Пастка.</b> Baseline, яку «оновлюють», щоб звіт був зеленим. Після третього такого оновлення порівнювати вже нема з чим: відхилення завжди нуль, а проєкт спізнюється на квартал. Базова лінія змінюється лише через ухвалену зміну, і в Change Log має лишитись слід.</div>
 </section>
 
@@ -751,7 +918,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
   <h2><span class="num">03</span>Communications and Leadership</h2>
   <p>Дві області PMI, одна щоденна робота: доставити інформацію тому, хто ухвалює рішення, і зібрати команду, здатну це зробити.</p>
   <nav class="subnav"><a href="#u-project-communications-management">Project Communications Management</a><a href="#u-project-hr-management">Project HR Management</a></nav>
-  <div class="sub" id="u-project-communications-management">
+  <div class="sub has8" id="u-project-communications-management"><div class="v7 v7-top">
     <h3>Project Communications Management <em>інформація й рішення</em></h3>
     <p>Хто яку інформацію отримує, у якому вигляді й як часто — щоб рішення ухвалювались вчасно. Кількість каналів росте як n(n−1)/2, тому «повідомити всіх» не працює.</p>
     <h4 class="sh">З чого складається</h4>
@@ -761,7 +928,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Plan Communications Management</td><td class="in">Stakeholder register, вимоги до інформації</td><td>Складає матрицю «хто · що · коли · канал · відповідальний».</td><td>Communications Management Plan</td></tr>
     <tr><td>Manage Communications</td><td class="in">Communications plan, work performance reports</td><td>Створює й розповсюджує інформацію.</td><td>Project Communications</td></tr>
     <tr><td>Monitor Communications</td><td class="in">Project communications, issue log</td><td>Перевіряє, чи інформація дійшла й спрацювала.</td><td>Work performance information, Change Requests</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <div class="cbox" data-comp="comms"></div>
     <p class="chint">Від сирих даних до аудиторії: що перетворює дані на звіт і який канал кому підходить.</p>
     <table class="t">
@@ -789,8 +956,19 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Одна розсилка для всіх. Спонсор тоне в деталях, команда не бачить рішень, і обидві сторони перестають читати.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Stakeholders domain</b></div>
+<h4>Комунікації — частина Stakeholders</h4>
+<p>Три процеси комунікацій перейшли в домен Stakeholders: інформація розглядається як інструмент залучення людей, а не окрема дисципліна.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Plan Communications Management</td><td>Plan Communications Management — Stakeholders</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>Manage Communications</td><td>Manage Communications — Stakeholders</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>Monitor Communications</td><td>Monitor Communications — Stakeholders</td><td><span class="st v">переїхало</span></td></tr>
+</tbody></table>
+<p class="v8s">PMBOK 8: розділ 2.5.2.</p>
+</aside>
+</div>
 
-  <div class="sub" id="u-project-hr-management">
+  <div class="sub has8" id="u-project-hr-management"><div class="v7 v7-top">
     <h3>Project HR Management <em>люди й команда</em></h3>
     <p>Область Resource Management у частині людей: спланувати ролі, набрати команду, розвинути її й керувати продуктивністю та конфліктами. У матричній структурі PM має вплив, а не адміністративну владу — тому повноваження фіксуються письмово.</p>
     <h4 class="sh">З чого складається</h4>
@@ -802,7 +980,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Acquire Resources</td><td class="in">Resource management plan, resource requirements</td><td>Отримує людей у проєкт.</td><td>Project Team Assignments, Resource Calendars</td></tr>
     <tr><td>Develop Team</td><td class="in">Team assignments, resource calendars, team charter</td><td>Підвищує компетенції й згуртованість.</td><td>Team Performance Assessment</td></tr>
     <tr><td>Manage Team</td><td class="in">Team performance assessments, issue log</td><td>Продуктивність, конфлікти, зміни складу.</td><td>Change Requests, оновлення плану</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <table class="t">
       <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
       <tbody>
@@ -839,6 +1017,21 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Людина «на 50%» у трьох проєктах. На папері ресурс є, насправді її час зʼїдають перемикання, і всі три проєкти чекають.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Resources domain · 5 процесів</b></div>
+<h4>HR → Resources: вести команду</h4>
+<p>Develop Team і Manage Team обʼєднано в Lead the Team. Контроль охоплює і людей, і фізичні ресурси.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Plan Resource Management</td><td>Plan Resource Management</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Estimate Activity Resources</td><td>Estimate Resources</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Acquire Resources</td><td>Acquire Resources</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Develop Team</td><td>Lead the Team</td><td><span class="st m">обʼєднано</span></td></tr>
+<tr><td>Manage Team</td><td>Lead the Team</td><td><span class="st m">обʼєднано</span></td></tr>
+<tr><td>Control Resources</td><td>Monitor and Control Resourcing</td><td><span class="st r">перейменовано</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>Принципи Be an Accountable Leader і Build an Empowered Culture задають, як вести команду.</li></ul>
+<p class="v8s">PMBOK 8: розділи 2.6.2, 3.6, 3.8.</p>
+</aside>
+</div>
   <div class="trap"><b>Пастка.</b> Звіт заради звіту. Якщо після документа ніхто нічого не вирішує, він не потрібен — або потрібен іншій аудиторії й в іншому вигляді. Тест: яке рішення має ухвалити читач і чи є в звіті все для цього рішення.</div>
 </section>
 
@@ -846,7 +1039,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
   <h2><span class="num">04</span>Business Management</h2>
   <p>Тут проєкт стикається з інтересами й грошима: хто може його зупинити і що саме сторони одна одній зобовʼязані за договором.</p>
   <nav class="subnav"><a href="#u-project-stakeholders-management">Project Stakeholders Management</a><a href="#u-contract-obligations">Contract Obligations</a></nav>
-  <div class="sub" id="u-project-stakeholders-management">
+  <div class="sub has8" id="u-project-stakeholders-management"><div class="v7 v7-top">
     <h3>Project Stakeholders Management <em>інтереси й вплив</em></h3>
     <p>Виявити всіх, хто впливає на проєкт або залежить від нього, і привести рівень залучення до потрібного. Пізній стейкхолдер — найдорожчий.</p>
     <h4 class="sh">З чого складається</h4>
@@ -857,7 +1050,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Plan Stakeholder Engagement</td><td class="in">Stakeholder register, communications plan</td><td>Визначає потрібний рівень залучення й дії для нього.</td><td>Stakeholder Engagement Plan</td></tr>
     <tr><td>Manage Stakeholder Engagement</td><td class="in">Engagement plan, issue log, change log</td><td>Працює з очікуваннями й опором.</td><td>Change Requests, оновлення Issue Log</td></tr>
     <tr><td>Monitor Stakeholder Engagement</td><td class="in">Stakeholder register, work performance data</td><td>Перевіряє, чи залучення справді змінюється.</td><td>Work performance information</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <table class="t">
       <thead><tr><th>Техніка</th><th>Процес</th><th>Що дає</th><th>Приклад</th></tr></thead>
       <tbody>
@@ -885,8 +1078,21 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Реєстр складений на старті й більше не відкривався. Новий керівник у замовника — новий стейкхолдер, про якого ніхто не знає.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Stakeholders domain · 7 процесів</b></div>
+<h4>Стейкхолдери й комунікації — один домен</h4>
+<p>Чотири процеси роботи зі стейкхолдерами лишились, а поруч із ними — три процеси комунікацій.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Identify Stakeholders</td><td>Identify Stakeholders</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Plan Stakeholder Engagement</td><td>Plan Stakeholder Engagement</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Manage Stakeholder Engagement</td><td>Manage Stakeholder Engagement</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Monitor Stakeholder Engagement</td><td>Monitor Stakeholder Engagement</td><td><span class="st s">без змін</span></td></tr>
+<tr><td>Communications (окрема область)</td><td>+ Plan, Manage, Monitor Communications</td><td><span class="st v">переїхало</span></td></tr>
+</tbody></table>
+<p class="v8s">PMBOK 8: розділ 2.5.2.</p>
+</aside>
+</div>
 
-  <div class="sub" id="u-contract-obligations">
+  <div class="sub has8" id="u-contract-obligations"><div class="v7 v7-top">
     <h3>Contract Obligations <em>project procurement management</em></h3>
     <p>Що купуємо, за яким типом контракту, хто несе ризик і як закриваємо. Обовʼязки сторін живуть у SOW і в умовах договору, а не в переписці.</p>
     <h4 class="sh">З чого складається</h4>
@@ -896,7 +1102,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Plan Procurement Management</td><td class="in">Scope baseline, вимоги, make-or-buy</td><td>Make-or-buy, тип контракту, критерії вибору, SOW.</td><td>Procurement Management Plan, SOW, Bid Documents</td></tr>
     <tr><td>Conduct Procurements</td><td class="in">Procurement docs, пропозиції продавців</td><td>Вибір постачальника й підписання договору.</td><td>Selected Sellers, Agreements</td></tr>
     <tr><td>Control Procurements</td><td class="in">Agreements, work performance data, change requests</td><td>Керування виконанням, змінами, претензіями, закриттям.</td><td>Closed Procurements, Change Requests</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <div class="cbox" data-comp="contract"></div>
     <p class="chint">Три типи контрактів: де сидить ризик і чим у кожному керує PM.</p>
     <table class="t">
@@ -933,6 +1139,19 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Робота до підписання додатка. «Почніть, папери потім» — і на прийманні ця робота опиняється поза договором.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Governance · Appendix X4</b></div>
+<h4>Procurement — рішення в Governance, практика в додатку</h4>
+<p>Окремої області Procurement немає. Рішення, робити самим чи залучати зовнішніх, — процес Plan Sourcing Strategy у Governance. Практика закупівель описана в Appendix X4.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Plan Procurement Management</td><td>Plan Sourcing Strategy — Governance</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>Conduct Procurements</td><td>Appendix X4: bid process, source selection</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>Control Procurements</td><td>Appendix X4: claims administration</td><td><span class="st v">переїхало</span></td></tr>
+<tr><td>—</td><td>X4.8.2 Emerging Trends in Contract Management</td><td><span class="st n">нове</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>Типи контрактів (Fundamental Contract Models) і make-or-buy лишаються — у X4.3 і X4.8.1.</li></ul>
+<p class="v8s">PMBOK 8: розділ 2.1.6, Appendix X4.</p>
+</aside>
+</div>
   <div class="trap"><b>Пастка.</b> Fixed Price із нечітким SOW. Виконавець закладає резерв у ціну, замовник вважає, що «це ж очевидно входить», і кожна дрібниця стає переговорами. Якщо обсяг невідомий — це або T&amp;M із лімітом, або Fixed Price лише на першу фазу з чітким результатом.</div>
 </section>
 
@@ -940,7 +1159,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
   <h2><span class="num">05</span>Monitoring and Control</h2>
   <p>Контроль — не спостереження, а порівняння з базовою лінією й дія. PMI розрізняє work performance <b>data</b> (сирі виміри), <b>information</b> (дані в контексті baseline) і <b>reports</b> (документ для рішення). Більшість проблем зі звітністю — це data, подана замість information.</p>
   <nav class="subnav"><a href="#u-measurement-and-analysis">Measurement and Analysis</a><a href="#u-tools">Tools</a></nav>
-  <div class="sub" id="u-measurement-and-analysis">
+  <div class="sub has8" id="u-measurement-and-analysis"><div class="v7 v7-top">
     <h3>Measurement and Analysis <em>що і як міряємо</em></h3>
     <p>Метрика має відповідати на питання рішення. Дві системи координат: EVM у грошах для проєкту з baseline і потокові метрики для команди, що працює ітераціями.</p>
     <h4 class="sh">З чого складається</h4>
@@ -952,7 +1171,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Звітність</td><td class="in">Work performance information, comms plan</td><td>Документ під рішення конкретної аудиторії.</td><td>Work Performance Reports</td></tr>
     <tr><td>Прогноз</td><td class="in">Information, темп, припущення</td><td>Що буде за поточного темпу.</td><td>Forecasts: EAC, ETC, дата завершення</td></tr>
     <tr><td>Дія</td><td class="in">Reports, пороги відхилень</td><td>Корегування або запит на зміну.</td><td>Change Requests: corrective, preventive, defect repair</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <div class="cbox" data-comp="measure"></div>
     <p class="chint">Одна затримка в трьох системах координат: що показує кожна й чого в ній не видно.</p>
     <table class="t">
@@ -1073,8 +1292,20 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Метрики, які ніхто не використовує для рішень. Якщо цифра не змінює жодної дії, її збір — витрата часу.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Focus Area · Check Results</b></div>
+<h4>Моніторинг — у кожному домені</h4>
+<p>Monitoring and Controlling тепер Focus Area. У кожному домені є власний процес «Monitor and Control …» і розділ Check Results — як перевірити, що домен дає результат.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>Monitoring and Controlling process group</td><td>Monitoring and Controlling Focus Area</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>Control Scope / Schedule / Costs</td><td>Monitor and Control Scope / Schedule / Finances</td><td><span class="st r">перейменовано</span></td></tr>
+<tr><td>—</td><td>Check Results у кожному домені</td><td><span class="st n">нове</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>EVM, потокові метрики й техніки аналізу відхилень — без змін.</li><li>Формули EVM — у Section 5, Table 5-1 Earned Value Calculations Summary; сам аналіз — техніка домену Finance (Monitor and Control Finances). Набір формул той самий: PV, EV, AC, BAC, SV, CV, SPI, CPI, чотири EAC, ETC, VAC, два TCPI.</li></ul>
+<p class="v8s">PMBOK 8: розділи 2.x.5 Check Results, 4.5.4.</p>
+</aside>
+</div>
 
-  <div class="sub" id="u-tools">
+  <div class="sub has8" id="u-tools"><div class="v7 v7-top">
     <h3>Tools <em>де живуть дані</em></h3>
     <p>Жодна система не покриває все: потік у трекері, гроші у фінансовій системі, зведення — у BI. Правило одне: у кожної метрики одне джерельне джерело, решта лише читають.</p>
     <table class="t">
@@ -1084,7 +1315,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
       <tr><td>Data sources map<small>карта джерел</small></td><td>Звідки береться кожна цифра звіту.</td><td class="ex">Питання «звідки це» має відповідь за 10 секунд.</td></tr>
       <tr><td>Автоматичні вигрузки<small>автоматизація</small></td><td>Заміна ручного збирання даних.</td><td class="ex">Ручний звіт застаріває в момент відправлення.</td></tr>
       <tr><td>Ритм звітності<small>ритм</small></td><td>Що щодня, що щотижня, що щомісяця.</td><td class="ex">Не всі метрики потрібні щодня.</td></tr>
-      </tbody></table>
+      </tbody></table></div><div class="v7 v7-rest">
     <h4 class="sh">Інструменти</h4>
     <table class="p">
     <thead><tr><th>Інструмент</th><th>Що з нього беремо</th><th>Чого в ньому немає</th></tr></thead>
@@ -1104,14 +1335,14 @@ table.t,table.p,.clist,.cslist{max-width:none}
       <tr><td>Dashboard</td><td>Зведення для рішень. PMO / аналітик.</td><td class="ex">Автоматично</td></tr>
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Дві системи з різними цифрами. Коли дашборд і трекер розходяться, спір іде про дані, а не про проєкт.</div>
-  </div>
+  </div><div class="v8same">PMBOK 8 · без змін</div></div>
   <div class="trap"><b>Пастка.</b> Зелений статус до останнього тижня. Зазвичай це не брехня, а відсутність базової лінії й прогнозу: команда чесно каже «працюємо», і це правда. Прогноз (EAC, дата за поточним темпом) перетворює відчуття на цифру, яку можна оскаржити.</div>
 </section>
 
 <section class="sec" id="s6">
   <h2><span class="num">06</span>GenAI Productivity</h2>
   <p>Остання область — не про інструмент, а про спосіб роботи: що можна доручити моделі, що не можна відпускати з рук і як це лишити перевірюваним.</p>
-  <div class="sub" id="u-genai-pm">
+  <div class="sub has8" id="u-genai-pm"><div class="v7 v7-top">
     <h3>GenAI у роботі PM <em>швидкість плюс відповідальність</em></h3>
     <p>Модель дає швидкість на чернетці й аналізі; відповідальність за факти лишається на людині. Тому процес будується навколо перевірки, а не навколо промпта.</p>
     <h4 class="sh">З чого складається</h4>
@@ -1123,7 +1354,7 @@ table.t,table.p,.clist,.cslist{max-width:none}
     <tr><td>Чернетка</td><td class="in">Промпт і джерела</td><td>Перший варіант артефакта.</td><td>Draft із позначками походження</td></tr>
     <tr><td>Перевірка людиною</td><td class="in">Чернетка, першоджерела</td><td>Факти, цифри, суперечності.</td><td>Вичитаний артефакт</td></tr>
     <tr><td>Публікація</td><td class="in">Вичитаний артефакт</td><td>Артефакт із вказаними джерелами.</td><td>Готовий документ</td></tr>
-    </tbody></table>
+    </tbody></table></div><div class="v7 v7-rest">
     <div class="cbox" data-comp="genai"></div>
     <p class="chint">Ланцюг від джерела до артефакта: де саме людина зобовʼязана втрутитись.</p>
     <table class="t">
@@ -1150,6 +1381,19 @@ table.t,table.p,.clist,.cslist{max-width:none}
       </tbody></table>
     <div class="trap sm"><b>Пастка.</b> Чернетка моделі пішла замовнику без вичитки. Одна вигадана цифра — і довіра до всього документа зникає.</div>
   </div>
+<aside class="v8"><div class="v8-k">Як у PMBOK 8 · <b>Appendix X3</b></div>
+<h4>AI вперше в стандарті</h4>
+<p>PMBOK 8 додає окремий Appendix про штучний інтелект у проєктах і згадує AI серед технік і tailoring considerations.</p>
+<table class="t v8t"><thead><tr><th>Було</th><th>Стало в PMBOK 8</th><th>Статус</th></tr></thead><tbody>
+<tr><td>—</td><td>X3.1 AI in the Project Context: стратегії впровадження, стан ринку</td><td><span class="st n">нове</span></td></tr>
+<tr><td>—</td><td>X3.2 Common Use Cases</td><td><span class="st n">нове</span></td></tr>
+<tr><td>—</td><td>X3.3 Responsible Use and Ethical Concerns</td><td><span class="st n">нове</span></td></tr>
+<tr><td>—</td><td>AI у Tools & Techniques Identify Risks</td><td><span class="st n">нове</span></td></tr>
+</tbody></table>
+<ul class="v8n"><li>Правила з лівої частини — перевірка людиною, позначки походження, «цифра без джерела не публікується» — збігаються з responsible use з X3.3.</li></ul>
+<p class="v8s">PMBOK 8: Appendix X3.</p>
+</aside>
+</div>
   <div class="trap"><b>Пастка.</b> Правдоподібний текст замість перевіреного. Абзац, який модель вигадала, виглядає рівно так само впевнено, як факт із договору. Саме тому потрібні позначки походження й правило «цифра без джерела не публікується» — інакше економія часу на чернетці повертається втричі на розборі.</div>
 </section>
 
@@ -1179,6 +1423,40 @@ table.t,table.p,.clist,.cslist{max-width:none}
   }
   addEventListener('scroll', upd, { passive: true });
   upd();
+})();
+</script>
+<script>
+/* Перемикач PMBOK 7 / 8: стан у #pmbok8 і в localStorage. */
+(function () {
+  var sw = document.getElementById('v8sw');
+  function set(v, push) {
+    document.body.classList.toggle('mode8', v === '8');
+    [].forEach.call(sw.querySelectorAll('button'), function (b) { b.classList.toggle('on', b.dataset.v === v); });
+    try { localStorage.setItem('comp26b_v', v); } catch (e) {}
+    if (push) history.replaceState(null, '', v === '8' ? '#pmbok8' : location.pathname + location.search);
+  }
+  sw.addEventListener('click', function (e) { var b = e.target.closest('button[data-v]'); if (b) { set(b.dataset.v, true); fitDiagrams(); } });
+  /* У половині екрана схема може не влізти — масштабуємо її під ширину колонки,
+     висоту рамки підганяємо, щоб не лишалось порожнечі. */
+  function fitDiagrams() {
+    [].forEach.call(document.querySelectorAll('.cfit'), function (f) {
+      var st = f.querySelector('.cstage'); if (!st) return;
+      st.style.transform = ''; f.style.height = '';
+      var w = st.offsetWidth, avail = f.clientWidth;
+      if (!w || !avail || w <= avail) return;
+      var k = avail / w;
+      st.style.transformOrigin = '0 0';
+      st.style.transform = 'scale(' + k + ')';
+      st.style.marginLeft = '0';
+      f.style.height = Math.ceil(st.offsetHeight * k) + 'px';
+    });
+  }
+  addEventListener('resize', fitDiagrams);
+  addEventListener('load', fitDiagrams);
+  var v = '7';
+  try { v = localStorage.getItem('comp26b_v') || '7'; } catch (e) {}
+  if (location.hash === '#pmbok8') v = '8';
+  set(v, false);
 })();
 </script>
 <script>

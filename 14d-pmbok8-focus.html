@@ -7,10 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20260922144732">
-<link rel="stylesheet" href="shared/style.css?v=20260922144732">
-<link rel="stylesheet" href="shared/map.css?v=20260922144732">
-<link rel="stylesheet" href="shared/overview.css?v=20260922144732">
+<link rel="stylesheet" href="shared/tokens.css?v=20260923101553">
+<link rel="stylesheet" href="shared/style.css?v=20260923101553">
+<link rel="stylesheet" href="shared/map.css?v=20260923101553">
+<link rel="stylesheet" href="shared/overview.css?v=20260923101553">
 <style>
 /* 14d — фази колонками зліва направо, домени в колонці одна під одною. */
 .ov{width:auto}
@@ -163,6 +163,7 @@
           <span class="lg-act">selected</span><span class="lg-in">feeds in</span><span class="lg-out">feeds out</span>
         </div>
         <span class="fv-hint">pinch — zoom · two fingers or drag — pan</span>
+        <button type="button" class="fv-fs" id="btn-fit" title="Fit to frame" aria-label="Fit the diagram to the frame">⊡</button>
         <button type="button" class="fv-fs" id="btn-fs-in" title="Open full screen" aria-label="Open full screen">⤢</button>
         <button type="button" class="fv-fs fs-x" id="btn-fs-x" title="Exit full screen" aria-label="Exit full screen">✕</button>
       </div></div>
@@ -183,11 +184,11 @@
 </main>
 </div>
 
-<script src="shared/zoom.js?v=20260922144732"></script>
-<script src="shared/pmbok-io.js?v=20260922144732"></script>
-<script src="shared/pmbok-data.js?v=20260922144732"></script>
-<script src="shared/nav.js?v=20260922144732"></script>
-<script src="shared/topbar.js?v=20260922144732"></script>
+<script src="shared/zoom.js?v=20260923101553"></script>
+<script src="shared/pmbok-io.js?v=20260923101553"></script>
+<script src="shared/pmbok-data.js?v=20260923101553"></script>
+<script src="shared/nav.js?v=20260923101553"></script>
+<script src="shared/topbar.js?v=20260923101553"></script>
 <script>
 /* На весь екран — рамка схеми разом із панеллю; схема переміряється на resize сама */
 (function(){
@@ -196,6 +197,6 @@
   document.getElementById('btn-fs-x').addEventListener('click',function(){ if(document.fullscreenElement) document.exitFullscreen(); });
 })();
 </script>
-<script src="shared/focus.js?v=20260922144732"></script>
+<script src="shared/focus.js?v=20260923101553"></script>
 </body>
 </html>

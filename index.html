@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20260922211510">
-<link rel="stylesheet" href="shared/style.css?v=20260922211510">
+<link rel="stylesheet" href="shared/tokens.css?v=20260923104634">
+<link rel="stylesheet" href="shared/style.css?v=20260923104634">
 <style>
 /* ── Хаб: один екран ────────────────────────────────────────────────────────
    Три смуги: знайомство · підходи · статті. Висоти й відступи від висоти
@@ -40,38 +40,41 @@
 /* плитка: «13 · Назва» одним рядком, під ним опис, мініатюра праворуч */
 .item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;
   text-decoration:none;color:inherit;border:1px solid var(--rule);border-radius:var(--r-md);
-  padding:8px 8px 8px 12px;background:var(--paper);transition:border-color .15s,background .15s;min-width:0}
+  padding:8px 8px 8px 11px;background:var(--paper);transition:border-color .15s,background .15s;min-width:0}
 .item:hover{border-color:var(--act);background:var(--act-soft)}
 .item .tt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
   font-size:14px;line-height:1.25;letter-spacing:-.01em;font-weight:600}
 /* у дереві заголовок може зайняти два рядки — опис тоді один */
 .item .tt{-webkit-line-clamp:2}
-.item p{-webkit-line-clamp:2}
+.item p{-webkit-line-clamp:1}
 .item .tt .n{color:var(--ink-3);font-weight:500;font-variant-numeric:tabular-nums}
 .item .tt .n::after{content:" · "}
 .item p{margin:3px 0 0;font-size:12.5px;line-height:1.35;color:var(--ink-3);
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.item .hv-wrap{order:2;width:clamp(100px,8.6vw,128px);height:calc(var(--ih) - 16px);margin:0;border:1px solid var(--rule);border-radius:6px;
+.item .hv-wrap{order:2;width:clamp(76px,6.2vw,104px);height:calc(var(--ih) - 16px);margin:0;border:1px solid var(--rule);border-radius:6px;
   background:var(--ground);overflow:hidden;flex:0 0 auto}
 .item .en{display:inline-block;vertical-align:1px;white-space:nowrap;font:600 8.5px/1 var(--mono);letter-spacing:.08em;color:var(--ink-3);border:1px solid var(--rule-2);
   border-radius:3px;padding:2px 4px;margin-right:4px}
 html[lang="en"] .item .en{display:none}
-.main.hub{--ih:clamp(76px,10.4vh,98px)}
+.main.hub{--ih:clamp(70px,9.4vh,88px);--C:clamp(12px,1.4vw,20px)}
 .item{height:var(--ih)}
 
 .lbl{font-size:12px;line-height:14px;color:var(--ink-3);margin:0 0 6px;height:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* дерево підходів: ряд 1 — 13 і 15; ряд 2 під 13 — 14d, 16a, 16. Лінії помітні. */
 .htree{--G:clamp(22px,3.6vh,36px);--C:clamp(12px,1.4vw,20px);--lh:20px;
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:var(--C);row-gap:var(--G)}
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:var(--C);row-gap:var(--G)}
 .htree .cell{position:relative;min-width:0}
-.htree .c13{grid-column:2}.htree .c15{grid-column:4}
+.htree .c13{grid-column:2}.htree .c15{grid-column:5}
+.htree .c13,.htree .c15,.htree .c26b{grid-row:1}.htree .kid{grid-row:2}
+.htree .c26b{grid-column:1}
+.htree .c26b::after{content:"";position:absolute;left:50%;top:100%;height:calc(var(--G) / 2);border-left:1.5px dashed var(--rule-2)}
 .htree .c26{grid-column:1}.htree .c14{grid-column:2}.htree .c16a{grid-column:3}.htree .c16{grid-column:4}
 .htree .c16 .lbl{visibility:hidden}
 .htree .c16a .lbl{overflow:visible;width:calc(200% + var(--C))}
 .htree .c14 .lbl{visibility:hidden}
 .htree .c26 .lbl{overflow:visible;width:calc(200% + var(--C))}
-.htree .c15::before{content:"";position:absolute;left:calc(-100% - 2 * var(--C));width:calc(100% + 2 * var(--C));
+.htree .c15::before{content:"";position:absolute;left:calc(-200% - 3 * var(--C));width:calc(200% + 3 * var(--C));
   top:calc(var(--lh) + var(--ih) / 2);height:1.5px;background:var(--rule-2)}
 .htree .c13::after{content:"";position:absolute;left:50%;top:100%;width:1.5px;height:calc(var(--G) / 2);background:var(--rule-2)}
 .htree .kid::before{content:"";position:absolute;top:calc(-1 * var(--G) / 2);height:1.5px;background:var(--rule-2)}
@@ -83,9 +86,8 @@ html[lang="en"] .item .en{display:none}
   height:calc(var(--G) / 2);background:var(--rule-2)}
 
 /* статті: без мініатюр, 4 колонки; чернетки другим рядом, приглушені */
-.arts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1.4vh,14px) clamp(12px,1.4vw,20px)}
-.arts .item{height:calc(var(--ih) - 6px)}
-.arts .item .hv-wrap{height:calc(var(--ih) - 22px)}
+.arts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1.4vh,14px) var(--C)}
+.arts .item{height:var(--ih)}
 .item.is-draft .hv-wrap{opacity:.75}
 .arts .draft-first{grid-column:1}
 .item.is-draft{background:var(--paper-2);border-style:dashed}
@@ -93,31 +95,59 @@ html[lang="en"] .item .en{display:none}
 .arts .row-lbl{grid-column:1/-1;font-size:12px;color:var(--ink-3);margin:2px 0 -2px}
 
 /* до 1366 px: мініатюра вужча, опис — один рядок, щоб текст не вилазив за плитку */
-@media (max-width:1366px){ .item .hv-wrap{width:clamp(84px,7vw,96px)} .item p{-webkit-line-clamp:1} .item .tt{font-size:13.5px} }
+@media (max-width:1366px){ .item .hv-wrap{width:clamp(72px,6vw,90px)} .item .tt{font-size:13px} }
 @media (max-width:1100px){ .main.hub{height:auto;overflow:visible} .arts{grid-template-columns:repeat(2,minmax(0,1fr))} .item .hv-wrap{display:none} }
 @media (max-width:760px){ .hello,.arts,.htree{grid-template-columns:1fr} .me{white-space:normal} .htree .cell{grid-column:1!important} .htree .cell::before,.htree .cell::after{display:none} .htree .c16 .lbl{display:none} }
 /* Мініатюри (shared/hub-visuals.js) */
 .hv{display:block;width:100%;height:100%}
-.hv .k,.hv .k-ink,.hv .k-teal,.hv .k-clay,.hv .acc-s,.hv .acc-l{fill:none;stroke-width:1.5;stroke-linecap:round}
+.hv .k,.hv .k-ink,.hv .k-teal,.hv .k-clay,.hv .acc-s,.hv .acc-l{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
 .hv .k{stroke:var(--rule-2)} .hv .k-ink{stroke:var(--ink-3)}
 .hv .k-teal{stroke:var(--c-teal)} .hv .k-clay{stroke:var(--c-clay)}
 .hv .acc-s,.hv .acc-l{stroke:var(--act)}
-.hv .o{fill:var(--ground);stroke:var(--rule-2);stroke-width:1}
+.hv .o{fill:var(--ground);stroke:var(--ink-3);stroke-width:1.6}
 .hv .f-s{fill:var(--paper-2)} .hv .f-rule{fill:var(--rule)}
 .hv .f-blue{fill:var(--c-blue)} .hv .f-blue-s{fill:var(--c-blue-s)} .hv .f-teal{fill:var(--c-teal)}
 .hv .f-teal-s{fill:var(--c-teal-s)} .hv .f-purple{fill:var(--c-purple)} .hv .f-clay{fill:var(--c-clay)}
 .hv .f-green{fill:var(--c-green)}
-.hv .c-blue{fill:var(--c-blue-s);stroke:var(--c-blue);stroke-width:1.5}
-.hv .c-purple{fill:var(--c-purple-s);stroke:var(--c-purple);stroke-width:1.5}
-.hv .hatch{fill:var(--paper-2);stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
-.hv .acc{fill:var(--act)} .hv .acc-box{fill:var(--act-soft);stroke:var(--act);stroke-width:1.5}
-.hv .t{font:500 9px var(--mono);fill:var(--ink-3)} .hv .acc-t{fill:var(--act)}
+.hv .c-blue{fill:var(--c-blue-s);stroke:var(--c-blue);stroke-width:2}
+.hv .c-purple{fill:var(--c-purple-s);stroke:var(--c-purple);stroke-width:2}
+.hv .hatch{fill:var(--paper-2);stroke:var(--ink-3);stroke-width:1.6;stroke-dasharray:4 3}
+.hv .acc{fill:var(--act)} .hv .acc-box{fill:var(--act-soft);stroke:var(--act);stroke-width:2}
+.hv .t{font:600 11px var(--sans);fill:var(--ink-2)} .hv .t.big{font:700 13px var(--sans);fill:var(--ink)} .hv .t.huge{font:700 34px var(--sans);fill:var(--ink-2)}
+.hv .acc-t{fill:var(--act)} .hv .f-gold{fill:var(--c-gold-s);stroke:var(--c-gold);stroke-width:1.4} .hv .f-green-s{fill:var(--c-green-s);stroke:var(--c-green);stroke-width:1.4}
+.hv .f-clay{fill:var(--c-clay-s);stroke:var(--c-clay);stroke-width:1.4} .hv .acc-dot{fill:var(--act);stroke:var(--ground);stroke-width:2.5}
 .hv .d-gov{fill:var(--d-gov)} .hv .d-scope{fill:var(--d-scope)} .hv .d-sched{fill:var(--d-sched)}
 .hv .d-fin{fill:var(--d-fin)} .hv .d-stake{fill:var(--d-stake)} .hv .d-res{fill:var(--d-res)} .hv .d-risk{fill:var(--d-risk)}
 .hv [class^="dd-"]{fill:var(--paper-2);stroke:var(--rule-2);stroke-width:.75}
-.hv .acc,.hv .acc-s,.hv .acc-l,.hv .acc-box,.hv .acc-t{opacity:.7;transition:opacity .2s}
+.hv .acc,.hv .acc-s,.hv .acc-l,.hv .acc-box,.hv .acc-t{opacity:.85;transition:opacity .2s}
 .item:hover .hv .acc,.item:hover .hv .acc-s,.item:hover .hv .acc-l,.item:hover .hv .acc-box,.item:hover .hv .acc-t{opacity:1}
 .item:hover .hv-wrap{border-color:var(--act)}
+
+/* мікроанімації мініатюр: грають лише при наведенні на плитку */
+.hv [class*="a-"]{transform-box:fill-box}
+.hv .a-grow,.hv .a-wave{transform-origin:50% 100%}
+.hv .a-pulse,.hv .a-pop,.hv .a-spin{transform-origin:50% 50%}
+.item:hover .hv .a-grow{animation:hvGrow .6s cubic-bezier(.2,.8,.2,1) both}
+.item:hover .hv .a-wave{animation:hvWave .9s ease-in-out infinite alternate;transform-origin:50% 50%}
+.item:hover .hv .a-draw{stroke-dasharray:1;animation:hvDraw .8s ease-out both}
+.item:hover .hv .a-flow{stroke-dasharray:.06 .04;animation:hvFlow 1.2s linear infinite}
+.item:hover .hv .a-pulse{animation:hvPulse 1.1s ease-in-out infinite}
+.item:hover .hv .a-pop{animation:hvPop .45s cubic-bezier(.2,.9,.3,1.3) both}
+.item:hover .hv .a-slide{animation:hvSlide .55s ease-out both}
+.item:hover .hv .a-blink{animation:hvBlink 1s ease-in-out infinite}
+.item:hover .hv .a-spin{animation:hvSpin 1.4s ease-in-out infinite}
+.item:hover .hv .a-move{animation:hvMove 1.6s ease-in-out infinite alternate}
+@keyframes hvGrow{from{transform:scaleY(.15);opacity:.3}to{transform:none;opacity:1}}
+@keyframes hvWave{from{transform:scaleY(.45)}to{transform:scaleY(1.05)}}
+@keyframes hvDraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes hvFlow{to{stroke-dashoffset:-1}}
+@keyframes hvPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes hvPop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@keyframes hvSlide{from{transform:translateX(-14px);opacity:0}to{transform:none;opacity:1}}
+@keyframes hvBlink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes hvSpin{0%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+@keyframes hvMove{from{transform:translate(0,0)}to{transform:translate(-56px,56px)}}
+@media (prefers-reduced-motion:reduce){.item:hover .hv [class*="a-"]{animation:none!important}}
 </style>
 </head>
 <body>
@@ -149,6 +179,8 @@ html[lang="en"] .item .en{display:none}
         <a class="item" href="13-delivery-framework.html" data-hv="13-delivery-framework.html"><span><span class="tt"><span class="n">13</span><span data-en="Delivery Framework">Delivery Framework</span></span><p data-en="PM and PC duties by grade"><span class="en">EN</span> Обовʼязки PM і PC за грейдами</p></span></a></div>
       <div class="cell c15"><p class="lbl" data-en="At the same level">На тому ж рівні</p>
         <a class="item" href="15-outsourcing-product.html" data-hv="15-outsourcing-product.html"><span><span class="tt"><span class="n">15</span><span data-en="Outsourcing vs product">Аутсорс і продукт</span></span><p data-en="Service vs product work">Сервісна й продуктова робота</p></span></a></div>
+      <div class="cell c26b"><p class="lbl" data-en="Compared with PMBOK 8">Порівняння з PMBOK 8</p>
+        <a class="item" href="26b-competencies-pmbok8.html" data-hv="26b-competencies-pmbok8.html"><span><span class="tt"><span class="n">26b</span><span data-en="PMBOK 7 vs 8">PMBOK 7 і 8</span></span><p data-en="What changed, side by side">Що змінилось — поруч</p></span></a></div>
       <div class="cell kid c26"><p class="lbl" data-en="What it stands on">На чому це стоїть</p>
         <a class="item" href="26-competencies.html" data-hv="26-competencies.html"><span><span class="tt"><span class="n">26</span><span data-en="PM competencies">Компетенції PM</span></span><p data-en="Techniques and artifacts: from SDLC to GenAI">Техніки й артефакти: від SDLC до GenAI</p></span></a></div>
       <div class="cell kid c14"><p class="lbl">&nbsp;</p>
@@ -179,8 +211,8 @@ html[lang="en"] .item .en{display:none}
 </main>
 </div>
 
-<script src="shared/lang.js?v=20260922211510"></script>
-<script src="shared/nav.js?v=20260922211510"></script>
-<script src="shared/hub-visuals.js?v=20260922211510"></script>
+<script src="shared/lang.js?v=20260923104634"></script>
+<script src="shared/nav.js?v=20260923104634"></script>
+<script src="shared/hub-visuals.js?v=20260923104634"></script>
 </body>
 </html>
