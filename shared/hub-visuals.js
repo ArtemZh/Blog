@@ -100,16 +100,8 @@
         r(18, y, 5, 18, c, 2, 'a-grow', k * .1) + r(28, y + 2, 92, 5, 'f-rule', 2) + r(28, y + 11, 64, 5, 'f-rule', 2)).join('') +
       r(14, 40, 112, 26, 'acc-box', 5, 'a-blink')),
 
-    // Компетенції PM: шість областей, одна підсвічена
-    '26-competencies.html': S(
-      range(3).map(i => range(2).map(j => {
-        const on = i === 1 && j === 0;
-        return r(10 + i * 42, 16 + j * 36, 36, 30, on ? 'acc-box' : 'o', 5, 'a-pop', (i + j * 3) * .05) +
-          r(16 + i * 42, 24 + j * 36, 18, 4, on ? 'acc' : 'f-rule', 2) + r(16 + i * 42, 32 + j * 36, 24, 4, 'f-s', 2);
-      }).join('')).join('')),
-
     // PMBOK 7 → 8: дві сторінки поруч і стрілка «як стало»
-    '26b-competencies-pmbok8.html': S(
+    '26-competencies.html': S(
       r(8, 16, 50, 68, 'o', 6) + t(22, 60, '7', 'huge') +
       p('M62 50 L76 50', 'acc-s', 'a-draw') + arrow(80, 50, 'r', 'acc-s') +
       r(82, 16, 50, 68, 'acc-box', 6, 'a-pop', .2) + t(96, 60, '8', 'huge acc-t')),

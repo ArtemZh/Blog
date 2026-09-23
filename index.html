@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20260923104634">
-<link rel="stylesheet" href="shared/style.css?v=20260923104634">
+<link rel="stylesheet" href="shared/tokens.css?v=20260923201713">
+<link rel="stylesheet" href="shared/style.css?v=20260923201713">
 <style>
 /* ── Хаб: один екран ────────────────────────────────────────────────────────
    Три смуги: знайомство · підходи · статті. Висоти й відступи від висоти
@@ -66,9 +66,7 @@ html[lang="en"] .item .en{display:none}
   display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:var(--C);row-gap:var(--G)}
 .htree .cell{position:relative;min-width:0}
 .htree .c13{grid-column:2}.htree .c15{grid-column:5}
-.htree .c13,.htree .c15,.htree .c26b{grid-row:1}.htree .kid{grid-row:2}
-.htree .c26b{grid-column:1}
-.htree .c26b::after{content:"";position:absolute;left:50%;top:100%;height:calc(var(--G) / 2);border-left:1.5px dashed var(--rule-2)}
+.htree .c13,.htree .c15{grid-row:1}.htree .kid{grid-row:2}
 .htree .c26{grid-column:1}.htree .c14{grid-column:2}.htree .c16a{grid-column:3}.htree .c16{grid-column:4}
 .htree .c16 .lbl{visibility:hidden}
 .htree .c16a .lbl{overflow:visible;width:calc(200% + var(--C))}
@@ -97,7 +95,7 @@ html[lang="en"] .item .en{display:none}
 /* до 1366 px: мініатюра вужча, опис — один рядок, щоб текст не вилазив за плитку */
 @media (max-width:1366px){ .item .hv-wrap{width:clamp(72px,6vw,90px)} .item .tt{font-size:13px} }
 @media (max-width:1100px){ .main.hub{height:auto;overflow:visible} .arts{grid-template-columns:repeat(2,minmax(0,1fr))} .item .hv-wrap{display:none} }
-@media (max-width:760px){ .hello,.arts,.htree{grid-template-columns:1fr} .me{white-space:normal} .htree .cell{grid-column:1!important} .htree .cell::before,.htree .cell::after{display:none} .htree .c16 .lbl{display:none} }
+@media (max-width:760px){ .hello,.arts,.htree{grid-template-columns:1fr} .me{white-space:normal} .htree .cell{grid-column:1!important;grid-row:auto!important} .htree .lbl{width:auto!important;visibility:visible!important} .htree .lbl:empty,.htree .c14 .lbl,.htree .c16 .lbl{display:none} .htree .cell::before,.htree .cell::after{display:none} .htree .c16 .lbl{display:none} }
 /* Мініатюри (shared/hub-visuals.js) */
 .hv{display:block;width:100%;height:100%}
 .hv .k,.hv .k-ink,.hv .k-teal,.hv .k-clay,.hv .acc-s,.hv .acc-l{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
@@ -148,6 +146,27 @@ html[lang="en"] .item .en{display:none}
 @keyframes hvSpin{0%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
 @keyframes hvMove{from{transform:translate(0,0)}to{transform:translate(-56px,56px)}}
 @media (prefers-reduced-motion:reduce){.item:hover .hv [class*="a-"]{animation:none!important}}
+
+/* телефон: плитка на всю ширину — мініатюра знову поміщається, висота за вмістом */
+@media (max-width:760px){
+  .main.hub .item{height:auto;min-height:74px}
+  .item .hv-wrap{display:block;width:96px;height:62px}
+  .htree{row-gap:14px}
+  .arts{gap:10px}
+  .main.hub{padding-bottom:96px}
+}
+
+
+
+/* помітка про екран: лише на телефоні й планшеті, над привітанням; закрита — більше не показується */
+.screen-note{display:flex;align-items:flex-start;gap:9px;margin:0 0 14px;padding:9px 10px 9px 12px;font-size:12.5px;line-height:1.4;
+  color:var(--ink-2);background:var(--act-soft);border:1px solid var(--act);border-radius:var(--r-md)}
+.screen-note[hidden]{display:none}
+.screen-note svg{flex:0 0 auto;width:18px;height:18px;margin-top:1px;fill:none;stroke:var(--act);stroke-width:1.8;stroke-linecap:round}
+.screen-note span{flex:1 1 auto}
+.sn-x{flex:0 0 auto;border:0;background:none;color:var(--ink-3);font-size:14px;line-height:1;padding:2px 4px;cursor:pointer}
+.sn-x:hover{color:var(--act)}
+@media (min-width:1101px){.screen-note{display:none!important}}
 </style>
 </head>
 <body>
@@ -157,6 +176,11 @@ html[lang="en"] .item .en{display:none}
 </header>
 
 <main class="main hub" id="top">
+  <div class="screen-note" id="screenNote" role="note" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+    <span data-en="The blog is built for large screens: diagrams and dashboards are hard to read on a phone. For the best experience, open it on a tablet or a computer.">Блог розрахований на великий екран: схеми й дашборди на телефоні читаються погано. Для зручного перегляду відкрийте його на планшеті або комп’ютері.</span>
+    <button type="button" class="sn-x" aria-label="Закрити" data-en-aria="Close">✕</button>
+  </div>
 
   <section class="hello" id="s-hello">
     <div>
@@ -179,10 +203,8 @@ html[lang="en"] .item .en{display:none}
         <a class="item" href="13-delivery-framework.html" data-hv="13-delivery-framework.html"><span><span class="tt"><span class="n">13</span><span data-en="Delivery Framework">Delivery Framework</span></span><p data-en="PM and PC duties by grade"><span class="en">EN</span> Обовʼязки PM і PC за грейдами</p></span></a></div>
       <div class="cell c15"><p class="lbl" data-en="At the same level">На тому ж рівні</p>
         <a class="item" href="15-outsourcing-product.html" data-hv="15-outsourcing-product.html"><span><span class="tt"><span class="n">15</span><span data-en="Outsourcing vs product">Аутсорс і продукт</span></span><p data-en="Service vs product work">Сервісна й продуктова робота</p></span></a></div>
-      <div class="cell c26b"><p class="lbl" data-en="Compared with PMBOK 8">Порівняння з PMBOK 8</p>
-        <a class="item" href="26b-competencies-pmbok8.html" data-hv="26b-competencies-pmbok8.html"><span><span class="tt"><span class="n">26b</span><span data-en="PMBOK 7 vs 8">PMBOK 7 і 8</span></span><p data-en="What changed, side by side">Що змінилось — поруч</p></span></a></div>
       <div class="cell kid c26"><p class="lbl" data-en="What it stands on">На чому це стоїть</p>
-        <a class="item" href="26-competencies.html" data-hv="26-competencies.html"><span><span class="tt"><span class="n">26</span><span data-en="PM competencies">Компетенції PM</span></span><p data-en="Techniques and artifacts: from SDLC to GenAI">Техніки й артефакти: від SDLC до GenAI</p></span></a></div>
+        <a class="item" href="26-competencies.html" data-hv="26-competencies.html"><span><span class="tt"><span class="n">26</span><span data-en="PM competencies">Компетенції PM</span></span><p data-en="PMBOK 7 and 8 side by side">PMBOK 7 і 8 поруч, техніки й артефакти</p></span></a></div>
       <div class="cell kid c14"><p class="lbl">&nbsp;</p>
         <a class="item" href="14d-pmbok8-focus.html" data-hv="14d-pmbok8-focus.html"><span><span class="tt"><span class="n">14d</span><span data-en="PMBOK 8 Focus View">PMBOK 8 Focus View</span></span><p data-en="Phases × domains, inputs and outputs"><span class="en">EN</span> Фази × домени, входи й виходи</p></span></a></div>
       <div class="cell kid c16a"><p class="lbl" data-en="How to visualize portfolio management">Як візуалізувати керування портфелем</p>
@@ -211,8 +233,21 @@ html[lang="en"] .item .en{display:none}
 </main>
 </div>
 
-<script src="shared/lang.js?v=20260923104634"></script>
-<script src="shared/nav.js?v=20260923104634"></script>
-<script src="shared/hub-visuals.js?v=20260923104634"></script>
+<script src="shared/lang.js?v=20260923201713"></script>
+<script src="shared/nav.js?v=20260923201713"></script>
+<script src="shared/hub-visuals.js?v=20260923201713"></script>
+<script>
+/* Помітка для телефону: показуємо, доки користувач її не закрив. */
+(function () {
+  var n = document.getElementById('screenNote'); if (!n) return;
+  var closed = false;
+  try { closed = localStorage.getItem('screenNoteClosed') === '1'; } catch (e) {}
+  if (!closed) n.hidden = false;
+  n.querySelector('.sn-x').addEventListener('click', function () {
+    n.hidden = true;
+    try { localStorage.setItem('screenNoteClosed', '1'); } catch (e) {}
+  });
+})();
+</script>
 </body>
 </html>
