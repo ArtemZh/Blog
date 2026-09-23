@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20260923201713">
-<link rel="stylesheet" href="shared/style.css?v=20260923201713">
+<link rel="stylesheet" href="shared/tokens.css?v=20260923203933">
+<link rel="stylesheet" href="shared/style.css?v=20260923203933">
 <style>
 /* ── Хаб: один екран ────────────────────────────────────────────────────────
    Три смуги: знайомство · підходи · статті. Висоти й відступи від висоти
@@ -166,7 +166,20 @@ html[lang="en"] .item .en{display:none}
 .screen-note span{flex:1 1 auto}
 .sn-x{flex:0 0 auto;border:0;background:none;color:var(--ink-3);font-size:14px;line-height:1;padding:2px 4px;cursor:pointer}
 .sn-x:hover{color:var(--act)}
-@media (min-width:1101px){.screen-note{display:none!important}}
+@media (min-width:761px){.screen-note{display:none!important}}
+
+/* планшет (iPad 768–1100): дерево й статті — по дві плитки в ряд, з мініатюрами; лінії дерева ховаємо */
+@media (min-width:761px) and (max-width:1100px){
+  .htree{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px}
+  .htree .cell{grid-column:auto!important;grid-row:auto!important}
+  .htree .cell::before,.htree .cell::after{display:none}
+  .htree .lbl{width:auto!important;visibility:visible!important}
+  .htree .c14 .lbl,.htree .c16 .lbl{visibility:hidden!important}
+  .arts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .main.hub .item{height:auto;min-height:84px}
+  .item .hv-wrap{display:block;width:112px;height:70px}
+  .main.hub{padding-bottom:96px}
+}
 </style>
 </head>
 <body>
@@ -233,9 +246,9 @@ html[lang="en"] .item .en{display:none}
 </main>
 </div>
 
-<script src="shared/lang.js?v=20260923201713"></script>
-<script src="shared/nav.js?v=20260923201713"></script>
-<script src="shared/hub-visuals.js?v=20260923201713"></script>
+<script src="shared/lang.js?v=20260923203933"></script>
+<script src="shared/nav.js?v=20260923203933"></script>
+<script src="shared/hub-visuals.js?v=20260923203933"></script>
 <script>
 /* Помітка для телефону: показуємо, доки користувач її не закрив. */
 (function () {
