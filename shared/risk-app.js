@@ -39,12 +39,21 @@ roam:["ROAM","Resolved / Owned / Accepted / Mitigated — швидке сорт�
 burndown:["Risk burndown","Графік сумарної експозиції по спринтах. Має спадати."],
 p80:["P80","Значення, яке не буде перевищено з імовірністю 80%. «З імовірністю 80% закінчимо за N тижнів»."]
 };
+Object.assign(GLOSS,{p50:["P50 (медіана)","Половина прогонів закінчилась раніше, половина — пізніше. Це «підкинути монетку», а не обіцянка клієнту."],
+pdl:["Шанс вкластися в дедлайн","Частка прогонів, де проєкт закінчився не пізніше дедлайну. Двигайте повзунок або клікніть по гістограмі."],
+pplan:["Шанс вкластися в «план»","План = сума найімовірніших оцінок. Оцінки асиметричні (запізнитися можна сильніше, ніж випередити), тому такий план майже завжди оптимістичний."]});
 const EXTRA_GL=[["Escalate","Ризик поза обсягом або повноваженнями PM — передаємо на рівень програми, портфеля, спонсора."],["Avoid","Усуваємо причину — ризик зникає. Для критичних загроз."],["Transfer","Передаємо наслідки третій стороні: страховка, SLA, fixed price. Ризик не зникає."],["Mitigate","Зменшуємо ймовірність і/або вплив загрози. Найчастіша стратегія."],["Accept","Приймаємо: активно (резерв + contingency plan) або пасивно (лише переглядаємо)."],["Exploit","Робимо так, щоб можливість точно реалізувалася."],["Share","Ділимося можливістю з партнером, який краще її використає."],["Enhance","Підвищуємо ймовірність і/або вигоду можливості."],["Шість процесів","Plan Risk Management → Identify Risks → Perform Risk Analysis → Plan Risk Responses → Implement Risk Responses → Monitor Risks."],["Формула ризику","Через <причину> може статися <подія>, що призведе до <ефекту на цілі>."]];
 
 const pop=$("#pop");
 function HINT(k,x,y){const g=GLOSS[k];if(!g)return;pop.innerHTML="<b>"+esc(g[0])+"</b><br>"+esc(g[1]);pop.style.display="block";
  const w=Math.min(320,window.innerWidth-20);let left=Math.min(x,window.innerWidth-w-12);pop.style.left=Math.max(8,left)+"px";pop.style.top=(y+14)+"px";}
-document.addEventListener("click",e=>{const h=e.target.closest&&e.target.closest(".hn");if(h){HINT(h.dataset.k,e.pageX,e.pageY);e.stopPropagation();}else pop.style.display="none";});
+function TIP(html,x,y){pop.innerHTML=html;pop.style.display="block";const w=Math.min(320,window.innerWidth-20);pop.style.left=Math.max(8,Math.min(x+12,window.scrollX+window.innerWidth-w-12))+"px";pop.style.top=(y+16)+"px";}
+const TIPZ="[data-tip],#b7h";
+document.addEventListener("click",e=>{const c=e.target.closest&&e.target;const h=c&&c.closest(".hn");if(h){HINT(h.dataset.k,e.pageX,e.pageY);e.stopPropagation();return;}
+ const t=c&&c.closest("[data-tip]");if(t){TIP(t.dataset.tip,e.pageX,e.pageY);return;}if(!(c&&c.closest(TIPZ)))pop.style.display="none";});
+document.addEventListener("mousemove",e=>{const t=e.target.closest&&e.target.closest("[data-tip]");if(t)TIP(t.dataset.tip,e.pageX,e.pageY);});
+document.addEventListener("mouseout",e=>{const t=e.target.closest&&e.target.closest(TIPZ);if(t&&!(e.relatedTarget&&t.contains(e.relatedTarget)))pop.style.display="none";});
+const ta=h=>' data-tip="'+esc(h)+'"';
 const hn=(k,t)=>'<span class="hn" data-k="'+k+'">'+t+'</span>';
 
 /* ================= НАВІГАЦІЯ / ПРОГРЕС ================= */
@@ -280,14 +289,14 @@ function b7risks(){const d=$("#b7r");d.innerHTML="";REV.forEach((r,i)=>{const w=
  w.innerHTML="<label style='display:flex;gap:6px;align-items:center'><input type='checkbox' "+(r.on?"checked":"")+" data-a='on'><b>"+r.n+"</b></label><div style='font-size:.82rem;color:var(--mut);margin-left:22px'>P = "+(r.mit?r.mp:r.p)+"% · +"+(r.mit?r.md:r.d)+" тиж</div><label style='display:flex;gap:6px;align-items:center;margin-left:22px;font-size:.85rem'><input type='checkbox' "+(r.mit?"checked":"")+" data-a='mit'>реагування: "+r.mt+"</label>";
  w.querySelectorAll("input").forEach(c=>c.onchange=e=>{r[e.target.dataset.a]=e.target.checked;b7risks();});d.appendChild(w);});b7swing();}
 function tri(a,m,b){const u=Math.random();const f=(m-a)/(b-a||1);return u<f?a+Math.sqrt(u*(b-a)*(m-a)):b-Math.sqrt((1-u)*(b-a)*(b-m));}
-let SIM=null;
+let SIM=null,SIMG=null;
 function b7run(){const N=+$("#b7n").value;const tot=[],cols=TASKS.map(()=>[]),rc=REV.map(()=>[]);
  for(let k=0;k<N;k++){let s=0;TASKS.forEach((t,i)=>{const v=tri(t[1],t[2],t[3]);cols[i].push(v);s+=v;});REV.forEach((r,i)=>{let v=0;if(r.on){const p=(r.mit?r.mp:r.p)/100;if(Math.random()<p)v=r.mit?r.md:r.d;}rc[i].push(v);s+=v;});tot.push(s);}
  const sorted=tot.slice().sort((a,b)=>a-b);SIM={tot,sorted,cols,rc};b7draw();markDone("b7");}
 function corr(x,y){const n=x.length;const mx=x.reduce((a,b)=>a+b,0)/n,my=y.reduce((a,b)=>a+b,0)/n;let sxy=0,sx=0,sy=0;for(let i=0;i<n;i++){sxy+=(x[i]-mx)*(y[i]-my);sx+=(x[i]-mx)**2;sy+=(y[i]-my)**2;}return sx&&sy?sxy/Math.sqrt(sx*sy):0;}
 function b7draw(){const dl=+$("#b7d").value;$("#b7dv").textContent=dl;if(!SIM){$("#b7k").innerHTML="<div class='q'>Натисніть «Запустити».</div>";return;}
  const S=SIM.sorted,n=S.length,q=p=>S[Math.min(n-1,Math.floor(p*n))];const pOk=S.filter(v=>v<=dl).length/n;const plan=TASKS.reduce((a,t)=>a+t[2],0);const pPlan=S.filter(v=>v<=plan).length/n;
- $("#b7k").innerHTML="<div class='kpis' style='grid-template-columns:1fr 1fr'><div class='kpi'><div class='v'>"+q(.5).toFixed(1)+"</div><div class='l'>P50, тижнів</div></div><div class='kpi'><div class='v'>"+q(.8).toFixed(1)+"</div><div class='l'>"+hn("p80","P80")+", тижнів</div></div><div class='kpi'><div class='v' style='color:"+(pOk>=.8?"var(--c-green)":pOk>=.5?"var(--c-gold)":"var(--c-clay)")+"'>"+Math.round(pOk*100)+"%</div><div class='l'>шанс вкластися в "+dl+" тиж</div></div><div class='kpi'><div class='v' style='color:var(--c-clay)'>"+Math.round(pPlan*100)+"%</div><div class='l'>шанс вкластися в «план» "+plan+" тиж</div></div></div>";
+ $("#b7k").innerHTML="<div class='kpis' style='grid-template-columns:1fr 1fr'><div class='kpi'><div class='v'>"+q(.5).toFixed(1)+"</div><div class='l'>"+hn("p50","P50")+", тижнів</div></div><div class='kpi'><div class='v'>"+q(.8).toFixed(1)+"</div><div class='l'>"+hn("p80","P80")+", тижнів</div></div><div class='kpi'><div class='v' style='color:"+(pOk>=.8?"var(--c-green)":pOk>=.5?"var(--c-gold)":"var(--c-clay)")+"'>"+Math.round(pOk*100)+"%</div><div class='l'>"+hn("pdl","шанс вкластися")+" в "+dl+" тиж</div></div><div class='kpi'><div class='v' style='color:var(--c-clay)'>"+Math.round(pPlan*100)+"%</div><div class='l'>"+hn("pplan","шанс вкластися в «план»")+" "+plan+" тиж</div></div></div>";
  const lo=Math.floor(S[0]),hi=Math.ceil(S[n-1]);const bins=[];const bw=0.5;for(let v=lo;v<hi;v+=bw)bins.push({a:v,c:0});S.forEach(v=>{const i=Math.min(bins.length-1,Math.floor((v-lo)/bw));bins[i].c++;});
  const W=760,H=260,L=46,R=16,T=18,B=40,mc=Math.max(...bins.map(b=>b.c));const X=v=>L+(v-lo)/(hi-lo||1)*(W-L-R),Y=c=>H-B-c/mc*(H-T-B);
  let s="";bins.forEach(b=>{s+='<rect x="'+(X(b.a)+1)+'" y="'+Y(b.c)+'" width="'+Math.max(1,X(b.a+bw)-X(b.a)-2)+'" height="'+(H-B-Y(b.c))+'" fill="'+(b.a+bw<=dl?"var(--c-green)":"var(--c-clay)")+'" opacity=".85"/>';});
@@ -295,11 +304,19 @@ function b7draw(){const dl=+$("#b7d").value;$("#b7dv").textContent=dl;if(!SIM){$
  s+='<path d="'+cum+'" fill="none" stroke="var(--ink)" stroke-width="2"/>';
  for(let v=lo;v<=hi;v++)s+='<text x="'+X(v)+'" y="'+(H-B+16)+'" font-size="11" text-anchor="middle" fill="var(--ink-3)">'+v+'</text>';
  s+='<text x="'+(W/2)+'" y="'+(H-4)+'" font-size="12" text-anchor="middle" fill="var(--ink-3)">тривалість, тижнів · лінія — накопичена ймовірність</text>';
- [[plan,"план","var(--ink-3)"],[q(.5),"P50","var(--act)"],[q(.8),"P80","var(--c-purple)"],[dl,"дедлайн","var(--ink)"]].forEach((m,i)=>{if(m[0]<lo||m[0]>hi)return;s+='<line x1="'+X(m[0])+'" y1="'+T+'" x2="'+X(m[0])+'" y2="'+(H-B)+'" stroke="'+m[2]+'" stroke-width="2" stroke-dasharray="'+(i===3?"0":"5 4")+'"/><text x="'+(X(m[0])+3)+'" y="'+(T+10+i*13)+'" font-size="11" font-weight="700" fill="'+m[2]+'">'+m[1]+'</text>';});
+ const pc=v=>Math.round(S.filter(x=>x<=v).length/n*100)+"%";
+ const MT=["<b>План: "+plan+" тиж</b><br>Сума найімовірніших оцінок. У нього вкладаються лише "+pc(plan)+" прогонів — тому «план» не можна називати клієнту як дату.",
+  "<b>P50: "+q(.5).toFixed(1)+" тиж</b><br>Половина прогонів закінчилась раніше. Це монетка: пообіцяти P50 — отже, з шансом 50% зірвати строк.",
+  "<b>P80: "+q(.8).toFixed(1)+" тиж</b><br>80% прогонів — не пізніше. Це число зазвичай називають клієнту; різниця P80 − P50 = "+(q(.8)-q(.5)).toFixed(1)+" тиж — резерв часу під ризики.",
+  "<b>Дедлайн: "+dl+" тиж</b><br>Вкладаємось з імовірністю "+pc(dl)+". Рухайте повзунок або клікніть по гістограмі, щоб перевірити іншу дату."];
+ [[plan,"план","var(--ink-3)"],[q(.5),"P50","var(--act)"],[q(.8),"P80","var(--c-purple)"],[dl,"дедлайн","var(--ink)"]].forEach((m,i)=>{if(m[0]<lo||m[0]>hi)return;s+='<g'+ta(MT[i])+' style="cursor:help"><rect x="'+(X(m[0])-5)+'" y="'+T+'" width="10" height="'+(H-B-T)+'" fill="transparent"/><text x="'+(X(m[0])+3)+'" y="'+(T+10+i*13)+'" font-size="11" font-weight="700" fill="'+m[2]+'">'+m[1]+'</text></g>';s+='<line x1="'+X(m[0])+'" y1="'+T+'" x2="'+X(m[0])+'" y2="'+(H-B)+'" stroke="'+m[2]+'" stroke-width="2" stroke-dasharray="'+(i===3?"0":"5 4")+'" pointer-events="none"/>';});
+ s+='<circle id="b7dot" r="5" fill="var(--ink)" stroke="var(--paper)" stroke-width="2" style="display:none" pointer-events="none"/>';
+ SIMG={lo,hi,L,R,T,B,W,H,bw,bins,S,n};
  s+='<text x="'+(L-6)+'" y="'+(T+6)+'" font-size="10" text-anchor="end" fill="var(--ink-3)">100%</text><text x="'+(L-6)+'" y="'+(H-B)+'" font-size="10" text-anchor="end" fill="var(--ink-3)">0</text>';
  $("#b7h").innerHTML=s;
  const items=TASKS.map((t,i)=>({n:t[0],c:corr(SIM.cols[i],SIM.tot)})).concat(REV.map((r,i)=>({n:r.n.split(" · ")[0]+" (подія)",c:r.on?corr(SIM.rc[i],SIM.tot):0}))).sort((a,b)=>b.c-a.c);
- let t="";const TW=760,bh=22;items.forEach((it,i)=>{const w=Math.max(0,it.c)*(TW-260);t+='<text x="180" y="'+(24+i*bh)+'" font-size="12" text-anchor="end" fill="var(--ink)">'+esc(it.n)+'</text><rect x="190" y="'+(12+i*bh)+'" width="'+w+'" height="16" rx="3" fill="'+(/подія/.test(it.n)?"var(--c-clay)":"var(--act)")+'"/><text x="'+(196+w)+'" y="'+(24+i*bh)+'" font-size="11" fill="var(--ink-3)">'+it.c.toFixed(2)+'</text>';});
+ let t="";const TW=760,bh=22;items.forEach((it,i)=>{const w=Math.max(0,it.c)*(TW-260);const ev=/подія/.test(it.n);const tp="<b>"+it.n+"</b><br>Кореляція з тривалістю проєкту: "+it.c.toFixed(2)+". "+(it.c>=.5?"Сильно визначає, коли закінчимо — тут реагування дасть найбільший ефект.":it.c>=.25?"Помітний вплив: варто стежити і мати план.":"Слабкий вплив на строк: витрачати зусилля тут — останнє.")+(ev?" Це ризик-подія: у прогонах вона або стається, або ні.":" Це оцінка задачі: вплив росте з шириною діапазону оптимістично–песимістично.");
+ t+='<g'+ta(tp)+' style="cursor:help"><rect x="0" y="'+(10+i*bh)+'" width="760" height="'+bh+'" fill="transparent"/><text x="180" y="'+(24+i*bh)+'" font-size="12" text-anchor="end" fill="var(--ink)">'+esc(it.n)+'</text><rect x="190" y="'+(12+i*bh)+'" width="'+w+'" height="16" rx="3" fill="'+(/подія/.test(it.n)?"var(--c-clay)":"var(--act)")+'"/><text x="'+(196+w)+'" y="'+(24+i*bh)+'" font-size="11" fill="var(--ink-3)">'+it.c.toFixed(2)+'</text></g>';});
  $("#b7tor").setAttribute("viewBox","0 0 760 "+(20+items.length*bh));$("#b7tor").innerHTML=t;}
 
 /* Tornado «розмах»: кожен фактор від оптимістичного до песимістичного, решта — на базі.
@@ -317,10 +334,12 @@ function b7swing(){const svg=$("#b7sw");if(!svg)return;
  let g='<line x1="'+X(base)+'" y1="'+(T-8)+'" x2="'+X(base)+'" y2="'+(H-24)+'" stroke="var(--ink)" stroke-width="1.5"/>'+
   '<text x="'+X(base)+'" y="'+(T-12)+'" font-size="11" text-anchor="middle" font-weight="700" fill="var(--ink)">база '+base.toFixed(1)+' тиж</text>';
  items.forEach((it,i)=>{const y=T+i*bh;
+  const tp="<b>"+it.n+"</b><br>"+(it.ev?"Подія з імовірністю "+Math.round(it.hi>it.lo?(base-it.lo)/(it.hi-it.lo)*100:0)+"%. Не сталася — "+it.lo.toFixed(1)+" тиж (зелене), сталася — "+it.hi.toFixed(1)+" тиж (червоне).":"Решта задач — на найімовірнішій оцінці. Ця задача оптимістично — "+it.lo.toFixed(1)+" тиж (зелене), песимістично — "+it.hi.toFixed(1)+" тиж (синє).")+" Розмах "+it.w.toFixed(1)+" тиж"+(i===0?" — найбільший, з нього й починаємо.":".");
+  g+='<g'+ta(tp)+' style="cursor:help"><rect x="0" y="'+y+'" width="'+W+'" height="'+bh+'" fill="transparent"/>';
   g+='<text x="'+(L-10)+'" y="'+(y+14)+'" font-size="12" text-anchor="end" fill="var(--ink)">'+esc(it.n)+'</text>';
   if(base-it.lo>0.001)g+='<rect x="'+X(it.lo)+'" y="'+(y+2)+'" width="'+(X(base)-X(it.lo))+'" height="17" rx="2" fill="var(--c-green)" opacity=".75"/>';
   if(it.hi-base>0.001)g+='<rect x="'+X(base)+'" y="'+(y+2)+'" width="'+(X(it.hi)-X(base))+'" height="17" rx="2" fill="'+(it.ev?"var(--c-clay)":"var(--act)")+'" opacity=".85"/>';
-  g+='<text x="'+(X(it.hi)+6)+'" y="'+(y+14)+'" font-size="11" fill="var(--ink-3)">±'+it.w.toFixed(1)+'</text>';});
+  g+='<text x="'+(X(it.hi)+6)+'" y="'+(y+14)+'" font-size="11" fill="var(--ink-3)">±'+it.w.toFixed(1)+'</text></g>';});
  for(let v=Math.ceil(mn-pad);v<=Math.floor(mx+pad);v++)g+='<text x="'+X(v)+'" y="'+(H-8)+'" font-size="10" text-anchor="middle" fill="var(--ink-3)">'+v+'</text>';
  svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.innerHTML=g;
  const top=items[0];let tip="<b>Почніть з «"+esc(top.n)+"»</b>: розмах "+top.w.toFixed(1)+" тиж — найбільший у проєкті. ";
@@ -331,6 +350,17 @@ function b7swing(){const svg=$("#b7sw");if(!svg)return;
 function b7setMode(m){B7MODE=m;$$("#b7mode button").forEach(b=>b.classList.toggle("pri",b.dataset.m===m));
  $("#b7swBox").style.display=m==="sw"?"":"none";$("#b7coBox").style.display=m==="co"?"":"none";
  $("#b7coNote").textContent=SIM?"":"Спершу натисніть «Запустити симуляцію» вище — кореляцію рахуємо з прогонів.";}
+function b7pt(e){if(!SIMG)return null;const svg=$("#b7h");const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const m=svg.getScreenCTM();if(!m)return null;const q=p.matrixTransform(m.inverse());
+ const G=SIMG;if(q.x<G.L||q.x>G.W-G.R||q.y<G.T||q.y>G.H-G.B)return null;const v=G.lo+(q.x-G.L)/(G.W-G.L-G.R)*(G.hi-G.lo);const bi=Math.min(G.bins.length-1,Math.max(0,Math.floor((v-G.lo)/G.bw)));return {v,b:G.bins[bi]};}
+function b7hover(e){if(e.target.closest("[data-tip]"))return;const r=b7pt(e);const dot=$("#b7dot");if(!r){pop.style.display="none";if(dot)dot.style.display="none";return;}
+ const G=SIMG,b=r.b,top=b.a+G.bw,cnt=G.S.filter(x=>x<=r.v).length/G.n,upto=G.S.filter(x=>x<=top).length/G.n;
+ const X=v=>G.L+(v-G.lo)/(G.hi-G.lo||1)*(G.W-G.L-G.R);if(dot){dot.setAttribute("cx",X(r.v));dot.setAttribute("cy",G.H-G.B-cnt*(G.H-G.T-G.B));dot.style.display="";}
+ TIP("<b>"+b.a.toFixed(1)+"–"+top.toFixed(1)+" тиж</b><br>У цьому діапазоні закінчились "+b.c+" з "+G.n+" прогонів ("+(b.c/G.n*100).toFixed(1)+"%).<br>Лінія: не пізніше "+r.v.toFixed(1)+" тиж — "+Math.round(cnt*100)+"% прогонів.<br><i>Клік — поставити дедлайн на "+top.toFixed(1)+" тиж (шанс "+Math.round(upto*100)+"%).</i>",e.pageX,e.pageY);}
+$("#b7h").addEventListener("mousemove",b7hover);
+$("#b7h").addEventListener("mouseleave",()=>{const d=$("#b7dot");if(d)d.style.display="none";});
+$("#b7h").addEventListener("click",e=>{if(e.target.closest("[data-tip]"))return;const r=b7pt(e);if(!r)return;const sl=$("#b7d"),v=Math.round((r.b.a+SIMG.bw)*2)/2;
+ if(v>+sl.max)sl.max=Math.ceil(v);if(v<+sl.min)sl.min=Math.floor(v);sl.value=v;b7draw();b7hover(e);});
+$("#b7h").style.cursor="crosshair";
 $("#b7mode").addEventListener("click",e=>{const b=e.target.closest("button[data-m]");if(b)b7setMode(b.dataset.m);});
 $("#b7go").onclick=()=>{b7run();b7setMode(B7MODE);};$("#b7d").oninput=b7draw;b7table();b7risks();b7draw();b7setMode("sw");
 
