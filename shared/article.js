@@ -12,7 +12,8 @@
     'agentic/index.html': '20-agentic-ai.html',
     'support-chat/index.html': '21-support-chat.html',
     'support-voice/index.html': '22-support-voice.html',
-    'release/index.html': '23-release.html'
+    'release/index.html': '23-release.html',
+    'pci-dss/index.html': '28-pci-dss.html'
   };
   var f = document.querySelector('.article-frame');
   if (!f) return;

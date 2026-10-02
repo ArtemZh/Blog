@@ -1,0 +1,124 @@
+/* Компоненти статті «PCI DSS очима PM». Спільне (етапи, картки, кейси) — у shared/. */
+.lead--sm{font-size:14px;margin-bottom:14px}
+.card dl{margin:0}
+.card dt{margin-top:10px;font-size:12.5px;font-weight:600}
+.card dd{margin:2px 0 0;font-size:13px;line-height:1.5;color:var(--g700)}
+.cols+.note,.cols+.lead{margin-top:18px}
+
+/* ── 01 цілі й вимоги ─────────────────────────────────────── */
+.goals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:8px}
+.goal{border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper);padding:12px}
+.goal__r{display:grid;grid-template-columns:26px minmax(0,1fr);gap:6px;align-items:baseline;margin-top:8px}
+.goal__r i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--g300)}
+.goal__r b{font-size:13.5px;font-weight:600;line-height:1.3}
+@media (max-width:860px){.goals{grid-template-columns:minmax(0,1fr)}}
+
+/* ── 02 межі перевірки ────────────────────────────────────── */
+.scp{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+.scp__box{border:1px solid var(--line-soft);border-radius:var(--r-lg);padding:16px;background:var(--surface-2)}
+.scp__count{font-size:13px;color:var(--g700);margin-bottom:12px}
+.scp__count b{font-size:28px;font-weight:700;color:var(--ink);margin-right:2px}
+.scp__count span{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;margin-left:6px}
+.scp__grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.scp__s{border:1px solid var(--line);border-radius:var(--r);background:var(--paper);padding:10px;min-height:92px;
+  display:flex;flex-direction:column;gap:3px;transition:background .2s,border-color .2s,opacity .2s}
+.scp__s b{font-size:13px;font-weight:600;line-height:1.25}
+.scp__s span{font-size:11.5px;line-height:1.35;color:var(--g500)}
+.scp__s i{margin-top:auto;font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--g700)}
+/* Стан читається без кольору: суцільна заливка · рамка · пунктир. */
+.scp__s[data-st="in"]{background:var(--ink);border-color:var(--ink)}
+.scp__s[data-st="in"] b,.scp__s[data-st="in"] i{color:#fff}
+.scp__s[data-st="in"] span{color:var(--g300)}
+.scp__s[data-st="conn"]{border-color:var(--ink);border-width:1.5px}
+.scp__s[data-st="out"]{border-style:dashed;background:none;opacity:.62}
+.scp__legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--g700)}
+.scp__legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px;border:1.5px solid var(--ink)}
+.scp__legend [data-st="in"]::before{background:var(--ink)}
+.scp__legend [data-st="out"]::before{border:1px dashed var(--g500)}
+.scp .card h3{font-size:17px}
+@media (max-width:980px){.scp{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.scp__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ── 03 матриця ───────────────────────────────────────────── */
+.mxw{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+.mx{display:grid;grid-template-columns:minmax(200px,1.7fr) repeat(4,minmax(0,1fr)) minmax(84px,.9fr);gap:3px}
+.mx__h{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--g700);padding:4px 2px 8px;text-align:center;border-radius:var(--r) var(--r) 0 0}
+.mx__h:first-child{text-align:left;padding-left:10px}
+.mx__h.on{color:var(--signal)}
+.mx__row{display:grid;grid-template-columns:24px minmax(0,1fr);gap:6px;align-items:baseline;text-align:left;padding:9px 10px;
+  border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper);color:var(--ink);cursor:pointer;transition:border-color .15s,opacity .15s}
+.mx__row:hover,.mx__row.on{border-color:var(--signal)}
+.mx__row i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--g300)}
+.mx__row span{font-size:13px;font-weight:600;line-height:1.3}
+.mx__c{display:flex;align-items:center;justify-content:center;border-radius:var(--r);background:var(--surface-2);transition:opacity .15s}
+.mx__c.on{background:var(--surface)}
+.mx__c .dot{width:11px;height:11px;border-radius:50%;display:block}
+.mx__c .lbl{display:none}
+.mx__c[data-v="L"] .dot{background:var(--ink)}
+.mx__c[data-v="H"] .dot{border:1.5px solid var(--g700);background:var(--paper)}
+.mx__c--cloud{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--g700);background:none;border:1px dashed var(--line)}
+.mx__c--cloud[data-v="P"]{background:var(--ink);border-color:var(--ink);color:#fff;border-style:solid}
+.mx__c--cloud[data-v="S"]{border-style:solid;border-color:var(--g300)}
+.mx .is-dim{opacity:.32}
+.mx__legend{margin:10px 0 0;font-size:12px;color:var(--g500)}
+.mxw .card h3{font-size:17px}
+@media (max-width:1100px){.mxw{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:680px){
+  .mx{grid-template-columns:minmax(0,1fr)}
+  .mx__h,.mx__c:not([data-v]){display:none}
+  .mx__c{justify-content:flex-start;gap:8px;padding:2px 10px;background:none}
+  .mx__c .lbl{display:inline;font-size:12px;color:var(--g700)}
+  .mx__c--cloud{border:0;padding:2px 10px 8px}
+  .mx__c--cloud[data-v="P"]{background:none;color:var(--ink)}
+  .mx__c--cloud::before{content:"☁ ";margin-right:4px}
+}
+
+/* ── 04 порядок робіт ─────────────────────────────────────── */
+.cal-wrap{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+.cal{overflow-x:auto;border:1px solid var(--line-soft);border-radius:var(--r-lg);padding:12px;background:var(--surface-2)}
+.cal__head,.cal__lane{display:grid;grid-template-columns:120px repeat(var(--w),minmax(96px,1fr));gap:4px;min-width:720px}
+.cal__head span{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--g500);padding:0 2px 6px}
+.cal__lane{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);grid-auto-flow:row dense;align-items:stretch}
+.cal__k{grid-column:1;grid-row:1/span 3;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--g700);align-self:center}
+.cal__it{text-align:left;font-size:12px;line-height:1.25;padding:9px 8px;border-radius:var(--r);border:1px solid var(--line);
+  background:var(--paper);color:var(--ink);cursor:pointer;transition:border-color .15s}
+.cal__it.is-crit{background:var(--ink);color:#fff;border-color:var(--ink)}
+.cal__it:hover,.cal__it.on{border-color:var(--signal)}
+.cal__it.is-crit.on{box-shadow:0 0 0 2px var(--signal)}
+.cal__legend{margin:12px 0 0;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--g700)}
+.cal__legend i{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--ink);margin-right:6px;vertical-align:-2px}
+.cal-wrap .card h3{font-size:17px}
+@media (max-width:980px){.cal-wrap{grid-template-columns:minmax(0,1fr)}}
+
+/* ── 07 докази ────────────────────────────────────────────── */
+.clk{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start;margin-bottom:18px}
+.clk__t{display:grid;gap:4px}
+.clk__h,.clk__r{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;padding:10px 12px}
+.clk__h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g700);padding-bottom:2px}
+.clk__r{border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper)}
+.clk__r b{font-size:13.5px;font-weight:600}
+.clk__r span{font-size:13px;line-height:1.45;color:var(--g700)}
+.clk .card h3,.rhw .card h3{font-size:17px}
+.rhw{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start;margin-bottom:18px}
+.rh{border:1px solid var(--line-soft);border-radius:var(--r-lg);padding:6px 14px;background:var(--surface-2)}
+.rh__row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:center;padding:10px 0}
+.rh__row+.rh__row{border-top:1px dashed var(--line)}
+.rh__k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--g700)}
+.rh__its{display:flex;gap:6px;flex-wrap:wrap}
+.rh__it{font-size:12.5px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--paper);color:var(--ink);cursor:pointer;transition:border-color .15s}
+.rh__it:hover,.rh__it.on{border-color:var(--signal)}
+@media (max-width:980px){.clk,.rhw{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.rh__row,.clk__h,.clk__r{grid-template-columns:minmax(0,1fr);gap:4px}}
+
+/* ── 08 аудит ─────────────────────────────────────────────── */
+.roll--6 .ro-bar{grid-template-columns:repeat(3,minmax(0,1fr))}
+.roll--6{margin-bottom:8px}
+@media (max-width:620px){.roll--6 .ro-bar{grid-template-columns:minmax(0,1fr)}}
+
+/* ── 06, 09 картки з питанням і дією ──────────────────────── */
+.metric .kicker{display:block;margin-bottom:6px}
+.m__act b{color:var(--ink) !important}
+
+/* ── 10 кейси ─────────────────────────────────────────────── */
+.case__l{margin-top:10px !important;font-size:13px !important;color:var(--g700) !important}
+.case__l b{color:var(--ink)}

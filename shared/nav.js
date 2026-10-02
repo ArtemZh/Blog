@@ -24,6 +24,7 @@
     { g: 4, n: '21', f: '21-support-chat.html',        t: t('Чат-бот підтримки', 'Support chatbot') },
     { g: 4, n: '22', f: '22-support-voice.html',       t: t('Голосовий бот', 'Voice bot') },
     { g: 4, n: '23', f: '23-release.html',             t: t('Робота з релізом', 'Working with releases') },
+    { g: 4, n: '28', f: '28-pci-dss.html',             t: t('PCI DSS очима PM', 'PCI DSS through a PM’s eyes') },
     { g: 4, n: '17', f: '17-ai.html',                  t: 'AI slop helper' },
     { g: 4, n: '25', f: 'https://artemzh.github.io/Be_like_Sheldon/', t: t('Be like Sheldon · відкриті дані', 'Be like Sheldon · open data'), ext: true }
   ];

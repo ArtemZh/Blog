@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Сертифікація PCI DSS очима PM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/css/tokens.css?v=20261002124457">
+<link rel="stylesheet" href="../shared/css/base.css?v=20261002124457">
+<link rel="stylesheet" href="../shared/css/diagram.css?v=20261002124457">
+<link rel="stylesheet" href="../shared/css/components.css?v=20261002124457">
+<link rel="stylesheet" href="css/page.css?v=20261002124457">
+</head>
+<body>
+
+<header class="top">
+  <span class="top__title" data-i18n="ui.brand"></span>
+  <nav class="top__nav">
+    <a href="#basics" data-i18n="nav.1"></a>
+    <a href="#scope" data-i18n="nav.2"></a>
+    <a href="#roles" data-i18n="nav.3"></a>
+    <a href="#path-sec" data-i18n="nav.4"></a>
+    <a href="#streams" data-i18n="nav.5"></a>
+    <a href="#evidence" data-i18n="nav.6"></a>
+    <a href="#risks" data-i18n="nav.7"></a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="hero__kicker" data-i18n="hero.kicker"></div>
+    <h1 data-i18n="hero.title"></h1>
+    <p data-i18n-html="hero.lead"></p>
+    <div class="specs">
+      <div><b data-i18n="hero.s1.b"></b><span data-i18n="hero.s1.s"></span></div>
+      <div><b data-i18n="hero.s2.b"></b><span data-i18n="hero.s2.s"></span></div>
+      <div><b data-i18n="hero.s3.b"></b><span data-i18n="hero.s3.s"></span></div>
+      <div><b data-i18n="hero.s4.b"></b><span data-i18n="hero.s4.s"></span></div>
+    </div>
+  </div>
+
+  <!-- 01 ─────────────────────────────────────────────── -->
+  <section id="basics">
+    <div class="sec__head">
+      <span class="sec__num">01</span>
+      <h2 data-i18n="s1.h"></h2>
+      <p data-i18n="s1.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s1.lead"></p>
+    <div class="cols cols--3"><div class="card card--soft"><span class="kicker" data-i18n="s1.c1.k"></span><h3 data-i18n="s1.c1.t"></h3><p data-i18n-html="s1.c1.b"></p></div><div class="card card--soft"><span class="kicker" data-i18n="s1.c2.k"></span><h3 data-i18n="s1.c2.t"></h3><p data-i18n-html="s1.c2.b"></p></div><div class="card card--soft"><span class="kicker" data-i18n="s1.c3.k"></span><h3 data-i18n="s1.c3.t"></h3><p data-i18n-html="s1.c3.b"></p></div></div>
+    <p class="lead lead--sm" style="margin-top:18px" data-i18n-html="s1.levels"></p>
+    <h3 class="sub" data-i18n="s1.goals.h"></h3>
+    <div class="goals" id="goals"></div>
+    <h3 class="sub" data-i18n="s1.why.h"></h3>
+    <div class="cols cols--3"><div class="card card--soft"><h3 data-i18n="s1.w1.t"></h3><p data-i18n-html="s1.w1.b"></p></div><div class="card card--soft"><h3 data-i18n="s1.w2.t"></h3><p data-i18n-html="s1.w2.b"></p></div><div class="card card--soft"><h3 data-i18n="s1.w3.t"></h3><p data-i18n-html="s1.w3.b"></p></div></div>
+    <div class="note" data-i18n-html="s1.note"></div>
+  </section>
+
+  <!-- 02 ─────────────────────────────────────────────── -->
+  <section id="scope">
+    <div class="sec__head">
+      <span class="sec__num">02</span>
+      <h2 data-i18n="s2.h"></h2>
+      <p data-i18n="s2.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s2.lead"></p>
+    <div class="toggles" id="scopeBar"></div>
+    <div class="scp">
+      <div class="scp__box"><div class="scp__count" id="scopeCount"></div><div class="scp__grid" id="scopeGrid"></div><div class="scp__legend" id="scopeLegend"></div></div>
+      <div class="card" id="scopeCard"></div>
+    </div>
+    <div style="margin-top:22px"><div class="cols cols--3"><div class="card card--soft"><span class="kicker" data-i18n="s2.o1.k"></span><h3 data-i18n="s2.o1.t"></h3><p data-i18n-html="s2.o1.b"></p></div><div class="card card--soft"><span class="kicker" data-i18n="s2.o2.k"></span><h3 data-i18n="s2.o2.t"></h3><p data-i18n-html="s2.o2.b"></p></div><div class="card card--soft"><span class="kicker" data-i18n="s2.o3.k"></span><h3 data-i18n="s2.o3.t"></h3><p data-i18n-html="s2.o3.b"></p></div></div></div>
+    <div class="note" data-i18n-html="s2.note"></div>
+  </section>
+
+  <!-- 03 ─────────────────────────────────────────────── -->
+  <section id="roles">
+    <div class="sec__head">
+      <span class="sec__num">03</span>
+      <h2 data-i18n="s3.h"></h2>
+      <p data-i18n="s3.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s3.lead"></p>
+    <div class="toggles" id="roleBar"></div>
+    <div class="mxw">
+      <div><div class="mx" id="mx"></div><p class="mx__legend" data-i18n="mx.legend"></p></div>
+      <div class="card" id="mxCard"></div>
+    </div>
+    <h3 class="sub" data-i18n="s3.sec.h"></h3>
+    <p class="lead lead--sm" data-i18n-html="s3.sec.lead"></p>
+    <div class="cols cols--4"><div class="card card--soft"><h3 data-i18n="s3.q1.t"></h3><p data-i18n-html="s3.q1.b"></p></div><div class="card card--soft"><h3 data-i18n="s3.q2.t"></h3><p data-i18n-html="s3.q2.b"></p></div><div class="card card--soft"><h3 data-i18n="s3.q3.t"></h3><p data-i18n-html="s3.q3.b"></p></div><div class="card card--soft"><h3 data-i18n="s3.q4.t"></h3><p data-i18n-html="s3.q4.b"></p></div></div>
+    <h3 class="sub" data-i18n="s3.cloud.h"></h3>
+    <p class="lead lead--sm" data-i18n-html="s3.cloud.b"></p>
+    <div class="note" data-i18n-html="s3.note"></div>
+  </section>
+
+  <!-- 04 ─────────────────────────────────────────────── -->
+  <section id="order">
+    <div class="sec__head">
+      <span class="sec__num">04</span>
+      <h2 data-i18n="s4.h"></h2>
+      <p data-i18n="s4.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s4.lead"></p>
+    <div class="cal-wrap">
+      <div class="cal" id="ord"></div>
+      <div class="card" id="ordCard"></div>
+    </div>
+    <div style="margin-top:22px"><div class="cols cols--3"><div class="card card--soft"><span class="kicker" data-i18n="s4.o1.k"></span><h3 data-i18n="s4.o1.t"></h3><p data-i18n-html="s4.o1.b"></p></div><div class="card card--soft"><span class="kicker" data-i18n="s4.o2.k"></span><h3 data-i18n="s4.o2.t"></h3><p data-i18n-html="s4.o2.b"></p></div><div class="card card--soft"><span class="kicker" data-i18n="s4.o3.k"></span><h3 data-i18n="s4.o3.t"></h3><p data-i18n-html="s4.o3.b"></p></div></div></div>
+    <div class="note" data-i18n-html="s4.note"></div>
+  </section>
+
+  <!-- 05 ─────────────────────────────────────────────── -->
+  <section id="path-sec">
+    <div class="sec__head">
+      <span class="sec__num">05</span>
+      <h2 data-i18n="s5.h"></h2>
+      <p data-i18n="s5.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s5.lead"></p>
+    <div id="flowBox" class="wide">
+      <div class="flows toggles"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+        <span class="steps__track"></span>
+      </div>
+      <div id="path"></div>
+    </div>
+    <div class="note" data-i18n-html="s5.note"></div>
+  </section>
+
+  <!-- 06 ─────────────────────────────────────────────── -->
+  <section id="streams">
+    <div class="sec__head">
+      <span class="sec__num">06</span>
+      <h2 data-i18n="s6.h"></h2>
+      <p data-i18n="s6.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s6.lead"></p>
+    <div class="toggles" id="stBar"></div>
+    <div class="cols cols--3" id="stList"></div>
+    <div class="note" id="stTrap"></div>
+  </section>
+
+  <!-- 07 ─────────────────────────────────────────────── -->
+  <section id="evidence">
+    <div class="sec__head">
+      <span class="sec__num">07</span>
+      <h2 data-i18n="s7.h"></h2>
+      <p data-i18n="s7.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s7.lead"></p>
+    <div class="cols cols--4" id="evList"></div>
+    <h3 class="sub" data-i18n="s7.clock.h"></h3>
+    <p class="lead lead--sm" data-i18n-html="s7.clock.lead"></p>
+    <div class="toggles" id="clockBar"></div>
+    <div class="clk">
+      <div class="clk__t" id="clock"></div>
+      <div class="card" id="clockCard"></div>
+    </div>
+    <div class="note" data-i18n-html="s7.clock.note"></div>
+    <h3 class="sub" data-i18n="s7.cal.h"></h3>
+    <p class="lead lead--sm" data-i18n-html="s7.cal.lead"></p>
+    <div class="rhw">
+      <div class="rh" id="rh"></div>
+      <div class="card" id="rhCard"></div>
+    </div>
+    <div class="note" data-i18n-html="s7.note"></div>
+  </section>
+
+  <!-- 08 ─────────────────────────────────────────────── -->
+  <section id="audit">
+    <div class="sec__head">
+      <span class="sec__num">08</span>
+      <h2 data-i18n="s8.h"></h2>
+      <p data-i18n="s8.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s8.lead"></p>
+    <div class="roll roll--6">
+      <div class="ro-bar" id="auBar"></div>
+      <div class="card" id="auCard"></div>
+    </div>
+    <h3 class="sub" data-i18n="s8.out.h"></h3>
+    <div class="cols cols--3" id="outList"></div>
+    <div class="note" data-i18n-html="s8.note"></div>
+  </section>
+
+  <!-- 09 ─────────────────────────────────────────────── -->
+  <section id="risks">
+    <div class="sec__head">
+      <span class="sec__num">09</span>
+      <h2 data-i18n="s9.h"></h2>
+      <p data-i18n="s9.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s9.lead"></p>
+    <div class="cols cols--3" id="riskList"></div>
+  </section>
+
+  <!-- 10 ─────────────────────────────────────────────── -->
+  <section id="cases">
+    <div class="sec__head">
+      <span class="sec__num">10</span>
+      <h2 data-i18n="s10.h"></h2>
+      <p data-i18n="s10.p"></p>
+    </div>
+    <p class="lead" data-i18n-html="s10.lead"></p>
+    <div class="cols cols--3" id="caseList"></div>
+  </section>
+
+  <!-- 11 ─────────────────────────────────────────────── -->
+  <section id="refs">
+    <div class="sec__head">
+      <span class="sec__num">11</span>
+      <h2 data-i18n="s11.h"></h2>
+      <p data-i18n="s11.p"></p>
+    </div>
+    <h3 class="sub" data-i18n="s11.check.h"></h3>
+    <ol class="check">
+      <li data-i18n-html="s11.c1"></li><li data-i18n-html="s11.c2"></li><li data-i18n-html="s11.c3"></li><li data-i18n-html="s11.c4"></li><li data-i18n-html="s11.c5"></li><li data-i18n-html="s11.c6"></li><li data-i18n-html="s11.c7"></li><li data-i18n-html="s11.c8"></li>
+    </ol>
+    <h3 class="sub" data-i18n="s11.gloss.h"></h3>
+    <input class="search" id="glossSearch" type="search" data-i18n-ph="s11.gloss.ph">
+    <div class="gloss" id="gloss"></div>
+    <h3 class="sub" data-i18n="s11.src.h"></h3>
+    <ul class="src">
+      <li><a href="https://www.pcisecuritystandards.org/standards/pci-dss/" target="_blank" rel="noopener" data-i18n="src.pcidss"></a></li>
+      <li><a href="https://blog.pcisecuritystandards.org/just-published-pci-dss-v4-0-1" target="_blank" rel="noopener" data-i18n="src.pciblog"></a></li>
+      <li><a href="https://www.pcisecuritystandards.org/document_library/" target="_blank" rel="noopener" data-i18n="src.pcilib"></a></li>
+      <li><a href="https://corporate.visa.com/en/resources/security-compliance.html" target="_blank" rel="noopener" data-i18n="src.visa"></a></li>
+      <li><a href="https://www.commerce.senate.gov/services/files/24d3c229-4f2f-405d-b8db-a3a67f183883" target="_blank" rel="noopener" data-i18n="src.target"></a></li>
+      <li><a href="https://www.commerce.senate.gov/wp-content/uploads/meetings/082407F8-9740-4E43-B2D2-1520C5495014/Mulligan%20Testimony.pdf" target="_blank" rel="noopener" data-i18n="src.mulligan"></a></li>
+      <li><a href="https://ico.org.uk/media2/migrated/2618421/ba-penalty-20201016.pdf" target="_blank" rel="noopener" data-i18n="src.ico"></a></li>
+      <li><a href="https://www.justice.gov/opa/pr/alleged-international-hacker-indicted-massive-attack-us-retail-and-banking-networks" target="_blank" rel="noopener" data-i18n="src.doj"></a></li>
+      <li><a href="https://www.sec.gov/Archives/edgar/data/0001144354/000119312510052648/d10k.htm" target="_blank" rel="noopener" data-i18n="src.hpy"></a></li>
+    </ul>
+    <div class="foot" data-i18n="ui.foot"></div>
+  </section>
+
+</main>
+
+<script src="copy.js?v=20261002124457"></script>
+<script src="../shared/js/i18n.js?v=20261002124457"></script>
+<script src="data/path.js?v=20261002124457"></script>
+<script src="data/content.js?v=20261002124457"></script>
+<script src="../shared/js/diagram-engine.js?v=20261002124457"></script>
+<script src="../shared/js/scenarios.js?v=20261002124457"></script>
+<script src="js/sections.js?v=20261002124457"></script>
+<script src="js/app.js?v=20261002124457"></script>
+<script src="../shared/js/toc.js?v=20261002124457"></script>
+</body>
+</html>
