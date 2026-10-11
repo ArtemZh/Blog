@@ -1,0 +1,117 @@
+/* Компоненти статті «Один колір — одне значення, одна дія — одне місце». Спільне (картки, схема,
+   сценарії) — у ../../oss-bss/shared/. Сигнальний колір тут лише на дії;
+   справжні кольори ролей живуть тільки в маленьких зразках .sw. */
+.cols+.note,.cols+.lead,.tb+.note{margin-top:18px}
+.lead+.lead{margin-top:-8px}
+
+/* Виноска на джерело: номер у списку розділу 09. */
+.fn{font-size:.72em;line-height:0;margin-left:1px}
+.fn a{font-family:var(--mono);color:var(--g500);text-decoration:none;padding:0 1px}
+.fn a:hover,.fn a:focus-visible{color:var(--signal);text-decoration:underline}
+.fn+.fn::before{content:",";color:var(--g300);font-family:var(--mono)}
+
+/* Зразок кольору: маленький квадратик, рамка — щоб бліді не зникали на білому. */
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;
+  box-shadow:inset 0 0 0 1px rgba(18,24,38,.14);flex:none}
+
+/* Велике число в картці (03, 06). */
+.stat{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.stat b{font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.stat span{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g500)}
+
+/* ── таблиці ──────────────────────────────────────────────── */
+.tb{display:grid;gap:4px}
+.tb__h,.tb__r{display:grid;gap:14px;padding:10px 12px;align-items:start}
+.tb__h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g700);padding-bottom:2px}
+.tb__r{border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper)}
+.tb__r b{font-size:13.5px;font-weight:600;line-height:1.45}
+.tb__r span{font-size:13px;line-height:1.5;color:var(--g700)}
+.tb__r i{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--g500);padding-top:2px}
+.tb--2{max-width:760px}
+.tb--2 .tb__h,.tb--2 .tb__r{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr)}
+.tb--k .tb__h,.tb--k .tb__r{grid-template-columns:30px minmax(0,1fr) minmax(0,1.1fr)}
+.tb--s .tb__h,.tb--s .tb__r{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) 118px}
+.tb--3 .tb__h,.tb--3 .tb__r{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.4fr)}
+.tb--q{margin-top:10px}
+.tb--q .tb__h,.tb--q .tb__r{grid-template-columns:22px minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr)}
+.tb--q .tb__r b{font-weight:500;font-size:13px}
+/* Позначка читається словом і рамкою, не кольором. */
+.tag{font-style:normal;justify-self:start;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 7px;border-radius:5px;border:1px solid var(--ink);background:var(--ink);color:#fff;white-space:nowrap}
+.tag--ok{background:none;color:var(--g500);border:1px dashed var(--g300)}
+#qCard,#vCard{max-width:920px}
+#qCard h3,#vCard h3{font-size:17px}
+@media (max-width:760px){
+  .tb__h{display:none}
+  .tb .tb__r{grid-template-columns:minmax(0,1fr);gap:5px}
+  .tb--q .tb__r span::before,.tb--l .tb__r span::before{content:attr(data-l) ". ";font-weight:600;color:var(--ink)}
+}
+
+/* ── 05 відстані між ролями ───────────────────────────────── */
+.dist{display:grid;gap:4px;max-width:920px}
+.dist__h,.dist__r{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 40px 130px;gap:14px;align-items:center;padding:9px 12px}
+.dist__h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g700);padding-bottom:2px}
+.dist__r{border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper)}
+.dist__p{display:flex;align-items:center;gap:6px;font-size:13.5px;min-width:0}
+.dist__p .sw{width:14px;height:14px}
+.dist__p .sw+.sw{margin-right:5px}
+.dist__bar{display:block;height:6px;border-radius:3px;background:var(--surface)}
+.dist__bar i{display:block;height:100%;min-width:3px;border-radius:3px;background:var(--g300)}
+.dist__r b{font-family:var(--mono);font-size:13px;font-weight:500;text-align:right;color:var(--g700)}
+.dist__v{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--g500)}
+/* Близькі пари: темніша рамка, чорнило й слово — без сигнального кольору. */
+.dist__r[data-v="near"],.dist__r[data-v="same"]{border-color:var(--g700)}
+.dist__r[data-v="near"] b,.dist__r[data-v="same"] b{color:var(--ink);font-weight:500}
+.dist__r[data-v="near"] .dist__bar i,.dist__r[data-v="same"] .dist__bar i{background:var(--ink)}
+.dist__r[data-v="near"] .dist__v,.dist__r[data-v="same"] .dist__v{color:var(--ink)}
+.dist__sum{max-width:72ch;margin:14px 0 0;font-size:14px;line-height:1.6;color:var(--g700)}
+.dist__sum b{color:var(--ink)}
+@media (max-width:680px){
+  .dist__h{display:none}
+  .dist__r{grid-template-columns:minmax(0,1fr) 40px;gap:6px 10px}
+  .dist__bar{grid-column:1;grid-row:2}
+  .dist__v{grid-column:1/-1}
+}
+
+/* ── схема ────────────────────────────────────────────────── */
+/* Запозичений колір — пунктир. Під час сценарію дріт кроку суцільний. */
+#map path.wire[id^="map-w-k"]{stroke-dasharray:5 4}
+/* Токен — це ім'я з коду: назва моноширинним. */
+#map .node[data-id^="t-"] b{font-family:var(--mono);font-size:12px;font-weight:500}
+/* Додаток до хмарки: зразки кольору й місце в коді (номер конфлікту — у плашках рушія). */
+.pop__x{display:block;margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft)}
+.pop__x:empty{display:none}
+.pop__sw,.pop__ref{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:4px;font-size:11.5px;color:var(--g700)}
+.pop__sw em,.pop__ref em{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--g500);min-width:74px}
+.pop__sw code,.pop__ref{font-family:var(--mono);font-size:10.5px}
+/* Друга схема (панель «Плану»): дріт «та сама іконка» — не рух даних, а збіг,
+   тому пунктир. Смуги не згортаються, тож кнопки «розгорнути / згорнути» зайві. */
+#bar path.wire[id^="bar-w-same"]{stroke-dasharray:5 4}
+.flowbox--flat .flows .ghost,.flowbox--flat .flows .toggles__sp{display:none}
+/* Вузька розкладка: порожня група (підпис колонки без вузлів) не потрібна. */
+.list__grp:not(:has(.list__node)){display:none}
+
+/* ── джерела ──────────────────────────────────────────────── */
+.srcs{margin:0;padding-left:30px;font-size:13.5px;line-height:1.75;color:var(--g700);max-width:920px}
+.srcs li::marker{font-family:var(--mono);font-size:10.5px;color:var(--g500)}
+.srcs li{padding-left:4px;overflow-wrap:anywhere}
+.srcs li:target{color:var(--ink);background:var(--surface-2);box-shadow:0 0 0 6px var(--surface-2);border-radius:4px}
+.srcs a{color:var(--ink);text-decoration-color:var(--line)}
+.srcs a:hover{text-decoration-color:var(--signal)}
+.srcs__n{color:var(--g500)}
+
+@media print{
+  .steps,#distBar,#qBar,#vBar{display:none}
+  .wide{width:100%;left:0;transform:none}
+  .card,.tb__r,.dist__r,.note{break-inside:avoid}
+  .pop{display:none}
+}
+
+/* Висновок у картці (07). */
+.case__l{margin-top:10px !important;font-size:13px !important;color:var(--g700) !important}
+.case__l b{color:var(--ink)}
+
+/* Посилання на інший розділ усередині тексту. */
+.lead a[href^="#"],.card p a[href^="#"],.note a[href^="#"]{color:var(--ink);text-decoration-color:var(--line)}
+.lead a[href^="#"]:hover,.card p a[href^="#"]:hover,.note a[href^="#"]:hover{text-decoration-color:var(--signal)}
