@@ -11,6 +11,7 @@ const box = document.getElementById('coral');
 const $ = (id) => document.getElementById(id);
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const P = { N: 2500, E: 8.5, O: 16, T: 22, spin: true };
+const EN = window.PMP_LANG === 'en';
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const step = (n) => (n % 2 ? (3 * n + 1) / 2 : n / 2);
 
@@ -19,7 +20,7 @@ try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } ca
 
 if (!renderer) {
   const d = document.createElement('div'); d.className = 'fail';
-  d.textContent = 'Тривимірна сцена не запустилась: браузер не дав доступу до WebGL. Решта статті працює без неї.';
+  d.textContent = EN ? 'The 3D scene did not start: the browser gave no access to WebGL. The rest of the article works without it.' : 'Тривимірна сцена не запустилась: браузер не дав доступу до WebGL. Решта статті працює без неї.';
   box.appendChild(d);
   window.CORAL = { ok: false };
 } else {
@@ -76,7 +77,7 @@ if (!renderer) {
     camera.position.copy(s.center).add(new THREE.Vector3(0.25, 0.12, 1).normalize().multiplyScalar(dist));
     camera.near = dist / 200; camera.far = dist * 6; camera.updateProjectionMatrix();
     scene.fog = new THREE.Fog(css('--paper') || '#FAFAFB', dist * .9, dist + s.radius * 2.6);
-    $('cInfo').textContent = `${info.nodes.toLocaleString('uk')} чисел · найдовший шлях ${maxD}`;
+    $('cInfo').textContent = EN ? `${info.nodes.toLocaleString('en')} numbers · longest path ${maxD}` : `${info.nodes.toLocaleString('uk')} чисел · найдовший шлях ${maxD}`;
     highlight();
   }
 
@@ -106,7 +107,7 @@ if (!renderer) {
   function loop() { raf = 0; if (!visible) return; controls.autoRotate = P.spin && !reduce; controls.update(); renderer.render(scene, camera); raf = requestAnimationFrame(loop); }
   new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible && !raf) raf = requestAnimationFrame(loop); }, { threshold: .02 }).observe(box);
 
-  const bind = (id, key, digits) => { const i = $(id), o = $(id + 'o'); const show = () => (o.textContent = Number(i.value).toFixed(digits).replace('.', ','));
+  const bind = (id, key, digits) => { const i = $(id), o = $(id + 'o'); const show = () => (o.textContent = EN ? Number(i.value).toFixed(digits) : Number(i.value).toFixed(digits).replace('.', ','));
     i.value = P[key]; show(); i.addEventListener('input', () => { P[key] = +i.value; show(); build(); }); return () => { i.value = P[key]; show(); }; };
   const sync = [bind('cN', 'N', 0), bind('cE', 'E', 1), bind('cO', 'O', 1), bind('cT', 'T', 0)];
   const preset = (o) => { Object.assign(P, o); sync.forEach((f) => f()); build(); };

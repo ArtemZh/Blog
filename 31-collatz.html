@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="The 3n+1 problem · Draft">Задача 3n+1 · Draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20261012234501">
+<link rel="stylesheet" href="shared/style.css?v=20261012234501">
+<link rel="stylesheet" href="shared/collatz.css?v=20261012234501">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body data-lang-reload>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top" data-en="The 3n+1 problem">Задача 3n+1</a>
+  <nav class="toc" id="toc" aria-label="Розділи">
+    <a href="#rule" data-en="Rule">Правило</a><a href="#history" data-en="History">Історія</a><a href="#tree-sec" data-en="Tree">Дерево</a><a href="#steps" data-en="Steps">Кроки</a>
+    <a href="#bits-sec" data-en="Bits">Біти</a><a href="#drift" data-en="Drift">Дрейф</a><a href="#coral-sec" data-en="3D coral">Корал 3D</a><a href="#known" data-en="What is known">Що відомо</a>
+  </nav>
+</header>
+
+<main class="main" id="top">
+  <header class="mast wrap">
+    <div class="kicker" data-en="Article · mathematics outside work · draft">Стаття · математика поза роботою · чернетка</div>
+    <h1 data-en="The 3n+1 problem">Задача 3n+1</h1>
+    <p class="lede" data-en="A rule you can explain to a child in a minute, and a conjecture nobody has managed to prove in almost a century. This article shows the same problem in six ways: a “hailstone” chart, a tree, a cloud of points, bits, statistics and a three-dimensional “coral”. The number you enter in the first section travels with you through the whole page.">Правило, яке пояснюють дитині за хвилину, і гіпотеза, яку не можуть довести майже століття.
+      У статті одна й та сама задача показана шістьма способами: графіком «граду», деревом, хмарою точок,
+      бітами, статистикою і тривимірним «коралом». Число, яке ви введете в першому розділі, йде з вами через усю сторінку.</p>
+  </header>
+
+  <div class="wrap">
+
+  <section class="sec" id="rule">
+    <h2 data-en="<span class='num'>01</span>The rule and “try it yourself”"><span class="num">01</span>Правило і «спробуй сам»</h2>
+    <p data-en="Take any positive whole number and repeat one step:">Візьміть будь-яке натуральне число і повторюйте один крок:</p>
+    <div class="rule2">
+      <div><i data-en="the number is even">число парне</i><b>n → n / 2</b></div>
+      <div><i data-en="the number is odd">число непарне</i><b>n → 3n + 1</b></div>
+    </div>
+    <p data-en="<b>The Collatz conjecture:</b> whatever number you start from, sooner or later you reach 1. After that the sequence goes round in a loop 1 → 4 → 2 → 1. Along the way the numbers soar and drop like hailstones in a cloud — hence the name “hailstone numbers”."><b>Гіпотеза Коллатца:</b> з якого б числа ви не почали, рано чи пізно отримаєте 1. Далі послідовність
+      ходить по колу 1 → 4 → 2 → 1. Числа на шляху то злітають, то падають, як градини у хмарі, — звідси назва
+      «числа-градини».</p>
+
+    <div class="ctl">
+      <label><span data-en="Number">Число</span> <input type="text" inputmode="numeric" class="n-in" id="nIn" value="27" aria-label="Стартове число"></label>
+      <span id="quick"></span>
+      <button type="button" class="chipbtn" id="rnd" data-en="random">випадкове</button>
+      <span class="seg" id="scale" role="group" aria-label="Шкала">
+        <button type="button" data-v="lin" class="on" data-en="linear scale">звичайна шкала</button><button type="button" data-v="log" data-en="logarithmic">логарифмічна</button>
+      </span>
+    </div>
+    <div class="stats" id="tryStats"></div>
+    <div class="fig">
+      <svg id="hail" viewBox="0 0 960 320" role="img" aria-label="Графік послідовності"></svg>
+      <div class="tipx" id="hailTip"></div>
+      <p class="cap" data-en="Horizontal axis — step number, vertical axis — value. Hover over the chart to see the number at a step. The logarithmic scale shows what the linear one hides near zero: the long descent to one.">По горизонталі — номер кроку, по вертикалі — значення. Наведіть на графік, щоб побачити число на кроці.
+        Логарифмічна шкала показує те, що на звичайній ховається біля нуля: довгий спуск до одиниці.</p>
+    </div>
+    <div class="legend"><span data-en="<i class='lg-o'></i>odd number"><i class="lg-o"></i>непарне число</span><span data-en="<i class='lg-e'></i>even number"><i class="lg-e"></i>парне число</span><span data-en="<i class='lg-a'></i>highest point"><i class="lg-a"></i>найвища точка</span></div>
+    <div class="seq" id="seq"></div>
+    <p data-en="Try 27 and 26. Neighbouring numbers, different fates: 26 reaches one in 10 steps, 27 takes 111 and climbs to 9,232 on the way. The field accepts very large numbers too, even thirty digits: the calculation is exact, with no rounding.">Спробуйте 27 і 26. Сусідні числа, а доля різна: 26 доходить до одиниці за 10 кроків, 27 — за 111 і дорогою
+      злітає до 9232. Поле приймає й дуже великі числа, хоч на тридцять цифр: обчислення йде точно, без округлень.</p>
+    <p class="trap" data-en="<b>Trap.</b> “I checked a hundred numbers and they all got there, so it is true.” Computers have checked every number up to 2<sup>71</sup>, and that still proves nothing: there are infinitely many natural numbers, and a counterexample may lie further on."><b>Пастка.</b> «Перевірив сотню чисел — усі дійшли, отже правда». Комп'ютери перевірили всі числа
+      до 2<sup>71</sup>, і це все одно нічого не доводить: натуральних чисел нескінченно багато, і контрприклад може бути далі.</p>
+  </section>
+
+  <section class="sec" id="history">
+    <h2 data-en="<span class='num'>02</span>History: one problem, seven names"><span class="num">02</span>Історія: одна задача, сім назв</h2>
+    <p data-en="The problem travelled by word of mouth from university to university, and almost everyone who passed it on left their name on it. That is why it appears in the literature under different names.">Задача мандрувала усно від університету до університету, і майже кожен, хто її переказував, залишив їй своє
+      ім'я. Через це в літературі вона трапляється під різними назвами.</p>
+    <table class="names">
+      <tr><th data-en="Name">Назва</th><th data-en="Named after">На честь кого або чого</th></tr>
+      <tr><td data-en="Collatz conjecture">Гіпотеза Коллатца</td><td data-en="Lothar Collatz, a German mathematician; the first note on the function is in his notebook dated 1 July 1932">Лотар Коллатц, німецький математик; перший запис про функцію — у його зошиті за 1 липня 1932 року</td></tr>
+      <tr><td data-en="The 3n+1, 3x+1 problem">Задача 3n+1, 3x+1</td><td data-en="after the rule itself">за самим правилом</td></tr>
+      <tr><td data-en="Syracuse problem">Сиракузька задача</td><td data-en="Syracuse University in the USA; the name was proposed by Helmut Hasse after a visit there in the 1950s">Сиракузький університет у США; назву запропонував Гельмут Гассе після візиту туди в 1950-х</td></tr>
+      <tr><td data-en="Hasse’s algorithm">Алгоритм Гассе</td><td data-en="Helmut Hasse, who discussed generalisations of the problem with many colleagues">Гельмут Гассе, який обговорював узагальнення задачі з багатьма колегами</td></tr>
+      <tr><td data-en="Kakutani’s problem">Задача Какутані</td><td data-en="Shizuo Kakutani, who heard it around 1960 and passed it on; at Yale everybody worked on it for a month">Сідзуо Какутані, який близько 1960 року почув її й поширив далі; у Єлі над нею місяць працювали всі</td></tr>
+      <tr><td data-en="Ulam’s problem">Задача Улама</td><td data-en="Stanisław Ulam, who talked about it at Los Alamos">Станіслав Улам, який розповідав про неї в Лос-Аламосі</td></tr>
+      <tr><td data-en="Thwaites conjecture">Гіпотеза Туейтса</td><td data-en="Bryan Thwaites, who came across it independently in 1952">Браян Туейтс, який незалежно натрапив на неї 1952 року</td></tr>
+      <tr><td data-en="Hailstone numbers">Числа-градини</td><td data-en="after the behaviour of the sequence: rises and falls, like hailstones in a cloud">за поведінкою послідовності: злети й падіння, як у градин у хмарі</td></tr>
+    </table>
+
+    <h3 data-en="Timeline">Хронологія</h3>
+    <div class="ctl" id="tlFilter" role="group" aria-label="Фільтр подій"></div>
+    <ol class="tl" id="tl"></ol>
+    <div class="legend">
+      <span data-en="<i class='lg-e'></i>person or name"><i class="lg-e"></i>людина або назва</span>
+      <span data-en="<i class='lg-o'></i>proved result"><i class="lg-o"></i>доведений результат</span>
+      <span data-en="<i class='lg-e' style='border-radius:2px'></i>computation"><i class="lg-e" style="border-radius:2px"></i>обчислення</span>
+      <span data-en="<i class='lg-e' style='border-radius:2px;transform:rotate(45deg)'></i>prize"><i class="lg-e" style="border-radius:2px;transform:rotate(45deg)"></i>приз</span>
+    </div>
+    <p class="trap" data-en="<b>Trap.</b> “The problem is almost a hundred years old, so it must be nearly cracked.” In that time many statements “for almost all numbers” have been proved and none “for all”. The step from the first to the second is the whole difficulty."><b>Пастка.</b> «Задачі майже сто років, отже скоро дотиснуть». За цей час довели багато тверджень
+      «майже для всіх чисел» і жодного — «для всіх». Перехід від першого до другого і є вся складність.</p>
+  </section>
+
+  <section class="sec" id="tree-sec">
+    <h2 data-en="<span class='num'>03</span>The tree: the path in reverse"><span class="num">03</span>Дерево: шлях навпаки</h2>
+    <p data-en="If the conjecture is true, all numbers flow down to one like streams into a river. So the map can be built backwards: start from 1 and ask <b>where you can get here from</b>. The number 2n always leads to n. And if n leaves a remainder of 4 when divided by 6, there is a second road too — from the odd number (n − 1) / 3.">Якщо гіпотеза правдива, усі числа стікаються до одиниці, як струмки в річку. Тому карту можна будувати навпаки:
+      почати з 1 і питати, <b>звідки сюди можна потрапити</b>. У число n завжди веде число 2n. А якщо n при діленні на 6
+      дає остачу 4, то є ще й друга дорога — з непарного числа (n − 1) / 3.</p>
+    <div class="ctl">
+      <span id="treeFlows"></span>
+      <span class="seg" id="treeDepth" role="group" aria-label="Глибина дерева">
+        <button type="button" data-v="8" data-en="8 steps">8 кроків</button><button type="button" data-v="11" class="on">11</button><button type="button" data-v="14">14</button><button type="button" data-v="16">16</button>
+      </span>
+      <button type="button" class="chipbtn" id="treeReset" data-en="collapse to the initial view">згорнути до початкового</button>
+    </div>
+    <div class="steps29" id="treeSteps" aria-live="polite">
+      <span class="n"></span><span class="t"></span>
+      <span class="row" style="display:flex;gap:4px"><button type="button" class="chipbtn" data-a="play">▶</button><button type="button" class="chipbtn" data-a="prev">←</button><button type="button" class="chipbtn" data-a="next">→</button></span>
+      <span class="cells"></span>
+    </div>
+    <div class="treebox" id="treeBox">
+      <svg id="tree" role="img" aria-label="Дерево Коллатца"></svg>
+      <div class="pop29" id="treePop"></div>
+    </div>
+    <div class="legend">
+      <span data-en="<i class='lg-o'></i>odd"><i class="lg-o"></i>непарне</span><span data-en="<i class='lg-e'></i>even"><i class="lg-e"></i>парне</span>
+      <span data-en="<i class='lg-s'></i>“divide by 2” step"><i class="lg-s"></i>крок «поділити на 2»</span><span data-en="<i class='lg-d'></i>“3n + 1” step"><i class="lg-d"></i>крок «3n + 1»</span>
+      <span data-en="<i class='lg-a'></i>path of the chosen number"><i class="lg-a"></i>шлях обраного числа</span><span data-en="<b style='color:var(--act)'>+</b> hidden predecessors — click the number"><b style="color:var(--act)">+</b> є приховані попередники — клікніть число</span>
+    </div>
+    <h3 data-en="How to read it">Як читати</h3>
+    <p data-en="One is on the left. Each column to the right is one step further from it, so the column number equals the number of steps to 1. The arrows show the direction of the rule itself: from a number to the next one, that is, right to left. The numbered buttons above run a scenario: the number’s path is walked step by step, and if the tree does not yet contain the numbers it needs, it grows them itself.">Одиниця ліворуч. Кожна колонка праворуч — на один крок далі від неї, тож номер колонки дорівнює кількості
+      кроків до 1. Стрілки показують напрямок самого правила: від числа до наступного, тобто справа наліво.
+      Кнопки з числами вгорі запускають сценарій: шлях числа проходиться крок за кроком, а якщо потрібних чисел
+      у дереві ще немає, воно добудовується само.</p>
+    <p data-en="Clicking a number opens a card: its binary form, the number of steps, its predecessors and an explanation of why this number has one road or two. Multiples of three are “leaves”: no odd number leads to them, so all they have is an endless chain of doublings.">Клік по числу відкриває картку: двійковий запис, кількість кроків, попередники і пояснення, чому в цього
+      числа одна дорога або дві. Числа, кратні трьом, — «листя»: з непарного в них потрапити не можна, тож у них
+      лише нескінченний ланцюжок подвоєнь.</p>
+    <p data-en="The conjecture can be stated with this tree: <b>does it contain every natural number?</b> You do not see 27 here not because it is missing, but because it sits all the way out in column 111.">Гіпотезу можна сформулювати цим деревом: <b>чи є в ньому кожне натуральне число?</b> Числа 27 тут не видно
+      не тому, що його немає, а тому, що воно аж у 111-й колонці.</p>
+    <p class="trap" data-en="<b>Trap.</b> The tree looks orderly, and it seems “obvious” that it contains every number. But the tree grows from one, while what has to be proved is the converse: that no number is left outside — neither in a separate loop, nor on a path that escapes to infinity."><b>Пастка.</b> Дерево виглядає впорядкованим, і здається, що в ньому «очевидно» є всі числа. Але
+      дерево росте від одиниці, а довести треба зворотне: що жодне число не лишилось осторонь — ні в окремому колі,
+      ні на шляху, що тікає в нескінченність.</p>
+  </section>
+
+  <section class="sec" id="steps">
+    <h2 data-en="<span class='num'>04</span>How many steps to one"><span class="num">04</span>Скільки кроків до одиниці</h2>
+    <p data-en="Let us count the steps for every number in turn and put a dot for each. There is no predictable curve — but no chaos either: the dots line up in bands.">Порахуємо кількість кроків для кожного числа підряд і поставимо точку. Передбачуваної кривої немає — але й
+      хаосу теж: точки складаються у смуги.</p>
+    <div class="ctl">
+      <span class="seg" id="scatN" role="group" aria-label="Скільки чисел">
+        <button type="button" data-v="1000" data-en="up to 1,000">до 1 000</button><button type="button" data-v="10000" class="on" data-en="up to 10,000">до 10 000</button><button type="button" data-v="100000" data-en="up to 100,000">до 100 000</button>
+      </span>
+      <span class="seg" id="scatM" role="group" aria-label="Що показувати">
+        <button type="button" data-v="steps" class="on" data-en="number of steps">кількість кроків</button><button type="button" data-v="peak" data-en="highest point of the path">найвища точка шляху</button>
+      </span>
+    </div>
+    <div class="fig">
+      <canvas id="scat" width="960" height="420" role="img" aria-label="Кількість кроків для кожного числа"></canvas>
+      <div class="tipx" id="scatTip"></div>
+      <p class="cap" id="scatCap"></p>
+    </div>
+    <div class="two">
+      <div>
+        <h3 data-en="Why bands">Чому смуги</h3>
+        <p data-en="Neighbouring numbers often merge into one trajectory within a few steps and travel on together — so they have the same or almost the same number of steps. For example, 54 and 55 both take 112 steps: their paths meet at 47. Groups like these form the horizontal dashes.">Сусідні числа часто вже за кілька кроків зливаються в одну траєкторію і далі йдуть разом — тому мають
+          однакову або майже однакову кількість кроків. Наприклад, 54 і 55 обидва доходять за 112 кроків: їхні шляхи
+          сходяться в числі 47. Такі групи й утворюють горизонтальні риски.</p>
+        <h3 data-en="Distribution">Розподіл</h3>
+        <div class="fig"><canvas id="hist" width="620" height="200" role="img" aria-label="Розподіл кількості кроків"></canvas>
+          <p class="cap" data-en="How many numbers have each step count. The distribution is not bell-shaped: it has several humps.">Скільки чисел мають ту чи іншу кількість кроків. Розподіл не дзвоноподібний: у нього кілька горбів.</p></div>
+      </div>
+      <div>
+        <h3 data-en="Record holders">Рекордсмени</h3>
+        <p data-en="Numbers that need more steps than any smaller number. The table is computed on this page.">Числа, яким потрібно більше кроків, ніж будь-якому меншому. Таблицю пораховано на цій сторінці.</p>
+        <table class="rec" id="recs"></table>
+      </div>
+    </div>
+    <p class="trap" data-en="<b>Trap.</b> “The bigger the number, the longer the path.” No: 100,000 gets there in 128 steps, and 97 in 118. The length of the path depends on how the number is built in binary, not on its size. The next section is about that."><b>Пастка.</b> «Чим більше число, тим довший шлях». Ні: 100 000 доходить за 128 кроків, а 97 —
+      за 118. Довжина шляху залежить від того, як число влаштоване у двійковому записі, а не від його розміру. Про це наступний розділ.</p>
+  </section>
+
+  <section class="sec" id="bits-sec">
+    <h2 data-en="<span class='num'>05</span>The binary view: why it is hard"><span class="num">05</span>Двійковий погляд: чому це складно</h2>
+    <p data-en="Let us write the number in ones and zeros — each row of the picture below is one step. A dark cell is a one, a light cell is a zero.">Запишемо число одиницями й нулями — кожен рядок малюнка нижче є одним кроком. Темна клітинка — одиниця, світла — нуль.</p>
+    <div class="ctl">
+      <label><span data-en="Number">Число</span> <input type="text" inputmode="numeric" class="n-in" value="27" aria-label="Стартове число"></label>
+      <span class="legend" style="margin:0"><span data-en="<i class='lg-a'></i>row with an odd number"><i class="lg-a"></i>рядок із непарним числом</span></span>
+    </div>
+    <div class="fig">
+      <canvas id="bits" width="960" height="400" role="img" aria-label="Двійковий запис послідовності"></canvas>
+      <div class="tipx" id="bitsTip"></div>
+      <p class="cap" id="bitsCap"></p>
+    </div>
+    <div class="cards">
+      <div class="cardx"><span class="k" data-en="dividing by 2">ділення на 2</span><b data-en="Erase a zero on the right">Стерти нуль праворуч</b><p data-en="In binary this is the simplest action there is: the number shifts by one position. Nothing gets mixed.">У двійковому записі це найпростіша дія з можливих: число зсувається на одну позицію. Нічого не перемішується.</p></div>
+      <div class="cardx"><span class="k">3n + 1</span><b data-en="Add the number to a shifted copy of itself">Скласти число із собою, зсунутим</b><p data-en="3n is n plus 2n, so the number is added to its own shifted copy, plus one more. Carries run through the whole record and change it unpredictably.">3n — це n плюс 2n, тобто число додається до власної зсунутої копії, і ще одиниця. Переноси біжать через увесь запис і змінюють його непередбачувано.</p></div>
+      <div class="cardx"><span class="k" data-en="together">разом</span><b data-en="Addition against multiplication">Додавання проти множення</b><p data-en="Dividing by 2 “sees” the factors of a number, while adding one destroys them. Mathematics has few tools that describe such a mixture well — that is the root of the difficulty.">Ділення на 2 «бачить» множники числа, а додавання одиниці їх руйнує. Інструментів, які добре описують таку суміш, у математики мало — у цьому корінь складності.</p></div>
+    </div>
+    <p data-en="In the picture, after every odd row the right edge gets “eaten” by zeros while the left edge slowly grows. The question of the conjecture is whether the right edge always eats faster than the left one grows.">На малюнку правий край після кожного непарного рядка «з'їдається» нулями, а лівий повільно росте. Питання
+      гіпотези — чи завжди правий край з'їдає швидше, ніж лівий наростає.</p>
+    <p class="trap" data-en="<b>Trap.</b> Looking for a pattern in the right-hand bits and assuming it will continue. The last bits of a number do determine the next few steps, but then the higher bits come into play, and the pattern knows nothing about them."><b>Пастка.</b> Шукати візерунок у правих бітах і вважати, що він триватиме. Останні біти числа
+      справді визначають кілька найближчих кроків, але далі в гру вступають старші біти, про які цей візерунок нічого не знає.</p>
+  </section>
+
+  <section class="sec" id="drift">
+    <h2 data-en="<span class='num'>06</span>Downward drift: why everyone believes the conjecture"><span class="num">06</span>Дрейф униз: чому всі вірять, що гіпотеза правдива</h2>
+    <p data-en="After a “3n + 1” step the number is always even, so at least one division by 2 follows. But how many exactly? If odd numbers are treated as “random”, one division happens half the time, two a quarter of the time, three one eighth of the time.">Після кроку «3n + 1» число завжди парне, тож далі йде щонайменше одне ділення на 2. А скільки саме? Якщо
+      вважати непарні числа «випадковими», то одне ділення трапляється у половині випадків, два — у чверті, три — у восьмій частині.</p>
+    <div class="bars" id="halv"></div>
+    <div class="legend"><span data-en="<i class='lg-o' style='border-radius:2px'></i>all odd numbers up to 200,000"><i class="lg-o" style="border-radius:2px"></i>усі непарні числа до 200 000</span><span data-en="<i class='lg-o' style='border-radius:2px;background:var(--ink-3)'></i>only those met on the paths of numbers up to 20,000"><i class="lg-o" style="border-radius:2px;background:var(--ink-3)"></i>лише ті, що трапились на шляхах чисел до 20 000</span><span data-en="<i class='lg-a'></i>theory: 1 / 2<sup>k</sup>"><i class="lg-a"></i>теорія: 1 / 2<sup>k</sup></span></div>
+    <div class="cards" id="driftCards"></div>
+    <p data-en="So from one odd number to the next the value is multiplied by 3/4 on average — that is, it shrinks. Replace the three with a five and the average factor becomes 5/4 — and the picture flips:">Отже, від одного непарного числа до наступного значення в середньому множиться на 3/4, тобто зменшується.
+      Якщо замінити трійку на п'ятірку, середній множник стане 5/4 — і картина перевертається:</p>
+    <div class="ctl">
+      <label><span data-en="Number">Число</span> <input type="text" inputmode="numeric" class="n-in" value="27" aria-label="Стартове число"></label>
+      <span class="seg" id="walkRule" role="group" aria-label="Правило">
+        <button type="button" data-v="3" class="on">3n + 1</button><button type="button" data-v="5">5n + 1</button>
+      </span>
+    </div>
+    <div class="fig">
+      <svg id="walk" viewBox="0 0 960 280" role="img" aria-label="Розмір числа за кроками"></svg>
+      <p class="cap" id="walkCap"></p>
+    </div>
+    <p class="trap" data-en="<b>Trap.</b> Taking “it shrinks on average” for a proof. The argument rests on the assumption that the steps are independent, like coin tosses. In fact each step is fully determined by the previous one, and nobody has proved that some one stubborn number does not behave differently from the average."><b>Пастка.</b> Прийняти «в середньому зменшується» за доказ. Міркування тримається на припущенні,
+      що кроки незалежні, як підкидання монети. Насправді кожен крок повністю визначений попереднім, і ніхто не довів,
+      що якесь одне вперте число не поводиться інакше за середнє.</p>
+  </section>
+
+  <section class="sec" id="coral-sec">
+    <h2 data-en="<span class='num'>07</span>The coral in 3D"><span class="num">07</span>Корал у 3D</h2>
+    <p data-en="Take the paths of all numbers up to a given limit and draw them from one outwards. At every step the branch turns a little: one way after an even number, the other way after an odd one. Shared stretches of paths merge into trunks. The method was invented by the mathematician Edmund Harriss; here a third dimension is added — a twist around the branch’s own axis.">Візьмемо шляхи всіх чисел до заданої межі й намалюємо їх від одиниці назовні. На кожному кроці гілка трохи
+      повертає: після парного числа в один бік, після непарного — в інший. Спільні відрізки шляхів зливаються в
+      стовбури. Цей спосіб придумав математик Едмунд Гарріс; у нас до нього додано третій вимір — скрут навколо осі гілки.</p>
+    <div class="ctl">
+      <label><span data-en="Numbers up to">Числа до</span> <input type="range" id="cN" min="200" max="8000" step="100" value="2500"><output id="cNo"></output></label>
+      <label><span data-en="Even, °">Парне, °</span> <input type="range" id="cE" min="2" max="25" step="0.5" value="8.5"><output id="cEo"></output></label>
+      <label><span data-en="Odd, °">Непарне, °</span> <input type="range" id="cO" min="2" max="40" step="0.5" value="16"><output id="cOo"></output></label>
+      <label><span data-en="Twist, °">Скрут, °</span> <input type="range" id="cT" min="0" max="60" step="1" value="22"><output id="cTo"></output></label>
+    </div>
+    <div class="ctl">
+      <button type="button" class="chipbtn" id="cFlat" data-en="flat, as in Harriss">пласка, як у Гарріса</button>
+      <button type="button" class="chipbtn" id="cVol" data-en="in volume">об'ємна</button>
+      <button type="button" class="chipbtn on" id="cSpin" data-en="rotation">обертання</button>
+      <button type="button" class="chipbtn" id="cFull" data-en="full screen">на весь екран</button>
+      <label><span data-en="Highlight a number">Підсвітити число</span> <input type="text" inputmode="numeric" class="n-in" value="27" aria-label="Число для підсвітки"></label>
+    </div>
+    <div class="coral" id="coral">
+      <span class="hint" data-en="drag — rotate · wheel or pinch — zoom · right button — pan">тягніть — обертати · колесо або щипок — масштаб · права кнопка — зсув</span>
+      <span class="info" id="cInfo"></span>
+    </div>
+    <div class="legend"><span data-en="<i class='lg-a'></i>path of the chosen number to one"><i class="lg-a"></i>шлях обраного числа до одиниці</span><span data-en="<i class='lg-s'></i>paths of the other numbers; lighter means further from one"><i class="lg-s"></i>шляхи решти чисел; світліші — далі від одиниці</span><span data-en="the path is highlighted if the number does not exceed the “Numbers up to” limit">шлях підсвічується, якщо число не більше за межу «Числа до»</span></div>
+    <p data-en="The shape is not built into the drawing in advance — it comes out of the numbers themselves. The branches curl because the angles for an even and an odd step differ, while the steps themselves are roughly equal in number in this notation. Make the angles equal — and the branches straighten out. The look depends on two arbitrarily chosen numbers, while the branching structure stays the same.">Форма не закладена в малюнок заздалегідь — вона виходить із самих чисел. Гілки закручуються, бо
+      кути для парного й непарного кроку різні, а самих кроків у цьому записі приблизно порівну. Зробіть кути однаковими —
+      і гілки випростаються. Вигляд залежить від двох довільно обраних чисел, а структура розгалужень лишається та сама.</p>
+    <p class="trap" data-en="<b>Trap.</b> A beautiful picture feels like an explanation. The coral shows only the numbers we ourselves put into it, and all of them have already been checked. About the numbers that are not in the picture it says nothing."><b>Пастка.</b> Красива картинка здається поясненням. Корал показує лише ті числа, які ми самі в
+      нього поклали, і всі вони вже перевірені. Про числа, яких на малюнку немає, він мовчить.</p>
+  </section>
+
+  <section class="sec" id="known">
+    <h2 data-en="<span class='num'>08</span>What is known today"><span class="num">08</span>Що відомо сьогодні</h2>
+    <div class="cards">
+      <div class="cardx"><span class="k" data-en="checked by computer">перевірено комп'ютером</span><span class="big" data-en="up to 2<sup>71</sup>">до 2<sup>71</sup></span><p data-en="All numbers up to about 2.36 × 10<sup>21</sup> reach one. David Barina, 2025; the previous limit of 2<sup>68</sup> was also his, 2020.">Усі числа до приблизно 2,36 × 10<sup>21</sup> доходять до одиниці. Давид Барина, 2025; попередня межа 2<sup>68</sup> — його ж, 2020.</p></div>
+      <div class="cardx"><span class="k" data-en="almost all numbers">майже всі числа</span><b data-en="Terras, 1976">Террас, 1976</b><p data-en="Almost every number at some point becomes smaller than where it started: the share of such numbers equals one.">Майже кожне число колись стає меншим за стартове: частка таких чисел дорівнює одиниці.</p></div>
+      <div class="cardx"><span class="k" data-en="how many certainly get there">скільки точно доходить</span><b data-en="Krasikov and Lagarias, 2003">Красіков і Лагаріас, 2003</b><p data-en="Among the numbers from 1 to x at least x<sup>0.84</sup> reach one — for sufficiently large x.">Серед чисел від 1 до x щонайменше x<sup>0,84</sup> доходять до одиниці — для достатньо великих x.</p></div>
+      <div class="cardx"><span class="k" data-en="the strongest result">найсильніший результат</span><b data-en="Terence Tao, 2019">Теренс Тао, 2019</b><p data-en="Almost all trajectories descend below any given function of the starting number, provided that function grows to infinity — however slowly.">Майже всі траєкторії опускаються нижче будь-якої заданої функції від стартового числа, якщо ця функція росте до нескінченності — хай як повільно.</p></div>
+      <div class="cardx"><span class="k" data-en="other cycles">інші цикли</span><b data-en="If they exist, they are enormous">Якщо є, то величезні</b><p data-en="A cycle that does not pass through 1 would have at least 217,976,794,617 steps in the shortened notation. No cycles with up to 91 “rises” exist (Hercher, 2023).">Цикл, що не проходить через 1, мав би щонайменше 217 976 794 617 кроків у скороченому записі. Циклів з числом «підйомів» до 91 не існує (Герхер, 2023).</p></div>
+      <div class="cardx"><span class="k" data-en="the limit of the method">межа методу</span><b data-en="Conway, 1972">Конвей, 1972</b><p data-en="For a natural generalisation of the problem — with other multipliers and remainders — there is no algorithm that always gives the answer. This does not settle the conjecture itself, but it shows how close it lies to the undecidable.">Для природного узагальнення задачі — з іншими множниками й остачами — не існує алгоритму, який завжди дає відповідь. Саму гіпотезу це не закриває, але показує, наскільки близько вона до нерозв'язного.</p></div>
+    </div>
+
+    <h3 data-en="What a counterexample could look like">Як міг би виглядати контрприклад</h3>
+    <p data-en="The conjecture is false if there is a number that grows without bound, or a loop that does not pass through one. No such loops have been found among the natural numbers. But allow negative numbers and they appear at once — three of them:">Гіпотеза хибна, якщо знайдеться число, яке росте без меж, або коло, що не проходить через одиницю. Серед
+      натуральних чисел таких кіл не знайдено. А от якщо дозволити від'ємні числа, вони з'являються одразу — три штуки:</p>
+    <div class="rings" id="rings"></div>
+    <p data-en="The same rules, a different world — and already three separate loops instead of one. That is exactly why one cannot wave away the possibility that somewhere among the enormous natural numbers another one is hiding.">Ті самі правила, інший світ — і вже три окремі кола замість одного. Саме тому не можна відмахнутись від
+      можливості, що десь серед величезних натуральних чисел ховається ще одне.</p>
+
+    <h3 data-en="Two quotes">Дві цитати</h3>
+    <div class="cards">
+      <div class="cardx"><span class="k" data-en="Paul Erdős">Пал Ердеш</span><p data-en="“Mathematics may not be ready for such problems.”">«Математика, можливо, ще не готова до таких задач».</p></div>
+      <div class="cardx"><span class="k" data-en="Jeffrey Lagarias, 2010">Джеффрі Лагаріас, 2010</span><p data-en="“An extraordinarily difficult problem, completely out of reach of present day mathematics.”">«Надзвичайно складна задача, цілком поза досяжністю сучасної математики».</p></div>
+    </div>
+    <p class="trap" data-en="<b>Trap.</b> Confusing “almost all” with “all”. The results of Terras and Tao are about the share of numbers. They are compatible with there being infinitely many exceptions — just rare ones."><b>Пастка.</b> Плутати «майже всі» з «усі». Результати Терраса і Тао стосуються частки чисел. Вони
+      сумісні з тим, що існує нескінченно багато винятків — просто вони рідкісні.</p>
+
+    <h3 data-en="Sources">Джерела</h3>
+    <ul class="src29">
+      <li data-en="<a href='https://en.wikipedia.org/wiki/Collatz_conjecture' target='_blank' rel='noopener'>Wikipedia — Collatz conjecture</a>: names, records, results on cycles, the verification limit"><a href="https://en.wikipedia.org/wiki/Collatz_conjecture" target="_blank" rel="noopener">Wikipedia — Collatz conjecture</a>: назви, рекорди, результати про цикли, межа перевірки</li>
+      <li data-en="<a href='https://uk.wikipedia.org/wiki/Гіпотеза_Коллатца' target='_blank' rel='noopener'>Ukrainian Wikipedia — Гіпотеза Коллатца</a>: Ukrainian terms, the BOINC project"><a href="https://uk.wikipedia.org/wiki/Гіпотеза_Коллатца" target="_blank" rel="noopener">Вікіпедія — Гіпотеза Коллатца</a>: українські терміни, проєкт BOINC</li>
+      <li data-en="<a href='https://www.cecm.sfu.ca/organics/papers/lagarias/paper/html/node1.html' target='_blank' rel='noopener'>J. C. Lagarias — The 3x+1 problem and its generalizations (1985)</a>: history, prizes, Kakutani’s recollection"><a href="https://www.cecm.sfu.ca/organics/papers/lagarias/paper/html/node1.html" target="_blank" rel="noopener">J. C. Lagarias — The 3x+1 problem and its generalizations (1985)</a>: історія, призи, спогад Какутані</li>
+      <li><a href="https://arxiv.org/abs/1909.03562" target="_blank" rel="noopener">T. Tao — Almost all orbits of the Collatz map attain almost bounded values (2019)</a></li>
+      <li><a href="https://doi.org/10.1007/s11227-025-07337-0" target="_blank" rel="noopener">D. Barina — Improved verification limit for the convergence of the Collatz conjecture (2025)</a></li>
+      <li><a href="https://arxiv.org/abs/2201.00406" target="_blank" rel="noopener">C. Hercher — There are no Collatz m-cycles with m ≤ 91 (2023)</a></li>
+      <li data-en="<a href='https://mathematicians.org.uk/projects/collatz-seaweed/' target='_blank' rel='noopener'>Edmund Harriss — Collatz Seaweed</a>: the idea of the “coral”"><a href="https://mathematicians.org.uk/projects/collatz-seaweed/" target="_blank" rel="noopener">Edmund Harriss — Collatz Seaweed</a>: ідея «коралу»</li>
+      <li data-en="<a href='https://threejs.org/' target='_blank' rel='noopener'>three.js</a> — the library behind the three-dimensional scene"><a href="https://threejs.org/" target="_blank" rel="noopener">three.js</a> — бібліотека для тривимірної сцени</li>
+    </ul>
+    <p class="foot29" data-en="All charts, the table of record holders and the statistics on this page are computed in your browser when it opens. Historical facts and results come from the sources listed; where the sources disagree on dates, the date from Lagarias’s survey is used.">Усі графіки, таблиця рекордів і статистика на цій сторінці рахуються у вашому браузері під час відкриття.
+      Історичні факти й результати — з перелічених джерел; де джерела розходяться в датах, узято дату з огляду Лагаріаса.</p>
+  </section>
+
+  </div>
+</main>
+</div>
+
+<script src="shared/lang.js?v=20261012234501"></script>
+<script src="shared/nav.js?v=20261012234501"></script>
+<script src="shared/collatz.js?v=20261012234501"></script>
+<script type="module" src="shared/collatz-3d.js?v=20261012234501"></script>
+</body>
+</html>

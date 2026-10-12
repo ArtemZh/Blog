@@ -13,7 +13,10 @@
     if (parent) parent.appendChild(n);
     return n;
   };
-  const fmt = (v) => String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  /* Мова: lang.js кладе вибір у PMP_LANG; сторінка перезавантажується при перемиканні. */
+  const EN = window.PMP_LANG === 'en', _t = (uk, en) => (EN ? en : uk);
+  const SEP = EN ? ',' : '\u202f', dec = (v) => (EN ? String(v) : String(v).replace('.', ','));
+  const fmt = (v) => String(v).replace(/\B(?=(\d{3})+(?!\d))/g, SEP);
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
   const seg = (root, cb) => {
     $$('button', root).forEach((b) => b.addEventListener('click', () => {
@@ -34,7 +37,7 @@
     return out;
   }
   const log2 = (b) => { const s = b.toString(2); return s.length - 1 + Math.log2(Number('0b' + s.slice(0, 52)) / 2 ** (Math.min(52, s.length) - 1)); };
-  const big10 = (b) => { const s = b.toString(); return s.length <= 15 ? fmt(s) : s[0] + ',' + s.slice(1, 3) + ' × 10^' + (s.length - 1); };
+  const big10 = (b) => { const s = b.toString(); return s.length <= 15 ? fmt(s) : dec(s[0] + '.' + s.slice(1, 3)) + ' × 10^' + (s.length - 1); };
 
   // Кроки й піки для всіх чисел до N — з пам'яттю, звичайними числами (пік < 2^53 для N ≤ 10^5).
   const tableCache = {};
@@ -76,7 +79,7 @@
     const o = (hail.orb = orbit(state.n)), svg = $('#hail');
     svg.innerHTML = '';
     const W = 960, H = 320, L = 64, R = 18, T = 22, B = 34;
-    const lg = o.map(log2), mxL = Math.max(...lg, 1);
+    const lg = o.map(log2), mxL = Math.max(...lg);
     const pk = lg.indexOf(mxL), mxB = o[pk];
     const big = mxB > BigInt(Number.MAX_SAFE_INTEGER);
     const useLog = hail.scale === 'log' || big;
@@ -106,15 +109,15 @@
 
     const oddN = o.filter((v) => v % 2n === 1n && v !== 1n).length, done = o[o.length - 1] === 1n;
     $('#tryStats').innerHTML = [
-      [done ? fmt(o.length - 1) : '> ' + fmt(MAX_STEPS), 'кроків до одиниці'],
-      [fmt(oddN), 'з них кроків «3n + 1»'],
-      [big10(mxB), 'найвища точка, крок ' + pk],
-      ['× ' + (mxB / state.n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '), 'у стільки разів пік більший за старт'],
+      [done ? fmt(o.length - 1) : '> ' + fmt(MAX_STEPS), _t('кроків до одиниці', 'steps to one')],
+      [fmt(oddN), _t('з них кроків «3n + 1»', 'of them “3n + 1” steps')],
+      [big10(mxB), _t('найвища точка, крок ', 'highest point, step ') + pk],
+      ['× ' + (mxB / state.n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, SEP), _t('у стільки разів пік більший за старт', 'how many times the peak exceeds the start')],
     ].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
     const sq = $('#seq'); sq.innerHTML = '';
     const lim = 140;
     o.slice(0, lim).forEach((v, i) => { const s = document.createElement('span'); s.textContent = v.toString().length > 18 ? big10(v) : fmt(v); if (v % 2n === 1n) s.className = 'o'; if (i === pk) s.classList.add('pk'); sq.appendChild(s); });
-    if (o.length > lim) { const e = document.createElement('em'); e.textContent = '… ще ' + fmt(o.length - lim) + ' чисел до одиниці'; sq.appendChild(e); }
+    if (o.length > lim) { const e = document.createElement('em'); e.textContent = _t('… ще ' + fmt(o.length - lim) + ' чисел до одиниці', '… ' + fmt(o.length - lim) + ' more numbers down to one'); sq.appendChild(e); }
   }
   (function hailHover() {
     const svg = $('#hail'), tip = $('#hailTip');
@@ -123,7 +126,7 @@
       const r = svg.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * g.W;
       const i = Math.max(0, Math.min(o.length - 1, Math.round((x - g.L) / (g.W - g.L - g.R) * (o.length - 1))));
       const c = $('#hailCur'); c.setAttribute('x1', g.X(i)); c.setAttribute('x2', g.X(i)); c.setAttribute('opacity', .6);
-      tip.style.display = 'block'; tip.innerHTML = `крок ${i}: <b>${o[i].toString().length > 24 ? big10(o[i]) : fmt(o[i])}</b>`;
+      tip.style.display = 'block'; tip.innerHTML = `${_t('крок', 'step')} ${i}: <b>${o[i].toString().length > 24 ? big10(o[i]) : fmt(o[i])}</b>`;
       const fr = svg.parentNode.getBoundingClientRect();
       tip.style.left = Math.max(70, Math.min(fr.width - 70, g.X(i) / g.W * r.width + r.left - fr.left)) + 'px';
       tip.style.top = (g.Y(g.val(i)) / g.H * r.height + r.top - fr.top) + 'px';
@@ -132,7 +135,7 @@
   })();
 
   /* ── 02 хронологія ────────────────────────────────────────── */
-  const KINDS = { name: 'люди й назви', proof: 'доведено', calc: 'обчислення', prize: 'призи' };
+  const KINDS = { name: _t('люди й назви', 'people and names'), proof: _t('доведено', 'proved'), calc: _t('обчислення', 'computation'), prize: _t('призи', 'prizes') };
   const TL = [
     ['1932', 'name', 'Зошит Коллатца', 'Студент Лотар Коллатц цікавиться функціями на цілих числах. Перший запис про цю функцію в його зошиті датовано 1 липня 1932 року.'],
     ['1937', 'name', 'Рік, який зазвичай називають датою задачі', 'Через два роки після захисту дисертації. Сам Коллатц тоді нічого про задачу не надрукував.'],
@@ -158,13 +161,38 @@
     ['2023', 'proof', 'Герхер', 'Немає циклів, що складаються з 91 або менше «підйомів і спусків».'],
     ['2025', 'calc', 'Перевірено до 2<sup>71</sup>', 'Барина піднімає межу до 2<sup>71</sup> ≈ 2,36 × 10<sup>21</sup>. Обчислення розподілено між тисячами процесів на кількох європейських суперкомп\'ютерах.'],
   ];
+  const TL_EN = [
+    ['', 'Collatz’s notebook', 'Lothar Collatz, then a student, takes an interest in functions on the integers. The first note on this function in his notebook is dated 1 July 1932.'],
+    ['', 'The year usually given as the date of the problem', 'Two years after his doctorate. Collatz himself published nothing about the problem at the time.'],
+    ['', 'The congress in Cambridge', 'Collatz circulates the problem at the International Congress of Mathematicians in Cambridge, Massachusetts. From then on it spreads by word of mouth.'],
+    ['', 'Bryan Thwaites', 'The English mathematician comes across the same problem independently. Later he offers £1,000 for a solution.'],
+    ['1950s', 'Hasse and Syracuse', 'Helmut Hasse discusses generalisations with many colleagues — hence “Hasse’s algorithm”. After a visit to Syracuse University he proposes the name “Syracuse problem”.'],
+    ['', 'Kakutani at Yale', 'Shizuo Kakutani hears the problem and passes it on. He recalled: <q>For about a month everybody at Yale worked on it, with no result</q>. That is also when the joke appeared that the problem was part of a conspiracy to slow down mathematical research in the U.S.'],
+    ['1960s', 'Ulam at Los Alamos', 'Stanisław Ulam talks about the problem at Los Alamos and elsewhere; in some circles it is called “Ulam’s problem”.'],
+    ['', '$50 from Coxeter', 'H. S. M. Coxeter offers the first known prize for a solution.'],
+    ['', 'Conway: the generalisation is undecidable', 'John Conway proves that for a natural generalisation of the problem there is no algorithm that always determines whether a number reaches one.'],
+    ['', 'Terras: almost all numbers descend', 'Riho Terras proves that almost every natural number at some point becomes smaller than its starting value: the share of such numbers equals 1.'],
+    ['', 'Steiner: no simplest cycles', 'R. P. Steiner proves that there is no cycle with a single “rise and fall” other than the known 1 → 4 → 2 → 1.'],
+    ['', '“Hailstone numbers” in Scientific American', 'Brian Hayes publishes a popular article on the ups and downs of hailstone numbers; the name takes hold outside the mathematical community.'],
+    ['', 'Lagarias’s survey', 'Jeffrey Lagarias gathers the history of the problem and all known results in one paper. Most of the historical facts on this page come from it.'],
+    ['by 1985', '$500 from Erdős', 'Paul Erdős offers his own prize and says: <q>Mathematics may not be ready for such problems</q>.'],
+    ['', 'Eliahou: a cycle would be enormous', 'Shalom Eliahou proves that the length of any other cycle is at least 17,087,915.'],
+    ['', 'Krasikov and Lagarias', 'Among the numbers from 1 to x at least x<sup>0.84</sup> reach one. The proof is computer-assisted.'],
+    ['', 'Simons and de Weger', 'There are no cycles made of 68 or fewer “rises and falls”.'],
+    ['', 'Kurtz and Simon', 'They strengthen Conway’s result: the question “does every number reach one” is also undecidable for generalised rules.'],
+    ['', 'Distributed computing', 'The Collatz Conjecture project starts on the BOINC platform: volunteers check numbers on their own computers.'],
+    ['', 'Terence Tao', 'Almost all trajectories descend below any function of the starting number that grows to infinity. The strongest result in decades; published in 2022.'],
+    ['', 'Checked up to 2<sup>68</sup>', 'David Barina of Brno University of Technology checks all numbers up to 2<sup>68</sup>.'],
+    ['', 'Hercher', 'There are no cycles made of 91 or fewer “rises and falls”.'],
+    ['', 'Checked up to 2<sup>71</sup>', 'Barina raises the limit to 2<sup>71</sup> ≈ 2.36 × 10<sup>21</sup>. The computation is spread across thousands of workers on several European supercomputers.'],
+  ];
   (function timeline() {
     const ol = $('#tl'), bar = $('#tlFilter'); let cur = null;
-    TL.forEach(([y, k, t, b]) => { const li = document.createElement('li'); li.dataset.k = k;
+    TL.forEach(([y, k, t, b], i) => { if (EN) [y, t, b] = [TL_EN[i][0] || y, TL_EN[i][1], TL_EN[i][2]]; const li = document.createElement('li'); li.dataset.k = k;
       li.innerHTML = `<span class="y">${y}</span><span class="dot"></span><span class="tx"><b>${t}</b><p>${b}</p></span>`; ol.appendChild(li); });
     const paint = () => { $$('li', ol).forEach((li) => li.classList.toggle('off', !!cur && li.dataset.k !== cur));
       $$('button', bar).forEach((b) => b.classList.toggle('on', (b.dataset.k || null) === cur)); };
-    [['', 'усі події']].concat(Object.entries(KINDS)).forEach(([k, t]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'chipbtn';
+    [['', _t('усі події', 'all events')]].concat(Object.entries(KINDS)).forEach(([k, t]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'chipbtn';
       b.dataset.k = k; b.textContent = t + (k ? ' · ' + TL.filter((x) => x[1] === k).length : ''); b.addEventListener('click', () => { cur = k || null; paint(); }); bar.appendChild(b); });
     paint();
   })();
@@ -223,17 +251,17 @@
     const m = tree.model, v = m.nodes.get(n), pop = $('#treePop');
     tree.sel = n; $$('#tree .nd').forEach((g) => g.classList.toggle('sel', +g.dataset.n === n));
     const all = kids(n), st = orbit(BigInt(n)).length - 1, r6 = n % 6;
-    const why = n === 1 ? 'Корінь дерева: сюди сходяться всі відомі шляхи.' :
-      n === 4 ? 'Остача від ділення на 6 дорівнює 4, але (4 − 1) / 3 = 1 — це вже коло 1 → 4 → 2 → 1, а не нова гілка.' :
-      all.length === 2 ? `Остача від ділення на 6 дорівнює 4, тому сюди ведуть дві дороги: з ${fmt(2 * n)} діленням і з ${fmt((n - 1) / 3)} правилом 3n + 1.` :
-      n % 3 === 0 ? 'Число ділиться на 3, тому з непарного сюди потрапити не можна. Те саме буде з усіма його подвоєннями — це «лист» дерева.' :
-      `Остача від ділення на 6 дорівнює ${r6}, а не 4, тому з непарного сюди не потрапити. Єдиний попередник — ${fmt(2 * n)}.`;
-    pop.innerHTML = `<button class="x" type="button" aria-label="Закрити">×</button><h4>${fmt(n)}</h4><dl>
-      <dt>кроків до 1</dt><dd>${st}</dd><dt>двійковий запис</dt><dd>${n.toString(2)}</dd>
-      <dt>наступне</dt><dd>${n === 1 ? '4 → 2 → 1' : fmt(nextN(n)) + (n % 2 ? ' (3n + 1)' : ' (÷ 2)')}</dd>
-      <dt>попередники</dt><dd>${all.map(fmt).join(', ')}</dd></dl><p>${why}</p>
-      <div class="row">${v.more ? '<button type="button" class="chipbtn" data-a="open">показати попередників</button>' : ''}
-      <button type="button" class="chipbtn" data-a="use">зробити числом сторінки</button></div>`;
+    const why = n === 1 ? _t('Корінь дерева: сюди сходяться всі відомі шляхи.', 'The root of the tree: every known path ends here.') :
+      n === 4 ? _t('Остача від ділення на 6 дорівнює 4, але (4 − 1) / 3 = 1 — це вже коло 1 → 4 → 2 → 1, а не нова гілка.', 'The remainder modulo 6 is 4, but (4 − 1) / 3 = 1 — that is the loop 1 → 4 → 2 → 1, not a new branch.') :
+      all.length === 2 ? _t(`Остача від ділення на 6 дорівнює 4, тому сюди ведуть дві дороги: з ${fmt(2 * n)} діленням і з ${fmt((n - 1) / 3)} правилом 3n + 1.`, `The remainder modulo 6 is 4, so two roads lead here: from ${fmt(2 * n)} by halving and from ${fmt((n - 1) / 3)} by the 3n + 1 rule.`) :
+      n % 3 === 0 ? _t('Число ділиться на 3, тому з непарного сюди потрапити не можна. Те саме буде з усіма його подвоєннями — це «лист» дерева.', 'The number is divisible by 3, so no odd number leads here. The same holds for all its doublings — this is a “leaf” of the tree.') :
+      _t(`Остача від ділення на 6 дорівнює ${r6}, а не 4, тому з непарного сюди не потрапити. Єдиний попередник — ${fmt(2 * n)}.`, `The remainder modulo 6 is ${r6}, not 4, so no odd number leads here. The only predecessor is ${fmt(2 * n)}.`);
+    pop.innerHTML = `<button class="x" type="button" aria-label="${_t('Закрити', 'Close')}">×</button><h4>${fmt(n)}</h4><dl>
+      <dt>${_t('кроків до 1', 'steps to 1')}</dt><dd>${st}</dd><dt>${_t('двійковий запис', 'binary')}</dt><dd>${n.toString(2)}</dd>
+      <dt>${_t('наступне', 'next')}</dt><dd>${n === 1 ? '4 → 2 → 1' : fmt(nextN(n)) + (n % 2 ? ' (3n + 1)' : ' (÷ 2)')}</dd>
+      <dt>${_t('попередники', 'predecessors')}</dt><dd>${all.map(fmt).join(', ')}</dd></dl><p>${why}</p>
+      <div class="row">${v.more ? `<button type="button" class="chipbtn" data-a="open">${_t('показати попередників', 'show predecessors')}</button>` : ''}
+      <button type="button" class="chipbtn" data-a="use">${_t('зробити числом сторінки', 'use as the page number')}</button></div>`;
     const box = $('#treeBox');
     pop.style.display = 'block';
     pop.style.left = Math.max(8, Math.min(v.x + 18, box.scrollLeft + box.clientWidth - 290)) + 'px';
@@ -254,17 +282,17 @@
     const cells = $('.cells', box); cells.innerHTML = '';
     $$('[data-a]', box).forEach((b) => (b.disabled = !tree.flow));
     $('[data-a=play]', box).textContent = tree.timer ? '❚❚' : '▶';
-    if (!tree.flow) { $('.n', box).textContent = '—'; $('.t', box).innerHTML = 'Оберіть число вгорі — його шлях до одиниці пройде по дереву крок за кроком. Або клікайте числа й розгортайте гілки самі.'; return; }
+    if (!tree.flow) { $('.n', box).textContent = '—'; $('.t', box).innerHTML = _t('Оберіть число вгорі — його шлях до одиниці пройде по дереву крок за кроком. Або клікайте числа й розгортайте гілки самі.', 'Pick a number above — its path to one will be walked across the tree step by step. Or click numbers and expand branches yourself.'); return; }
     const i = tree.idx, cur = p[i];
     $$('.nd', svg).forEach((g) => { const k = p.indexOf(+g.dataset.n); g.classList.toggle('hot', k >= 0 && k <= i); g.classList.toggle('cur', +g.dataset.n === cur); });
     $$('[data-e]', svg).forEach((g) => { const k = p.indexOf(+g.dataset.e); g.classList.toggle('hot', k >= 0 && k < i); g.classList.toggle('now', k === i - 1 && i > 0); });
     $('.n', box).textContent = `${String(i).padStart(2, '0')} / ${String(p.length - 1).padStart(2, '0')}`;
     const prev = p[i - 1];
-    $('.t', box).innerHTML = i === 0 ? `Починаємо з <b>${fmt(cur)}</b>: ${cur % 2 ? 'непарне, далі 3n + 1' : 'парне, далі ділимо на 2'}.` :
-      (prev % 2 ? `<b>${fmt(prev)}</b> непарне: 3 · ${fmt(prev)} + 1 = <b>${fmt(cur)}</b>.` : `<b>${fmt(prev)}</b> парне: ${fmt(prev)} / 2 = <b>${fmt(cur)}</b>.`) +
-      (cur === 1 ? ` Одиниця — за ${p.length - 1} кроків.` : '');
+    $('.t', box).innerHTML = i === 0 ? _t(`Починаємо з <b>${fmt(cur)}</b>: ${cur % 2 ? 'непарне, далі 3n + 1' : 'парне, далі ділимо на 2'}.`, `We start from <b>${fmt(cur)}</b>: ${cur % 2 ? 'odd, so 3n + 1 next' : 'even, so we halve it next'}.`) :
+      (prev % 2 ? `<b>${fmt(prev)}</b> ${_t('непарне', 'is odd')}: 3 · ${fmt(prev)} + 1 = <b>${fmt(cur)}</b>.` : `<b>${fmt(prev)}</b> ${_t('парне', 'is even')}: ${fmt(prev)} / 2 = <b>${fmt(cur)}</b>.`) +
+      (cur === 1 ? _t(` Одиниця — за ${p.length - 1} кроків.`, ` One — in ${p.length - 1} steps.`) : '');
     p.forEach((_, k) => { const b = document.createElement('button'); b.type = 'button'; b.className = k < i ? 'done' : k === i ? 'cur' : '';
-      b.setAttribute('aria-label', 'Крок ' + k); b.addEventListener('click', () => { stopPlay(); tree.idx = k; paintFlow(); }); cells.appendChild(b); });
+      b.setAttribute('aria-label', _t('Крок ', 'Step ') + k); b.addEventListener('click', () => { stopPlay(); tree.idx = k; paintFlow(); }); cells.appendChild(b); });
     const v = m.nodes.get(cur), bx = $('#treeBox');
     if (v && (v.x < bx.scrollLeft + 60 || v.x > bx.scrollLeft + bx.clientWidth - 60)) bx.scrollTo({ left: Math.max(0, v.x - bx.clientWidth / 2), behavior: 'smooth' });
   }
@@ -282,7 +310,7 @@
     paintFlow();
   }
   FLOWS.forEach((f) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'chipbtn'; b.dataset.f = f;
-    b.textContent = '▶ ' + f; b.title = 'Шлях числа ' + f; b.addEventListener('click', () => setFlow(f)); $('#treeFlows').appendChild(b); $('#treeFlows').append(' '); });
+    b.textContent = '▶ ' + f; b.title = _t('Шлях числа ', 'Path of ') + f; b.addEventListener('click', () => setFlow(f)); $('#treeFlows').appendChild(b); $('#treeFlows').append(' '); });
   $('#treeSteps').addEventListener('click', (e) => { const a = e.target.dataset && e.target.dataset.a; if (!a || !tree.flow) return;
     if (a === 'play') { if (tree.timer) { stopPlay(); paintFlow(); } else { if (tree.idx >= tree.model.path.length - 1) tree.idx = 0; play(); } return; }
     stopPlay(); tree.idx = Math.max(0, Math.min(tree.model.path.length - 1, tree.idx + (a === 'next' ? 1 : -1))); paintFlow(); });
@@ -352,8 +380,8 @@
         x.textAlign = X(n) > w - 90 ? 'right' : 'left';
         x.fillText(fmt(n), X(n) + (X(n) > w - 90 ? -9 : 9), Math.max(T + 8, Y(val(n)) - 7)); }); }
     sc.geom = { X, Y, val, L, R, w, h, N, t };
-    $('#scatCap').innerHTML = peakM ? 'По вертикалі — найбільше число на шляху, у степенях десятки. Нижня межа — пряма: число, яке одразу падає, само і є своїм піком. Наведіть на точку, щоб побачити число.'
-      : 'Кожна точка — одне число: по горизонталі воно само, по вертикалі — скільки кроків йому треба до одиниці. Кружечками позначено рекордсменів. Наведіть на точку, щоб побачити число.';
+    $('#scatCap').innerHTML = peakM ? _t('По вертикалі — найбільше число на шляху, у степенях десятки. Нижня межа — пряма: число, яке одразу падає, само і є своїм піком. Наведіть на точку, щоб побачити число.', 'Vertical axis — the largest number on the path, in powers of ten. The lower edge is a straight line: a number that falls at once is its own peak. Hover over a dot to see the number.')
+      : _t('Кожна точка — одне число: по горизонталі воно само, по вертикалі — скільки кроків йому треба до одиниці. Кружечками позначено рекордсменів. Наведіть на точку, щоб побачити число.', 'Each dot is one number: horizontally the number itself, vertically how many steps it needs to reach one. Circles mark the record holders. Hover over a dot to see the number.');
   }
   (function scatHover() {
     const c = $('#scat'), tip = $('#scatTip');
@@ -363,7 +391,7 @@
       let best = 0, bd = 1e9;
       for (let n = Math.max(1, n0 - span); n <= Math.min(g.N, n0 + span); n++) { const d = Math.hypot(g.X(n) - px, g.Y(g.val(n)) - py); if (d < bd) { bd = d; best = n; } }
       if (!best || bd > 24) { tip.style.display = 'none'; return; }
-      tip.style.display = 'block'; tip.innerHTML = `<b>${fmt(best)}</b>: ${g.t.steps[best]} кроків, пік ${fmt(g.t.peak[best])}`;
+      tip.style.display = 'block'; tip.innerHTML = `<b>${fmt(best)}</b>: ${g.t.steps[best]} ${_t('кроків, пік', 'steps, peak')} ${fmt(g.t.peak[best])}`;
       const fr = c.parentNode.getBoundingClientRect();
       tip.style.left = Math.max(110, Math.min(fr.width - 110, g.X(best) + r.left - fr.left)) + 'px'; tip.style.top = (g.Y(g.val(best)) + r.top - fr.top) + 'px'; });
     c.addEventListener('mouseleave', () => (tip.style.display = 'none'));
@@ -381,7 +409,7 @@
   }
   function drawRecs() {
     const t = table(100000), rec = recordsUpTo(100000).filter((n) => n >= 9 || n === 1).slice(-14);
-    $('#recs').innerHTML = '<tr><th>число</th><th>кроків</th><th>пік шляху</th></tr>' +
+    $('#recs').innerHTML = `<tr><th>${_t('число', 'number')}</th><th>${_t('кроків', 'steps')}</th><th>${_t('пік шляху', 'path peak')}</th></tr>` +
       rec.map((n) => `<tr><td>${fmt(n)}</td><td>${t.steps[n]}</td><td>${fmt(t.peak[n])}</td></tr>`).join('');
   }
   seg($('#scatN'), (v) => { sc.N = +v; drawScatter(); drawHist(); });
@@ -402,14 +430,16 @@
         if (ch === null) continue; x.fillStyle = ch === '1' ? ink : off; x.fillRect(x0 + i * cell, y, cell - (cell > 4 ? 1 : 0), rh - (rh > 4 ? 1 : 0)); }
       if (s[s.length - 1] === '1') { x.fillStyle = act; x.fillRect(x0 - 10, y, 5, rh - (rh > 4 ? 1 : 0)); } });
     Object.assign(bitsG, { o, rows, rh, x0, cell, cols });
-    $('#bitsCap').textContent = `Число ${big10(state.n)}: ${o.length - 1} кроків` + (o.length > rows ? `, показано перші ${rows} рядків` : '') +
-      `. Найдовший запис — ${cols} біт. Рядок без позначки ліворуч завжди коротший за попередній рівно на одну клітинку праворуч: це ділення на 2.`;
+    $('#bitsCap').textContent = _t(`Число ${big10(state.n)}: ${o.length - 1} кроків` + (o.length > rows ? `, показано перші ${rows} рядків` : '') +
+      `. Найдовший запис — ${cols} біт. Рядок без позначки ліворуч завжди коротший за попередній рівно на одну клітинку праворуч: це ділення на 2.`,
+      `Number ${big10(state.n)}: ${o.length - 1} steps` + (o.length > rows ? `, first ${rows} rows shown` : '') +
+      `. The longest record is ${cols} bits. A row with no mark on the left is always shorter than the previous one by exactly one cell on the right: that is division by 2.`);
   }
   (function bitsHover() { const c = $('#bits'), tip = $('#bitsTip');
     c.addEventListener('mousemove', (e) => { const r = c.getBoundingClientRect(), i = Math.floor((e.clientY - r.top - 6) / bitsG.rh);
       if (i < 0 || i >= bitsG.rows) { tip.style.display = 'none'; return; }
       const v = bitsG.o[i], fr = c.parentNode.getBoundingClientRect();
-      tip.style.display = 'block'; tip.innerHTML = `крок ${i}: <b>${v.toString().length > 24 ? big10(v) : fmt(v)}</b> · ${v % 2n ? 'непарне → 3n + 1' : 'парне → ÷ 2'}`;
+      tip.style.display = 'block'; tip.innerHTML = `${_t('крок', 'step')} ${i}: <b>${v.toString().length > 24 ? big10(v) : fmt(v)}</b> · ${v % 2n ? _t('непарне', 'odd') + ' → 3n + 1' : _t('парне', 'even') + ' → ÷ 2'}`;
       tip.style.left = Math.max(130, Math.min(fr.width - 130, e.clientX - fr.left)) + 'px'; tip.style.top = (e.clientY - fr.top) + 'px'; });
     c.addEventListener('mouseleave', () => (tip.style.display = 'none')); })();
 
@@ -420,16 +450,16 @@
     const v2 = (m) => { let k = 0; while (m % 2 === 0) { m /= 2; k++; } return k; };
     for (let m = 1; m < 200000; m += 2) { const k = v2(3 * m + 1); all[Math.min(k, K + 1)]++; nAll++; lnAll += Math.log(3) - k * Math.log(2); }
     for (let s = 2; s <= 20000; s++) { let n = s; while (n !== 1) { if (n % 2) { const k = v2(3 * n + 1); onp[Math.min(k, K + 1)]++; nOn++; n = 3 * n + 1; } else n /= 2; } }
-    let html = ''; const pc = (v) => (v * 100).toFixed(2).replace('.', ',') + '%';
+    let html = ''; const pc = (v) => dec((v * 100).toFixed(2)) + '%';
     for (let k = 1; k <= K; k++) { const th = 1 / 2 ** k, a = all[k] / nAll, b = onp[k] / nOn;
-      html += `<div class="r"><span>${k} ${k === 1 ? 'ділення' : k < 5 ? 'ділення' : 'ділень'}</span><span class="tr"><i style="width:${(a * 200).toFixed(2)}%"></i><u style="width:${(b * 200).toFixed(2)}%"></u><s style="left:${(th * 200).toFixed(2)}%"></s></span>` +
+      html += `<div class="r"><span>${k} ${EN ? (k === 1 ? 'halving' : 'halvings') : (k < 5 ? 'ділення' : 'ділень')}</span><span class="tr"><i style="width:${(a * 200).toFixed(2)}%"></i><u style="width:${(b * 200).toFixed(2)}%"></u><s style="left:${(th * 200).toFixed(2)}%"></s></span>` +
         `<span class="v">${pc(a)} · ${pc(b)} · ${pc(th)}</span></div>`; }
     $('#halv').innerHTML = html;
     const gm = Math.exp(lnAll / nAll);
     $('#driftCards').innerHTML = [
-      ['середній множник', gm.toFixed(4).replace('.', ','), 'Геометричне середнє множника «від непарного до наступного непарного» для всіх непарних до 200 000. Теоретичне значення — 3/4 = 0,75.'],
-      ['скільки ділень у середньому', '2', 'Очікувана кількість ділень після одного кроку 3n + 1: 1·½ + 2·¼ + 3·⅛ + … = 2. Множимо на 3, ділимо на 4.'],
-      ['що це означає', '−0,415 біта', 'Стільки двійкових розрядів число втрачає в середньому за один «непарний» крок: log₂ 3 − 2 ≈ −0,415.'],
+      [_t('середній множник', 'average factor'), dec(gm.toFixed(4)), _t('Геометричне середнє множника «від непарного до наступного непарного» для всіх непарних до 200 000. Теоретичне значення — 3/4 = 0,75.', 'The geometric mean of the factor “from one odd number to the next odd one” over all odd numbers up to 200,000. The theoretical value is 3/4 = 0.75.')],
+      [_t('скільки ділень у середньому', 'halvings on average'), '2', _t('Очікувана кількість ділень після одного кроку 3n + 1: 1·½ + 2·¼ + 3·⅛ + … = 2. Множимо на 3, ділимо на 4.', 'The expected number of halvings after one 3n + 1 step: 1·½ + 2·¼ + 3·⅛ + … = 2. Multiply by 3, divide by 4.')],
+      [_t('що це означає', 'what it means'), _t('−0,415 біта', '−0.415 bits'), _t('Стільки двійкових розрядів число втрачає в середньому за один «непарний» крок: log₂ 3 − 2 ≈ −0,415.', 'That is how many binary digits a number loses on average per “odd” step: log₂ 3 − 2 ≈ −0.415.')],
     ].map(([k, big, p]) => `<div class="cardx"><span class="k">${k}</span><span class="big">${big}</span><p>${p}</p></div>`).join('');
   }
   function drawWalk() {
@@ -437,22 +467,27 @@
     const W = 960, H = 280, L = 64, R = 18, T = 18, B = 34, lg = o.map(log2), mx = Math.max(...lg, 1);
     const X = (i) => L + (o.length > 1 ? i / (o.length - 1) : 0) * (W - L - R), Y = (v) => H - B - v / mx * (H - T - B);
     for (let k = 0; k <= 4; k++) { const v = mx * k / 4, y = Y(v); el('line', { x1: L, x2: W - R, y1: y, y2: y, stroke: css('--rule') }, svg);
-      el('text', { x: L - 8, y: y + 4, 'text-anchor': 'end', 'font-size': 11, fill: css('--ink-3'), 'font-family': 'Roboto Mono, monospace' }, svg, Math.round(v) + ' біт'); }
+      el('text', { x: L - 8, y: y + 4, 'text-anchor': 'end', 'font-size': 11, fill: css('--ink-3'), 'font-family': 'Roboto Mono, monospace' }, svg, Math.round(v) + _t(' біт', ' bits')); }
     el('path', { d: o.map((_, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(lg[i]).toFixed(1)).join(''), fill: 'none', stroke: walk.mul === 3 ? css('--ink') : css('--act'), 'stroke-width': 1.8, 'stroke-linejoin': 'round' }, svg);
-    el('text', { x: W - R, y: H - 10, 'text-anchor': 'end', 'font-size': 11, fill: css('--ink-3'), 'font-family': 'Roboto Mono, monospace' }, svg, 'крок ' + (o.length - 1));
+    el('text', { x: W - R, y: H - 10, 'text-anchor': 'end', 'font-size': 11, fill: css('--ink-3'), 'font-family': 'Roboto Mono, monospace' }, svg, _t('крок ', 'step ') + (o.length - 1));
     const last = o[o.length - 1], cyc = walk.mul === 5 && last !== 1n && o.indexOf(last) < o.length - 1;
+    const N = big10(state.n), st = o.length - 1, b0 = Math.round(lg[0]) + 1, b1 = Math.round(lg[lg.length - 1]) + 1;
     $('#walkCap').innerHTML = walk.mul === 3
-      ? `Правило 3n + 1, число ${big10(state.n)}. По вертикалі — довжина двійкового запису. Лінія смикається, але тренд униз: за ${o.length - 1} кроків число втратило всі розряди.`
-      : last === 1n ? `Правило 5n + 1, число ${big10(state.n)}: цього разу шлях дійшов до одиниці за ${o.length - 1} кроків. Спробуйте 7 або 27.`
-      : cyc ? `Правило 5n + 1, число ${big10(state.n)}: шлях потрапив у коло, що не проходить через 1 (повторилось число ${fmt(last)}). Для 5n + 1 такі кола є; для 3n + 1 їх не знайдено.`
-      : `Правило 5n + 1, число ${big10(state.n)}: за ${o.length - 1} кроків запис виріс із ${Math.round(lg[0]) + 1} до ${Math.round(lg[lg.length - 1]) + 1} біт і продовжує рости. Вважають, що такі шляхи тікають у нескінченність, але й це не доведено.`;
+      ? _t(`Правило 3n + 1, число ${N}. По вертикалі — довжина двійкового запису. Лінія смикається, але тренд униз: за ${st} кроків число втратило всі розряди.`,
+          `The 3n + 1 rule, number ${N}. Vertical axis — the length of the binary record. The line jerks about, but the trend is down: in ${st} steps the number lost all its digits.`)
+      : last === 1n ? _t(`Правило 5n + 1, число ${N}: цього разу шлях дійшов до одиниці за ${st} кроків. Спробуйте 7 або 27.`,
+          `The 5n + 1 rule, number ${N}: this time the path reached one in ${st} steps. Try 7 or 27.`)
+      : cyc ? _t(`Правило 5n + 1, число ${N}: шлях потрапив у коло, що не проходить через 1 (повторилось число ${fmt(last)}). Для 5n + 1 такі кола є; для 3n + 1 їх не знайдено.`,
+          `The 5n + 1 rule, number ${N}: the path fell into a loop that does not pass through 1 (the number ${fmt(last)} repeated). Such loops exist for 5n + 1; none has been found for 3n + 1.`)
+      : _t(`Правило 5n + 1, число ${N}: за ${st} кроків запис виріс із ${b0} до ${b1} біт і продовжує рости. Вважають, що такі шляхи тікають у нескінченність, але й це не доведено.`,
+          `The 5n + 1 rule, number ${N}: in ${st} steps the record grew from ${b0} to ${b1} bits and keeps growing. Such paths are believed to escape to infinity, but that is not proved either.`);
   }
   seg($('#walkRule'), (v) => { walk.mul = +v; drawWalk(); });
 
   /* ── 08 кола серед від'ємних ──────────────────────────────── */
   (function rings() {
     const root = $('#rings');
-    [[1, 'єдине відоме коло серед натуральних'], [-1, 'коло з числа −1'], [-5, 'коло з числа −5'], [-17, 'коло з числа −17']].forEach(([s, cap]) => {
+    [[1, _t('єдине відоме коло серед натуральних', 'the only known loop among natural numbers')], [-1, _t('коло з числа −1', 'the loop from −1')], [-5, _t('коло з числа −5', 'the loop from −5')], [-17, _t('коло з числа −17', 'the loop from −17')]].forEach(([s, cap]) => {
       const cyc = [s]; let n = s; for (;;) { n = n % 2 === 0 ? n / 2 : 3 * n + 1; if (n === s) break; cyc.push(n); }
       const f = document.createElement('figure'), k = cyc.length, big = k > 8, S = big ? 280 : 220, c = S / 2, r = big ? 112 : 66;
       const svg = el('svg', { viewBox: `0 0 ${S} ${S}`, role: 'img', 'aria-label': cap + ': ' + cyc.join(' → ') }, null);
@@ -463,7 +498,7 @@
         el('polygon', { points: '-4,-4 5,0 -4,4', transform: `translate(${ax.toFixed(1)},${ay.toFixed(1)}) rotate(${deg.toFixed(1)})`, fill: css('--ink-3') }, svg);
         el('rect', { x: x - w / 2, y: y - 10, width: w, height: 20, rx: 10, class: 'c' + (Math.abs(v) % 2 ? ' o' : '') }, svg);
         el('text', { x, y: y + .5, 'font-size': big ? 10 : 11 }, svg, String(v).replace('-', '−')); });
-      el('text', { x: c, y: c, 'font-size': 12, fill: css('--ink-3') }, svg, k + (k < 5 ? ' числа' : ' чисел'));
+      el('text', { x: c, y: c, 'font-size': 12, fill: css('--ink-3') }, svg, k + _t(k < 5 ? ' числа' : ' чисел', ' numbers'));
       f.appendChild(svg); const fc = document.createElement('figcaption'); fc.textContent = cap; f.appendChild(fc); root.appendChild(f);
     });
   })();
