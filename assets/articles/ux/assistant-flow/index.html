@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Планувальник і асистент: як тече інформація</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../oss-bss/shared/css/tokens.css?v=20261011b">
+<link rel="stylesheet" href="../../oss-bss/shared/css/base.css?v=20261011b">
+<link rel="stylesheet" href="../../oss-bss/shared/css/diagram.css?v=20261011b">
+<link rel="stylesheet" href="../../oss-bss/shared/css/components.css?v=20261011b">
+<link rel="stylesheet" href="css/page.css?v=20261012a">
+</head>
+<body>
+
+<header class="top">
+  <span class="top__title" data-i18n="ui.brand"></span>
+  <nav class="top__nav">
+    <a href="#planner" data-i18n="nav.1"></a>
+    <a href="#flow" data-i18n="nav.2"></a>
+    <a href="#why" data-i18n="nav.3"></a>
+    <a href="#meeting" data-i18n="nav.4"></a>
+    <a href="#qdt" data-i18n="nav.5"></a>
+    <a href="#who" data-i18n="nav.6"></a>
+    <a href="#store" data-i18n="nav.7"></a>
+    <a href="#access" data-i18n="nav.8"></a>
+    <a href="#limits" data-i18n="nav.9"></a>
+    <a href="#open" data-i18n="nav.10"></a>
+    <a href="#gloss" data-i18n="nav.11"></a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <div class="hero__kicker" data-i18n="hero.kicker"></div>
+    <h1 data-i18n="hero.title"></h1>
+    <p data-i18n-html="hero.lead"></p>
+    <p data-i18n-html="hero.lead2"></p>
+    <div class="specs">
+      <div><b data-i18n="hero.s1.b"></b><span data-i18n="hero.s1.s"></span></div>
+      <div><b data-i18n="hero.s2.b"></b><span data-i18n="hero.s2.s"></span></div>
+      <div><b data-i18n="hero.s3.b"></b><span data-i18n="hero.s3.s"></span></div>
+      <div><b data-i18n="hero.s4.b"></b><span data-i18n="hero.s4.s"></span></div>
+      <div><b data-i18n="hero.s5.b"></b><span data-i18n="hero.s5.s"></span></div>
+    </div>
+  </div>
+
+  <!-- 01 ─────────────────────────────────────────────── -->
+  <section id="planner">
+    <div class="sec__head"><span class="sec__num">01</span><h2 data-i18n="s1.h"></h2><p data-i18n="s1.p"></p></div>
+    <p class="lead" data-i18n-html="s1.lead"></p>
+    <!-- Панель кроку стоїть над схемою: текст кроку й полотно видно разом. -->
+    <div id="flowBoxP" class="wide flowbox--flat">
+      <div class="flows toggles"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+        <span class="steps__track"></span>
+      </div>
+      <div id="pmap"></div>
+    </div>
+    <div class="note" data-i18n-html="s1.note"></div>
+
+    <h3 class="sub" data-i18n="s1.path.h"></h3>
+    <p class="lead" data-i18n-html="s1.path.a"></p>
+    <p class="lead" data-i18n-html="s1.path.b"></p>
+    <p class="lead" data-i18n-html="s1.path.c"></p>
+
+    <h3 class="sub" data-i18n="s1.stage.h"></h3>
+    <p class="lead" data-i18n-html="s1.stage.lead"></p>
+    <div class="cols cols--3" id="stageList"></div>
+    <div class="note" data-i18n-html="s1.edge"></div>
+  </section>
+
+  <!-- 02 ─────────────────────────────────────────────── -->
+  <section id="flow">
+    <div class="sec__head"><span class="sec__num">02</span><h2 data-i18n="s2.h"></h2><p data-i18n="s2.p"></p></div>
+    <p class="lead" data-i18n-html="s2.lead"></p>
+    <div id="flowBox" class="wide flowbox--flat">
+      <div class="flows toggles"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+        <span class="steps__track"></span>
+      </div>
+      <div id="fmap"></div>
+    </div>
+    <div class="note" data-i18n-html="s2.note"></div>
+    <h3 class="sub" data-i18n="s2.bridge.h"></h3>
+    <p class="lead" data-i18n-html="s2.bridge.a"></p>
+    <p class="lead" data-i18n-html="s2.bridge.b"></p>
+  </section>
+
+  <!-- 03 ─────────────────────────────────────────────── -->
+  <section id="why">
+    <div class="sec__head"><span class="sec__num">03</span><h2 data-i18n="s3.h"></h2><p data-i18n="s3.p"></p></div>
+    <p class="lead" data-i18n-html="s3.a"></p>
+    <p class="lead" data-i18n-html="s3.b"></p>
+    <div class="cols cols--3" id="ruleList"></div>
+  </section>
+
+  <!-- 04 ─────────────────────────────────────────────── -->
+  <section id="meeting">
+    <div class="sec__head"><span class="sec__num">04</span><h2 data-i18n="s4.h"></h2><p data-i18n="s4.p"></p></div>
+    <p class="lead" data-i18n-html="s4.lead"></p>
+    <ol class="check" id="meetSteps"></ol>
+    <h3 class="sub" data-i18n="s4.prop.h"></h3>
+    <p class="lead" data-i18n-html="s4.prop.lead"></p>
+    <div class="tb tb--p tb--l" id="propTable"></div>
+    <div class="note" data-i18n-html="s4.note"></div>
+  </section>
+
+  <!-- 05 ─────────────────────────────────────────────── -->
+  <section id="qdt">
+    <div class="sec__head"><span class="sec__num">05</span><h2 data-i18n="s5.h"></h2><p data-i18n="s5.p"></p></div>
+    <p class="lead" data-i18n-html="s5.lead"></p>
+    <div class="tb tb--4 tb--l" id="qdtTable"></div>
+    <p class="lead" style="margin-top:18px" data-i18n-html="s5.a"></p>
+    <p class="lead" data-i18n-html="s5.b"></p>
+  </section>
+
+  <!-- 06 ─────────────────────────────────────────────── -->
+  <section id="who">
+    <div class="sec__head"><span class="sec__num">06</span><h2 data-i18n="s6.h"></h2><p data-i18n="s6.p"></p></div>
+    <p class="lead" data-i18n-html="s6.lead"></p>
+    <div class="tb tb--w tb--l" id="whoTable"></div>
+    <p class="lead" style="margin-top:18px" data-i18n-html="s6.a"></p>
+    <p class="lead" data-i18n-html="s6.b"></p>
+    <div class="note" data-i18n-html="s6.note"></div>
+  </section>
+
+  <!-- 07 ─────────────────────────────────────────────── -->
+  <section id="store">
+    <div class="sec__head"><span class="sec__num">07</span><h2 data-i18n="s7.h"></h2><p data-i18n="s7.p"></p></div>
+    <p class="lead" data-i18n-html="s7.lead"></p>
+    <div id="flowBoxS" class="wide flowbox--flat flowbox--mid">
+      <div class="flows toggles"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+        <span class="steps__track"></span>
+      </div>
+      <div id="smap"></div>
+    </div>
+    <p class="lead" style="margin-top:18px" data-i18n-html="s7.a"></p>
+    <p class="lead" data-i18n-html="s7.b"></p>
+    <div class="note" data-i18n-html="s7.note"></div>
+  </section>
+
+  <!-- 08 ─────────────────────────────────────────────── -->
+  <section id="access">
+    <div class="sec__head"><span class="sec__num">08</span><h2 data-i18n="s8.h"></h2><p data-i18n="s8.p"></p></div>
+    <p class="lead" data-i18n-html="s8.lead"></p>
+    <div class="ladder" id="ladder"></div>
+    <h3 class="sub" data-i18n="s8.mode.h"></h3>
+    <p class="lead" data-i18n-html="s8.mode.lead"></p>
+    <div class="tb tb--m tb--l" id="modeTable"></div>
+    <h3 class="sub" data-i18n="s8.never.h"></h3>
+    <div class="cols cols--3" id="neverList"></div>
+    <div class="note" data-i18n-html="s8.note"></div>
+  </section>
+
+  <!-- 09 ─────────────────────────────────────────────── -->
+  <section id="limits">
+    <div class="sec__head"><span class="sec__num">09</span><h2 data-i18n="s9.h"></h2><p data-i18n="s9.p"></p></div>
+    <p class="lead" data-i18n-html="s9.lead"></p>
+    <div class="tb tb--2" id="notTable"></div>
+  </section>
+
+  <!-- 10 ─────────────────────────────────────────────── -->
+  <section id="open">
+    <div class="sec__head"><span class="sec__num">10</span><h2 data-i18n="s10.h"></h2><p data-i18n="s10.p"></p></div>
+    <p class="lead" data-i18n-html="s10.lead"></p>
+    <div class="tb tb--2" id="openTable"></div>
+  </section>
+
+  <!-- 11 ─────────────────────────────────────────────── -->
+  <section id="gloss">
+    <div class="sec__head"><span class="sec__num">11</span><h2 data-i18n="s11.h"></h2><p data-i18n="s11.p"></p></div>
+    <h3 class="sub" data-i18n="s11.plan.h"></h3>
+    <div class="gloss" id="glossPlan"></div>
+    <h3 class="sub" data-i18n="s11.ast.h"></h3>
+    <div class="gloss" id="glossAst"></div>
+  </section>
+
+  <!-- 12 ─────────────────────────────────────────────── -->
+  <section id="refs">
+    <div class="sec__head"><span class="sec__num">12</span><h2 data-i18n="s12.h"></h2><p data-i18n="s12.p"></p></div>
+    <p class="lead" data-i18n-html="s12.lead"></p>
+    <ol class="srcs" id="srcList"></ol>
+    <div class="foot" data-i18n="ui.foot"></div>
+  </section>
+
+</main>
+
+<script src="data/content.js?v=20261012a"></script>
+<script src="copy.js?v=20261012a"></script>
+<script src="../../oss-bss/shared/js/i18n.js?v=20261011b"></script>
+<script src="data/planner.js?v=20261012a"></script>
+<script src="data/flow.js?v=20261012a"></script>
+<script src="data/store.js?v=20261012a"></script>
+<script src="../../oss-bss/shared/js/diagram-engine.js?v=20261011b"></script>
+<script src="../../oss-bss/shared/js/scenarios.js?v=20261011b"></script>
+<script src="js/sections.js?v=20261012a"></script>
+<script src="js/app.js?v=20261012a"></script>
+<script src="../../oss-bss/shared/js/toc.js?v=20261011b"></script>
+</body>
+</html>

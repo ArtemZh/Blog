@@ -1,0 +1,84 @@
+/* Компоненти статті «Планувальник і асистент: як тече інформація». Спільне (картки,
+   схема, сценарії) — у ../../oss-bss/shared/. Сигнальний колір тут лише на дії:
+   хто що робить і який рівень доступу — словом і рамкою, не кольором. */
+.cols+.note,.cols+.lead,.tb+.note,.check+.sub{margin-top:18px}
+.lead+.lead{margin-top:-8px}
+.hero p+p{margin-top:10px}
+.lead code{font-family:var(--mono);font-size:.9em;color:var(--ink)}
+
+/* ── таблиці ──────────────────────────────────────────────── */
+.tb{display:grid;gap:4px}
+.tb__h,.tb__r{display:grid;gap:14px;padding:10px 12px;align-items:start}
+.tb__h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g700);padding-bottom:2px}
+.tb__r{border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper)}
+.tb__r b{font-size:13.5px;font-weight:600;line-height:1.45}
+.tb__r span{font-size:13px;line-height:1.5;color:var(--g700)}
+.tb__r i{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--g500);padding-top:2px}
+.tb--2{max-width:860px}
+.tb--2 .tb__h,.tb--2 .tb__r{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr)}
+/* 04 — пропозиції із зустрічі: тип · пункт · хто й до коли · цитата · рівень */
+.tb--p .tb__h,.tb--p .tb__r{grid-template-columns:62px minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1.2fr) 92px}
+/* 05 — чотири типи записів */
+.tb--4 .tb__h,.tb--4 .tb__r{grid-template-columns:84px minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.3fr)}
+/* 06 — хто що може: дія · подробиці · позначка */
+.tb--w{max-width:1040px}
+.tb--w .tb__h,.tb--w .tb__r{grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) 138px}
+/* 08 — режими документів */
+.tb--m .tb__h,.tb--m .tb__r{grid-template-columns:96px minmax(0,.7fr) minmax(0,1.4fr) minmax(0,1.2fr)}
+/* Позначка читається словом і рамкою, не кольором: темна — потрібна людина. */
+.tag{font-style:normal;justify-self:start;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 7px;border-radius:5px;border:1px solid var(--ink);background:var(--ink);color:#fff;white-space:nowrap}
+.tag--ok{background:none;color:var(--g500);border:1px dashed var(--g300)}
+@media (max-width:760px){
+  .tb__h{display:none}
+  .tb .tb__r{grid-template-columns:minmax(0,1fr);gap:5px}
+  .tb--l .tb__r span[data-l]::before{content:attr(data-l) ". ";font-weight:600;color:var(--ink)}
+}
+
+/* ── 04 кроки зустрічі ────────────────────────────────────── */
+#meetSteps{max-width:860px}
+
+/* ── 08 драбина рівнів: кожен нижчий рівень вужчий — відступ зліва росте ── */
+.ladder{display:grid;gap:4px;max-width:1040px}
+.ladder__r{display:grid;grid-template-columns:84px 110px minmax(0,1fr) minmax(0,1.3fr);gap:14px;align-items:start;
+  margin-left:calc(var(--i) * 28px);padding:10px 12px;border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper)}
+.ladder__r code{font-family:var(--mono);font-size:11px;color:var(--g500);padding-top:2px}
+.ladder__r b{font-size:13.5px;font-weight:600;line-height:1.45}
+.ladder__r span{font-size:13px;line-height:1.5;color:var(--g700)}
+.ladder__dir{display:flex;gap:8px 24px;flex-wrap:wrap;margin:8px 0 0;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--g700)}
+@media (max-width:760px){
+  .ladder__r{grid-template-columns:minmax(0,1fr);gap:4px;margin-left:calc(var(--i) * 10px)}
+}
+
+/* ── схеми ────────────────────────────────────────────────── */
+/* Смуги не згортаються, тож кнопки «розгорнути / згорнути» зайві. */
+.flowbox--flat .flows .ghost,.flowbox--flat .flows .toggles__sp{display:none}
+/* Третя схема вужча: чотири колонки. */
+.flowbox--mid{width:min(1240px,calc(100vw - 32px))}
+/* Місток «план ↔ база»: пунктир — посилання на об'єкт плану, а не копіювання даних.
+   Під час сценарію дріт кроку суцільний. */
+#fmap path.wire[id^="fmap-w-plan-"]{stroke-dasharray:5 4}
+/* У базі лежить шлях до файла, а не його вміст — теж пунктир. */
+#smap path.wire[id$="-path"],#smap path.wire[id="smap-w-link-plan"]{stroke-dasharray:5 4}
+/* Додаток до хмарки: хто це робить або де це в коді. */
+.pop__x{display:block;margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft)}
+.pop__x:empty{display:none}
+.pop__ref{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:4px;font-family:var(--mono);font-size:10.5px;color:var(--g700)}
+.pop__ref em{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--g500);min-width:52px}
+/* Вузька розкладка: порожня група не потрібна. */
+.list__grp:not(:has(.list__node)){display:none}
+
+/* ── звідки це відомо ─────────────────────────────────────── */
+.srcs{margin:0;padding-left:30px;font-size:13.5px;line-height:1.75;color:var(--g700);max-width:920px}
+.srcs li::marker{font-family:var(--mono);font-size:10.5px;color:var(--g500)}
+.srcs li{padding-left:4px;overflow-wrap:anywhere}
+.srcs b{color:var(--ink);font-weight:600}
+
+@media print{
+  .steps{display:none}
+  .wide{width:100%;left:0;transform:none}
+  .card,.tb__r,.ladder__r,.note{break-inside:avoid}
+  .pop{display:none}
+}

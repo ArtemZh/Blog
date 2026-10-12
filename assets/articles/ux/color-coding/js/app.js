@@ -1,6 +1,6 @@
 /* Збирає статтю «Один колір — одне значення, одна дія — одне місце»: мова,
-   дві схеми на спільному рушії (ролі кольору; панель «Плану»), сценарії,
-   розділи, перевірка геометрії. */
+   чотири схеми на спільному рушії (ролі кольору й панель «Плану» — на час
+   розбору й після переробки), сценарії, розділи, перевірка геометрії. */
 (function () {
   const I = window.I18N;
   const t = (k) => I.t(k);
@@ -55,8 +55,7 @@
      маленьким квадратиком за кліком. Схема розкрита одразу: у ній 36 вузлів,
      і зміст — саме у зв'язках між смугами. */
   const sw = (hex) => `<i class="sw" style="background:${hex}"></i>`;
-  const color = mount('flowBox', 'map', window.MAP, window.COLOR_FLOWS, BANDS, (id) => {
-    const inf = window.MAP_INFO[id];
+  const swatches = (inf) => {
     if (!inf) return '';
     let html = '';
     if (inf.people) {
@@ -69,7 +68,8 @@
     }
     if (inf.ref) html += line('pop.code', inf.ref);
     return html;
-  });
+  };
+  const color = mount('flowBox', 'map', window.MAP, window.COLOR_FLOWS, BANDS, (id) => swatches(window.MAP_INFO[id]));
   const main = color.main;
 
   /* 08 — панель «Плану». У хмарці: розмір за стилями й місце в коді.
@@ -80,10 +80,15 @@
     return (inf.size ? line('pop.size', inf.size) : '') + (inf.ref ? line('pop.code', inf.ref) : '');
   });
 
+  /* 10 — ті самі дві сцени після переробки. Смуги не згортаються: стан у кожної
+     схеми один. У хмарці ролей — ті самі зразки кольору; у хмарки панелі додатка немає. */
+  const after = mount('flowBox3', 'amap', window.AFTER, window.AFTER_FLOWS, [], (id) => swatches(window.AFTER_INFO[id]));
+  const bar2 = mount('flowBox4', 'bar2', window.BAR2, window.BAR2_FLOWS, [], () => '');
+
   ColorSections.render();
   I.onChange(() => { boxes.forEach((b) => { b.main.render(); b.flows.refresh(); }); ColorSections.render(); });
 
-  // Стан з адреси — для знімків і посилань: ?closed=1, ?flow=conf&step=3, ?flow=view&step=2
+  // Стан з адреси — для знімків і посилань: ?closed=1, ?flow=conf&step=3, ?flow=view&step=2, ?flow=aleft&step=3
   const q = new URLSearchParams(location.search);
   if (q.get('closed')) main.collapse(BANDS);
   if (q.get('flow')) {
@@ -152,18 +157,27 @@
   const geometry = (d) => { const r = d.main.check(); r.through = through(d); return r; };
   const clean = (r) => !(r.overlaps.length || r.loose.length || r.gutter.length || r.through.length);
 
-  /* З консолі: COLOR.check() — схема ролей у всіх 8 станах смуг і схема панелі
-     в її єдиному стані. Порожні bad і data, roundtrip: true — геометрія й дані
+  /* Схема з одним станом (смуги не згортаються): геометрія, дані, знімок до й після. */
+  function checkFlat(d, D, flowData, info, wired) {
+    const before = d.main.snapshot();
+    const r = geometry(d);
+    const res = dataCheck(D, flowData, info, wired);
+    d.main.render();
+    return { states: 1, bad: clean(r) ? {} : { open: r }, data: wired ? res : res.bad, loners: wired ? [] : res.loners, roundtrip: d.main.snapshot() === before };
+  }
+
+  /* З консолі: COLOR.check() — схема ролей у всіх 8 станах смуг, схема панелі
+     в її єдиному стані й обидві схеми розділу 10 (after — ролі після переробки,
+     bar2 — панель після). Порожні bad і data, roundtrip: true — геометрія й дані
      в порядку. Запускати на широкому екрані: на вузькому полотно сховане,
-     і довжини дротів не рахуються. COLOR.checkBar() — лише схема панелі. */
+     і довжини дротів не рахуються. COLOR.checkBar() — лише схема панелі,
+     COLOR.checkAfter() — лише дві схеми розділу 10. */
   window.COLOR = {
-    main, bar: bar.main,
-    checkBar() {
-      const before = bar.main.snapshot();
-      const r = geometry(bar);
-      const d = dataCheck(window.BAR, window.BAR_FLOWS, window.BAR_INFO, false);
-      bar.main.render();
-      return { states: 1, bad: clean(r) ? {} : { open: r }, data: d.bad, loners: d.loners, roundtrip: bar.main.snapshot() === before };
+    main, bar: bar.main, after: after.main, bar2: bar2.main,
+    checkBar() { return checkFlat(bar, window.BAR, window.BAR_FLOWS, window.BAR_INFO, false); },
+    checkAfter() {
+      return { after: checkFlat(after, window.AFTER, window.AFTER_FLOWS, window.AFTER_INFO, true),
+        bar2: checkFlat(bar2, window.BAR2, window.BAR2_FLOWS, window.BAR2_INFO, false) };
     },
     check() {
       const was = BANDS.filter((b) => main.isOpen(b));
@@ -177,7 +191,7 @@
         if (!clean(r)) bad[on.join('+') || 'collapsed'] = r;
       }
       main.collapse(BANDS); main.expand(was);
-      return { states, bad, data: dataCheck(window.MAP, window.COLOR_FLOWS, window.MAP_INFO, true), roundtrip: main.snapshot() === base, bar: this.checkBar() };
+      return { states, bad, data: dataCheck(window.MAP, window.COLOR_FLOWS, window.MAP_INFO, true), roundtrip: main.snapshot() === base, bar: this.checkBar(), ...this.checkAfter() };
     },
   };
 })();

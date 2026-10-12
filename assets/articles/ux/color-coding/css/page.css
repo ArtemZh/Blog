@@ -4,7 +4,7 @@
 .cols+.note,.cols+.lead,.tb+.note{margin-top:18px}
 .lead+.lead{margin-top:-8px}
 
-/* Виноска на джерело: номер у списку розділу 09. */
+/* Виноска на джерело: номер у списку джерел (останній розділ). */
 .fn{font-size:.72em;line-height:0;margin-left:1px}
 .fn a{font-family:var(--mono);color:var(--g500);text-decoration:none;padding:0 1px}
 .fn a:hover,.fn a:focus-visible{color:var(--signal);text-decoration:underline}
@@ -32,6 +32,11 @@
 .tb--k .tb__h,.tb--k .tb__r{grid-template-columns:30px minmax(0,1fr) minmax(0,1.1fr)}
 .tb--s .tb__h,.tb--s .tb__r{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) 118px}
 .tb--3 .tb__h,.tb--3 .tb__r{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.4fr)}
+/* 10 — «було → стало»: що міряли · було · стало · як рахували. Число — моноширинним чорнилом. */
+.tb--n{max-width:1040px}
+.tb--n .tb__h,.tb--n .tb__r{grid-template-columns:minmax(0,1.25fr) 78px 78px minmax(0,1.5fr)}
+.tb__r .tb__n{font-family:var(--mono);font-size:13px;line-height:1.5;color:var(--g700);white-space:nowrap}
+.tb__r .tb__n--now{color:var(--ink);font-weight:500}
 .tb--q{margin-top:10px}
 .tb--q .tb__h,.tb--q .tb__r{grid-template-columns:22px minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr)}
 .tb--q .tb__r b{font-weight:500;font-size:13px}
@@ -89,6 +94,10 @@
    тому пунктир. Смуги не згортаються, тож кнопки «розгорнути / згорнути» зайві. */
 #bar path.wire[id^="bar-w-same"]{stroke-dasharray:5 4}
 .flowbox--flat .flows .ghost,.flowbox--flat .flows .toggles__sp{display:none}
+/* Схеми розділу 10 (після переробки). Пунктир — лише те, що лишилось: К6, К7,
+   записаний виняток і збіг значень двох токенів. Токен — моноширинним, як у розділі 5. */
+#amap path.wire[id^="amap-w-k"],#amap path.wire[id^="amap-w-x-"],#amap path.wire[id^="amap-w-same"]{stroke-dasharray:5 4}
+#amap .node[data-id^="at-"] b{font-family:var(--mono);font-size:12px;font-weight:500}
 /* Вузька розкладка: порожня група (підпис колонки без вузлів) не потрібна. */
 .list__grp:not(:has(.list__node)){display:none}
 
@@ -113,5 +122,5 @@
 .case__l b{color:var(--ink)}
 
 /* Посилання на інший розділ усередині тексту. */
-.lead a[href^="#"],.card p a[href^="#"],.note a[href^="#"]{color:var(--ink);text-decoration-color:var(--line)}
-.lead a[href^="#"]:hover,.card p a[href^="#"]:hover,.note a[href^="#"]:hover{text-decoration-color:var(--signal)}
+.lead a[href^="#"],.card p a[href^="#"],.note a[href^="#"],.hero p a[href^="#"],.tb__r a[href^="#"]{color:var(--ink);text-decoration-color:var(--line)}
+.lead a[href^="#"]:hover,.card p a[href^="#"]:hover,.note a[href^="#"]:hover,.hero p a[href^="#"]:hover,.tb__r a[href^="#"]:hover{text-decoration-color:var(--signal)}

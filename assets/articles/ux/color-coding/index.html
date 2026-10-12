@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../../oss-bss/shared/css/base.css?v=20261011b">
 <link rel="stylesheet" href="../../oss-bss/shared/css/diagram.css?v=20261011b">
 <link rel="stylesheet" href="../../oss-bss/shared/css/components.css?v=20261011b">
-<link rel="stylesheet" href="css/page.css?v=20261011b">
+<link rel="stylesheet" href="css/page.css?v=20261012a">
 </head>
 <body>
 
@@ -27,6 +27,7 @@
     <a href="#buttons" data-i18n="nav.7"></a>
     <a href="#layout" data-i18n="nav.8"></a>
     <a href="#others" data-i18n="nav.9"></a>
+    <a href="#after" data-i18n="nav.after"></a>
     <a href="#checklist" data-i18n="nav.10"></a>
   </nav>
 </header>
@@ -210,7 +211,7 @@
 
     <h3 class="sub" data-i18n="s8.map.h"></h3>
     <p class="lead" data-i18n-html="s8.map.lead"></p>
-    <!-- Друга схема на тому самому рушії: панель «Плану» сьогодні. -->
+    <!-- Друга схема на тому самому рушії: панель «Плану» на час розбору. -->
     <div id="flowBox2" class="wide flowbox--flat">
       <div class="flows toggles"></div>
       <div class="steps" aria-live="polite">
@@ -253,15 +254,80 @@
   </section>
 
   <!-- 10 ─────────────────────────────────────────────── -->
+  <section id="after">
+    <div class="sec__head"><span class="sec__num">10</span><h2 data-i18n="sa.h"></h2><p data-i18n="sa.p"></p></div>
+    <p class="lead" data-i18n-html="sa.lead"></p>
+    <p class="lead" data-i18n-html="sa.lead2"></p>
+
+    <h3 class="sub" data-i18n="sa.color.h"></h3>
+    <p class="lead" data-i18n-html="sa.color.lead"></p>
+    <p class="lead" data-i18n-html="sa.color.map"></p>
+    <!-- Третя схема на тому самому рушії: та сама сцена, що в розділі 5, після переробки. -->
+    <div id="flowBox3" class="wide flowbox--flat">
+      <div class="flows toggles"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+        <span class="steps__track"></span>
+      </div>
+      <div id="amap"></div>
+    </div>
+    <div class="note" data-i18n-html="sa.color.note"></div>
+
+    <h3 class="sub" data-i18n="sa.bar.h"></h3>
+    <p class="lead" data-i18n-html="sa.bar.lead"></p>
+    <!-- Четверта схема: панель «Плану» після переробки (пара до схеми з розділу 8). -->
+    <div id="flowBox4" class="wide flowbox--flat">
+      <div class="flows toggles"></div>
+      <div class="steps" aria-live="polite">
+        <span class="steps__n"></span>
+        <span class="steps__t"></span>
+        <span class="steps__nav">
+          <button type="button" data-dir="-1" aria-label="←">←</button>
+          <button type="button" data-dir="1" aria-label="→">→</button>
+        </span>
+        <span class="steps__track"></span>
+      </div>
+      <div id="bar2"></div>
+    </div>
+    <div class="note" data-i18n-html="sa.bar.note"></div>
+
+    <h3 class="sub" data-i18n="sa.entry.h"></h3>
+    <p class="lead" data-i18n-html="sa.entry.lead"></p>
+    <p class="lead" data-i18n-html="sa.entry.lead2"></p>
+
+    <h3 class="sub" data-i18n="sa.num.h"></h3>
+    <p class="lead" data-i18n-html="sa.num.lead"></p>
+    <div class="tb tb--n tb--l" id="numTable"></div>
+    <div class="note" data-i18n-html="sa.num.note"></div>
+
+    <h3 class="sub" data-i18n="sa.ch.h"></h3>
+    <p class="lead" data-i18n-html="sa.ch.lead"></p>
+    <div class="tb tb--2" id="choiceTable"></div>
+
+    <h3 class="sub" data-i18n="sa.left.h"></h3>
+    <p class="lead" data-i18n-html="sa.left.lead"></p>
+    <div class="tb tb--2" id="leftTable"></div>
+
+    <h3 class="sub" data-i18n="sa.les.h"></h3>
+    <div class="cols cols--3" id="lessonList"></div>
+    <div class="note" data-i18n-html="sa.note"></div>
+  </section>
+
+  <!-- 11 ─────────────────────────────────────────────── -->
   <section id="checklist">
-    <div class="sec__head"><span class="sec__num">10</span><h2 data-i18n="s10.h"></h2><p data-i18n="s10.p"></p></div>
+    <div class="sec__head"><span class="sec__num">11</span><h2 data-i18n="s10.h"></h2><p data-i18n="s10.p"></p></div>
     <p class="lead" data-i18n-html="s10.lead"></p>
     <div id="checkList"></div>
   </section>
 
-  <!-- 11 ─────────────────────────────────────────────── -->
+  <!-- 12 ─────────────────────────────────────────────── -->
   <section id="refs">
-    <div class="sec__head"><span class="sec__num">11</span><h2 data-i18n="s11.h"></h2><p data-i18n="s11.p"></p></div>
+    <div class="sec__head"><span class="sec__num">12</span><h2 data-i18n="s11.h"></h2><p data-i18n="s11.p"></p></div>
     <p class="lead" data-i18n-html="s11.lead"></p>
     <ol class="srcs" id="srcList"></ol>
     <div class="foot" data-i18n="ui.foot"></div>
@@ -270,14 +336,15 @@
 </main>
 
 <script src="data/content.js?v=20261011b"></script>
-<script src="copy.js?v=20261011b"></script>
+<script src="copy.js?v=20261012a"></script>
 <script src="../../oss-bss/shared/js/i18n.js?v=20261011b"></script>
 <script src="data/map.js?v=20261011b"></script>
 <script src="data/bar.js?v=20261011b"></script>
+<script src="data/after.js?v=20261012a"></script>
 <script src="../../oss-bss/shared/js/diagram-engine.js?v=20261011b"></script>
 <script src="../../oss-bss/shared/js/scenarios.js?v=20261011b"></script>
-<script src="js/sections.js?v=20261011b"></script>
-<script src="js/app.js?v=20261011b"></script>
+<script src="js/sections.js?v=20261012a"></script>
+<script src="js/app.js?v=20261012a"></script>
 <script src="../../oss-bss/shared/js/toc.js?v=20261011b"></script>
 </body>
 </html>

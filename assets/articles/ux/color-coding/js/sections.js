@@ -106,7 +106,19 @@
       window.UNDO_PLACES.map((id) => [`<b>${esc(t(`un.${id}.tab`))}</b>`, `<span>${esc(t(`un.${id}.where`))}</span>`]));
   }
 
-  /* 10, 11 — чекліст із двох частин (номери наскрізні) і джерела */
+  /* 10 — що стало після: числа «було → стало», вибір із відкритих питань, що лишилось */
+  function renderAfter() {
+    const num = (label, v, now) => `<span class="tb__n${now ? ' tb__n--now' : ''}" data-l="${esc(label)}">${esc(v)}</span>`;
+    table('#numTable', [t('num.h.what'), t('num.h.was'), t('num.h.now'), t('num.h.how')],
+      window.AFTER_NUMS.map((x) => [`<b>${t(`num.${x.id}.t`)}</b>`, num(t('num.h.was'), x.was), num(t('num.h.now'), x.now, true),
+        cell(t('num.h.how'), t(`num.${x.id}.how`))]));
+    table('#choiceTable', [t('ch.h.q'), t('ch.h.a')],
+      window.AFTER_CHOICES.map((id) => [`<b>${t(`ch.${id}.q`)}</b>`, `<span>${t(`ch.${id}.a`)}</span>`]));
+    table('#leftTable', [t('left.h.what'), t('left.h.why')],
+      window.AFTER_LEFT.map((id) => [`<b>${t(`left.${id}.t`)}</b>`, `<span>${t(`left.${id}.b`)}</span>`]));
+  }
+
+  /* 11, 12 — чекліст із двох частин (номери наскрізні) і джерела */
   function renderLists() {
     $('#checkList').innerHTML = window.CHECK.map((g) => `<h3 class="sub">${esc(t('chk.g.' + g.id))}</h3>` +
       `<ol class="check" start="${g.from}" style="counter-reset:c ${g.from - 1}">` +
@@ -130,8 +142,9 @@
       cards('#dngList', 'dng', window.DANGER);
       cards('#goodList', 'good', window.GOOD, 'metric');
       cards('#othList', 'oth', window.OTHERS, 'case');
+      cards('#lessonList', 'les', window.AFTER_LESSONS);
       renderShare(); renderDist(); renderConflicts(); renderQuestions();
-      renderButtons(); renderLayout(); renderVariants(); renderLists();
+      renderButtons(); renderLayout(); renderVariants(); renderAfter(); renderLists();
     },
   };
 })();
