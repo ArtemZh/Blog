@@ -265,6 +265,8 @@
 
     /* ── сценарій (механіка DWH): крок = дріт + підпис, решта гасне ──── */
     var sc = data.scenario;
+    /* підписи кнопок: за замовчуванням українські, сторінка може дати свої (data.ui) */
+    var UI = Object.assign({ play: 'Програти', prev: 'Попередній крок', next: 'Наступний крок' }, data.ui || {});
     if (sc && sc.steps && sc.steps.length) {
       var bar = document.createElement('div');
       bar.className = 'cscen';
@@ -272,9 +274,9 @@
         return '<button type="button" class="cs-n" data-i="' + i + '">' + (i + 1) + '</button>';
       }).join('');
       bar.innerHTML =
-        '<button type="button" class="cs-b cs-play" aria-label="Програти">▶</button>' +
-        '<button type="button" class="cs-b cs-prev" aria-label="Попередній крок">←</button>' +
-        '<button type="button" class="cs-b cs-next" aria-label="Наступний крок">→</button>' +
+        '<button type="button" class="cs-b cs-play" aria-label="' + esc(UI.play) + '">▶</button>' +
+        '<button type="button" class="cs-b cs-prev" aria-label="' + esc(UI.prev) + '">←</button>' +
+        '<button type="button" class="cs-b cs-next" aria-label="' + esc(UI.next) + '">→</button>' +
         '<span class="cs-nums">' + nums + '</span>' +
         '<span class="cs-cap"></span>';
       host.appendChild(bar);

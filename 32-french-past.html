@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Past tenses in French · Draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20261015183936">
+<link rel="stylesheet" href="shared/style.css?v=20261015183936">
+<link rel="stylesheet" href="shared/french-past.css?v=20261015183936">
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top">Past tenses in French</a>
+  <nav class="toc" id="toc" aria-label="Sections">
+    <a href="#glance">At a glance</a><a href="#map">Map</a><a href="#timeline">Timeline</a><a href="#pc">Passé composé</a>
+    <a href="#imp">Imparfait</a><a href="#choose">Which one?</a><a href="#pqp">Before &amp; just now</a><a href="#ps">Literary</a><a href="#test">Test</a>
+  </nav>
+</header>
+
+<main class="main" id="top">
+  <header class="mast wrap">
+    <div class="kicker">Article · French grammar · draft</div>
+    <h1>Past tenses in French</h1>
+    <p class="lede">English gets by with “I did”, “I was doing” and “I had done”. French splits the past more finely, and the
+      choice between two tenses — <b>passé composé</b> and <b>imparfait</b> — is where most learners stumble. This page
+      shows which tense does which job, how each one is built, and ends with a test.</p>
+  </header>
+
+  <div class="wrap">
+
+  <section class="sec" id="glance">
+    <h2><span class="num">01</span>Five past tenses at a glance</h2>
+    <p>Four are used every day, in speech and in writing. The fifth, together with its companion, lives only in books.</p>
+    <div class="cards">
+      <div class="cardx"><span class="k">completed event</span><b>Passé composé</b><p class="fr">J'<u>ai mangé</u> une pomme.</p><p>I ate an apple / I have eaten an apple. The workhorse of spoken French: things that happened and are done.</p></div>
+      <div class="cardx"><span class="k">background, habit, state</span><b>Imparfait</b><p class="fr">Il <u>pleuvait</u>. Je <u>lisais</u> tous les soirs.</p><p>It was raining. I used to read every evening. The scenery and the routines around the events.</p></div>
+      <div class="cardx"><span class="k">the past before the past</span><b>Plus-que-parfait</b><p class="fr">J'<u>avais oublié</u> mes clés.</p><p>I had forgotten my keys. Something that happened before another past moment.</p></div>
+      <div class="cardx"><span class="k">just happened</span><b>Passé récent</b><p class="fr">Je <u>viens de</u> finir.</p><p>I have just finished. Built with <i>venir de</i> + infinitive.</p></div>
+      <div class="cardx lit"><span class="k">books only</span><b>Passé simple · passé antérieur</b><p class="fr">Il <u>entra</u>. Quand il <u>eut fini</u>, il <u>sortit</u>.</p><p>He came in. When he had finished, he went out. Written narrative; in speech they become passé composé and plus-que-parfait.</p></div>
+    </div>
+    <p class="trap"><b>Trap.</b> Mapping English tenses one to one. “I was” is sometimes <i>j'étais</i> (a state) and sometimes
+      <i>j'ai été</i> (a completed episode: <i>j'ai été malade pendant deux jours</i>). The question is never “which English
+      tense is this?” but “is this an event or the background?”.</p>
+  </section>
+
+  <section class="sec" id="map">
+    <h2><span class="num">02</span>The map: what each tense is built from</h2>
+    <p>Three columns. On the left — the building blocks. In the middle — the tenses of everyday French. On the right — the
+      two literary tenses. Solid lines mean “is built from”, dashed lines mean “in speech this becomes”. Hover over a
+      block to light up its connections; press ▶ to walk through a short story, one sentence per tense.</p>
+    <div class="cbox" data-comp="tenses"></div>
+    <p class="chint">Everything a block means is written out below the diagram, grouped by column — no need to click to read it.</p>
+    <p class="trap"><b>Trap.</b> Thinking the compound tenses are separate things to memorise. Passé composé, plus-que-parfait
+      and passé antérieur are one pattern — <i>auxiliary + past participle</i> — with the auxiliary in three different
+      tenses. Learn the participle and the choice of avoir or être once, and you have all three.</p>
+  </section>
+
+  <section class="sec" id="timeline">
+    <h2><span class="num">03</span>On a timeline</h2>
+    <p>The same story, placed on time. The background (imparfait) is a band — it lasts. Events (passé composé) are points — they happen.
+      The plus-que-parfait sits before them, and the passé récent sits right next to “now”. Click a sentence.</p>
+    <div class="tlw">
+      <ol class="story" id="story"></ol>
+      <div class="fig"><svg id="tline" viewBox="0 0 760 300" role="img" aria-label="Story on a timeline"></svg></div>
+    </div>
+    <div class="legend"><span><i class="lg-band"></i>imparfait — background or state</span><span><i class="lg-dot"></i>passé composé — event</span><span><i class="lg-ring"></i>plus-que-parfait — earlier event</span><span><i class="lg-now"></i>passé récent — just before now</span></div>
+  </section>
+
+  <section class="sec" id="pc">
+    <h2><span class="num">04</span>Passé composé: avoir or être, and agreement</h2>
+    <p>Present tense of <b>avoir</b> or <b>être</b> + <b>past participle</b>. Most verbs take avoir. Être is used by two groups:</p>
+    <div class="cards">
+      <div class="cardx"><span class="k">group 1</span><b>Sixteen verbs of motion and change of state</b><p>Mostly about coming, going, being born, dying. The classic memory aid is <i>DR MRS VANDERTRAMP</i>. Click a verb for an example.</p></div>
+      <div class="cardx"><span class="k">group 2</span><b>All reflexive verbs</b><p><i>Je me suis levé, elle s'est habillée, nous nous sommes trompés.</i> Any verb used with a reflexive pronoun takes être.</p></div>
+    </div>
+    <div class="verbs" id="etre"></div>
+    <div class="vbox" id="etreEx"></div>
+    <h3>Past participles</h3>
+    <table class="tt">
+      <tr><th>Infinitive ending</th><th>Participle</th><th>Examples</th></tr>
+      <tr><td>-er</td><td>-é</td><td>parler → parlé, aller → allé</td></tr>
+      <tr><td>-ir (most)</td><td>-i</td><td>finir → fini, partir → parti</td></tr>
+      <tr><td>-re (many)</td><td>-u</td><td>vendre → vendu, attendre → attendu</td></tr>
+      <tr><td>irregular</td><td>learn them</td><td>avoir → eu, être → été, faire → fait, prendre → pris, mettre → mis, dire → dit, écrire → écrit, voir → vu, venir → venu, pouvoir → pu, vouloir → voulu, devoir → dû, savoir → su, lire → lu, boire → bu, ouvrir → ouvert, naître → né, mourir → mort</td></tr>
+    </table>
+    <h3>Build it yourself</h3>
+    <p>Pick a verb and a person. The form below shows the auxiliary, the participle and — if there is one — the agreement, with the reason.</p>
+    <div class="ctl">
+      <label>Verb <select id="pcVerb"></select></label>
+      <label>Person <select id="pcWho"></select></label>
+    </div>
+    <div class="out" id="pcOut"></div>
+    <h3>Agreement in one table</h3>
+    <table class="tt">
+      <tr><th>Auxiliary</th><th>The participle agrees with…</th><th>Example</th></tr>
+      <tr><td>être</td><td>the subject</td><td>Elle est allé<u>e</u> au marché. Ils sont parti<u>s</u>.</td></tr>
+      <tr><td>avoir</td><td>a direct object placed <b>before</b> the verb — otherwise nothing</td><td>J'ai écrit la lettre. → La lettre que j'ai écrit<u>e</u>. Je l'ai écrit<u>e</u>.</td></tr>
+      <tr><td>être, reflexive</td><td>the reflexive pronoun, if it is the direct object</td><td>Elle s'est lavé<u>e</u>. But: elle s'est lavé les mains (the object is <i>les mains</i>).</td></tr>
+    </table>
+    <p class="trap"><b>Trap.</b> Six of the être verbs — <i>sortir, monter, descendre, rentrer, retourner, passer</i> — switch to
+      avoir when they take a direct object. <i>Je suis sorti</i> (I went out) but <i>j'ai sorti la poubelle</i> (I took the bin out);
+      <i>elle est montée</i> but <i>elle a monté les valises</i>.</p>
+  </section>
+
+  <section class="sec" id="imp">
+    <h2><span class="num">05</span>Imparfait: one rule, one exception</h2>
+    <p>Take the <b>nous</b> form of the present tense, drop <b>-ons</b>, add <b>-ais, -ais, -ait, -ions, -iez, -aient</b>.
+      The only verb that does not follow this is <b>être</b>, whose stem is <b>ét-</b>.</p>
+    <div class="ctl"><label>Verb <select id="impVerb"></select></label></div>
+    <div class="imp" id="impOut"></div>
+    <p>Spelling keeps the sound: verbs in <i>-ger</i> keep an <i>e</i> before <i>a</i> (<i>je mangeais</i> but <i>nous mangions</i>),
+      verbs in <i>-cer</i> take <i>ç</i> before <i>a</i> (<i>je commençais</i> but <i>nous commencions</i>).</p>
+    <h3>What the imparfait is for</h3>
+    <div class="cards">
+      <div class="cardx"><b>Description and scenery</b><p class="fr">La maison était grande et il faisait froid.</p></div>
+      <div class="cardx"><b>Habits and repeated actions</b><p class="fr">Le dimanche, nous allions chez ma grand-mère.</p></div>
+      <div class="cardx"><b>Something in progress</b><p class="fr">Je regardais la télé quand tu as appelé.</p></div>
+      <div class="cardx"><b>States: age, time, weather, feelings</b><p class="fr">J'avais dix ans. Il était midi. J'étais content.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="choose">
+    <h2><span class="num">06</span>Imparfait or passé composé?</h2>
+    <p>Think of a film. The imparfait is the set, the light and what the characters were doing when the camera started.
+      The passé composé is what happens in the scene — the actions that move the story forward.</p>
+    <table class="tt">
+      <tr><th></th><th>Imparfait</th><th>Passé composé</th></tr>
+      <tr><td>Question it answers</td><td>What was it like? What was going on? What used to happen?</td><td>What happened? What happened next?</td></tr>
+      <tr><td>Shape in time</td><td>open, no clear start or end</td><td>closed, a finished whole</td></tr>
+      <tr><td>Typical signal words</td><td>autrefois, d'habitude, souvent, toujours, tous les jours, le lundi, pendant que, quand j'étais petit</td><td>hier, soudain, tout à coup, un jour, une fois, ce matin, à ce moment-là, trois fois, pendant deux heures</td></tr>
+      <tr><td>Together</td><td colspan="2" class="fr">Je <u>dormais</u> (background) quand le téléphone <u>a sonné</u> (event).</td></tr>
+    </table>
+    <p class="trap"><b>Trap.</b> “Long action means imparfait.” Duration alone does not decide. <i>J'ai habité à Lyon pendant
+      dix ans</i> is passé composé: the ten years are presented as a finished, closed block. Signal words help, but the real
+      question is whether the speaker shows the action as a whole or as the background to something else.</p>
+  </section>
+
+  <section class="sec" id="pqp">
+    <h2><span class="num">07</span>Before the past, and just now</h2>
+    <div class="cards">
+      <div class="cardx"><span class="k">plus-que-parfait</span><b>Imparfait of avoir / être + participle</b>
+        <p class="fr">Quand je suis arrivé, le film <u>avait</u> déjà <u>commencé</u>.</p>
+        <p>When I arrived, the film had already started. The same choice of auxiliary and the same agreement rules as the passé composé: <i>elle était partie</i>.
+          It also follows <i>si</i> for regrets: <i>Si j'avais su, je serais venu</i> — if I had known, I would have come.</p></div>
+      <div class="cardx"><span class="k">passé récent</span><b>venir de + infinitive</b>
+        <p class="fr">Je <u>viens de</u> rentrer. Ils <u>viennent d'</u>arriver.</p>
+        <p>I have just come home. They have just arrived. Put <i>venir</i> in the imparfait to say “had just” in a past story:
+          <i>il venait de partir</i> — he had just left.</p></div>
+    </div>
+    <p class="trap"><b>Trap.</b> Translating “I have just…” with the passé composé and <i>juste</i>. <i>J'ai juste mangé</i> means
+      “I only ate”. For “just now”, French uses <i>venir de</i>.</p>
+  </section>
+
+  <section class="sec" id="ps">
+    <h2><span class="num">08</span>Passé simple and passé antérieur: recognise, rarely produce</h2>
+    <p>In novels, fairy tales, history books and newspaper narratives, events are told in the <b>passé simple</b>; an event
+      that came just before another one is in the <b>passé antérieur</b> (passé simple of the auxiliary + participle).
+      In conversation and in most everyday writing, they are replaced by the passé composé and the plus-que-parfait.
+      For a learner the goal is to recognise the forms when reading.</p>
+    <table class="tt">
+      <tr><th>Verb type</th><th>il / elle</th><th>ils / elles</th><th>Example</th></tr>
+      <tr><td>-er verbs</td><td>-a</td><td>-èrent</td><td>parler → il parla, ils parlèrent</td></tr>
+      <tr><td>-ir and most -re verbs</td><td>-it</td><td>-irent</td><td>finir → il finit, ils finirent; prendre → il prit</td></tr>
+      <tr><td>many -oir verbs and others</td><td>-ut</td><td>-urent</td><td>vouloir → il voulut; lire → il lut</td></tr>
+      <tr><td>the ones to know by sight</td><td colspan="3">être → il fut · avoir → il eut · faire → il fit · venir → il vint · voir → il vit · aller → il alla · naître → il naquit · mourir → il mourut</td></tr>
+    </table>
+    <p class="trap"><b>Trap.</b> <i>Il finit</i> can be the present or the passé simple — the forms are identical for many -ir
+      verbs in the singular. In a story told in the past, it is the passé simple.</p>
+  </section>
+
+  <section class="sec" id="test">
+    <h2><span class="num">09</span>Test yourself</h2>
+    <p>Sixteen questions covering everything above. After each answer you will see why it is right or wrong. Your best score is kept in this browser only.</p>
+    <div class="quiz" id="quiz"></div>
+  </section>
+
+  <section class="sec" id="src">
+    <h2><span class="num">10</span>Sources</h2>
+    <ul class="src29">
+      <li><a href="https://en.wikipedia.org/wiki/French_verbs" target="_blank" rel="noopener">Wikipedia — French verbs</a>: tenses, auxiliaries, participle agreement</li>
+      <li><a href="https://en.wikipedia.org/wiki/Pass%C3%A9_compos%C3%A9" target="_blank" rel="noopener">Wikipedia — Passé composé</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pass%C3%A9_simple" target="_blank" rel="noopener">Wikipedia — Passé simple</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Imperfect" target="_blank" rel="noopener">Wikipedia — Imperfect</a> (section on French)</li>
+      <li><a href="https://en.wikipedia.org/wiki/Pluperfect" target="_blank" rel="noopener">Wikipedia — Pluperfect</a></li>
+    </ul>
+    <p class="foot29">The rules here are the standard ones taught in French grammar references; the examples and the test were written for this page.</p>
+  </section>
+
+  </div>
+</main>
+</div>
+
+<script>
+/* Схема для shared/comp.js: колонка × рядок, дроти з id. Пов'язані блоки стоять в одному рядку (SCHEMA-PRINCIPLES §6). */
+window.COMP_DATA = {
+  tenses: {
+    ui: { play: 'Play the story', prev: 'Previous step', next: 'Next step' },
+    lanes: [
+      { id: 'b', t: 'Building blocks', w: 220 },
+      { id: 's', t: 'Everyday French', w: 220 },
+      { id: 'l', t: 'Literary French only', w: 220 }
+    ],
+    nodes: [
+      { id: 'presaux', lane: 'b', row: 0, t: 'Present of avoir / être', s: "j'ai · je suis",
+        b: 'The auxiliary for the passé composé: <i>ai, as, a, avons, avez, ont</i> or <i>suis, es, est, sommes, êtes, sont</i>.' },
+      { id: 'part', lane: 'b', row: 1, t: 'Past participle', s: 'mangé · fini · vendu',
+        b: 'The second half of every compound tense. Regular: -er → -é, -ir → -i, -re → -u; the common irregulars have to be learned.' },
+      { id: 'nous', lane: 'b', row: 2, t: 'Present “nous” stem', s: 'finiss-ons → finiss-',
+        b: 'The stem for the imparfait: the nous form of the present without -ons. Only être is different (ét-).' },
+      { id: 'impaux', lane: 'b', row: 3, t: 'Imparfait of avoir / être', s: "j'avais · j'étais",
+        b: 'The auxiliary for the plus-que-parfait.' },
+      { id: 'venir', lane: 'b', row: 4, t: 'venir de + infinitive', s: 'je viens de partir',
+        b: 'Venir in the present for “have just”, in the imparfait for “had just”.' },
+      { id: 'psaux', lane: 'b', row: 5, t: 'Passé simple of avoir / être', s: "j'eus · je fus",
+        b: 'The auxiliary for the passé antérieur.' },
+
+      { id: 'pc', lane: 's', row: 0, t: 'Passé composé', s: 'event · done',
+        b: 'Completed events and a sequence of actions. <i>Je suis rentré à minuit.</i>' },
+      { id: 'imp', lane: 's', row: 2, t: 'Imparfait', s: 'background · habit · state',
+        b: 'Description, habits, actions in progress, states. <i>Il pleuvait.</i>' },
+      { id: 'pqp', lane: 's', row: 3, t: 'Plus-que-parfait', s: 'before another past',
+        b: 'An event earlier than another past moment. <i>J’avais oublié mes clés.</i>' },
+      { id: 'rec', lane: 's', row: 4, t: 'Passé récent', s: 'just happened',
+        b: 'Something that has only just happened. <i>Je viens de les retrouver dans ma poche.</i>' },
+
+      { id: 'ps', lane: 'l', row: 0, t: 'Passé simple', s: 'event · in books',
+        b: 'The narrative tense of written French. In speech it becomes the passé composé. <i>Il rentra à minuit.</i>' },
+      { id: 'pa', lane: 'l', row: 3, t: 'Passé antérieur', s: 'just before · in books',
+        b: 'An event just before a passé simple event, usually after <i>quand, dès que, après que</i>. In speech it becomes the plus-que-parfait. <i>Quand il eut fini, il sortit.</i>' }
+    ],
+    links: [
+      { from: 'presaux', to: 'pc' },
+      { from: 'part', to: 'pc' },
+      { from: 'nous', to: 'imp' },
+      { from: 'impaux', to: 'pqp' },
+      { from: 'part', to: 'pqp' },
+      { from: 'venir', to: 'rec' },
+      { from: 'psaux', to: 'pa' },
+      { from: 'part', to: 'pa' },
+      { from: 'ps', to: 'pc', kind: 'rule' },
+      { from: 'pa', to: 'pqp', kind: 'rule' }
+    ],
+    scenario: { steps: [
+      { n: ['imp'], w: ['nous', 'imp'], d: '1. “Hier soir, il pleuvait.” — Last night it was raining. Background: imparfait.' },
+      { n: ['pc'], w: [['presaux', 'pc'], ['part', 'pc']], d: '2. “Je suis rentré à minuit.” — I got home at midnight. An event: passé composé with être (rentrer).' },
+      { n: ['pqp'], w: [['impaux', 'pqp'], ['part', 'pqp']], d: '3. “J’avais oublié mes clés au bureau.” — I had left my keys at the office. Earlier than getting home: plus-que-parfait.' },
+      { n: ['rec'], w: ['venir', 'rec'], d: '4. “Je viens de les retrouver dans ma poche.” — I have just found them in my pocket. Passé récent.' },
+      { n: ['ps', 'pa'], w: [['ps', 'pc'], ['pa', 'pqp']], d: '5. In a novel the same night reads: “Il rentra à minuit. Il avait oublié ses clés.” — passé simple for the event; in speech it is the passé composé.' }
+    ] }
+  }
+};
+</script>
+<script src="shared/nav.js?v=20261015183936"></script>
+<script src="shared/comp.js?v=20261015183936"></script>
+<script src="shared/french-past.js?v=20261015183936"></script>
+</body>
+</html>

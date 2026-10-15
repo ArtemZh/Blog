@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20261012234501">
-<link rel="stylesheet" href="shared/style.css?v=20261012234501">
+<link rel="stylesheet" href="shared/tokens.css?v=20261015183936">
+<link rel="stylesheet" href="shared/style.css?v=20261015183936">
 <style>
 /* ── Хаб: один екран ────────────────────────────────────────────────────────
    Три смуги: знайомство · підходи · статті. Висоти й відступи від висоти
@@ -87,10 +87,10 @@ html[lang="en"] .item .en{display:none}
 .arts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1.4vh,14px) var(--C)}
 .arts .item{height:var(--ih)}
 .item.is-draft .hv-wrap{opacity:.75}
-/* шість чернеток в один ряд: сітка на 30 часток — статті по 6, чернетки по 5 */
-@media (min-width:1101px){ .arts{grid-template-columns:repeat(30,minmax(0,1fr))} .arts>.item{grid-column:span 6}
+/* сім чернеток в один ряд: сітка на 35 часток — статті по 7, чернетки по 5 */
+@media (min-width:1101px){ .arts{grid-template-columns:repeat(35,minmax(0,1fr))} .arts>.item{grid-column:span 7}
   .arts>.item.is-draft{grid-column:span 5} .arts>.item.draft-first{grid-column:1/span 5}
-  .arts>.item.is-draft .hv-wrap{width:72px} .arts>.item.is-draft p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden} }
+  .arts>.item.is-draft .hv-wrap{display:none} .arts>.item.is-draft p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden} }
 @media (max-width:1100px){ .arts .draft-first{grid-column:1} }
 .item.is-draft{background:var(--paper-2);border-style:dashed}
 .item.is-draft .tt{color:var(--ink-2)}
@@ -246,15 +246,16 @@ html[lang="en"] .item .en{display:none}
       <a class="item is-draft" href="22-support-voice.html" data-hv="22-support-voice.html"><span><span class="tt"><span class="n">22</span><span data-en="Voice bot">Голосовий бот</span></span><p data-en="A call step by step">Дзвінок крок за кроком</p></span></a>
       <a class="item is-draft" href="28-pci-dss.html" data-hv="28-pci-dss.html"><span><span class="tt"><span class="n">28</span><span data-en="PCI DSS for a PM">PCI DSS очима PM</span></span><p data-en="Scope, three workstreams, evidence">Межі, три потоки робіт, докази</p></span></a>
       <a class="item is-draft" href="31-collatz.html" data-hv="31-collatz.html"><span><span class="tt"><span class="n">31</span><span data-en="The 3n+1 problem">Задача 3n+1</span></span><p data-en="Tree, bits, 3D coral">Дерево, біти, корал у 3D</p></span></a>
+      <a class="item is-draft" href="32-french-past.html" data-hv="32-french-past.html"><span><span class="tt"><span class="n">32</span><span data-en="Past tenses in French">Минулий час у французькій</span></span><p data-en="Map, timeline, test">Схема, часова вісь, тест</p></span></a>
     </div>
   </section>
 
 </main>
 </div>
 
-<script src="shared/lang.js?v=20261012234501"></script>
-<script src="shared/nav.js?v=20261012234501"></script>
-<script src="shared/hub-visuals.js?v=20261012234501"></script>
+<script src="shared/lang.js?v=20261015183936"></script>
+<script src="shared/nav.js?v=20261015183936"></script>
+<script src="shared/hub-visuals.js?v=20261015183936"></script>
 <script>
 /* Помітка для телефону: показуємо, доки користувач її не закрив. */
 (function () {
