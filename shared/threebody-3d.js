@@ -10,8 +10,8 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { makeSky } from './space-bg.js?v=20261018213240';
-import { makeStar, STAR_TINTS } from './sun-fx.js?v=20261018213240';
+import { makeSky } from './space-bg.js?v=20261018213705';
+import { makeStar, STAR_TINTS } from './sun-fx.js?v=20261018213705';
 
 const TB = window.TB;
 const $ = (id) => document.getElementById(id);
@@ -94,6 +94,33 @@ if (!renderer) {
     box.classList.toggle('is-space', sp);
     document.querySelectorAll('#simMode button').forEach((x) => x.classList.toggle('on', (x.dataset.m === 'space') === sp));
   }
+  /* ── «Свої маси»: точні розв'язки Лагранжа (трикутник) і Ейлера (пряма) для довільних мас ── */
+  const mOf = (v) => Math.pow(10, -3 + 3 * v / 100);
+  S.shape = 'tri';
+  function customMasses() { const m = [0, 1, 2].map((k) => mOf(+$('simM' + k).value)), M = m[0] + m[1] + m[2];
+    return m.map((x) => x * 3 / M); }                          // сума мас 3 — темп руху як в інших сценаріях
+  function accX(xs, ms) { return xs.map((x, i) => xs.reduce((a, y, j) => j === i ? a : a + ms[j] * Math.sign(y - x) / ((y - x) * (y - x)), 0)); }
+  TB.PRESETS.custom = () => {
+    const m = customMasses(), M = 3;
+    if (S.shape === 'tri') {
+      const P = [90, 210, 330].map((d) => [Math.cos(d * Math.PI / 180), Math.sin(d * Math.PI / 180)]), L = Math.sqrt(3);
+      const cx = P.reduce((a, p, i) => a + m[i] * p[0], 0) / M, cy = P.reduce((a, p, i) => a + m[i] * p[1], 0) / M, w = Math.sqrt(M / (L * L * L));
+      return P.map((p, i) => { const x = p[0] - cx, y = p[1] - cy; return { m: m[i], p: [x, y, 0], v: [-w * y, w * x, 0] }; });
+    }
+    // пряма: m₁ ліворуч, m₂ посередині, m₃ праворуч; λ = (x₃ − x₂)/(x₂ − x₁) — корінь рівняння Ейлера п'ятого степеня
+    const [a, b, c] = m, f = (l) => (a + b) * l ** 5 + (3 * a + 2 * b) * l ** 4 + (3 * a + b) * l ** 3 - (b + 3 * c) * l * l - (2 * b + 3 * c) * l - (b + c);
+    let lo = 1e-6, hi = 1e3; for (let k = 0; k < 200; k++) { const mid = Math.sqrt(lo * hi); if (f(mid) > 0) hi = mid; else lo = mid; }
+    const lam = Math.sqrt(lo * hi), x0 = [0, 1, 1 + lam], cm = (b * 1 + c * (1 + lam)) / M, sc = 2 / (1 + lam);
+    const xs = x0.map((x) => (x - cm) * sc), ax = accX(xs, m), far = xs[0] * xs[0] > xs[2] * xs[2] ? 0 : 2, w = Math.sqrt(-ax[far] / xs[far]);
+    return xs.map((x, i) => ({ m: m[i], p: [x, 0, 0], v: [0, w * x, 0] }));
+  };
+  function massUI() {
+    const m = customMasses(); [0, 1, 2].forEach((k) => { $('simM' + k + 'o').textContent = m[k] < .01 ? m[k].toExponential(1) : m[k].toFixed(2); });
+    const q = 27 * (m[0] * m[1] + m[1] * m[2] + m[2] * m[0]) / 9, r = $('simRouth');
+    if (S.shape === 'line') { r.textContent = 'Пряма Ейлера нестійка за будь-яких мас'; r.className = 'chint bad'; }
+    else { const ok = q < 1; r.textContent = `27·Σmᵢmⱼ / M² = ${q < .01 ? q.toExponential(1) : q.toFixed(2)} → ${ok ? 'стійкий: менше за 1' : 'нестійкий: більше за 1'}`; r.className = 'chint ' + (ok ? 'ok' : 'bad'); }
+    document.querySelectorAll('#simShape button').forEach((x) => x.classList.toggle('on', x.dataset.s === S.shape));
+  }
   function load(preset) {
     S.preset = preset; S.bodies = TB.PRESETS[preset](S.seed); S.t = 0; S.steps = 0; S.E0 = TB.energy(S.bodies);
     meshes.forEach((m) => scene.remove(m)); stars.forEach((s) => { scene.remove(s); s.userData.dispose(); }); trails.forEach((l) => { scene.remove(l); l.geometry.dispose(); });
@@ -118,6 +145,7 @@ if (!renderer) {
     frame(true); paint();
     document.querySelectorAll('#simPre button').forEach((b) => b.classList.toggle('on', b.dataset.p === preset));
     document.querySelectorAll('#sim-sec .simnote').forEach((n) => n.hidden = n.dataset.p !== preset);
+    $('simMass').hidden = preset !== 'custom'; if (preset === 'custom') massUI();
   }
   // камера: 2D — згори, 3D — під кутом; масштаб тримає всю систему в кадрі
   function frame(hard) {
@@ -169,6 +197,10 @@ if (!renderer) {
     if (S.space && !S.dim3) { S.dim3 = true; frame(true); } paint(); }));
   $('simPlay').addEventListener('click', () => { S.run = !S.run; $('simPlay').textContent = S.run ? '❚❚ пауза' : '▶ рух'; });
   $('simRe').addEventListener('click', () => load(S.preset));
+  let mT; [0, 1, 2].forEach((k) => $('simM' + k).addEventListener('input', () => { massUI(); clearTimeout(mT); mT = setTimeout(() => load('custom'), 120); }));
+  document.querySelectorAll('#simShape button').forEach((b) => b.addEventListener('click', () => { S.shape = b.dataset.s; load('custom'); }));
+  // поштовх: швидкість найшвидшого тіла +1 % — стійка фігура погойдається, нестійка розвалиться
+  $('simKick').addEventListener('click', () => { const v = S.bodies.reduce((a, b) => Math.hypot(...b.v) > Math.hypot(...a.v) ? b : a).v; v[0] *= 1.01; v[1] *= 1.01; S.E0 = TB.energy(S.bodies); });
   $('simDim').addEventListener('click', () => { S.dim3 = !S.dim3; frame(true); });
   const sp = $('simSpeed'); sp.addEventListener('input', () => { S.speed = +sp.value; $('simSpeedO').textContent = '×' + S.speed; });
   const tr = $('simTrail'); tr.addEventListener('input', () => { S.trail = +tr.value; });

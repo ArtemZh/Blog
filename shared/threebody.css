@@ -220,3 +220,8 @@ ul.src29 li{margin:5px 0}
 .lag3__labels{z-index:2}
 .lag-minibtn{z-index:5}
 @media(max-width:620px){.lag3 .lag-mini{width:130px;height:82px}}
+
+.simmass{padding:10px 12px;border:1px solid var(--rule);border-radius:var(--r-md);background:var(--ground)}
+.simmass output{font:500 12px/1 var(--mono, monospace);min-width:44px;color:var(--ink-2)}
+#simRouth.ok{color:var(--c-teal,#1E968C)}
+#simRouth.bad{color:var(--act)}
