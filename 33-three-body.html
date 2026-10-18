@@ -7,9 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20261018203152">
-<link rel="stylesheet" href="shared/style.css?v=20261018203152">
-<link rel="stylesheet" href="shared/threebody.css?v=20261018203152">
+<link rel="stylesheet" href="shared/tokens.css?v=20261018205354">
+<link rel="stylesheet" href="shared/style.css?v=20261018205354">
+<link rel="stylesheet" href="shared/threebody.css?v=20261018205354">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
@@ -113,6 +113,15 @@
     <p>Спростимо умову: два масивні тіла рухаються коловими орбітами одне навколо одного, а третє настільки легке, що ніяк не впливає на їхній рух. Це обмежена задача трьох тіл. У системі відліку, що обертається разом із важкими тілами, існує рівно п'ять місць, де тяжіння і відцентрова сила повністю врівноважуються. Це і є точки Лагранжа.</p>
     <p>Три з них — L1, L2 та L3 — розташовані на прямій, що з'єднує важкі тіла, і нестійкі: апаратам у цих точках доводиться регулярно вмикати двигуни для корекції. Дві інші — L4 та L5 — утворюють рівносторонні трикутники з масивними тілами і стійкі, якщо одне з них значно важче за інше.</p>
     <p>Карта показує «рельєф» ефективного потенціалу в системі, що обертається. L1, L2 і L3 — це перевали між ямами, L4 і L5 — вершини. Дивно, але саме вершини стійкі: тіло, що з них зісковзує, сила Коріоліса заводить на петлю навколо точки. Посуньте повзунок співвідношення мас і подивіться, як точки зсуваються; наведіть на точку, щоб прочитати, що там відбувається.</p>
+    <div class="ctl">
+      <span class="seg" id="lgSys" role="group" aria-label="Система"><button type="button" data-s="se" class="on">Сонце — Земля</button><button type="button" data-s="em">Земля — Місяць</button><button type="button" data-s="sj">Сонце — Юпітер</button></span>
+    </div>
+    <div class="simw">
+      <div><div class="lag3" id="lag3"></div><p class="chint" id="lagScale" style="margin-top:6px"></p></div>
+      <div class="simside"><div class="simnote" id="lagCard"></div>
+        <p class="chint" style="margin-top:10px">Сцену можна обертати мишею, колесо — масштаб. Карта зверху нижче показує те саме як рельєф потенціалу.</p></div>
+    </div>
+    <h3>Карта зверху: рельєф потенціалу</h3>
     <div class="ctl" id="lagPre">
       <button type="button" class="chipbtn" data-mu="0.000954">Сонце — Юпітер</button>
       <button type="button" class="chipbtn" data-mu="0.0121505">Земля — Місяць</button>
@@ -156,6 +165,7 @@
       <li><a href="https://arxiv.org/abs/math/0011268" target="_blank" rel="noopener">A. Chenciner, R. Montgomery — A remarkable periodic solution of the three-body problem (2000)</a></li>
       <li><a href="https://arxiv.org/abs/1303.0181" target="_blank" rel="noopener">M. Šuvakov, V. Dmitrašinović — Three classes of Newtonian three-body planar periodic orbits (2013)</a></li>
       <li><a href="https://www.esa.int/Science_Exploration/Space_Science/Gaia" target="_blank" rel="noopener">ESA — Gaia</a> і <a href="https://science.nasa.gov/mission/webb/" target="_blank" rel="noopener">NASA — James Webb Space Telescope</a>: апарати в точці L2</li>
+      <li><a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope — текстури планет</a> (CC BY 4.0)</li>
       <li><a href="https://science.nasa.gov/mission/lucy/" target="_blank" rel="noopener">NASA — Lucy</a>: троянські астероїди Юпітера</li>
       <li>Текст відредаговано з допомогою Gemini, факти звірено з джерелами вище.</li>
     </ul>
@@ -235,9 +245,10 @@ window.COMP_DATA = {
   }
 };
 </script>
-<script src="shared/nav.js?v=20261018203152"></script>
-<script src="shared/comp.js?v=20261018203152"></script>
-<script src="shared/threebody.js?v=20261018203152"></script>
-<script type="module" src="shared/threebody-3d.js?v=20261018203152"></script>
+<script src="shared/nav.js?v=20261018205354"></script>
+<script src="shared/comp.js?v=20261018205354"></script>
+<script src="shared/threebody.js?v=20261018205354"></script>
+<script type="module" src="shared/lagrange-3d.js?v=20261018205354"></script>
+<script type="module" src="shared/threebody-3d.js?v=20261018205354"></script>
 </body>
 </html>

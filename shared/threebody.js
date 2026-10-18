@@ -130,7 +130,7 @@
 
   /* ── 05 точки Лагранжа: ефективний потенціал в системі, що обертається ── */
   (function lagrange() {
-    const cv = $('#lag'); if (!cv) return;
+    const cv = $('#lag');
     const st = { mu: 0.0121505, pts: [], geom: null };
     const phi = (x, y, mu) => { const r1 = Math.hypot(x + mu, y), r2 = Math.hypot(x - 1 + mu, y); return -(1 - mu) / r1 - mu / r2 - (x * x + y * y) / 2; };
     const dphix = (x, mu) => { const h = 1e-7; return (phi(x + h, 0, mu) - phi(x - h, 0, mu)) / (2 * h); };
@@ -144,6 +144,8 @@
         { id: 'L4', x: .5 - mu, y: Math.sqrt(3) / 2 }, { id: 'L5', x: .5 - mu, y: -Math.sqrt(3) / 2 },
       ];
     }
+    window.TB.lag = { points, phi };          // 3D-сцена точок Лагранжа бере розрахунок звідси
+    if (!cv) return;
     const NOTE = {
       L1: 'між тілами; нестійка. Сонце — Земля: обсерваторія SOHO дивиться на Сонце без затемнень.',
       L2: 'за меншим тілом; нестійка. Сонце — Земля: телескоп «Джеймс Вебб», раніше — Gaia.',

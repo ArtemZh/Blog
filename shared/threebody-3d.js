@@ -10,6 +10,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { makeSky } from './space-bg.js?v=20261018205354';
 
 const TB = window.TB;
 const $ = (id) => document.getElementById(id);
@@ -39,13 +40,8 @@ if (!renderer) {
   const grid = new THREE.GridHelper(8, 16, new THREE.Color(css('--rule-2') || '#C6CAD3'), new THREE.Color(css('--rule') || '#E3E5EA'));
   grid.rotation.x = Math.PI / 2; scene.add(grid);
 
-  // зоряне небо: точки на далекій сфері, трохи різного кольору й яскравості
-  const sky = (() => { const N = 2600, p = new Float32Array(N * 3), c = new Float32Array(N * 3), col = new THREE.Color();
-    for (let i = 0; i < N; i++) { const u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2, r = 400 + Math.random() * 200, s = Math.sqrt(1 - u * u);
-      p.set([r * s * Math.cos(th), r * s * Math.sin(th), r * u], i * 3);
-      col.setHSL(.55 + Math.random() * .12 - (Math.random() < .3 ? .5 : 0), .35, .55 + Math.random() * .4); c.set([col.r, col.g, col.b], i * 3); }
-    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3)); g.setAttribute('color', new THREE.BufferAttribute(c, 3));
-    return g; })();
+  // небо з туманностями й зорями — спільне для обох 3D-сцен статті
+  const sky = makeSky(THREE, { spikes: 12, spikeSize: .45 }); scene.add(sky);   // у симуляції яскраві зорі менші — щоб не плутати з тілами
 
   // м'яке сяйво навколо зорі — спрайт із радіальним градієнтом
   const glowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
@@ -53,14 +49,9 @@ if (!renderer) {
     g.addColorStop(.45, 'rgba(255,255,255,.12)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(0, 0, 128, 128);
     return new THREE.CanvasTexture(c); })();
 
-  // зорі неба — круглі м'які точки (та сама радіальна текстура), а не квадрати
-  const skyPts = new THREE.Points(sky, new THREE.PointsMaterial({ size: 2.4, sizeAttenuation: false, map: glowTex, vertexColors: true,
-    transparent: true, opacity: .75, depthWrite: false, blending: THREE.AdditiveBlending }));
-  scene.add(skyPts);
-
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), .8, .45, .12);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), .8, .45, .45);
   composer.addPass(bloom); composer.addPass(new OutputPass());
 
   let meshes = [], glows = [], trails = [], hist = [], R0 = 2;
@@ -68,7 +59,7 @@ if (!renderer) {
   function paint() {      // застосувати режим до всіх об'єктів
     const sp = S.space;
     scene.background = sp ? new THREE.Color('#04050a') : new THREE.Color(css('--paper') || '#FAFAFB');
-    grid.visible = !sp; skyPts.visible = sp;
+    grid.visible = !sp; sky.visible = sp;
     const ms = S.bodies.map((b) => b.m), order = ms.map((m, i) => i).sort((a, b) => ms[b] - ms[a]);
     S.bodies.forEach((b, i) => {
       const rank = Math.min(2, order.indexOf(i)), col = sp ? starColor(rank) : DRAW[i];
@@ -87,7 +78,7 @@ if (!renderer) {
     meshes = S.bodies.map((b) => { const r = .045 * Math.cbrt(b.m / mmax) + .03;
       const m = new THREE.Mesh(new THREE.SphereGeometry(r, 28, 18), new THREE.MeshBasicMaterial({ color: 0xffffff })); m.userData.r = r; scene.add(m); return m; });
     glows = S.bodies.map((b, i) => { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
-      s.scale.setScalar(meshes[i].userData.r * 6.5); scene.add(s); return s; });
+      s.scale.setScalar(meshes[i].userData.r * 5); scene.add(s); return s; });
     hist = S.bodies.map(() => []);
     trails = S.bodies.map(() => { const g = new THREE.BufferGeometry();
       g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3 * MAXTR), 3)); g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(3 * MAXTR), 3));
@@ -95,7 +86,7 @@ if (!renderer) {
     R0 = Math.max(1.4, ...S.bodies.map((b) => Math.hypot(b.p[0], b.p[1], b.p[2]))) * 1.5;
     frame(true); paint();
     document.querySelectorAll('#simPre button').forEach((b) => b.classList.toggle('on', b.dataset.p === preset));
-    document.querySelectorAll('.simnote').forEach((n) => n.hidden = n.dataset.p !== preset);
+    document.querySelectorAll('#sim-sec .simnote').forEach((n) => n.hidden = n.dataset.p !== preset);
   }
   // камера: 2D — згори, 3D — під кутом; масштаб тримає всю систему в кадрі
   function frame(hard) {

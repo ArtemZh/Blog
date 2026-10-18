@@ -196,3 +196,16 @@ ul.src29 li{margin:5px 0}
 .seg button{font:600 12.5px/1 var(--sans);padding:8px 12px;border:0;background:var(--ground);color:var(--ink-2);cursor:pointer}
 .seg button+button{border-left:1px solid var(--rule-2)}
 .seg button.on{background:var(--act);color:#fff}
+
+/* 05 точки Лагранжа в 3D */
+.lag3{position:relative;height:min(64vh,560px);min-height:360px;border-radius:var(--r-lg);overflow:hidden;background:#04050a}
+.lag3 canvas{display:block;width:100%;height:100%}
+.lag3__labels{position:absolute;inset:0;touch-action:none}
+.lag3__lbl{font:600 11.5px/1 var(--mono);padding:4px 7px;border-radius:5px;border:1px solid rgba(255,255,255,.25);background:rgba(4,5,10,.6);color:#fff;cursor:pointer;white-space:nowrap}
+.lag3__lbl.is-pt{border-color:rgba(234,82,18,.8);color:#ffd6c2}
+.lag3__lbl.is-pt.on{background:var(--act);color:#fff}
+.lag3__lbl.is-body{cursor:default;border-color:transparent;background:none;color:rgba(255,255,255,.75);font-weight:500}
+.lag3__lbl.is-craft{border-color:rgba(159,196,255,.5);color:#cfe0ff;font-weight:500}
+.lag3 .fail{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aab;padding:24px;text-align:center}
+#lagCard .k{font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:6px}
+#lagCard p{margin:0 0 8px;font-size:13.5px}
