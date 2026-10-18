@@ -7,9 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20261018201252">
-<link rel="stylesheet" href="shared/style.css?v=20261018201252">
-<link rel="stylesheet" href="shared/threebody.css?v=20261018201252">
+<link rel="stylesheet" href="shared/tokens.css?v=20261018203036">
+<link rel="stylesheet" href="shared/style.css?v=20261018203036">
+<link rel="stylesheet" href="shared/threebody.css?v=20261018203036">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
@@ -26,12 +26,21 @@
 </header>
 
 <main class="main" id="top">
-  <header class="mast wrap">
-    <div class="kicker">Стаття · фізика й математика · чернетка</div>
-    <h1>Задача трьох тіл</h1>
-    <p class="lede"><b>Коли гравітація грає в хаос.</b> Якщо два небесні тіла завзято притягують одне одного, їхній танець цілком передбачуваний — ще 1687 року Ньютон розклав усе по поличках своїми формулами. Але варто запросити до цієї компанії третє тіло, як математична ідилія миттєво руйнується. У цій статті ми розберемося, чому так відбувається, що вченим усе ж вдалося відшукати за три століття і як космічним апаратам вдається жити в цьому гравітаційному хаосі. До речі, орбіти на цій сторінці ніхто не малював вручну — вони розраховуються прямо у вашому браузері за законом всесвітнього тяжіння.</p>
-    <figure class="cover"><img src="assets/threebody/hero.jpg" alt="Три зорі з переплетеними орбітами — ілюстрація" width="1600" height="900"><figcaption>Ілюстрацію згенеровано ChatGPT. Справжні орбіти — у симуляції нижче.</figcaption></figure>
+  <header class="hero3">
+    <img class="hero3__img" src="assets/threebody/banner.jpg" alt="Дві зорі й планета: велика біло-помаранчева зоря, червона зоря на її тлі й темний силует планети" width="1916" height="821">
+    <svg class="hero3__orb" viewBox="0 0 1916 821" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <ellipse cx="1560" cy="430" rx="860" ry="250" transform="rotate(-9 1560 430)"/>
+      <ellipse cx="1560" cy="430" rx="1110" ry="330" transform="rotate(-5 1560 430)"/>
+      <ellipse class="acc" cx="1560" cy="430" rx="1330" ry="410" transform="rotate(-12 1560 430)"/>
+    </svg>
+    <div class="hero3__txt">
+      <div class="hero3__kick">Стаття · фізика й математика · чернетка</div>
+      <h1>Задача трьох тіл</h1>
+      <p class="hero3__sub">Коли гравітація грає в хаос</p>
+    </div>
+    <span class="hero3__cap">Ілюстрацію згенеровано ChatGPT</span>
   </header>
+  <div class="wrap"><p class="lede lede3">Якщо два небесні тіла завзято притягують одне одного, їхній танець цілком передбачуваний — ще 1687 року Ньютон розклав усе по поличках своїми формулами. Але варто запросити до цієї компанії третє тіло, як математична ідилія миттєво руйнується. У цій статті ми розберемося, чому так відбувається, що вченим усе ж вдалося відшукати за три століття і як космічним апаратам вдається жити в цьому гравітаційному хаосі. До речі, орбіти на цій сторінці ніхто не малював вручну — вони розраховуються прямо у вашому браузері за законом всесвітнього тяжіння.</p></div>
 
   <div class="wrap">
 
@@ -46,6 +55,8 @@
   <section class="sec" id="sim-sec">
     <h2><span class="num">02</span>Симуляція</h2>
     <p>Оберіть сценарій до душі. Тіла тут рухаються згідно із законом всесвітнього тяжіння в умовних одиницях, де маси й гравітаційна стала підібрані як зручні числа. Лічильник під сценою показує зміну повної енергії системи: в ідеалі вона має залишатися сталою, тож будь-які коливання сигналізують про похибку обчислень. Якщо цей показник стрімко зростає, довіряти симуляції вже не варто.</p>
+    <div class="ctl" style="margin-bottom:0"><span class="seg" id="simMode" role="group" aria-label="Вигляд"><button type="button" data-m="space" class="on">Космос</button><button type="button" data-m="draw">Креслення</button></span>
+      <span class="chint">«Космос» — як виглядало б у небі; «Креслення» — чисті орбіти на світлому тлі.</span></div>
     <div class="chips" id="simPre">
       <button type="button" class="chipbtn" data-p="fig8">Вісімка</button>
       <button type="button" class="chipbtn" data-p="lagrange">Трикутник Лагранжа</button>
@@ -61,7 +72,7 @@
         <div class="ctl">
           <button type="button" class="chipbtn" id="simPlay">❚❚ пауза</button>
           <button type="button" class="chipbtn" id="simRe">↺ з початку</button>
-          <button type="button" class="chipbtn" id="simDim">під кутом (3D)</button>
+          <button type="button" class="chipbtn" id="simDim">вид згори (2D)</button>
           <label>Швидкість <input type="range" id="simSpeed" min="0.25" max="4" step="0.25" value="1"><output id="simSpeedO">×1</output></label>
           <label>Слід <input type="range" id="simTrail" min="50" max="1300" step="50" value="700"></label>
         </div>
@@ -73,8 +84,7 @@
         <div class="simnote" data-p="pyth" hidden><b>Піфагорова задача.</b> Тіла з масами 3, 4 та 5 спочатку нерухомо стоять у вершинах прямокутного трикутника зі сторонами 3, 4 і 5. Задачу поставили 1893 року, Карл Буррау досліджував її 1913-го, а 1967 року Віктор Себехей і Кеннет Пітерс чисельно показали фінал цієї драми: після тривалого хаотичного танцю найлегше тіло вилітає геть, а два важчі парою відлітають у протилежний бік.</div>
         <div class="simnote" data-p="hier" hidden><b>Зоря, планета й супутник.</b> Якщо одне тіло набагато масивніше за інші, а третє обертається близько до другого, система поводиться майже як дві окремі пари. Саме так живуть Сонце, Земля та Місяць, і тому їхній рух передбачуваний на тисячоліття вперед.</div>
         <div class="simnote" data-p="random" hidden><b>Випадковий старт.</b> Розмістимо три однакові тіла в довільних точках. Найчастіше фінал виявиться типовим: двоє утворюють тісну пару, а третє викидається геть.</div>
-        <div class="simleg"><span><i style="background:var(--ink)"></i>тіло 1</span><span><i style="background:var(--c-blue)"></i>тіло 2</span><span><i style="background:var(--c-teal)"></i>тіло 3</span></div>
-        <p class="chint" style="margin-top:8px">У режимі 3D сцену можна обертати мишею, колесо — масштаб.</p>
+        <p class="chint" style="margin-top:10px">Колір у «Космосі» — як у справжніх зір: найважче тіло біло-блакитне, найлегше червоне. У «Кресленні» кольори лише розрізняють тіла. Сцену можна обертати мишею, колесо — масштаб.</p>
       </div>
     </div>
     <p class="trap"><b>Пастка.</b> Сліпо вірити симуляції без запобіжників. У моменти найтісніших зближень тіла стрімко розганяються, і грубий крок обчислень дає хибний результат. Тому тут крок часу автоматично зменшується, коли тіла близько, а похибка енергії завжди перед очима.</p>
@@ -226,9 +236,9 @@ window.COMP_DATA = {
   }
 };
 </script>
-<script src="shared/nav.js?v=20261018201252"></script>
-<script src="shared/comp.js?v=20261018201252"></script>
-<script src="shared/threebody.js?v=20261018201252"></script>
-<script type="module" src="shared/threebody-3d.js?v=20261018201252"></script>
+<script src="shared/nav.js?v=20261018203036"></script>
+<script src="shared/comp.js?v=20261018203036"></script>
+<script src="shared/threebody.js?v=20261018203036"></script>
+<script type="module" src="shared/threebody-3d.js?v=20261018203036"></script>
 </body>
 </html>

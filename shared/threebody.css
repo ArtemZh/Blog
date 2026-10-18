@@ -163,3 +163,36 @@ ul.src29 li{margin:5px 0}
 .hist li:first-child .d::before{top:9px}.hist li:last-child .d::before{bottom:auto;height:16px}
 .hist .d::after{content:"";position:absolute;left:3px;top:5px;width:11px;height:11px;border-radius:50%;background:var(--ground);border:2px solid var(--ink)}
 .hist p{margin:0;font-size:14px;max-width:80ch}
+
+/* банер */
+.hero3{position:relative;margin:calc(-1 * var(--sp-xl)) calc(-1 * var(--sp-lg)) var(--sp-md);background:#04050a;overflow:hidden;
+  height:clamp(340px,40vw,560px)}
+.hero3__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center}
+.hero3::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,5,10,.55) 0%,rgba(4,5,10,.15) 45%,rgba(4,5,10,0) 60%);pointer-events:none}
+.hero3__orb{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.hero3__orb ellipse{fill:none;stroke:rgba(255,255,255,.28);stroke-width:1.4;stroke-dasharray:6 7;vector-effect:non-scaling-stroke}
+.hero3__orb ellipse.acc{stroke:rgba(234,82,18,.75);stroke-dasharray:none;stroke-width:1.6}
+@media (prefers-reduced-motion:no-preference){
+  .hero3__orb ellipse{animation:orbIn 2.4s ease-out both}
+  .hero3__orb ellipse:nth-child(2){animation-delay:.35s}.hero3__orb ellipse:nth-child(3){animation-delay:.7s}
+}
+@keyframes orbIn{from{opacity:0}to{opacity:1}}
+.hero3__txt{position:absolute;z-index:2;left:clamp(20px,5vw,72px);top:50%;transform:translateY(-50%);max-width:46%}
+.hero3__kick{font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:16px}
+.hero3 h1{color:#fff;font-size:clamp(36px,5.2vw,72px);line-height:1.02;letter-spacing:-.035em;margin:0 0 14px;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.hero3__sub{color:var(--act);font-size:clamp(16px,1.6vw,22px);font-weight:600;margin:0;max-width:none}
+.hero3__cap{position:absolute;z-index:2;right:14px;bottom:10px;font-size:11px;color:rgba(255,255,255,.55)}
+.lede3{margin-top:var(--sp-sm)}
+@media (max-width:760px){
+  .hero3{margin:calc(-1 * var(--sp-md)) calc(-1 * var(--sp-md)) var(--sp-md);height:420px}
+  .hero3__img{object-position:78% center}
+  .hero3::after{background:linear-gradient(0deg,rgba(4,5,10,.85) 0%,rgba(4,5,10,.2) 55%,rgba(4,5,10,0) 70%)}
+  .hero3__txt{top:auto;bottom:34px;transform:none;max-width:none;right:20px}
+}
+
+/* космічний режим симуляції */
+.sim.is-space{background:#04050a;border-color:#04050a}
+.seg{display:inline-flex;border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden}
+.seg button{font:600 12.5px/1 var(--sans);padding:8px 12px;border:0;background:var(--ground);color:var(--ink-2);cursor:pointer}
+.seg button+button{border-left:1px solid var(--rule-2)}
+.seg button.on{background:var(--act);color:#fff}
