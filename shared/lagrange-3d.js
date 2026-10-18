@@ -10,7 +10,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { makeSky } from './space-bg.js?v=20261018210516';
+import { makeSky } from './space-bg.js?v=20261018210821';
 
 const box = document.getElementById('lag3'), card = document.getElementById('lagCard'), cap = document.getElementById('lagScale');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -21,7 +21,7 @@ const SYS = {
   se: { name: 'Сонце — Земля', mu: 3.003e-6, big: 'sun', small: 'earth', bigR: 1.5, smallR: .48, exag: 2.6,
     craft: { L1: 'SOHO', L2: '«Джеймс Вебб»' },
     about: 'μ ≈ 3·10⁻⁶: Земля в 333 тисячі разів легша за Сонце. L1 і L2 лежать приблизно за 1,5 млн км від Землі — у сто разів ближче, ніж до Сонця.',
-    scale: 'Розміри тіл збільшено, а відстань від Землі до L1 і L2 на сцені — у кілька разів більша, ніж насправді, інакше точки сховались би за Землею.' },
+    scale: 'Розміри тіл збільшено, а відстані від Землі до L1, L2 і Місяця на сцені — у кілька разів більші, ніж насправді, інакше все злилося б із Землею. Насправді L1 і L2 приблизно вчетверо далі від Землі, ніж Місяць.' },
   em: { name: 'Земля — Місяць', mu: 0.0121505, big: 'earth', small: 'moon', bigR: .78, smallR: .22,
     craft: { L2: '«Цюецяо»' },
     about: 'μ ≈ 0,012: Місяць у 81 раз легший за Землю. L1 — приблизно за 326 тисяч км від Землі, за 58 тисяч км від Місяця.',
@@ -81,25 +81,29 @@ function init() {
         float act = smoothstep(-.1,.3, n3(p*2.2+3.));                                 // активні пояси
         float spot = smoothstep(.22,.48, n3(p*9.+vec3(uT*.01))) * act * smoothstep(.1,.4, n3(p*24.+7.)+.3);                 // групи плям
         float mu = max(dot(vN, vec3(0,0,1)),0.);
-        vec3 core = vec3(1.,.96,.88), edge = vec3(1.,.52,.18);
-        vec3 c = mix(edge, core, pow(mu,.4));                                         // потемніння й потепління до краю
+        vec3 core = vec3(1.,.93,.8), edge = vec3(.98,.45,.14);
+        vec3 c = mix(edge, core, pow(mu,.8));                                         // потемніння й потепління до краю
         c *= .93 + gran*.12;
         c = mix(c, vec3(.85,.30,.26), spot*.85);                                       // рожево-червоні плями
         gl_FragColor = vec4(c*.82, 1.); }` });
-  // ореол — площина, завжди повернута до камери; м'який, з легким «диханням» по краю
+  // ореол — площина, завжди повернута до камери. Струмені корони: добуток двох шарів шуму
+  // в «полярних» координатах (напрямок від центру × відстань від краю), що повільно течуть назовні;
+  // біля самого краю — гаряча смуга, далі м'яке світіння, що згасає.
   const coronaMat = new THREE.ShaderMaterial({ uniforms: { uT: { value: 0 } }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     vertexShader: 'varying vec2 vU; void main(){ vU = uv*2.-1.; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }',
     fragmentShader: `varying vec2 vU; uniform float uT;` + NOISE + `
-      void main(){ float r = length(vU); float a = atan(vU.y, vU.x);
-        float ragged = n3(vec3(cos(a)*3., sin(a)*3., uT*.15))*.05;                     // нерівний край
-        float d = max(r - .5 - ragged, 0.);   // край диска — на половині площини (площина = 4 радіуси)
-        float glow = exp(-d*10.)*.5 + exp(-d*3.2)*.16;
-        // язики й петлі плазми по краю диска — дрібні, як на ілюстраціях
-        float fl = n3(vec3(cos(a)*22., sin(a)*22., uT*.25 + d*30.));
-        float flames = smoothstep(.15,.6, fl) * exp(-d*26.) * smoothstep(.0,.012,d);
-        glow += flames*.9;
-        if (r < .5) glow = .0;
-        gl_FragColor = vec4(vec3(1.,.5,.17)*glow, glow); }` });
+      float fbm(vec3 p){ float s=0., a=.5; for(int k=0;k<5;k++){ s+=a*n3(p); p=p*2.03+vec3(1.7,9.2,3.1); a*=.5; } return s; }
+      void main(){ float r = length(vU); if (r < .4) { gl_FragColor = vec4(0.); return; }
+        vec2 dir = vU / r; float d = r - .4;                                          // площина = 5 радіусів, край диска на .4                                         // d: 0 на краю диска
+        float f1 = fbm(vec3(dir*3.2, d*5. - uT*.18)) * .5 + .5;
+        float f2 = fbm(vec3(dir*7.5 + 4., d*9. - uT*.32)) * .5 + .5;
+        float streak = pow(f1*f2, 2.6) * 6.;                                          // контрастні струмені
+        float fade = exp(-d*4.2);
+        float rim = exp(-d*55.) * .9;                                                  // гаряча смуга біля краю
+        float halo = exp(-d*4.) * .14;
+        vec3 col = mix(vec3(1.,.42,.12), vec3(1.,.78,.45), clamp(rim + streak*fade*.5, 0., 1.));
+        float a = clamp(streak*fade*1.1 + rim + halo, 0., 1.);
+        gl_FragColor = vec4(col*a, a); }` });
   // протуберанці: петлі плазми над поверхнею, по яких повільно тече світло
   const promMat = new THREE.ShaderMaterial({ uniforms: { uT: { value: 0 } }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
     vertexShader: 'varying vec2 vU; void main(){ vU = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }',
@@ -114,16 +118,7 @@ function init() {
   const ejTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
     const g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, 'rgba(255,170,90,.9)'); g.addColorStop(1, 'rgba(255,120,40,0)');
     x.fillStyle = g; x.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
-  // петля між двома точками поверхні, що вигинається назовні
-  function promLoop(r, R) {
-    const a = new THREE.Vector3(R() - .5, R() - .5, R() - .5).normalize();
-    const t = new THREE.Vector3(R() - .5, R() - .5, R() - .5).cross(a).normalize();
-    const span = .05 + R() * .1, h = r * (.06 + R() * .14);
-    const p0 = a.clone().applyAxisAngle(t, -span).multiplyScalar(r * .99), p1 = a.clone().applyAxisAngle(t, span).multiplyScalar(r * .99);
-    const top = a.clone().multiplyScalar(r + h * 1.6);
-    const curve = new THREE.CubicBezierCurve3(p0, p0.clone().lerp(top, .8), p1.clone().lerp(top, .8), p1);
-    return new THREE.Mesh(new THREE.TubeGeometry(curve, 48, r * (.025 + R() * .025), 8, false), promMat);
-  }
+
   const ringTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
     x.strokeStyle = 'rgba(234,82,18,1)'; x.lineWidth = 7; x.beginPath(); x.arc(64, 64, 46, 0, 7); x.stroke();
     x.fillStyle = 'rgba(234,82,18,1)'; x.beginPath(); x.arc(64, 64, 9, 0, 7); x.fill(); return new THREE.CanvasTexture(c); })();
@@ -132,10 +127,10 @@ function init() {
     const g = new THREE.Group();
     if (kind === 'sun') {
       g.add(new THREE.Mesh(new THREE.SphereGeometry(r, 96, 64), sunMat));
-      const cor = new THREE.Mesh(new THREE.PlaneGeometry(r * 4, r * 4), coronaMat); cor.userData.billboard = true; g.add(cor);
-      const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); s.scale.setScalar(r * 5.5); g.add(s);
+      const cor = new THREE.Mesh(new THREE.PlaneGeometry(r * 5, r * 5), coronaMat); cor.userData.billboard = true; g.add(cor);
+      const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); s.scale.setScalar(r * 4.5); g.add(s);
       let q = 4242; const R = () => ((q = (q * 1664525 + 1013904223) >>> 0) / 4294967296);
-      const proms = new THREE.Group(); for (let k = 0; k < 10; k++) proms.add(promLoop(r, R)); g.add(proms);
+      const proms = new THREE.Group(); g.add(proms);   // петлі-трубки виглядали штучно — полум'я дає корона
       g.userData.sun = { r, proms, cor, ej: [] };
       const L = new THREE.PointLight(0xfff1dc, 3.2, 0, 0); g.add(L); g.userData.light = L;
     } else if (kind === 'earth') {
@@ -168,7 +163,14 @@ function init() {
     const xBig = -mu * D, xSmall = (1 - mu) * D;
     const big = body(cfg.big, cfg.bigR); big.position.set(xBig, 0, 0); world.add(big);
     const small = body(cfg.small, cfg.smallR); small.position.set(xSmall, 0, 0); world.add(small);
-    S.spin = [big, small];
+    S.spin = [big, small]; S.moon = null;
+    if (S.sys === 'se') {                 // Місяць навколо Землі: розмір і відстань збільшено, як і все на цій сцені
+      const m = body('moon', .14); world.add(m);
+      const ring = new THREE.BufferGeometry().setFromPoints(Array.from({ length: 129 }, (_, i) => { const a = i / 128 * Math.PI * 2; return new THREE.Vector3(xSmall + Math.cos(a) * 1.05, Math.sin(a) * 1.05, 0); }));
+      world.add(new THREE.Line(ring, new THREE.LineBasicMaterial({ color: 0x8a90a0, transparent: true, opacity: .3 })));
+      const ml = label('Місяць', 'is-body'); world.add(ml);
+      S.moon = { m, ml, cx: xSmall, R: 1.05 };
+    }
     if (cfg.big !== 'sun') {            // без Сонця в кадрі — світло здалеку
       const dl = new THREE.DirectionalLight(0xfff1dc, 2.6); dl.position.set(-30, 18, 6); world.add(dl);
     }
@@ -279,6 +281,7 @@ function init() {
       world.traverse((o) => { if (o.userData.billboard) o.quaternion.copy(camera.quaternion).premultiply(o.parent.getWorldQuaternion(new THREE.Quaternion()).invert()); });
       sunFx(dt);
       if (!reduce) S.spin.forEach((g, i) => { g.children[0].rotation.y += dt * (i ? .25 : .05); if (g.children[1] && g.children[1].material && g.children[1].material.alphaMap) g.children[1].rotation.y += dt * .3; });   // другий шар обертається лише в Землі — це хмари
+      if (S.moon) { const a = S.t * .35; S.moon.m.position.set(S.moon.cx + Math.cos(a) * S.moon.R, Math.sin(a) * S.moon.R, 0); S.moon.ml.position.copy(S.moon.m.position).add(new THREE.Vector3(0, 0, -.42)); }
       S.crafts.forEach((c) => { const t = S.t * .6 + c.ph; c.dot.position.set(c.c.x, c.c.y + c.a * Math.cos(t), c.c.z + c.b * Math.sin(t)); c.lb.position.copy(c.dot.position).add(new THREE.Vector3(0, 0, .35)); });
       if (S.troj && !reduce) { for (let k = 0; k < 4; k++) trojStep(.02); }
       trojDraw();
@@ -300,6 +303,7 @@ function init() {
   // стан з адреси — для знімків і посилань: ?lag=sj
   const q = new URLSearchParams(location.search);
   if (SYS[q.get('lag')]) S.sys = q.get('lag');
-  resize(); frame(); build(); requestAnimationFrame(loop);
+  const closeUp = q.get('lagcam') === 'sun';
+  resize(); frame(); build(); if (closeUp) { camera.position.set(-SYS[S.sys].mu * D - 1, -5.2, 1.4); controls.target.set(-SYS[S.sys].mu * D, 0, 0); } requestAnimationFrame(loop);
   window.LAG3 = { ok: true, S, build, scene, trojStep };
 }
