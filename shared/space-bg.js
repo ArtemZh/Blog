@@ -7,10 +7,10 @@ export function makeSky(THREE, opts = {}) {
   /* ── туманності: сфера зсередини, колір рахується з напрямку погляду ── */
   const neb = new THREE.Mesh(new THREE.SphereGeometry(R, 64, 32), new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite: false,
-    uniforms: { uSeed: { value: opts.seed || 3.7 }, uAmt: { value: opts.amount ?? 1 } },
+    uniforms: { uSeed: { value: opts.seed || 3.7 }, uAmt: { value: opts.amount ?? 1 }, uCore: { value: opts.core ?? 1 } },
     vertexShader: 'varying vec3 vDir; void main(){ vDir = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
     fragmentShader: `
-      varying vec3 vDir; uniform float uSeed; uniform float uAmt;
+      varying vec3 vDir; uniform float uSeed; uniform float uAmt; uniform float uCore;
       vec3 hash3(vec3 p){ p = fract(p*vec3(.1031,.1030,.0973)); p += dot(p, p.yxz+33.33); return fract((p.xxy+p.yxx)*p.zyx)*2.-1.; }
       float noise(vec3 p){ vec3 i=floor(p), f=fract(p); vec3 u=f*f*(3.-2.*f);
         return mix(mix(mix(dot(hash3(i),f), dot(hash3(i+vec3(1,0,0)),f-vec3(1,0,0)),u.x),
@@ -22,14 +22,14 @@ export function makeSky(THREE, opts = {}) {
         vec3 d = vDir + uSeed;
         float band = exp(-pow(dot(vDir, normalize(vec3(.35,.25,.9))), 2.) * 3.2);   // «молочний шлях» — смуга через небо
         float c = fbm(d*1.6), c2 = fbm(d*3.1 + 7.);
-        float blue = smoothstep(.0, .55, c) * (.35 + .65*band);
+        float blue = smoothstep(.0, .55, c) * (.35 + .65*band) * mix(.75, 1., uCore);
         float dust = pow(smoothstep(.15, .6, c2), 2.) * band;
         float dark = smoothstep(.1, .45, fbm(d*4.3 - 3.)) * band;                 // темні пилові прожилки
         // насичений синій і вищий контраст: темне тло темніше, ядра хмар яскравіші
         blue = smoothstep(.08, .9, blue);
         vec3 col = vec3(.003,.004,.012);
         col += vec3(.05,.12,.62) * pow(blue, 1.35) * .95;
-        col += vec3(.22,.42,1.0) * pow(blue, 3.5) * .65;
+        col += vec3(.22,.42,1.0) * pow(blue, 3.5) * .65 * uCore;            // яскраві ядра хмар (у симуляції вимкнені)
         col += vec3(.32,.10,.42) * pow(blue, 2.2) * .22;
         col += vec3(.60,.25,.06) * dust * .34;
         col *= 1. - dark * .72;

@@ -10,8 +10,8 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { makeSky } from './space-bg.js?v=20261018211741';
-import { makeStar, STAR_TINTS } from './sun-fx.js?v=20261018211741';
+import { makeSky } from './space-bg.js?v=20261018212108';
+import { makeStar, STAR_TINTS } from './sun-fx.js?v=20261018212108';
 
 const TB = window.TB;
 const $ = (id) => document.getElementById(id);
@@ -38,12 +38,32 @@ if (!renderer) {
   // у космосі тіла — справжні зорі: поверхня з плямами й корона; колір за масою, як у зір головної послідовності
   const TINT = [STAR_TINTS.hot, STAR_TINTS.sun, STAR_TINTS.red];
   const starColor = (rank) => new THREE.Color(...TINT[rank].c2);
+  // «Зоря, планета, супутник» — це Сонце, Земля й Місяць: показуємо саме їх, з текстурами
+  const SEM_TRAIL = ['#ffd9a0', '#6fa8ff', '#b8bcc6'].map((c) => new THREE.Color(c));
+  const texL = new THREE.TextureLoader(), texCache = {};
+  const tex = (n) => texCache[n] || (texCache[n] = texL.load('assets/threebody/tex/' + n + '.jpg', (t) => { t.colorSpace = THREE.SRGBColorSpace; }));
+  function planet(kind, r) {
+    const g = new THREE.Group();
+    const m = new THREE.Mesh(new THREE.SphereGeometry(r, 48, 32), new THREE.MeshPhongMaterial(kind === 'earth'
+      ? { map: tex('earth_daymap'), shininess: 12, specular: 0x223344 } : { map: tex('moon'), shininess: 2, specular: 0x000000 }));
+    m.rotation.x = Math.PI / 2; g.add(m);           // полюси — поперек площини орбіт
+    if (kind === 'earth') { const a = new THREE.Sprite(new THREE.SpriteMaterial({ map: haloTex, color: 0x6fa8ff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .3 }));
+      a.scale.setScalar(r * 2.5); g.add(a); }
+    g.userData.update = (t) => { m.rotation.y = t * (kind === 'earth' ? .5 : .05); };
+    g.userData.dispose = () => g.traverse((o) => { o.geometry?.dispose(); o.material?.dispose(); });
+    return g;
+  }
+  const haloTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+    const gr = x.createRadialGradient(32, 32, 10, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,.5)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = gr; x.fillRect(0, 0, 64, 64);
+    return new THREE.CanvasTexture(c); })();
+  const isSEM = () => S.preset === 'hier';
 
   const grid = new THREE.GridHelper(8, 16, new THREE.Color(css('--rule-2') || '#C6CAD3'), new THREE.Color(css('--rule') || '#E3E5EA'));
   grid.rotation.x = Math.PI / 2; scene.add(grid);
+  scene.add(new THREE.AmbientLight(0xffffff, .06));      // нічний бік планет — ледь видно
 
   // небо з туманностями й зорями — спільне для обох 3D-сцен статті
-  const sky = makeSky(THREE, { spikes: 12, spikeSize: .45 }); scene.add(sky);   // у симуляції яскраві зорі менші — щоб не плутати з тілами
+  const sky = makeSky(THREE, { spikes: 12, spikeSize: .45, core: 0, amount: .8 }); scene.add(sky);   // у симуляції яскраві зорі менші й без засвічених ядер туманності — щоб не відволікали від тіл
 
 
   const composer = new EffectComposer(renderer);
@@ -59,7 +79,7 @@ if (!renderer) {
     grid.visible = !sp; sky.visible = sp;
     const ms = S.bodies.map((b) => b.m), order = ms.map((m, i) => i).sort((a, b) => ms[b] - ms[a]);
     S.bodies.forEach((b, i) => {
-      const rank = Math.min(2, order.indexOf(i)), col = sp ? starColor(rank) : DRAW[i];
+      const rank = Math.min(2, order.indexOf(i)), col = sp ? (isSEM() ? SEM_TRAIL[rank] : starColor(rank)) : DRAW[i];
       meshes[i].material.color.copy(col); meshes[i].visible = !sp;
       stars[i].visible = sp;
       trails[i].material.blending = sp ? THREE.AdditiveBlending : THREE.NormalBlending; trails[i].userData.col = col.clone();
@@ -76,7 +96,13 @@ if (!renderer) {
       const m = new THREE.Mesh(new THREE.SphereGeometry(r, 28, 18), new THREE.MeshBasicMaterial({ color: 0xffffff })); m.userData.r = r; scene.add(m); return m; });
     // зорі більші за кульки креслення, щоб було видно поверхню; колір — за місцем у ряду мас
     const ms = S.bodies.map((b) => b.m), order = ms.map((m, i) => i).sort((a, b) => ms[b] - ms[a]);
-    stars = S.bodies.map((b, i) => { const s = makeStar(THREE, .09 * Math.cbrt(b.m / mmax) + .05, TINT[Math.min(2, order.indexOf(i))], i + 1); scene.add(s); return s; });
+    stars = S.bodies.map((b, i) => { const rank = Math.min(2, order.indexOf(i));
+      let s;
+      if (isSEM()) {        // розміри умовні: Місяць мусить поміститися на своїй орбіті (0,06 від Землі)
+        if (rank === 0) { s = makeStar(THREE, .1, STAR_TINTS.sun, 2); const l = new THREE.PointLight(0xfff1dc, 3, 0, 0); s.add(l); }
+        else s = planet(rank === 1 ? 'earth' : 'moon', rank === 1 ? .042 : .014);
+      } else s = makeStar(THREE, .09 * Math.cbrt(b.m / mmax) + .05, TINT[rank], i + 1);
+      scene.add(s); return s; });
     hist = S.bodies.map(() => []);
     trails = S.bodies.map(() => { const g = new THREE.BufferGeometry();
       g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3 * MAXTR), 3)); g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(3 * MAXTR), 3));
@@ -137,5 +163,5 @@ if (!renderer) {
   const tr = $('simTrail'); tr.addEventListener('input', () => { S.trail = +tr.value; });
   $('simPlay').textContent = S.run ? '❚❚ пауза' : '▶ рух';
   resize(); load('fig8'); requestAnimationFrame(loop);
-  window.TB3 = { ok: true, S, load, tick, paint };
+  window.TB3 = { ok: true, S, load, tick, paint, camera, controls, stars: () => stars };
 }

@@ -10,7 +10,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { makeSky } from './space-bg.js?v=20261018211741';
+import { makeSky } from './space-bg.js?v=20261018212108';
 
 const box = document.getElementById('lag3'), card = document.getElementById('lagCard'), cap = document.getElementById('lagScale');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
