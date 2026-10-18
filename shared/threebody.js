@@ -155,6 +155,7 @@
     };
     const dpr = Math.min(2, devicePixelRatio || 1);
     function draw() {
+      if (!cv.clientWidth) return;                    // карта схована (вигляд 3D) — намалюємо, коли відкриють
       const w = cv.clientWidth, h = Math.round(w * .62); cv.width = w * dpr; cv.height = h * dpr; cv.style.height = h + 'px';
       const x = cv.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0);
       const mu = st.mu, S = Math.min(w / 3.4, h / 2.4), cx = w / 2, cy = h / 2;
@@ -173,6 +174,7 @@
       }
       x.putImageData(img, 0, 0); x.setTransform(dpr, 0, 0, dpr, 0, 0);
       const P = (X, Y) => [cx + X * S, cy - Y * S];
+      st.geom = { w, h, S, cx, cy };
       [[-mu, 1 - mu, 9], [1 - mu, mu, 5]].forEach(([X, m, r], i) => { const [a, b] = P(X, 0); x.fillStyle = css('--ink'); x.beginPath(); x.arc(a, b, i ? 4 + 4 * Math.sqrt(m) : r, 0, 7); x.fill(); });
       x.font = '600 12px "Roboto Mono", monospace'; x.textAlign = 'center';
       st.pts = pts.map((p) => { const [a, b] = P(p.x, p.y); x.fillStyle = css('--act'); x.beginPath(); x.arc(a, b, 5, 0, 7); x.fill();
@@ -191,7 +193,22 @@
       tip.style.display = 'block'; tip.innerHTML = `<b>${p.id}</b> — ${NOTE[p.id]}`; tip.style.left = Math.min(r.width - 140, Math.max(140, p.sx)) + 'px'; tip.style.top = p.sy + 'px'; });
     cv.addEventListener('mouseleave', () => (tip.style.display = 'none'));
     draw(); let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(draw, 150); });
-    window.TB.lag = { st, points, phi, NOTE };
+    // маленька статична карта для кута 3D-сцени: той самий рельєф, без підписів
+    function mini(c, mu) {
+      const w = c.clientWidth || 220, h = c.clientHeight || 140; c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+      const x = c.getContext('2d'), img = x.createImageData(c.width, c.height), Dd = img.data, pts = points(mu);
+      const S2 = Math.min(w / 3.4, h / 2.4), cx = w / 2, cy = h / 2;
+      const lowC = phi(pts[0].x, 0, mu) - .45, hiC = phi(pts[3].x, pts[3].y, mu) + .015, ink = [21, 24, 29], paper = [250, 250, 251];
+      for (let py = 0; py < img.height; py++) for (let px = 0; px < img.width; px++) {
+        const X = (px / dpr - cx) / S2, Y = -(py / dpr - cy) / S2;
+        const f = (Math.max(lowC, Math.min(hiC, phi(X, Y, mu))) - lowC) / (hiC - lowC), t = .5 + .5 * Math.floor(f * 12) / 12, i = (py * img.width + px) * 4;
+        for (let k = 0; k < 3; k++) Dd[i + k] = Math.round(paper[k] * t + ink[k] * (1 - t)); Dd[i + 3] = 255; }
+      x.putImageData(img, 0, 0); x.setTransform(dpr, 0, 0, dpr, 0, 0);
+      x.fillStyle = css('--ink'); [[-mu, 4], [1 - mu, 2.5]].forEach(([X, r]) => { x.beginPath(); x.arc(cx + X * S2, cy, r, 0, 7); x.fill(); });
+      x.fillStyle = css('--act'); pts.forEach((p) => { x.beginPath(); x.arc(cx + p.x * S2, cy - p.y * S2, 2.6, 0, 7); x.fill(); });
+    }
+    function setMu(mu) { st.mu = mu; sl.value = Math.round((Math.log10(mu) + 4) / Math.log10(0.5 / 1e-4) * 100); draw(); }
+    window.TB.lag = { st, points, phi, NOTE, mini, setMu, draw };
   })();
 
   /* ── зміст у шапці ───────────────────────────────────────────── */

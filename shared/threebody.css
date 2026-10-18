@@ -209,3 +209,14 @@ ul.src29 li{margin:5px 0}
 .lag3 .fail{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aab;padding:24px;text-align:center}
 #lagCard .k{font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:6px}
 #lagCard p{margin:0 0 8px;font-size:13.5px}
+.lag-live{position:absolute;left:0;top:0;width:100%;pointer-events:none;border-radius:var(--r-lg)}
+.lag-livebar{margin-top:8px}
+.lag-minibtn{position:absolute;z-index:3;right:12px;bottom:12px;padding:0;border:1px solid rgba(255,255,255,.35);border-radius:8px;overflow:hidden;cursor:pointer;background:none;display:block}
+.lag-minibtn:hover{border-color:var(--act)}
+.lag-mini{display:block;width:200px;height:126px}
+.lag-minibtn span{position:absolute;left:6px;top:5px;font:600 9.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+@media(max-width:620px){.lag-mini{width:130px;height:82px}}
+.lag3 .lag-mini{width:200px;height:126px}
+.lag3__labels{z-index:2}
+.lag-minibtn{z-index:5}
+@media(max-width:620px){.lag3 .lag-mini{width:130px;height:82px}}

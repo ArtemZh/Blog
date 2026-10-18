@@ -7,9 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20261018205354">
-<link rel="stylesheet" href="shared/style.css?v=20261018205354">
-<link rel="stylesheet" href="shared/threebody.css?v=20261018205354">
+<link rel="stylesheet" href="shared/tokens.css?v=20261018210516">
+<link rel="stylesheet" href="shared/style.css?v=20261018210516">
+<link rel="stylesheet" href="shared/threebody.css?v=20261018210516">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
@@ -115,22 +115,22 @@
     <p>Карта показує «рельєф» ефективного потенціалу в системі, що обертається. L1, L2 і L3 — це перевали між ямами, L4 і L5 — вершини. Дивно, але саме вершини стійкі: тіло, що з них зісковзує, сила Коріоліса заводить на петлю навколо точки. Посуньте повзунок співвідношення мас і подивіться, як точки зсуваються; наведіть на точку, щоб прочитати, що там відбувається.</p>
     <div class="ctl">
       <span class="seg" id="lgSys" role="group" aria-label="Система"><button type="button" data-s="se" class="on">Сонце — Земля</button><button type="button" data-s="em">Земля — Місяць</button><button type="button" data-s="sj">Сонце — Юпітер</button></span>
+      <span class="seg" id="lgView" role="group" aria-label="Вигляд"><button type="button" data-v="3d" class="on">3D</button><button type="button" data-v="2d">Карта зверху</button></span>
     </div>
     <div class="simw">
-      <div><div class="lag3" id="lag3"></div><p class="chint" id="lagScale" style="margin-top:6px"></p></div>
+      <div>
+        <div class="lag3" id="lag3"><button type="button" class="lag-minibtn" id="lagMiniBtn" title="Відкрити карту зверху"><canvas id="lagMini" class="lag-mini"></canvas><span>карта зверху</span></button></div>
+        <div class="lagmap" id="lagMap" hidden>
+          <div class="ctl" style="margin-top:0"><label>Частка меншого тіла μ <input type="range" id="lagSl" min="0" max="100" value="58"><output id="lagMu"></output></label><span class="chint" id="lagStab"></span></div>
+          <div id="lagPre" hidden></div>
+          <div class="lagw"><canvas id="lag" role="img" aria-label="Ефективний потенціал і точки Лагранжа"></canvas><div class="tipx" id="lagTip"></div></div>
+          <p class="chint" style="margin-top:6px">Світле кільце — «хребет», на якому лежать L4 і L5. Темне — ями навколо двох тіл і схил назовні, куди в системі, що обертається, тіло зісковзує. Смуги — лінії однакового рівня. Повзунком можна змінити співвідношення мас і побачити, як зсуваються точки.</p>
+        </div>
+        <p class="chint" id="lagScale" style="margin-top:6px"></p>
+      </div>
       <div class="simside"><div class="simnote" id="lagCard"></div>
-        <p class="chint" style="margin-top:10px">Сцену можна обертати мишею, колесо — масштаб. Карта зверху нижче показує те саме як рельєф потенціалу.</p></div>
+        <p class="chint" style="margin-top:10px">Сцену можна обертати мишею, колесо — масштаб. У куті — та сама система на карті зверху; клік відкриває її великою.</p></div>
     </div>
-    <h3>Карта зверху: рельєф потенціалу</h3>
-    <div class="ctl" id="lagPre">
-      <button type="button" class="chipbtn" data-mu="0.000954">Сонце — Юпітер</button>
-      <button type="button" class="chipbtn" data-mu="0.0121505">Земля — Місяць</button>
-      <button type="button" class="chipbtn" data-mu="0.2">μ = 0,2</button>
-      <label>Частка меншого тіла μ <input type="range" id="lagSl" min="0" max="100" value="58"><output id="lagMu"></output></label>
-      <span class="chint" id="lagStab"></span>
-    </div>
-    <div class="lagw"><canvas id="lag" role="img" aria-label="Ефективний потенціал і точки Лагранжа"></canvas><div class="tipx" id="lagTip"></div></div>
-    <p class="chint" style="margin-top:6px">Світле кільце — «хребет», на якому лежать L4 і L5. Темне — ями навколо двох тіл і схил назовні, куди в системі, що обертається, тіло зісковзує. Смуги — лінії однакового рівня. Більше тіло ліворуч, менше — праворуч.</p>
     <p>У системі Сонце — Земля точка L1 стала домівкою для сонячної обсерваторії SOHO, у точці L2 працює космічний телескоп «Джеймс Вебб» (а до 2025 року там працювала й обсерваторія Gaia). Тим часом у точках L4 та L5 орбіти Юпітера скупчилися тисячі астероїдів-троянців, дослідити які вирушила місія NASA Lucy.</p>
     <p class="trap"><b>Пастка.</b> Уявляти точку Лагранжа як нерухому крапку в космосі, де апарат просто зависає. Насправді вона обертається разом із системою, а апарати в L1 чи L2 літають навколо неї великими гало-орбітами.</p>
   </section>
@@ -245,10 +245,10 @@ window.COMP_DATA = {
   }
 };
 </script>
-<script src="shared/nav.js?v=20261018205354"></script>
-<script src="shared/comp.js?v=20261018205354"></script>
-<script src="shared/threebody.js?v=20261018205354"></script>
-<script type="module" src="shared/lagrange-3d.js?v=20261018205354"></script>
-<script type="module" src="shared/threebody-3d.js?v=20261018205354"></script>
+<script src="shared/nav.js?v=20261018210516"></script>
+<script src="shared/comp.js?v=20261018210516"></script>
+<script src="shared/threebody.js?v=20261018210516"></script>
+<script type="module" src="shared/lagrange-3d.js?v=20261018210516"></script>
+<script type="module" src="shared/threebody-3d.js?v=20261018210516"></script>
 </body>
 </html>
