@@ -10,8 +10,8 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { makeSky } from './space-bg.js?v=20261018212108';
-import { makeStar, STAR_TINTS } from './sun-fx.js?v=20261018212108';
+import { makeSky } from './space-bg.js?v=20261018213240';
+import { makeStar, STAR_TINTS } from './sun-fx.js?v=20261018213240';
 
 const TB = window.TB;
 const $ = (id) => document.getElementById(id);
@@ -38,6 +38,12 @@ if (!renderer) {
   // у космосі тіла — справжні зорі: поверхня з плямами й корона; колір за масою, як у зір головної послідовності
   const TINT = [STAR_TINTS.hot, STAR_TINTS.sun, STAR_TINTS.red];
   const starColor = (rank) => new THREE.Color(...TINT[rank].c2);
+  // тип зорі — за масою: однакові маси дають однакові зорі; різні — від біло-блакитної (найважча) до червоної (найлегша)
+  function tintIdx(ms) { const d = [...new Set(ms)].sort((a, b) => b - a);
+    return ms.map((m) => d.length === 1 ? 1 : m === d[0] ? 0 : m === d[d.length - 1] ? 2 : 1); }
+  // радіус зорі головної послідовності росте приблизно як m^0,8; тут м'якше, щоб легкі не зникали
+  const starR = (m, mmax) => .1 * Math.pow(m / mmax, .6) + .03;
+  const MOON_K = 3;       // «Сонце — Земля — Місяць»: відстань Місяця від Землі на сцені збільшено втричі, інакше він ховається в Землі
   // «Зоря, планета, супутник» — це Сонце, Земля й Місяць: показуємо саме їх, з текстурами
   const SEM_TRAIL = ['#ffd9a0', '#6fa8ff', '#b8bcc6'].map((c) => new THREE.Color(c));
   const texL = new THREE.TextureLoader(), texCache = {};
@@ -60,7 +66,7 @@ if (!renderer) {
 
   const grid = new THREE.GridHelper(8, 16, new THREE.Color(css('--rule-2') || '#C6CAD3'), new THREE.Color(css('--rule') || '#E3E5EA'));
   grid.rotation.x = Math.PI / 2; scene.add(grid);
-  scene.add(new THREE.AmbientLight(0xffffff, .06));      // нічний бік планет — ледь видно
+  scene.add(new THREE.AmbientLight(0xffffff, .16));      // нічний бік планет — ледь видно
 
   // небо з туманностями й зорями — спільне для обох 3D-сцен статті
   const sky = makeSky(THREE, { spikes: 12, spikeSize: .45, core: 0, amount: .8 }); scene.add(sky);   // у симуляції яскраві зорі менші й без засвічених ядер туманності — щоб не відволікали від тіл
@@ -77,9 +83,9 @@ if (!renderer) {
     const sp = S.space;
     scene.background = sp ? new THREE.Color('#04050a') : new THREE.Color(css('--paper') || '#FAFAFB');
     grid.visible = !sp; sky.visible = sp;
-    const ms = S.bodies.map((b) => b.m), order = ms.map((m, i) => i).sort((a, b) => ms[b] - ms[a]);
+    const ms = S.bodies.map((b) => b.m), order = ms.map((m, i) => i).sort((a, b) => ms[b] - ms[a]), ti = tintIdx(ms);
     S.bodies.forEach((b, i) => {
-      const rank = Math.min(2, order.indexOf(i)), col = sp ? (isSEM() ? SEM_TRAIL[rank] : starColor(rank)) : DRAW[i];
+      const rank = Math.min(2, order.indexOf(i)), col = sp ? (isSEM() ? SEM_TRAIL[rank] : starColor(ti[i])) : DRAW[i];
       meshes[i].material.color.copy(col); meshes[i].visible = !sp;
       stars[i].visible = sp;
       trails[i].material.blending = sp ? THREE.AdditiveBlending : THREE.NormalBlending; trails[i].userData.col = col.clone();
@@ -95,13 +101,14 @@ if (!renderer) {
     meshes = S.bodies.map((b) => { const r = .045 * Math.cbrt(b.m / mmax) + .03;
       const m = new THREE.Mesh(new THREE.SphereGeometry(r, 28, 18), new THREE.MeshBasicMaterial({ color: 0xffffff })); m.userData.r = r; scene.add(m); return m; });
     // зорі більші за кульки креслення, щоб було видно поверхню; колір — за місцем у ряду мас
-    const ms = S.bodies.map((b) => b.m), order = ms.map((m, i) => i).sort((a, b) => ms[b] - ms[a]);
+    const ms = S.bodies.map((b) => b.m), order = ms.map((m, i) => i).sort((a, b) => ms[b] - ms[a]), ti = tintIdx(ms);
+    S.moonOf = isSEM() ? [order[2], order[1]] : null;        // [Місяць, Земля] — для збільшеної відстані
     stars = S.bodies.map((b, i) => { const rank = Math.min(2, order.indexOf(i));
       let s;
       if (isSEM()) {        // розміри умовні: Місяць мусить поміститися на своїй орбіті (0,06 від Землі)
         if (rank === 0) { s = makeStar(THREE, .1, STAR_TINTS.sun, 2); const l = new THREE.PointLight(0xfff1dc, 3, 0, 0); s.add(l); }
-        else s = planet(rank === 1 ? 'earth' : 'moon', rank === 1 ? .042 : .014);
-      } else s = makeStar(THREE, .09 * Math.cbrt(b.m / mmax) + .05, TINT[rank], i + 1);
+        else s = planet(rank === 1 ? 'earth' : 'moon', rank === 1 ? .07 : .024);
+      } else s = makeStar(THREE, starR(b.m, mmax), TINT[ti[i]], i + 1);
       scene.add(s); return s; });
     hist = S.bodies.map(() => []);
     trails = S.bodies.map(() => { const g = new THREE.BufferGeometry();
@@ -130,9 +137,13 @@ if (!renderer) {
       S.bodies.forEach((b, i) => { const h = hist[i]; h.push(b.p[0], b.p[1], b.p[2]); if (h.length > S.trail * 3) h.splice(0, h.length - S.trail * 3); });
     }
     S.bodies.forEach((b, i) => {
-      meshes[i].position.set(b.p[0], b.p[1], b.p[2]); stars[i].position.copy(meshes[i].position);
+      const mo = S.moonOf && S.moonOf[0] === i ? S.moonOf[1] : -1;      // Місяць: від Землі відкладаємо збільшену відстань
+      const at = (src, k) => mo < 0 ? src[k] : hist[mo][k] + (src[k] - hist[mo][k]) * MOON_K;
+      if (mo < 0) meshes[i].position.set(b.p[0], b.p[1], b.p[2]);
+      else { const e = S.bodies[mo].p; meshes[i].position.set(e[0] + (b.p[0] - e[0]) * MOON_K, e[1] + (b.p[1] - e[1]) * MOON_K, e[2] + (b.p[2] - e[2]) * MOON_K); }
+      stars[i].position.copy(meshes[i].position);
       const g = trails[i].geometry, P = g.attributes.position, C = g.attributes.color, h = hist[i], n = Math.min(h.length / 3, MAXTR);
-      P.array.set(h.slice(h.length - n * 3)); const col = trails[i].userData.col;
+      if (mo < 0) P.array.set(h.slice(h.length - n * 3)); else for (let k = h.length - n * 3, j = 0; k < h.length; k++, j++) P.array[j] = at(h, k); const col = trails[i].userData.col;
       // слід згасає до хвоста: у космосі — до чорного (адитивне змішування), у кресленні — до тла
       const bg = S.space ? null : scene.background;
       for (let k = 0; k < n; k++) { const f = S.space ? Math.pow(k / n, 1.6) : .25 + .75 * k / n;
