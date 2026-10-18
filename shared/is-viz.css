@@ -1,0 +1,105 @@
+/* Стаття 34: вступна матриця, стрічки Купера й Мерф, 3D-приплив, спектрометр.
+   Усі класи з префіксом vz- — щоб не зачепити стилі інших блоків. */
+.vz{margin:var(--sp-md) 0;--vz-sci:var(--c-teal,#1E968C);--vz-simp:var(--c-blue,#4678DC);--vz-fic:var(--act,#EA5212)}
+.vz .chint{margin-top:8px}
+.vz-k{font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+
+/* ── 1. Матриця «розтин фільму» ── */
+.vz-mx{border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--ground);overflow:hidden}
+.vz-mx__head,.vz-mx__row{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,minmax(64px,108px));align-items:center}
+.vz-mx__head{padding:12px 14px 10px;border-bottom:1px solid var(--rule);background:var(--paper)}
+.vz-mx__head span{text-align:center}
+.vz-mx__head .badge{margin:0}
+.vz-mx__item{border-bottom:1px solid var(--rule)}
+.vz-mx__item:last-child{border-bottom:0}
+.vz-mx__row{width:100%;padding:0 14px;min-height:48px;border:0;background:none;cursor:pointer;text-align:left;font:500 14.5px/1.3 var(--sans);color:var(--ink);position:relative}
+.vz-mx__row:hover{background:var(--paper)}
+.vz-mx__row:focus-visible{outline:2px solid var(--act);outline-offset:-2px}
+.vz-mx__name{display:flex;align-items:center;gap:10px;padding:12px 8px 12px 0}
+.vz-mx__chev{flex:none;width:8px;height:8px;border-right:1.5px solid var(--ink-3);border-bottom:1.5px solid var(--ink-3);transform:rotate(-45deg);transition:transform .25s}
+.vz-mx__item.open .vz-mx__chev{transform:rotate(45deg)}
+.vz-mx__cell{position:relative;height:48px;display:flex;align-items:center;justify-content:center}
+.vz-mx__cell::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--rule);opacity:.7}
+.vz-mx__dot{position:relative;width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 16%,transparent);transform:scale(0);transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.vz-mx__ghost{position:relative;width:5px;height:5px;border-radius:50%;background:var(--rule-2)}
+.vz-mx.in .vz-mx__dot{transform:scale(1)}
+.vz-mx__body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.vz-mx__item.open .vz-mx__body{grid-template-rows:1fr}
+.vz-mx__body>div{overflow:hidden}
+.vz-mx__body p{margin:0;padding:0 14px 14px 32px;font-size:14px;max-width:62ch}
+.vz-mx__body a{color:var(--act);font-weight:600;text-decoration:none;white-space:nowrap}
+.vz-mx__body a:hover{text-decoration:underline}
+.vz-mx__body .badge{vertical-align:1px}
+
+/* ── 2. Стрічки життя ── */
+.vz-tw{border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--ground);padding:16px}
+.vz-tw__ages{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.vz-tw__age{border-radius:var(--r-md);padding:12px 14px;background:var(--paper)}
+.vz-tw__age b{display:block;font:600 clamp(26px,5.4vw,40px)/1.05 var(--mono);color:var(--who);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.vz-tw__age small{display:block;font-size:12.5px;color:var(--ink-2);margin-top:6px;min-height:2.6em}
+.vz-tw__age .vz-k{color:var(--who)}
+.vz-tw svg{display:block;width:100%;height:auto}
+.vz-tw__trk{position:relative;margin:14px 6px 0}
+.vz-tw__trk input{width:100%;margin:0;accent-color:var(--act)}
+.vz-tw__marks{position:relative;height:40px;margin-top:6px}
+.vz-tw__mk{position:absolute;top:0;transform:translateX(-50%);border:0;background:none;padding:2px 2px;font:500 11px/1.25 var(--sans);color:var(--ink-3);cursor:pointer;text-align:center;width:84px}
+.vz-tw__mk:first-child{transform:none;text-align:left}
+.vz-tw__mk:last-child{transform:translateX(-100%);text-align:right}
+.vz-tw__mk.on{color:var(--ink);font-weight:600}
+.vz-tw__bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+.vz-btn{font:600 12.5px/1 var(--sans);padding:9px 14px;border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--ground);color:var(--ink);cursor:pointer}
+.vz-btn:hover{border-color:var(--act);color:var(--act)}
+.vz-btn.on{background:var(--act);border-color:var(--act);color:#fff}
+.vz-tw__cap{font-size:13.5px;color:var(--ink-2);flex:1;min-width:200px}
+
+/* ── 3. 3D-приплив ── */
+.vz-td{position:relative;height:min(62vh,520px);min-height:340px;border-radius:var(--r-lg);overflow:hidden;background:#05060c}
+.vz-td canvas{display:block;width:100%;height:100%}
+.vz-td .fail{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aab;padding:24px;text-align:center}
+.vz-td__hud{position:absolute;right:14px;top:14px;text-align:right;pointer-events:none;color:#fff}
+.vz-td__hud b{display:block;font:600 clamp(26px,5vw,38px)/1 var(--mono);font-variant-numeric:tabular-nums}
+.vz-td__hud span{display:block;font:500 11px/1.35 var(--mono);color:rgba(255,255,255,.6);margin-top:5px}
+.vz-td__hud.bad b{color:#ff8a5c}
+.vz-td__st{position:absolute;left:14px;bottom:12px;font:500 11.5px/1.3 var(--mono);color:rgba(255,255,255,.7);pointer-events:none;max-width:70%}
+.vz-td__ctl{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:var(--sp-sm) 0 0}
+.vz-td__ctl label{font-size:12.5px;color:var(--ink-3);display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vz-td__ctl input[type=range]{accent-color:var(--act);width:220px;max-width:100%}
+.vz-td__ctl output{font:600 13px var(--mono);color:var(--ink);min-width:9ch}
+
+/* ── 4. Спектрометр ── */
+.vz-bl{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:14px;align-items:stretch}
+.vz-bl__plot{border-radius:var(--r-lg);background:#05060c;overflow:hidden;position:relative}
+.vz-bl__plot canvas{display:block;width:100%;height:clamp(260px,40vw,340px)}
+.vz-bl__sky{border-radius:var(--r-lg);background:#05060c;color:#fff;padding:14px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.vz-bl__sky .vz-k{color:rgba(255,255,255,.55);align-self:flex-start}
+.vz-bl__sky canvas{width:150px;height:150px;display:block}
+.vz-bl__sky p{margin:0;font-size:12.5px;line-height:1.4;color:rgba(255,255,255,.75);text-align:center;min-height:3.6em}
+.vz-bl__ctl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:var(--sp-sm) 0}
+.vz-bl__ctl label{font-size:12.5px;color:var(--ink-3);display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vz-bl__ctl input[type=range]{accent-color:var(--act);width:260px;max-width:100%}
+.vz-bl__ctl output{font:600 13px var(--mono);color:var(--ink);min-width:8ch}
+.vz-bl .calc{grid-column:1/-1;margin:0}
+
+@media(max-width:720px){
+  .vz-bl{grid-template-columns:1fr}
+  .vz-bl__sky{flex-direction:row;flex-wrap:wrap;justify-content:center}
+  .vz-bl__sky canvas{width:110px;height:110px}
+  .vz-bl__sky p{flex:1;min-width:150px;text-align:left}
+}
+@media(max-width:520px){
+  .vz-mx__head,.vz-mx__row{grid-template-columns:minmax(0,1fr) repeat(3,46px);padding-left:10px;padding-right:6px}
+  .vz-mx__head .badge{font-size:8.5px;padding:3px 4px;letter-spacing:.02em}
+  .vz-mx__row{font-size:13.5px}
+  .vz-mx__body p{padding-left:28px}
+  .vz-tw{padding:12px}
+  .vz-tw__ages{gap:8px}
+  .vz-tw__mk{width:62px;font-size:10px}
+  .vz-td__ctl input[type=range]{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .vz-mx__dot,.vz-mx__body,.vz-mx__chev{transition:none}
+}
+.vz-s{display:none}
+@media(max-width:520px){.vz-mx__head .vz-l{display:none}.vz-mx__head .vz-s{display:inline}}
+@media(max-width:720px){.vz-bl__sky .vz-k{width:100%}}
+@media(max-width:520px){.vz-td{height:420px;min-height:0}}

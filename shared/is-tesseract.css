@@ -1,0 +1,72 @@
+/* Стаття 34, розділ 08: тесеракт і петля причинності (shared/is-tesseract.js). Префікс .tss- */
+.tss{margin:var(--sp-sm) 0}
+.tss-stage{position:relative;height:min(62vh,520px);min-height:340px;border-radius:var(--r-lg);overflow:hidden;
+  background:#04050a;touch-action:pan-y;cursor:ew-resize;user-select:none;-webkit-user-select:none}
+.tss-stage canvas{display:block;width:100%;height:100%}
+.tss-stage.is-guard canvas{filter:saturate(.4)}
+.tss-hud{position:absolute;left:16px;top:14px;pointer-events:none;color:rgba(255,255,255,.62);font:500 11px/1.35 var(--mono)}
+.tss-hud b{display:block;font:600 22px/1.15 var(--mono);color:#fff;letter-spacing:.02em}
+.tss-hud .tss-n{display:block;max-width:240px;color:rgba(255,255,255,.55)}
+.tss-tick{position:absolute;right:16px;top:14px;pointer-events:none;font:600 15px/1.2 var(--mono);color:rgba(255,255,255,.35);
+  text-align:right;letter-spacing:.08em;max-width:60%}
+.tss-tick span{transition:color .12s}
+.tss-tick span.on{color:var(--act)}
+.tss-tick span.done{color:rgba(255,255,255,.8)}
+.tss-tick small{display:block;font:500 10.5px/1.3 var(--mono);letter-spacing:0;color:rgba(255,255,255,.45);margin-top:4px}
+.tss-cap{position:absolute;left:16px;bottom:12px;font:500 11px/1.3 var(--mono);color:rgba(255,255,255,.5);pointer-events:none}
+.tss-off{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:8px 14px;border:1px solid rgba(214,40,57,.6);border-radius:var(--r-md);
+  background:rgba(4,5,10,.7);color:#ff9aa4;font:500 12.5px/1.35 var(--mono);text-align:center;max-width:80%;opacity:0;transition:opacity .6s;pointer-events:none}
+.tss-stage.is-guard .tss-off{opacity:1}
+.tss-stage .fail{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aab;padding:24px;text-align:center;font-size:14px}
+
+.tss-ctl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:12px 0}
+.tss-yr{display:flex;align-items:center;gap:8px;flex:1 1 200px;min-width:0;font:500 12px/1 var(--mono);color:var(--ink-3)}
+.tss-yr input{flex:1;min-width:0;accent-color:var(--act)}
+.tss-yr output{min-width:3.4em;font-weight:600;color:var(--ink)}
+.tss-go{appearance:none;border:1px solid var(--act);background:var(--act);color:#fff;border-radius:var(--r-md);
+  padding:8px 16px;font:600 13.5px/1 var(--sans);cursor:pointer}
+.tss-go:disabled{opacity:.4;cursor:default}
+.tss-sw{appearance:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--rule-2);background:var(--ground);
+  color:var(--ink-2);border-radius:var(--r-md);padding:6px 12px 6px 8px;font:500 13px/1 var(--sans);cursor:pointer}
+.tss-sw i{position:relative;width:28px;height:16px;border-radius:9px;background:var(--rule-2);transition:background .2s;flex:none}
+.tss-sw i::after{content:"";position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:transform .2s}
+.tss-sw[aria-pressed="true"]{border-color:var(--ink-2);color:var(--ink)}
+.tss-sw[aria-pressed="true"] i{background:var(--ink)}
+.tss-sw[aria-pressed="true"] i::after{transform:translateX(12px)}
+.tss-msg button:disabled{opacity:.5;cursor:default}
+
+.tss-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:12px;margin-bottom:10px}
+.tss-pan{border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--ground);padding:12px 14px;min-width:0}
+.tss-h{font:600 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.tss-mo{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;min-height:22px}
+.tss-l{display:inline-flex;align-items:center;gap:4px}
+.tss-l b{font:600 14px/1 var(--mono);color:var(--ink);margin-right:4px}
+.tss-l i{display:inline-block;height:7px;width:7px;border-radius:4px;background:var(--rule-2);transition:background .12s,box-shadow .12s}
+.tss-l i.h{width:21px}
+.tss-l i.done{background:var(--ink-2)}
+.tss-l i.on{background:var(--act);box-shadow:0 0 0 3px var(--act-soft)}
+.tss-code{font:500 11px/1.4 var(--mono);color:var(--ink-3);margin:8px 0 0}
+.tss-v{font-size:13.5px;line-height:1.55;color:var(--ink-2);margin:10px 0 0;min-height:4.6em}
+.tss-v b{color:var(--ink)}
+.tss-v.ok b{color:var(--c-teal,#1E968C)}
+.tss-v.bad b,.tss-v.guard b{color:var(--signal-ink,#D62839)}
+
+.tss-g{display:block;width:100%;height:auto;max-height:300px}
+.tss-g .nd rect{fill:var(--paper);stroke:var(--rule-2);stroke-width:1.2;transition:fill .3s,stroke .3s}
+.tss-g .nd text{font:500 12px var(--sans);fill:var(--ink-2);text-anchor:middle}
+.tss-g .nd.on rect{fill:var(--act-soft);stroke:var(--act)}
+.tss-g .nd.on text{fill:var(--ink)}
+.tss-g .nd.dead rect{stroke-dasharray:3 4;opacity:.55}
+.tss-g .nd.dead text{opacity:.5}
+.tss-g .ed{fill:none;stroke:var(--rule-2);stroke-width:1.6;transition:stroke .3s}
+.tss-g .ed.on{stroke:var(--act);stroke-width:2.2;stroke-dasharray:7 5;animation:tss-flow 1.1s linear infinite}
+.tss-g .ed.brk{stroke:var(--signal-ink,#D62839);stroke-dasharray:3 5;stroke-width:1.8}
+.tss-g .x{stroke:var(--signal-ink,#D62839);stroke-width:2.4;stroke-linecap:round;opacity:0;transition:opacity .25s}
+.tss-g .x.on{opacity:1}
+.tss-g .ctr{font:600 13px var(--mono);fill:var(--ink-3);text-anchor:middle}
+.tss-g .ctr.ok{fill:var(--act)} .tss-g .ctr.bad{fill:var(--signal-ink,#D62839)}
+.tss-g .sub{font:500 10.5px var(--mono);fill:var(--ink-3);text-anchor:middle}
+@keyframes tss-flow{to{stroke-dashoffset:-24}}
+@media(prefers-reduced-motion:reduce){.tss-g .ed.on{animation:none}}
+@media(max-width:720px){.tss-grid{grid-template-columns:1fr}.tss-stage{height:min(56vh,420px);min-height:300px}
+  .tss-tick{font-size:13px;max-width:55%}}
