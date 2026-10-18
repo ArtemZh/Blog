@@ -1,7 +1,7 @@
 /* Стаття 33, розділ 02: три тіла на three.js. Фізика — window.TB (shared/threebody.js).
    Два режими:
    — «Креслення»: світле тло, сітка, тіла трьома сталими кольорами — лише щоб їх розрізнити;
-   — «Космос»: темне тло, зоряне небо, тіла як зорі зі світінням (колір за масою, як у справжніх зір:
+   — «Космос»: темне тло, зоряне небо, тіла як справжні зорі з плямами й короною (колір за масою, як у справжніх зір:
      важча — біло-блакитна, легша — червона), сліди світяться й згасають, bloom, камера під кутом.
    Помаранчевий сигнальний колір — тільки для похибки енергії, коли їй уже не можна вірити. */
 import * as THREE from 'three';
@@ -10,7 +10,8 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { makeSky } from './space-bg.js?v=20261018210821';
+import { makeSky } from './space-bg.js?v=20261018211741';
+import { makeStar, STAR_TINTS } from './sun-fx.js?v=20261018211741';
 
 const TB = window.TB;
 const $ = (id) => document.getElementById(id);
@@ -34,8 +35,9 @@ if (!renderer) {
 
   // кольори: креслення — розрізнення тіл; космос — температура зорі
   const DRAW = [css('--ink') || '#15181D', css('--c-blue') || '#4678DC', css('--c-teal') || '#1E968C'].map((c) => new THREE.Color(c));
-  const STAR_HOT = new THREE.Color('#cfe0ff'), STAR_SUN = new THREE.Color('#ffd9a0'), STAR_RED = new THREE.Color('#ff7a45');
-  const starColor = (rank) => [STAR_HOT, STAR_SUN, STAR_RED][rank];
+  // у космосі тіла — справжні зорі: поверхня з плямами й корона; колір за масою, як у зір головної послідовності
+  const TINT = [STAR_TINTS.hot, STAR_TINTS.sun, STAR_TINTS.red];
+  const starColor = (rank) => new THREE.Color(...TINT[rank].c2);
 
   const grid = new THREE.GridHelper(8, 16, new THREE.Color(css('--rule-2') || '#C6CAD3'), new THREE.Color(css('--rule') || '#E3E5EA'));
   grid.rotation.x = Math.PI / 2; scene.add(grid);
@@ -43,18 +45,13 @@ if (!renderer) {
   // небо з туманностями й зорями — спільне для обох 3D-сцен статті
   const sky = makeSky(THREE, { spikes: 12, spikeSize: .45 }); scene.add(sky);   // у симуляції яскраві зорі менші — щоб не плутати з тілами
 
-  // м'яке сяйво навколо зорі — спрайт із радіальним градієнтом
-  const glowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
-    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(.18, 'rgba(255,255,255,.55)');
-    g.addColorStop(.45, 'rgba(255,255,255,.12)'); g.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = g; x.fillRect(0, 0, 128, 128);
-    return new THREE.CanvasTexture(c); })();
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), .8, .45, .45);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), .55, .4, .8);
   composer.addPass(bloom); composer.addPass(new OutputPass());
 
-  let meshes = [], glows = [], trails = [], hist = [], R0 = 2;
+  let meshes = [], stars = [], trails = [], hist = [], R0 = 2;
 
   function paint() {      // застосувати режим до всіх об'єктів
     const sp = S.space;
@@ -63,8 +60,8 @@ if (!renderer) {
     const ms = S.bodies.map((b) => b.m), order = ms.map((m, i) => i).sort((a, b) => ms[b] - ms[a]);
     S.bodies.forEach((b, i) => {
       const rank = Math.min(2, order.indexOf(i)), col = sp ? starColor(rank) : DRAW[i];
-      meshes[i].material.color.copy(col); if (sp) meshes[i].material.color.multiplyScalar(1.6);
-      glows[i].visible = sp; glows[i].material.color.copy(col);
+      meshes[i].material.color.copy(col); meshes[i].visible = !sp;
+      stars[i].visible = sp;
       trails[i].material.blending = sp ? THREE.AdditiveBlending : THREE.NormalBlending; trails[i].userData.col = col.clone();
       trails[i].material.needsUpdate = true;
     });
@@ -73,12 +70,13 @@ if (!renderer) {
   }
   function load(preset) {
     S.preset = preset; S.bodies = TB.PRESETS[preset](S.seed); S.t = 0; S.steps = 0; S.E0 = TB.energy(S.bodies);
-    [...meshes, ...glows].forEach((m) => scene.remove(m)); trails.forEach((l) => { scene.remove(l); l.geometry.dispose(); });
+    meshes.forEach((m) => scene.remove(m)); stars.forEach((s) => { scene.remove(s); s.userData.dispose(); }); trails.forEach((l) => { scene.remove(l); l.geometry.dispose(); });
     const mmax = Math.max(...S.bodies.map((x) => x.m));
     meshes = S.bodies.map((b) => { const r = .045 * Math.cbrt(b.m / mmax) + .03;
       const m = new THREE.Mesh(new THREE.SphereGeometry(r, 28, 18), new THREE.MeshBasicMaterial({ color: 0xffffff })); m.userData.r = r; scene.add(m); return m; });
-    glows = S.bodies.map((b, i) => { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
-      s.scale.setScalar(meshes[i].userData.r * 5); scene.add(s); return s; });
+    // зорі більші за кульки креслення, щоб було видно поверхню; колір — за місцем у ряду мас
+    const ms = S.bodies.map((b) => b.m), order = ms.map((m, i) => i).sort((a, b) => ms[b] - ms[a]);
+    stars = S.bodies.map((b, i) => { const s = makeStar(THREE, .09 * Math.cbrt(b.m / mmax) + .05, TINT[Math.min(2, order.indexOf(i))], i + 1); scene.add(s); return s; });
     hist = S.bodies.map(() => []);
     trails = S.bodies.map(() => { const g = new THREE.BufferGeometry();
       g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3 * MAXTR), 3)); g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(3 * MAXTR), 3));
@@ -106,7 +104,7 @@ if (!renderer) {
       S.bodies.forEach((b, i) => { const h = hist[i]; h.push(b.p[0], b.p[1], b.p[2]); if (h.length > S.trail * 3) h.splice(0, h.length - S.trail * 3); });
     }
     S.bodies.forEach((b, i) => {
-      meshes[i].position.set(b.p[0], b.p[1], b.p[2]); glows[i].position.copy(meshes[i].position);
+      meshes[i].position.set(b.p[0], b.p[1], b.p[2]); stars[i].position.copy(meshes[i].position);
       const g = trails[i].geometry, P = g.attributes.position, C = g.attributes.color, h = hist[i], n = Math.min(h.length / 3, MAXTR);
       P.array.set(h.slice(h.length - n * 3)); const col = trails[i].userData.col;
       // слід згасає до хвоста: у космосі — до чорного (адитивне змішування), у кресленні — до тла
@@ -123,7 +121,7 @@ if (!renderer) {
   let last = performance.now(), visible = false;
   function loop(now) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
-    if (visible) { tick(dt); controls.autoRotate = S.space && S.dim3 && !reduce; controls.update();
+    if (visible) { tick(dt); if (S.space) { const tt = now / 1000; stars.forEach((s) => s.userData.update(reduce ? 0 : tt, camera)); } controls.autoRotate = S.space && S.dim3 && !reduce; controls.update();
       if (S.space) composer.render(); else renderer.render(scene, camera); }
     requestAnimationFrame(loop);
   }

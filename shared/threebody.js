@@ -155,6 +155,8 @@
     };
     const dpr = Math.min(2, devicePixelRatio || 1);
     function draw() {
+      $('#lagMu').textContent = st.mu < .001 ? st.mu.toExponential(2) : st.mu.toFixed(4);     // повзунок видно і в 3D
+      $('#lagStab').textContent = st.mu < 0.0385 ? 'L4 і L5 стійкі' : 'L4 і L5 вже нестійкі (μ > 0,0385)';
       if (!cv.clientWidth) return;                    // карта схована (вигляд 3D) — намалюємо, коли відкриють
       const w = cv.clientWidth, h = Math.round(w * .62); cv.width = w * dpr; cv.height = h * dpr; cv.style.height = h + 'px';
       const x = cv.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0);

@@ -10,7 +10,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { makeSky } from './space-bg.js?v=20261018210821';
+import { makeSky } from './space-bg.js?v=20261018211741';
 
 const box = document.getElementById('lag3'), card = document.getElementById('lagCard'), cap = document.getElementById('lagScale');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -159,7 +159,7 @@ function init() {
 
   function build() {
     world.clear(); S.crafts = []; S.troj = null;
-    const cfg = SYS[S.sys], mu = cfg.mu, pts = window.TB.lag.points(mu);
+    const cfg = SYS[S.sys], mu = S.mu ?? cfg.mu, real = mu === cfg.mu, pts = window.TB.lag.points(mu);   // μ можна змінити повзунком
     const xBig = -mu * D, xSmall = (1 - mu) * D;
     const big = body(cfg.big, cfg.bigR); big.position.set(xBig, 0, 0); world.add(big);
     const small = body(cfg.small, cfg.smallR); small.position.set(xSmall, 0, 0); world.add(small);
@@ -183,7 +183,7 @@ function init() {
     S.L = {};
     pts.forEach((p) => {
       let x = p.x * D, y = p.y * D;
-      if (cfg.exag && (p.id === 'L1' || p.id === 'L2')) x = xSmall + Math.sign(x - xSmall) * cfg.exag;
+      if (cfg.exag && real && (p.id === 'L1' || p.id === 'L2')) x = xSmall + Math.sign(x - xSmall) * cfg.exag;
       const m = new THREE.Sprite(new THREE.SpriteMaterial({ map: ringTex, transparent: true, depthWrite: false, depthTest: false })); m.scale.setScalar(.42); m.position.set(x, y, 0); world.add(m);
       const lb = label(p.id, 'is-pt', () => select(p.id)); lb.position.set(x, y, .45); world.add(lb);
       S.L[p.id] = new THREE.Vector3(x, y, 0);
@@ -198,7 +198,7 @@ function init() {
       lb.visible = false; S.crafts.push({ c, a, b, dot, lb, ph: k * 2, pid });
     });
     if (cfg.trojans) makeTrojans(mu);
-    cap.textContent = cfg.scale;
+    cap.textContent = real ? cfg.scale : `Маси змінено повзунком: μ = ${mu < .001 ? mu.toExponential(2) : mu.toFixed(4)} замість справжніх ${cfg.mu < .001 ? cfg.mu.toExponential(2) : cfg.mu.toFixed(4)}. Положення точок і рух троянців пораховано для нового μ.`;
     window.TB.lag.mini(document.getElementById('lagMini'), mu); window.TB.lag.setMu(mu);   // карта зверху — та сама система
     select(S.sel && S.L[S.sel] ? S.sel : null);
     document.querySelectorAll('#lgSys button').forEach((b) => b.classList.toggle('on', b.dataset.s === S.sys));
@@ -290,7 +290,9 @@ function init() {
     }
     requestAnimationFrame(loop);
   }
-  document.querySelectorAll('#lgSys button').forEach((b) => b.addEventListener('click', () => { S.sys = b.dataset.s; build(); }));
+  document.querySelectorAll('#lgSys button').forEach((b) => b.addEventListener('click', () => { S.sys = b.dataset.s; S.mu = null; build(); }));
+  // повзунок μ спільний для 3D і карти: TB.lag.st.mu уже оновлено обробником з threebody.js
+  let muT; document.getElementById('lagSl').addEventListener('input', () => { clearTimeout(muT); muT = setTimeout(() => { S.mu = window.TB.lag.st.mu; build(); }, 60); });
   // 3D або велика статична карта зверху; маленька карта в куті відкриває велику
   function view(v) {
     box.hidden = v !== '3d'; document.getElementById('lagMap').hidden = v === '3d';
