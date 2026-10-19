@@ -76,20 +76,24 @@
       if (grad && grad !== 'none') { const g = ox.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(4,5,10,.55)'); g.addColorStop(.45, 'rgba(4,5,10,.15)'); g.addColorStop(.6, 'rgba(4,5,10,0)'); ox.fillStyle = g; ox.fillRect(0, 0, W, H); }
       if (orbImg) { const sr = orb.getBoundingClientRect(); ox.drawImage(orbImg, sr.left - r.left, sr.top - r.top, sr.width, sr.height); }
       hero.querySelectorAll('.hero3__kick, h1, .hero3__sub').forEach((el) => {
-        const s = getComputedStyle(el); ox.font = `${s.fontWeight} ${s.fontSize} ${s.fontFamily}`; ox.fillStyle = s.color; ox.textBaseline = 'middle';
+        const s = getComputedStyle(el); ox.font = `${s.fontWeight} ${s.fontSize} ${s.fontFamily}`; ox.fillStyle = s.color; ox.textBaseline = 'alphabetic';
         ox.shadowColor = 'rgba(0,0,0,.5)'; ox.shadowBlur = el.tagName === 'H1' ? 24 : 0;
         if ('letterSpacing' in ox) ox.letterSpacing = s.letterSpacing === 'normal' ? '0px' : s.letterSpacing;
         const tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n;
         while ((n = tw.nextNode())) { const t = s.textTransform === 'uppercase' ? n.textContent.toUpperCase() : n.textContent;
           const re = /\S+/g; let m;
           while ((m = re.exec(n.textContent))) { const rg = document.createRange(); rg.setStart(n, m.index); rg.setEnd(n, m.index + m[0].length);
-            const b = rg.getBoundingClientRect(); ox.fillText(t.slice(m.index, m.index + m[0].length), b.left - r.left, b.top - r.top + b.height / 2); } }
+            const b = rg.getBoundingClientRect(), w = t.slice(m.index, m.index + m[0].length), mt = ox.measureText(w);
+            // базова лінія — як у браузера: рамка діапазону = область вмісту шрифту, її верх + висота над базовою лінією (fontBoundingBoxAscent)
+            const asc = mt.fontBoundingBoxAscent ?? b.height * .8, desc = mt.fontBoundingBoxDescent ?? b.height * .2;
+            ox.fillText(w, b.left - r.left, b.top - r.top + asc + (b.height - asc - desc) / 2); } }
         ox.shadowBlur = 0; });
       gl.bindTexture(gl.TEXTURE_2D, tex); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, off); ready = true;
     }
     let mx = 0, my = 0, tx = 0, ty = 0, k = 0, kt = 0, raf = 0;
     function draw() {
+      if (!ready) snap();                                              // знімок застарів (прокрутка змінила масштаб банера) — переробити
       tx += (mx - tx) * .18; ty += (my - ty) * .18; k += (kt - k) * .12;
       gl.viewport(0, 0, cv.width, cv.height);
       gl.uniform2f(P.u('uRes'), cv.width, cv.height); gl.uniform2f(P.u('uM'), tx * dpr, ty * dpr);
@@ -97,7 +101,9 @@
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       if (kt > 0 || k > .01) raf = requestAnimationFrame(draw); else { raf = 0; cv.classList.remove('on'); }
     }
-    hero.addEventListener('pointerenter', (e) => { if (!ready) snap(); if (!ready) return; const r = hero.getBoundingClientRect(); tx = mx = e.clientX - r.left; ty = my = e.clientY - r.top; kt = 1; cv.classList.add('on'); if (!raf) raf = requestAnimationFrame(draw); });
+    // знімок завжди свіжий: банер масштабується на прокрутці (політ камери), тож старий знімок не збігся б із картинкою
+    addEventListener('scroll', () => { ready = false; }, { passive: true });
+    hero.addEventListener('pointerenter', (e) => { snap(); if (!ready) return; const r = hero.getBoundingClientRect(); tx = mx = e.clientX - r.left; ty = my = e.clientY - r.top; kt = 1; cv.classList.add('on'); if (!raf) raf = requestAnimationFrame(draw); });
     hero.addEventListener('pointermove', (e) => { const r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
     hero.addEventListener('pointerleave', () => { kt = 0; });
     const resnap = () => { ready = false; orbSnap(); };
@@ -200,8 +206,8 @@
       // горизонт: чорне коло на дні вирви + тонке світле кільце
       const hz = (zf(RS * 1.002) - ZE) * K, ring = [];
       for (let k = 0; k <= 48; k++) { const t = k / 48 * 6.283; const q = proj([mx + Math.cos(t) * RS, hz, mz + Math.sin(t) * RS]); if (q) ring.push(q); }
-      const inside = Math.abs(mx) < EXT + RS && mz > -EXT + 1.2 - RS && mz < EXT + 1.2 + RS;   // за пластиною дірку не малюємо — там сітки немає
-      if (inside && ring.length > 3) { x.fillStyle = '#000'; x.beginPath(); ring.forEach((q, k) => k ? x.lineTo(q[0], q[1]) : x.moveTo(q[0], q[1])); x.closePath(); x.fill();
+      // горизонт (жовте кільце) видно завжди — і коли діру винесли за пластину: там простір рівний, а сама діра лишається
+      if (ring.length > 3) { x.fillStyle = '#000'; x.beginPath(); ring.forEach((q, k) => k ? x.lineTo(q[0], q[1]) : x.moveTo(q[0], q[1])); x.closePath(); x.fill();
         x.strokeStyle = 'rgba(255,190,120,.8)'; x.lineWidth = 1.4; x.stroke(); }
       raf = on && (Math.abs(tx - mx) > .002 || Math.abs(tz - mz) > .002) ? requestAnimationFrame(frame) : 0;
     }

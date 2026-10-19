@@ -19,7 +19,7 @@ if (root) init(root);
 function init(root) {
   const css = document.createElement('link');
   css.rel = 'stylesheet';
-  css.href = new URL('./is-tesseract.css?v=4', import.meta.url).href;
+  css.href = new URL('./is-tesseract.css?v=5', import.meta.url).href;
   document.head.appendChild(css);
 
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -36,7 +36,7 @@ function init(root) {
   };
   const LAY = {   // розкладка сліду: старт x, y, z, довжина точки, тире, пауза в літері, між літерами
     books: { x: -1.75, y: 0.05, z: 0.38, dot: 0.12, dash: 0.36, gi: 0.05, gl: 0.18 },
-    watch: { x: -0.36, y: 1.12, z: 0.1, dot: 0.06, dash: 0.18, gi: 0.03, gl: 0.09 },
+    watch: { x: -0.45, y: 0.9, z: 0.2, dot: 0.025, dash: 0.07, gi: 0.012, gl: 0.035 },   // смужка ≈ 53 см просто над годинником на столі (CLK)
   };
 
   /* ── Морзе: елементи з часом у тактах і місцем на підлозі ── */
@@ -63,7 +63,11 @@ function init(root) {
       <div class="tss-hud"><span>зріз кімнати Мерф</span><b class="tss-y">рік +0</b><span class="tss-n"></span></div>
       <div class="tss-tick" aria-live="polite"></div>
       <span class="tss-off">тесеракт не утворився — петля не замикається</span><span class="tss-cap">тягніть уліво-вправо — рух уздовж часу</span>
+      <div class="tss-film-cap" aria-live="polite"></div>
+      <div class="tss-cover"><b class="tss-cover-t">Тесеракт і петля причинності</b><span class="tss-cover-s">ролик ≈ 1 хв: як Купер передає повідомлення в минуле і чому воно не змінює історію</span>
+        <div class="tss-cover-b"><button type="button" class="tss-film-play">▶ Дивитися ролик</button><button type="button" class="tss-film-try">Спробувати самому</button></div></div>
     </div>
+    <div class="tss-film-bar" hidden><button type="button" class="tss-film-pp" aria-label="Пауза">❚❚</button><div class="tss-film-ch" role="group" aria-label="Глави ролика"></div><button type="button" class="tss-film-skip">Пропустити ролик</button></div>
     <div class="tss-ctl">
       <div class="seg tss-msg" role="group" aria-label="Повідомлення">
         <button type="button" data-m="STAY" aria-pressed="true">STAY</button><button type="button" data-m="GO" aria-pressed="false">GO</button><button type="button" data-m="DATA" aria-pressed="false">дані</button>
@@ -87,6 +91,7 @@ function init(root) {
 
   let msgKey = 'STAY', guard = false, target = 0, cur = 0;
   let tx = null;          // поточна передача
+  let muteSnd = false;    // тиша, коли передачу «прокручують» до результату (перехід на главу ролика)
   let outcome = null;     // 'ok' | 'bad' | null — результат останньої передачі
 
   /* ── граф причин ── */
@@ -363,7 +368,7 @@ function init(root) {
     {
       const enc = encode('DATA', LAY.watch), mat = new THREE.MeshBasicMaterial({ color: ACT, transparent: true, depthWrite: false });
       enc.els.forEach(e => {
-        const m = new THREE.Mesh(new THREE.BoxGeometry(e.len, 0.05, 0.04), mat);
+        const m = new THREE.Mesh(new THREE.BoxGeometry(e.len, 0.018, 0.018), mat);
         m.position.set(e.x, LAY.watch.y, LAY.watch.z); m.scale.setScalar(0.001);
         slices[N - 1].g.add(m); marks.push({ m, a: 0, to: 0 });
       });
@@ -418,7 +423,11 @@ function init(root) {
     const hudScene = new THREE.Scene(), hudCam = new THREE.OrthographicCamera(0, 1, 1, 0, -1, 1);
     const lupe = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), lupeMat); hudScene.add(lupe);
     const lupeEl = document.createElement('span'); lupeEl.className = 'tss-lupe'; stage.appendChild(lupeEl);
-    const mv = new THREE.Vector3(), mn = new THREE.Vector3(), mu = new THREE.Vector3();
+    const mv = new THREE.Vector3(), mn = new THREE.Vector3(), mu = new THREE.Vector3(), ms = new THREE.Vector3();
+    // під час передачі даних: ореол навколо годинника на столі й тонка лінія від нього до лупи — у лупі той самий годинник
+    const link = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); link.setAttribute('class', 'tss-link'); link.setAttribute('aria-hidden', 'true');
+    link.innerHTML = '<circle r="14"/><line/>'; stage.appendChild(link);
+    const lkC = link.querySelector('circle'), lkL = link.querySelector('line'); let lkA = 0;
     function renderLupe(w, h) {
       const si = Math.max(0, Math.min(N - 1, Math.round(cur))), wt = slices[si].watch;
       wt.inner.updateWorldMatrix(true, false);
@@ -427,14 +436,22 @@ function init(root) {
       const dist = WATCH.r * wt.g.scale.x * 4.4;
       macroCam.position.copy(mv).addScaledVector(mn, dist); macroCam.up.copy(mu); macroCam.lookAt(mv);
       const keep = slices.map(s => s.g.visible); slices.forEach((s, i) => { s.g.visible = i === si; });   // у лупі — лише обраний зріз
+      marks.forEach(mk => { mk.m.visible = false; });                    // риски Морзе висять над годинником — у лупі вони стали б між камерою й циферблатом
       renderer.setRenderTarget(rtLupe); renderer.setClearColor(0x04050a, 1); renderer.clear(); renderer.render(scene, macroCam); renderer.setRenderTarget(null);
-      slices.forEach((s, i) => { s.g.visible = keep[i]; });
+      slices.forEach((s, i) => { s.g.visible = keep[i]; }); marks.forEach(mk => { mk.m.visible = true; });
       const d = Math.min(170, Math.round(Math.min(w, h) * 0.36)), m = 14;
       lupe.scale.set(d / w, d / h, 1); lupe.position.set(1 - (m + d / 2) / w, (m + d / 2) / h, 0);
       lupeMat.uniforms.uA.value = fade;
       renderer.autoClear = false; renderer.render(hudScene, hudCam); renderer.autoClear = true;
       lupeEl.style.right = m + 'px'; lupeEl.style.bottom = (m + d + 4) + 'px'; lupeEl.textContent = `лупа · секундна стрілка · рік +${si}`;
       lupeEl.style.opacity = fade.toFixed(2);
+      lkA += ((tx && tx.m.kind === 'watch' ? 1 : 0) - lkA) * (RM ? 1 : .08);
+      link.style.opacity = (lkA * fade).toFixed(3);
+      if (lkA > .01) { const wt2 = slices[N - 1].watch; wt2.inner.updateWorldMatrix(true, false); ms.copy(WATCH.center).applyMatrix4(wt2.inner.matrixWorld).project(camera);
+        const sx = (ms.x * .5 + .5) * w, sy = (-ms.y * .5 + .5) * h, lx = w - m - d / 2, ly = h - m - d / 2, ang = Math.atan2(sy - ly, sx - lx);
+        lkC.setAttribute('cx', sx); lkC.setAttribute('cy', sy); lkC.setAttribute('r', (10 + 4 * Math.sin(performance.now() / 260)).toFixed(1));
+        lkL.setAttribute('x1', sx + 14 * Math.cos(ang + Math.PI)); lkL.setAttribute('y1', sy + 14 * Math.sin(ang + Math.PI));
+        lkL.setAttribute('x2', lx + d / 2 * Math.cos(ang)); lkL.setAttribute('y2', ly + d / 2 * Math.sin(ang)); }
     }
 
     let fade = 1, tSec = 0;
@@ -544,6 +561,7 @@ function init(root) {
     if (three) three.resetSlice(m.slice);
     outcome = null; setGraph('idle'); setVerdict('play');
     tx = { m, enc, t: RM ? enc.total + 1 : -0.5, k: -1, done: false, rej: 0 };
+    !muteSnd && window.IS_SOUND && IS_SOUND.fx('whoosh');
     lockUI(true); kick();
   }
   function stepTx(dt) {
@@ -553,7 +571,7 @@ function init(root) {
     let on = false, k = -1;
     enc.els.forEach((e, i) => {
       if (tx.t >= e.t0 && i > tx.k) {           // новий елемент коду
-        tx.k = i;
+        tx.k = i; !muteSnd && window.IS_SOUND && IS_SOUND.morse(e.c, i);             // Морзе звучить нотами, якщо увімкнено звук статті
         if (three) {
           if (m.kind === 'books') three.startFall(m.slice * three.NB + i, e, LAY.books);
           else three.marks[i] && (three.marks[i].to = 1);
@@ -564,7 +582,7 @@ function init(root) {
     if (s) s.off += ((on ? (enc.els[k].c === '-' ? 0.55 : 0.4) : 0) - s.off) * (RM ? 1 : Math.min(1, dt * 30));
     if (!tx.done) { const kk = k >= 0 ? k : tx.k; kk < 0 ? markMorse(-1, -1, false) : markMorse(kk, enc.els[kk].li, k < 0); }
     if (!tx.done && tx.t >= enc.total + 0.5) {
-      tx.done = true; markMorse(enc.els.length - 1, enc.els[enc.els.length - 1].li, true);
+      tx.done = true; markMorse(enc.els.length - 1, enc.els[enc.els.length - 1].li, true); !muteSnd && window.IS_SOUND && IS_SOUND.fx('chime');
       const ok = HIST[m.slice] === m.text;
       outcome = ok ? 'ok' : 'bad';
       setGraph(outcome); setVerdict(ok ? 'ok' + m.text : 'bad');
@@ -604,7 +622,7 @@ function init(root) {
 
   /* тягнути сцену — рух у часі */
   let drag = null;
-  stage.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, v: target, id: e.pointerId, h: null }; });
+  stage.addEventListener('pointerdown', e => { if (film.on || !cover.hidden) return; drag = { x: e.clientX, y: e.clientY, v: target, id: e.pointerId, h: null }; });
   stage.addEventListener('pointermove', e => {
     if (!drag || e.pointerId !== drag.id) return;
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
@@ -615,15 +633,78 @@ function init(root) {
   stage.addEventListener('pointerup', end); stage.addEventListener('pointercancel', end);
   stage.addEventListener('keydown', e => { if (e.key === 'ArrowRight') setYear(Math.round(target) + 1); if (e.key === 'ArrowLeft') setYear(Math.round(target) - 1); });
 
+  /* ── ролик: спершу пояснення по главах (≈ 1 хв, кнопкою ▶), потім пісочниця. Ролик керує тими самими діями, що й кнопки
+     (вибір повідомлення, рік, «Передати», захист хронології), тож граф причин і азбука Морзе внизу йдуть синхронно. ── */
+  const FILM = [
+    { t: 0, n: 'Тесеракт', cap: 'Тесеракт: кожен зріз — кімната Мерф в інший рік. Час тут — ще один вимір, уздовж якого можна рухатися.',
+      set: () => { selectMsg('STAY'); setYear(0, true); },
+      run: (u) => setYear(u < .5 ? 0 : u < 4 ? 23 * (u - .5) / 3.5 : u < 4.6 ? 23 : 23 * (1 - Math.min(1, (u - 4.6) / 3))) },
+    { t: 8, n: 'Рік відльоту', cap: 'День від\'їзду Купера. Він штовхає книжки — сила проходить крізь вимір як гравітація — і на підлозі складається STAY.',
+      set: () => { selectMsg('STAY'); setYear(0); }, at: [[1, () => transmit()]] },
+    { t: 17, n: 'Петля', cap: 'Купер однаково полетів: Мерф уже бачила саме цей знак. Повідомлення не змінює минуле — воно завжди було його частиною. Петля без початку.',
+      set: () => { selectMsg('STAY'); ff(); } },
+    { t: 25, n: 'Рік +23', cap: 'Через 23 роки Мерф повертається по годинник. Секундна стрілка смикається кодом Морзе — у лупі той самий годинник, що й на столі.',
+      set: () => { selectMsg('DATA'); }, at: [[2, () => transmit()]] },
+    { t: 34, n: 'Розв\'язка', cap: 'Мерф читає дані → люди рятуються із Землі → «вони» будують тесеракт → Купер передає дані. Коло замкнулося, і в нього немає автора.',
+      set: () => { selectMsg('DATA'); ff(); } },
+    { t: 42, n: 'Захист хронології', cap: 'А якщо природа забороняє петлі часу (гіпотеза Гокінга, 1992)? Тоді тесеракт не утвориться — і передати нічого не можна.',
+      set: () => { selectMsg('DATA'); ff(); }, at: [[1.5, () => setGuard(true)]] },
+    { t: 51, n: 'Тепер ви', cap: 'Спробуйте самі: оберіть повідомлення й рік і натисніть «Передати». Чи вийде змінити минуле?',
+      set: () => { setGuard(false); selectMsg('STAY'); } },
+  ];
+  const FILM_END = 57;
+  const film = { on: false, play: false, t: 0, ch: -1, fired: new Set() };
+  const cover = $('.tss-cover'), fCap = $('.tss-film-cap'), fBar = $('.tss-film-bar'), fPP = $('.tss-film-pp'), fCh = $('.tss-film-ch');
+  fCh.innerHTML = FILM.map((c, i) => `<button type="button" data-i="${i}"><span>${i + 1}</span>${c.n}</button>`).join('');
+  const chBtns = [...fCh.querySelectorAll('button')];
+  function ff() { muteSnd = true; transmit(); if (tx) stepTx(tx.enc.total + 1); muteSnd = false; }          // передачу — одразу до результату (для переходу на главу)
+  function setGuard(v) { if (guard !== v) sw.click(); }
+  function stopTx() { if (tx) { if (three) { three.slices[tx.m.slice].off = 0; three.resetSlice(tx.m.slice); } tx = null; lockUI(false); markMorse(-1, -1, false); } }
+  function enterCh(i) {
+    film.ch = i; film.fired = new Set(); stopTx(); setGuard(i === 5 && film.t - FILM[5].t > 1.5);
+    FILM[i].set(); fCap.textContent = FILM[i].cap; fCap.classList.remove('in'); void fCap.offsetWidth; fCap.classList.add('in');
+    chBtns.forEach((b, k) => { b.classList.toggle('on', k === i); b.classList.toggle('done', k < i); });
+  }
+  function stepFilm(dt) {
+    if (!film.on || !film.play) return;
+    film.t += dt;
+    if (film.t >= FILM_END) { endFilm(); return; }
+    let i = 0; while (i + 1 < FILM.length && film.t >= FILM[i + 1].t) i++;
+    if (i !== film.ch) enterCh(i);
+    const c = FILM[i], u = film.t - c.t;
+    if (c.run) c.run(u);
+    (c.at || []).forEach(([tt, fn], k) => { if (u >= tt && !film.fired.has(k)) { film.fired.add(k); fn(); } });
+  }
+  function startFilm(at = 0) {
+    film.on = true; film.play = true; film.t = at; film.ch = -1;
+    window.IS_SOUND && IS_SOUND.fx('whoosh');
+    root.querySelector('.tss').classList.add('is-film'); cover.hidden = true; fBar.hidden = false; fPP.textContent = '❚❚'; fPP.setAttribute('aria-label', 'Пауза');
+    kick();
+  }
+  function endFilm() {
+    film.on = false; film.play = false; stopTx(); setGuard(false); selectMsg('STAY');
+    root.querySelector('.tss').classList.remove('is-film'); fBar.hidden = true; fCap.textContent = ''; fCap.classList.remove('in');
+    cover.hidden = false; cover.classList.add('end'); $('.tss-film-play').textContent = '▶ Ще раз';
+  }
+  function trySelf() { if (film.on) endFilm(); cover.hidden = true; }
+  $('.tss-film-play').addEventListener('click', () => startFilm(0));
+  $('.tss-film-try').addEventListener('click', trySelf);
+  $('.tss-film-skip').addEventListener('click', () => { endFilm(); cover.hidden = true; });
+  fPP.addEventListener('click', () => { film.play = !film.play; fPP.textContent = film.play ? '❚❚' : '▶'; fPP.setAttribute('aria-label', film.play ? 'Пауза' : 'Далі'); kick(); });
+  chBtns.forEach((b, i) => b.addEventListener('click', () => { film.t = FILM[i].t; enterCh(i); film.play = true; fPP.textContent = '❚❚'; kick(); }));
+  // будь-яка дія з пісочницею — ролик ховається
+  [...msgBtns, goBtn, sw, range].forEach(el => el.addEventListener('pointerdown', () => { if (!film.on) cover.hidden = true; }));
+
   /* ── цикл: лише коли блок видно ── */
   let visible = false, raf = 0, last = 0;
   function loop(now) {
     raf = 0;
     const dt = last ? Math.min(0.05, (now - last) / 1000) : 0.016; last = now;
-    stepTx(dt);
+    stepFilm(dt); stepTx(dt);
     const moving = three ? three.frame(dt) : false;
-    const busy = tx || Math.abs(target - cur) > 0.002 || moving || !RM;
-    if (visible && busy) raf = requestAnimationFrame(loop); else last = 0;
+    const busy = tx || (film.on && film.play) || Math.abs(target - cur) > 0.002 || moving || !RM;
+    // наступний кадр — лише один: setYear()/kick() усередині кадру (ролик) вже міг його запланувати, інакше кадри множилися б удвічі щокадру
+    if (visible && busy) { if (!raf) raf = requestAnimationFrame(loop); } else { last = 0; if (raf) { cancelAnimationFrame(raf); raf = 0; } }
   }
   function kick() { if (visible && !raf) raf = requestAnimationFrame(loop); }
   new IntersectionObserver(es => { visible = es[es.length - 1].isIntersecting; if (visible) kick(); else { cancelAnimationFrame(raf); raf = 0; last = 0; } }, { rootMargin: '80px' }).observe(stage);

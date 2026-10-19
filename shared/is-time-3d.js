@@ -13,7 +13,7 @@ const slot = document.getElementById('viz-time');
 if (slot) init(slot);
 
 function init(slot) {
-  const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'shared/is-time-3d.css?v=2'; document.head.appendChild(css);
+  const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'shared/is-time-3d.css?v=3'; document.head.appendChild(css);
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const Q = new URLSearchParams(location.search);              // ?itm=3.3 — початковий час у годинах (для перевірки скрінами)
 
@@ -30,6 +30,16 @@ function init(slot) {
 
   let K = (window.IS_SPIN && window.IS_SPIN.K) || 62000;
   if (Q.has('itmk')) K = +Q.get('itmk');
+  // крива швидкості відтворення: три ділянки реального часу (rate = 1 с планети за 1 с екрана) — висадка, хвиля (мить, коли гребінь
+  // підхоплює Дойла) і зліт; кожна ≈ 2–2,5 доби Землі (доба Землі = 86 400 / K с планети, ≈ 1,4 с). Між ними — розгін до PLAY і
+  // гальмування перед наступною ділянкою: у лог-масштабі від відстані до ділянки (~2–3 с екрана) — години → дні → тижні → роки.
+  // Кнопки ×0,25…×4 змінюють лише «швидку» частину: на ділянках реального часу rate лишається 1.
+  const T_DOY = T_WAVE - 452 / 4.5;       // фронт підхоплює Дойла: за 420 м до гребеня, Дойл на z = −32, хвиля 4,5 м/с (див. DOY нижче)
+  const RT_R = 28;                        // ширина розгону/гальмування, с планети (≈ 2,5 с екрана)
+  const dayP = () => 86400 / K;           // доба Землі в секундах планети
+  const rtZones = () => { const D = Math.min(dayP(), 20); return [[0, 2.5 * D], [T_DOY - D, T_DOY + D], [T_BACK - D, T_BACK + D]]; };
+  function rate(t) { let d = 1e9; for (const [a, b] of rtZones()) d = Math.min(d, t < a ? a - t : t > b ? t - b : 0);
+    const x = Math.min(1, d / RT_R); return Math.exp(Math.log(PLAY) * (1 - (1 - x) * (1 - x))); }   // лог-швидкість: плавно виходить на PLAY
   let tP = Q.has('itm') ? Math.min(T_MAX, Math.max(0, +Q.get('itm') * 3600)) : 0;
 
   const fmt = (x, d = 0) => x.toLocaleString('uk', { maximumFractionDigits: d, minimumFractionDigits: d });
@@ -51,6 +61,8 @@ function init(slot) {
       <button class="itm-btn itm-film" type="button">як у фільмі: 3 год 18 хв</button>
       <span class="seg itm-spd" role="group" aria-label="Швидкість відтворення">${SPD.map((k) => `<button type="button" data-k="${k}" aria-pressed="${k === 1}">×${fmt0(k, 2)}</button>`).join('')}</span>
       <span class="itm-spd-l"></span>
+      <button class="bh-snd itm-snd" type="button" aria-pressed="false">Цокання</button>
+      <span class="itm-spd-l itm-snd-l"></span>
       <div class="itm-cnt" aria-live="off">
         <span>на планеті<b class="itm-tp">0:00:00</b></span>
         <span class="itm-e">на Землі минуло<b class="itm-te">0 год</b></span>
@@ -63,16 +75,45 @@ function init(slot) {
       <span class="itm-mk lo" style="left:calc(8px + (100% - 16px) * ${T_WAVE / T_MAX})"><b>1:10</b> хвиля-гора · за фільмом</span>
       <span class="itm-mk r" style="left:calc(8px + (100% - 16px) * ${T_BACK / T_MAX})"><b>3:18</b> повернення на корабель</span>
       <span class="itm-mk r" style="left:100%"><b>4:00</b></span>
+      <span class="itm-rts"></span>
     </div>
     <div class="itm-stage" role="img" aria-label="Ліворуч мілке море планети Міллер і Гаргантюа в небі, праворуч ферма на Землі, де за той самий час минають роки"></div>
     <p class="chint itm-note"></p>
-    <p class="chint">Пораховано: час на Землі = час на планеті × множник сповільнення з повзунка вище (орбіта Керра); Мерф — 10 років у день відльоту; Сонце й Місяць — за широтою 38° і порою року, тож за довгої «витримки» Сонце малює смугу, яскравішу по краях: біля сонцестоянь воно затримується. Дерево росте за логістичною кривою 1,5 м → ≈9,5 м за 25 років (межа 11 м) — типово для листяного дерева, наближення. Умовно: хвиля-гора (висота ≈1,2 км і момент — за фільмом, швидкість підібрана), вигляд неба й Гаргантюа (спрощений шейдер, не трасування променів). Два годинники в одному кадрі: таймлапсом ідуть лише роки — ріст дерева, пори року, день і ніч, сніг, імла; вітер (гілки, трава, кукурудза, пил) живе в реальному часі. Один листок після хвилі «вирвано» з часу ферми: він летить у часі планети Міллер — повільно, поки на фермі минають роки й сезони. Після хвилі Дойла на планеті вже немає; о 3:18 «Рейнджер» злітає.</p>
+    <p class="chint">Пораховано: час на Землі = час на планеті × множник сповільнення з повзунка вище (орбіта Керра); Мерф — 10 років у день відльоту; Сонце й Місяць — за широтою 38° і порою року, тож за довгої «витримки» Сонце малює смугу, яскравішу по краях: біля сонцестоянь воно затримується. Дерево росте за логістичною кривою 1,5 м → ≈9,5 м за 25 років (межа 11 м) — типово для листяного дерева, наближення. Умовно: хвиля-гора (висота ≈1,2 км і момент — за фільмом, швидкість підібрана), вигляд неба й Гаргантюа (спрощений шейдер, не трасування променів). Два годинники в одному кадрі: таймлапсом ідуть лише роки — ріст дерева, пори року, день і ніч, сніг, імла; вітер (гілки, трава, кукурудза, пил) живе в реальному часі. Один листок після хвилі «вирвано» з часу ферми: він летить у часі планети Міллер — повільно, поки на фермі минають роки й сезони. Після хвилі Дойла на планеті вже немає; о 3:18 «Рейнджер» злітає. Відтворення нерівномірне: висадку, хвилю й зліт показано в реальному часі (кожну ділянку — 2–2,5 доби Землі, тонкі позначки на шкалі), між ними — розгін до таймлапсу й гальмування. <span class="itm-tickfilm"></span></p>
   </div>`;
   const $ = (s) => slot.querySelector(s);
   const spdL = $('.itm-spd-l'), spdB = [...slot.querySelectorAll('.itm-spd button')];
   const spdNote = () => { spdL.textContent = '1 год на планеті = ' + fmt0(3600 / PLAY, 0) + ' с'; };
   spdB.forEach((b) => b.addEventListener('click', () => { PLAY = PLAY0 * +b.dataset.k; spdB.forEach((x) => x.setAttribute('aria-pressed', String(x === b))); spdNote(); }));
   spdNote();
+  // позначки ділянок реального часу на шкалі (залежать від K)
+  const rtBox = $('.itm-rts');
+  const rtMarks = () => { rtBox.innerHTML = rtZones().map(([a, b]) => `<span class="itm-rt" title="реальний час" style="left:calc(8px + (100% - 16px) * ${((a + b) / 2 / T_MAX).toFixed(5)})"></span>`).join(''); };
+  rtMarks();
+  // цокання: фізичний період — доба Землі на Міллер (86 400 / K с); звучить лише на повільних ділянках, синтез Web Audio, за замовчуванням вимкнено
+  const bSnd = $('.itm-snd'), sndL = $('.itm-snd-l'), tickFilm = $('.itm-tickfilm');
+  const sndNote = () => { sndL.textContent = 'тік = доба на Землі (≈ ' + fmt(dayP(), 2) + ' с)';
+    tickFilm.textContent = 'У фільмі тік у треку Ганса Ціммера «Mountains» звучить кожні 1,25 с; за фізикою при цьому множнику доба на Землі минає за ≈ ' + fmt(dayP(), 2) + ' с планети — це й період цокання.'; };
+  sndNote();
+  const SND = { on: false, ctx: null, out: null, noise: null };
+  function tick(at = 0, g = 1) {                                          // at — зсув у секундах від «зараз», g — гучність 0…1
+    const c = SND.ctx, t0 = c.currentTime + .005 + at;
+    const n = c.createBufferSource(); n.buffer = SND.noise; const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2500; bp.Q.value = 1.4;
+    const gn = c.createGain(); gn.gain.setValueAtTime(0, t0); gn.gain.linearRampToValueAtTime(.9 * g, t0 + .0015); gn.gain.exponentialRampToValueAtTime(.001, t0 + .022);
+    n.connect(bp).connect(gn).connect(SND.out); n.start(t0); n.stop(t0 + .03);
+    const o = c.createOscillator(); o.frequency.setValueAtTime(130, t0); o.frequency.exponentialRampToValueAtTime(90, t0 + .05);
+    const go = c.createGain(); go.gain.setValueAtTime(0, t0); go.gain.linearRampToValueAtTime(.35 * g, t0 + .002); go.gain.exponentialRampToValueAtTime(.001, t0 + .06);
+    o.connect(go).connect(SND.out); o.start(t0); o.stop(t0 + .07);
+    if (window.IS_SOUND) { IS_SOUND.duck('tick', true); clearTimeout(tick.t); tick.t = setTimeout(() => IS_SOUND.duck('tick', false), 2500); }   // тема стихає, поки цокає
+  }
+  bSnd.addEventListener('click', () => {
+    SND.on = !SND.on; bSnd.classList.toggle('on', SND.on); bSnd.setAttribute('aria-pressed', String(SND.on));
+    if (SND.on && !SND.ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; SND.ctx = new AC(); SND.out = SND.ctx.createGain(); SND.out.gain.value = .35; SND.out.connect(SND.ctx.destination);
+      const len = Math.round(SND.ctx.sampleRate * .03), b = SND.ctx.createBuffer(1, len, SND.ctx.sampleRate), d = b.getChannelData(0); for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1; SND.noise = b; }
+    if (SND.ctx) SND.on ? SND.ctx.resume() : SND.ctx.suspend();
+  });
+  addEventListener('is-sound', (e) => { if (e.detail.on !== SND.on) bSnd.click(); });   // загальний звук статті вмикає й цокання
+  document.addEventListener('visibilitychange', () => { if (SND.ctx && SND.on) document.hidden ? SND.ctx.suspend() : SND.ctx.resume(); });
   const sl = $('.itm-sl'), bPlay = $('.itm-play'), bFilm = $('.itm-film'), stage = $('.itm-stage'), note = $('.itm-note');
   const oTP = $('.itm-tp'), oTE = $('.itm-te'), oMU = $('.itm-mu');
 
@@ -414,7 +455,7 @@ function init(slot) {
   sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -.0006; sun.shadow.normalBias = .03;
   Object.assign(sun.shadow.camera, { left: -70, right: 70, top: 70, bottom: -70, near: 10, far: 300 }); sun.shadow.camera.updateProjectionMatrix();
   sun.target.position.set(2, 0, -30);                                   // центр карти тіней — між деревом і будинком
-  sB.add(sun, sun.target, moon, moon.target, hemi);
+  sB.add(sun, sun.target, moon, moon.target, hemi); [sun, moon, hemi].forEach((l) => l.layers.enable(1));   // шар 1 — листок-герой (окремий прохід)
 
   // земля: шум кольору, сніг і пори року — через колір матеріалу
   function noiseTex(n, lo, hi) {
@@ -660,8 +701,8 @@ function init(slot) {
   nodes.forEach((n) => {
     if (!n.level) { for (let k = 0; k < 12; k++) leafs.push(mkCard(n, .5 + .5 * rnd(), 3)); return; }   // саджанець: пагони просто на верхівці стовбура
     n.dens = n.level <= 2 ? .85 + .3 * rnd() : n.parent.dens * (.9 + .2 * rnd());   // густота рівна: просвіти — лише між масами листя
-    const cnt = n.level === 1 ? 8 : n.level === 2 ? 6 : Math.round([0, 0, 0, 7, 8, 11][n.level] * n.dens * (.8 + .4 * rnd()));
-    const retire = n.level === 1 ? 6 : n.level === 2 ? 14 : 1e9;
+    const cnt = n.level === 1 ? 8 : n.level === 2 ? 6 : Math.round([0, 0, 0, 7, 16, 22][n.level] * n.dens * (.8 + .4 * rnd()));   // тонких гілочок (4–5) удвічі більше — крона дорослого дерева густа
+    const retire = 1e9;                                                  // пагони на товстих гілках не відмирають — всередині крони теж листя (його притінює AO)
     for (let k = 0; k < cnt; k++) leafs.push(mkCard(n, n.level <= 3 ? .3 + .7 * rnd() : .2 + .8 * (k + rnd()) / cnt, retire));
     if (n.level >= 3) for (let k = 0; k < 2; k++) leafs.push(mkCard(n, 1, retire));   // кожен кінчик — з пагонами, голих кінців поза кроною немає
   });
@@ -695,12 +736,12 @@ function init(slot) {
   // «дисонанс часу»: один листок «вирвано» з потоку часу ферми й покладено на потік часу Міллер — він рухається лише з планетним часом,
   // поки на фермі мчать роки й сезони; колір фіксується в момент відриву й далі не змінюється.
   const heroM = new THREE.MeshLambertMaterial({ map: leafTex, alphaTest: .45, side: THREE.DoubleSide }); translucent(heroM);
-  const hero = new THREE.Mesh(new THREE.PlaneGeometry(.42, .55), heroM); hero.castShadow = true; hero.visible = false; sB.add(hero);
+  const hero = new THREE.Mesh(new THREE.PlaneGeometry(.42, .55), heroM); hero.visible = false; hero.layers.set(1); sB.add(hero);
   // шлях: зривається з верхівки крони рівно після хвилі (tP = T_WAVE + 40 с) і летить навскіс через кадр — з лівого верху
   // в правий низ — аж до повернення на корабель (T_BACK). Положення — функція планетного часу: u = (tP − T_WAVE − 40)/(T_BACK − T_WAVE − 40),
   // тож на паузі листок завмирає, а повзунок водить його назад і вперед; до хвилі й після T_BACK його немає.
   // (кінцеву точку задаємо в екранних координатах камери ферми, щоб діагональ була саме на екрані)
-  const HL = { t: 0, dur: 1, kind: 0, f: 0, a: new THREE.Vector3(), b: new THREE.Vector3(), c: new THREE.Vector3() }, HL_PH = 1.7;      // t = u; сталі фаза й зсув — політ щоразу однаковий
+  const HL = { t: 0, dur: 1, kind: 0, a: new THREE.Vector3(), b: new THREE.Vector3(), c: new THREE.Vector3() }, HL_PH = 1.7;      // t = u; сталі фаза й зсув — політ щоразу однаковий
   const hf = new THREE.Vector3(), hr = new THREE.Vector3(), hv = new THREE.Vector3();
   function atNdc(x, y, depth, out) {                                         // точка на екрані (x, y) на глибині depth від камери
     camB.updateMatrixWorld(); camB.getWorldDirection(hf);
@@ -710,7 +751,7 @@ function init(slot) {
   hero.scale.setScalar(.5);                                                  // ~0,2 м — трохи більший за справжній, щоб читався в кадрі
   function heroLeaf() {
     const u = (tP - T_WAVE - 40) / (T_BACK - T_WAVE - 40);
-    HL.kind = u >= 0 && u < 1 ? 1 : 0; HL.t = Math.max(0, Math.min(1, u)); hero.visible = HL.kind === 1; HL.f = 0;
+    HL.kind = u >= 0 && u < 1 ? 1 : 0; HL.t = Math.max(0, Math.min(1, u)); hero.visible = HL.kind === 1;
     if (!HL.kind) return;
     const h0 = treeH((T_WAVE + 40) / 3600 * K / HY), e0 = h0 * .45;           // дерево в момент відриву — точка старту не повзе вгору, поки дерево росте
     HL.a.set(TREE.x + .12 * e0, TREE.y + h0 * .93, TREE.z + e0 * .2);        // верхівка крони, з боку камери
@@ -725,7 +766,6 @@ function init(slot) {
     const o = hero;
     if (e < .13) { const x = e / .13; o.position.copy(HL.a).lerp(HL.c, 1 - (1 - x) * (1 - x)); }
     else { const x = (e - .13) / .87; o.position.copy(HL.c).lerp(HL.b, x * x * .3 + x * .7); }
-    HL.f = sm(.02, .12, u) * (.85 - .35 * sm(.2, .6, u)) * (1 - sm(.88, 1, u));   // поки листок близько — фокус переважно на ньому, далі частково                       // частка перевода фокуса DOF з дерева на листок
     o.position
       .addScaledVector(hr, Math.sin(w * 1.3 + HL_PH) * .9 * sw).addScaledVector(camB.up, Math.sin(w * 2.6 + HL_PH) * .18 * sw);
     { const gy = groundH(o.position.x, o.position.z) + .06; if (o.position.y < gy) o.position.y = gy; }   // не під землю
@@ -779,7 +819,7 @@ function init(slot) {
     for (let i = 0; i < NL; i++) {
       const L = leafs[i], n = L.n;
       const vis = n.Le > 1e-4 ? sm(n.birth + .5, n.birth + 2, age) * (1 - sm(L.retire, L.retire + 3, age)) : 0;
-      LS[i] = L.size * youth * grow * vis;
+      LS[i] = L.size * youth * grow * vis * (1 + .7 * sm(3, 20, age));   // з роками пагони густішають і довшають: картка ×1 → ×1,7
       polyAt(n, L.t, V1).multiplyScalar(G).add(TREE); LP[i * 3] = V1.x; LP[i * 3 + 1] = V1.y; LP[i * 3 + 2] = V1.z;   // стебельце — точно на гілці
       if (vis > .5 && f <= L.ft) { cn++; cx += V1.x; cy += V1.y; cz += V1.z; cxx += V1.x * V1.x; cyy += V1.y * V1.y; czz += V1.z * V1.z; }
     }
@@ -903,6 +943,7 @@ function init(slot) {
     watU.uRip.value[ripK % 8].set(hit.x, hit.z, T, 1); ripK++; FOC.clickT = T; FOC.clickP.copy(hit); need = true; kick();
   });
 
+  const EPOCH = Date.UTC(2067, 3, 28, 10, 0);                              // день відльоту (кінець квітня, F0), 10:00 — умовна дата
   function overlay(st) {
     const x = ox; x.setTransform(DPR, 0, 0, DPR, 0, 0); x.clearRect(0, 0, W, H);
     const vw = mob ? W : W / 2, vh = mob ? H / 2 : H, bx = mob ? 0 : vw, by = mob ? vh : 0;
@@ -920,6 +961,21 @@ function init(slot) {
           x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 5; x.fillStyle = 'rgba(255,255,255,.92)'; x.fillText(DOY.p < 1 ? 'Дойл' : 'Дойл — забрала хвиля', sx, sy);
           x.shadowBlur = 0; x.globalAlpha = 1; x.textAlign = 'left'; } } }
     label(bx + 14, by + 22, 'ЗЕМЛЯ · ФЕРМА', 'дерево ' + fmt(lastTree.h, 1) + ' м');
+    // цифрові годинники — поруч, в одній плашці на стику кадрів: ліворуч час планети, праворуч дата й час Землі (однаковий кегль) —
+    // одним поглядом видно, що зліва ледь змінюються секунди, а справа летять роки.
+    // Відлік дати — день відльоту, 10:00 (як у earth()); рік умовний: у фільмі його не названо, 2067 — поширена оцінка глядачів.
+    { const mono = getComputedStyle(document.body).getPropertyValue('--mono'), big = Math.round(Math.max(15, Math.min(22, W * .017)));
+      const d = new Date(EPOCH + tP / 3600 * K * 3600e3), p2 = (v) => String(v).padStart(2, '0');
+      const A = hms(tP), B = d.getUTCFullYear() + '-' + p2(d.getUTCMonth() + 1) + '-' + p2(d.getUTCDate()) + ' · ' + p2(d.getUTCHours()) + ':' + p2(d.getUTCMinutes());
+      x.font = `600 ${big}px ${mono}`; const wa = x.measureText(A).width, wb = x.measureText(B).width, pad = 14, gap = 16, hh = big + 26;
+      const sx = mob ? W / 2 : vw, sy = mob ? vh : H - 18 - hh / 2;          // стик кадрів: вертикальний (поруч) або горизонтальний (один над одним)
+      const x0 = sx - gap - wa - pad, x1 = sx + gap + wb + pad, y0 = sy - hh / 2;
+      x.fillStyle = 'rgba(8,10,16,.62)'; x.beginPath(); x.roundRect ? x.roundRect(x0, y0, x1 - x0, hh, 10) : x.rect(x0, y0, x1 - x0, hh); x.fill();
+      x.strokeStyle = 'rgba(255,255,255,.28)'; x.lineWidth = 1; x.beginPath(); x.moveTo(sx, y0 + 7); x.lineTo(sx, y0 + hh - 7); x.stroke();
+      x.fillStyle = 'rgba(255,255,255,.96)'; x.textAlign = 'right'; x.fillText(A, sx - gap, y0 + big + 4);
+      x.textAlign = 'left'; x.fillText(B, sx + gap, y0 + big + 4);
+      x.font = '500 10.5px ' + mono; x.fillStyle = 'rgba(255,255,255,.7)'; x.textAlign = 'right'; x.fillText('на планеті', sx - gap, y0 + big + 18);
+      x.textAlign = 'left'; x.fillText('на Землі', sx + gap, y0 + big + 18); }
     // годинник планети
     const r = Math.max(26, Math.min(38, vw * .07)), cx = 14 + r, cy = vh - 14 - r - 12;
     x.fillStyle = 'rgba(10,14,20,.55)'; x.beginPath(); x.arc(cx, cy, r, 0, 7); x.fill();
@@ -1035,7 +1091,6 @@ function init(slot) {
     if (dofRT.width !== pw || dofRT.height !== ph) dofRT.setSize(pw, ph);
     if (b.width !== pw || b.height !== ph) { b.setSize(pw, ph); RT[1][0].setSize(pw, ph); }
     cam.getWorldDirection(fD); let S = fV.set(TREE.x, Math.max(1, lastTree.h * .5), TREE.z).sub(cam.position).dot(fD);
-    if (HL.f > 0) S += (Math.max(.3, fV.copy(hero.position).sub(cam.position).dot(fD)) - S) * HL.f;   // листок-герой близько — фокус частково на ньому
     dofU.uS.value = S; dofU.uK.value = 85 * 85 / (1.2 * (S * 1000 - 85)) / 36 * pw * 1.15; dofU.uMax.value = 13 * DPR; dofU.uRes.value.set(pw, ph);
     R.setScissorTest(false);
     R.setRenderTarget(dofRT); R.render(scene, cam);
@@ -1046,10 +1101,28 @@ function init(slot) {
     tsU.tD.value = b.texture; tsU.uDir.value.set(0, 1 / ph); tsU.uLast.value = 1; R.render(tsS, tsC);
   }
 
+  // листок-герой — окремим проходом після DOF, поверх кадру: шар 1 (основний рендер і глибина різкості його не бачать), тож він завжди різкий;
+  // світла ферми увімкнені й на шарі 1; карту тіней у цьому проході не перераховуємо
+  function heroPass(x, y, w, h) {
+    if (!hero.visible) return;
+    const ac = R.autoClear, su = R.shadowMap.autoUpdate; R.autoClear = false; R.shadowMap.autoUpdate = false; camB.layers.set(1);
+    R.setRenderTarget(null); R.setScissorTest(true); R.setViewport(x, y, w, h); R.setScissor(x, y, w, h); R.clearDepth(); R.render(sB, camB);
+    camB.layers.set(0); R.autoClear = ac; R.shadowMap.autoUpdate = su;
+  }
   let need = true, playing = false, vis = false, last = 0, prevT = tP, T = 0, camD = 9;
   function render(now) {
     const dt = Math.min(.1, last ? (now - last) / 1000 : 0); last = now;
-    if (playing) { tP += dt * PLAY; if (tP >= T_MAX) { tP = T_MAX; setPlay(false); } sl.value = String(Math.round(tP)); counters(); }
+    const tP0 = tP;
+    if (playing) { for (let k = 0; k < 8; k++) tP += dt / 8 * rate(tP);         // крива швидкості: дрібні кроки, щоб розгін/гальмування не перескакувати
+      if (tP >= T_MAX) { tP = T_MAX; setPlay(false); } sl.value = String(Math.round(tP)); counters(); }
+    // тік — щоразу, коли планетний час перетинає кратне доби Землі (детерміновано від tP); лише під час відтворення, на повільних ділянках,
+    // коли блок видно й вкладка не схована
+    // на розгоні тіки частішають разом із добами Землі (дріб → дзижчання) і плавно стихають; на гальмуванні — навпаки.
+    // Гучність — від частоти тіків: до ~1,2/с повна, до 25/с сходить нанівець (лог-шкала); тіки цього кадру рівномірно в межах dt, не більше 25/с
+    if (SND.on && SND.ctx && playing && vis && !document.hidden && dt > 0) {
+      const dp = dayP(), n = Math.floor(tP / dp) - Math.floor(tP0 / dp), tps = rate(tP) / dp;
+      const g = 1 - sm(Math.log(1.2), Math.log(25), Math.log(Math.max(1e-3, tps)));
+      if (n > 0 && g > .01) { const m = Math.min(n, Math.max(1, Math.round(25 * dt))); for (let i = 0; i < m; i++) tick(dt * i / m, g); } }
     dtReal = RM ? 0 : dt; if (!RM) T += dt;
     const dps = dt > 0 ? Math.abs(tP - prevT) / 3600 * K / 24 / dt : 0; prevT = tP;
     const ft = sm(.4, 5, dps); fast += (ft - fast) * Math.min(1, dt * (ft > fast ? 6 : 2.5));
@@ -1106,6 +1179,7 @@ function init(slot) {
     focusTargets(wz, ride, st);
     tiltShift(sA, camA, 0, 0, mob ? vh : 0, vw, vh);
     dof(sB, camB, mob ? 0 : vw, 0, vw, vh);
+    heroPass(mob ? 0 : vw, 0, vw, vh);
     overlay(st);
     need = false;
   }
@@ -1125,9 +1199,9 @@ function init(slot) {
     sl.addEventListener('input', () => { tP = +sl.value; if (refresh) setPlay(false); counters(); refresh && refresh(); });
     bPlay.addEventListener('click', () => { if (!refresh) return; if (!playing && tP >= T_MAX) tP = 0; setPlay(!playing); refresh(); });
     bFilm.addEventListener('click', () => { tP = Math.min(T_MAX, FILM_H / K * 3600); sl.value = String(Math.round(tP)); if (refresh) setPlay(false); counters(); filmNote(); refresh && refresh(); });
-    addEventListener('is-spin', (e) => { K = e.detail.K; counters(); filmNote(); refresh && refresh(); });
+    addEventListener('is-spin', (e) => { K = e.detail.K; counters(); filmNote(); rtMarks(); sndNote(); refresh && refresh(); });
   }
-  window.IS_TIME = { R, tsU, render, hero, HL, n: () => [leaves.count, bark.count, singles.count] };
+  window.IS_TIME = { R, tsU, render, hero, HL, rate, n: () => [leaves.count, bark.count, singles.count] };
   resize();
   render(performance.now());   // перший кадр одразу, щоб сцена не була порожньою
 }

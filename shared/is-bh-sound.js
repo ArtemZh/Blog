@@ -34,9 +34,12 @@
   function level() {
     if (!ac) return; const t = ac.currentTime, want = on && seen && !document.hidden ? LEVEL : 0;
     master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value, t); master.gain.linearRampToValueAtTime(want, t + 2);
+    window.IS_SOUND && IS_SOUND.duck('bh', !!want);                         // тема сторінки стихає, поки гуде діра
     if (want) ac.resume(); else setTimeout(() => { if (ac && !(on && seen && !document.hidden)) ac.suspend(); }, 2100);
   }
   btn.addEventListener('click', () => { on = !on; if (on && !ac) build(); btn.setAttribute('aria-pressed', String(on)); btn.classList.toggle('on', on); level(); });
   new IntersectionObserver((es) => { seen = es[0].isIntersecting; level(); }, { threshold: .15 }).observe(box);
   document.addEventListener('visibilitychange', level);
+  // загальний звук статті: увімкнули/вимкнули — гул іде слідом
+  addEventListener('is-sound', (e) => { if (e.detail.on !== on) btn.click(); });
 })();

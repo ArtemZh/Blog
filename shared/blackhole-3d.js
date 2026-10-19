@@ -70,7 +70,7 @@ const BH = `
     bool done = false;
     // jitter (як у singularity): кожен піксель стартує з випадковим зсувом на частку кроку — замість смуг-«сходинок»
     // від однакових кроків маємо дрібне зерно, яке ховає сяйво й грейд
-    float jit = hash(vec3(gl_FragCoord.xy, fract(uT*.37)*61.));
+    float jit = hash(vec3(gl_FragCoord.xy, 7.));                        // сталий для пікселя: без мерехтіння країв від кадру до кадру
     for (int i=0; i<520; i++){
       float r = length(p);
       if (r < 1.) { hole = true; break; }
@@ -243,8 +243,8 @@ function addShip(fg, s) {
   const dl = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/');
   new GLTFLoader().setDRACOLoader(dl).load('assets/interstellar/ship.glb', (g) => {
     ship = g.scene; const b = new THREE.Box3().setFromObject(ship), sz = b.getSize(new THREE.Vector3()), c = b.getCenter(new THREE.Vector3());
-    ship.position.sub(c); const spin = new THREE.Group(); spin.add(ship); const k = 1.6 / Math.max(sz.x, sz.y, sz.z); const piv = new THREE.Group(); piv.add(spin); piv.scale.setScalar(k);
-    piv.rotation.set(.25, .9, .15); fg.add(piv); ship = spin; shipPiv = piv;     // вісь хаба в моделі — X (перевірено в Blender: уздовж X найбільше вершин біля осі)
+    ship.position.sub(c); const spin = new THREE.Group(); spin.add(ship); const k = 1.15 / Math.max(sz.x, sz.y, sz.z); const piv = new THREE.Group(); piv.add(spin); piv.scale.setScalar(k);
+    piv.rotation.set(0, 0, -Math.PI / 2); fg.add(piv); ship = spin; shipPiv = piv;     // вісь хаба в моделі — X (перевірено в Blender: уздовж X найбільше вершин біля осі)
   }, undefined, () => {});
 }
 
@@ -274,9 +274,9 @@ const bhBox = document.getElementById('bh');
 if (bhBox) {
   const V = (v) => ({ value: v }), C3 = (r, g, b) => ({ value: new THREE.Vector3(r, g, b) });
   const s = scene(bhBox, BH, { uReal: V(0), uSwirl: V(.35), uFlow: V(.12), uNoise: V(.45), uRelief: V(26), uEmis: V(14), uAbs: V(4.5), uThick: V(.012), uOuter: V(14), uPlume: V(.3), uPatch: V(.7),
-    uRamp1: V(.05), uRamp2: V(.42), uCol1: C3(1, .64, .32), uCol2: C3(.16, .045, .015), uGlow: C3(.02, .018, .012) }, { dist: 19, pitch: .035, bloom: .55, scale: innerWidth < 700 ? .6 : .7, exposure: 1.1, spin: .02, min: 5, max: 60, grade: { vignette: .42, grain: .05, ca: 1.6, sat: 1.18, tint: [1, .97, .92] }, onFrame: (t, dt, cam) => { if (!ship) return; if (!reduce) { ship.rotation.x = t * .3; shipPiv.rotation.z = .15 + .03 * Math.sin(t * .4); }     // колесо крутиться навколо осі хаба (у моделі — X)
+    uRamp1: V(.05), uRamp2: V(.42), uCol1: C3(1, .64, .32), uCol2: C3(.16, .045, .015), uGlow: C3(.02, .018, .012) }, { dist: 19, pitch: .035, bloom: .55, scale: innerWidth < 700 ? .6 : .7, exposure: 1.1, spin: .02, min: 5, max: 60, grade: { vignette: .42, grain: .05, ca: 1.6, sat: 1.18, tint: [1, .97, .92] }, onFrame: (t, dt, cam) => { if (!ship) return; if (!reduce) { ship.rotation.x = t * .3; shipPiv.rotation.x = .009 * Math.sin(t * .4); }     // вісь хаба (у моделі X) повернута вертикально: кільце паралельне диску, як у гіроскопа на екваторіальній орбіті; ледь помітне погойдування ±0,5°
     cam.getWorldDirection(_f); _r.crossVectors(_f, cam.up).normalize(); _u.crossVectors(_r, _f);
-    shipPiv.position.copy(cam.position).addScaledVector(_f, 10).addScaledVector(_r, -3.2).addScaledVector(_u, -1.6); } });
+    shipPiv.position.copy(cam.position).addScaledVector(_f, 10).addScaledVector(_r, -3.1).addScaledVector(_u, -1.1); } });   // перед діркою, ліворуч, трохи нижче смуги диска — на темному тлі
   if (s) {
     const set = (v) => { s.U.uReal.value = v === 'real' ? 1 : 0;
       document.querySelectorAll('#bhMode button').forEach((b) => b.classList.toggle('on', b.dataset.m === v));

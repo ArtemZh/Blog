@@ -145,9 +145,12 @@
     document.body.appendChild(svg); document.body.appendChild(tab);
     var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, MENU = 272;
     var open = false, base = 0, amp = 0, cy = innerHeight / 2, ty = cy, t0 = performance.now(), raf = 0, timer = 0;
-    function edge(y, tt) { var d = (y - cy) / 150, g = Math.exp(-d * d); return base + amp * g * (1 + .18 * Math.sin(d * 5 - tt * 3)); }
+    // меню відкривається лише біля курсора: сторінка відступає на BASE (видно номери), а навколо курсора вигинається на всю ширину меню —
+    // повністю читаються ~3 пункти (σ = 130 px: ширина ≥ MENU лише в межах ±47 px), далі край плавно повертається в обидва боки
+    var BASE = 64;
+    function edge(y, tt) { var d = (y - cy) / 130, g = Math.exp(-d * d); return base + amp * g * (1 + .04 * Math.sin(d * 5 - tt * 3)); }
     function draw(now) {
-      var tt = (now - t0) / 1000, tgtB = open ? MENU : 0, tgtA = open ? 46 : 0, k = reduce ? 1 : .16;
+      var tt = (now - t0) / 1000, tgtB = open ? BASE : 0, tgtA = open ? MENU - BASE + 26 : 0, k = reduce ? 1 : .16;
       base += (tgtB - base) * k; amp += (tgtA - amp) * k * .8; cy += (ty - cy) * .2;
       var H = innerHeight, pts = [], y;
       for (y = -20; y <= H + 20; y += 12) pts.push([edge(y, tt), y]);
