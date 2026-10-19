@@ -28,7 +28,8 @@
     { g: 4, n: '31', f: '31-collatz.html',             t: t('Задача 3n+1', 'The 3n+1 problem') },
     { g: 4, n: '32', f: '32-french-past.html',         t: t('Минулий час у французькій', 'Past tenses in French') },
     { g: 4, n: '33', f: '33-three-body.html',          t: t('Задача трьох тіл', 'The three-body problem') },
-    { g: 4, n: '34', f: '34-interstellar.html',        t: t('Фізика «Інтерстеллара»', 'The physics of Interstellar') },
+    // 34 тимчасово приховано з меню
+    // { g: 4, n: '34', f: '34-interstellar.html',        t: t('Фізика «Інтерстеллара»', 'The physics of Interstellar') },
     { g: 4, n: '17', f: '17-ai.html',                  t: 'AI slop helper' },
     { g: 4, n: '25', f: 'https://artemzh.github.io/Be_like_Sheldon/', t: t('Be like Sheldon · відкриті дані', 'Be like Sheldon · open data'), ext: true }
   ];
