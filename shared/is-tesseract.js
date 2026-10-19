@@ -9,7 +9,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { gradePass } from './is-post.js?v=20261018235830';
+import { gradePass } from './is-post.js?v=20261019083324';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
@@ -19,7 +19,7 @@ if (root) init(root);
 function init(root) {
   const css = document.createElement('link');
   css.rel = 'stylesheet';
-  css.href = new URL('./is-tesseract.css?v=2', import.meta.url).href;
+  css.href = new URL('./is-tesseract.css?v=4', import.meta.url).href;
   document.head.appendChild(css);
 
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -36,7 +36,7 @@ function init(root) {
   };
   const LAY = {   // розкладка сліду: старт x, y, z, довжина точки, тире, пауза в літері, між літерами
     books: { x: -1.75, y: 0.05, z: 0.38, dot: 0.12, dash: 0.36, gi: 0.05, gl: 0.18 },
-    watch: { x: -0.3, y: 1.3, z: -0.42, dot: 0.06, dash: 0.18, gi: 0.03, gl: 0.09 },
+    watch: { x: -0.36, y: 1.12, z: 0.1, dot: 0.06, dash: 0.18, gi: 0.03, gl: 0.09 },
   };
 
   /* ── Морзе: елементи з часом у тактах і місцем на підлозі ── */
@@ -76,7 +76,7 @@ function init(root) {
       <div class="tss-pan"><div class="tss-h">Азбука Морзе</div><div class="tss-mo"></div><p class="tss-code"></p><p class="tss-v"></p></div>
       <div class="tss-pan"><div class="tss-h">Граф причин</div>${graphSVG()}</div>
     </div>
-    <p class="chint">Буквально змодельовано кодування азбукою Морзе (міжнародний код) і граф причин. За сюжетом фільму: знак STAY із книжок у день від'їзду Купера і дані через секундну стрілку годинника; роки зрізів умовні, а «дані» — лише слово-замінник, справжніх чисел фільм не показує. Принцип самоузгодженості Новікова й захист хронології Гокінга — гіпотези фізиків, жодну не доведено. Тесеракт тут — абстрактна схема, не кадр із фільму.</p>
+    <p class="chint">Буквально змодельовано кодування азбукою Морзе (міжнародний код) і граф причин. За сюжетом фільму: знак STAY із книжок у день від'їзду Купера і дані через секундну стрілку годинника; роки зрізів умовні, а «дані» — лише слово-замінник, справжніх чисел фільм не показує. Принцип самоузгодженості Новікова й захист хронології Гокінга — гіпотези фізиків, жодну не доведено. Годинник — власна модель (не копія з фільму), стрілки показують живий час; у лупі — циферблат обраного зрізу. Тесеракт тут — абстрактна схема, не кадр із фільму.</p>
   </div>`;
 
   const $ = s => root.querySelector(s);
@@ -222,11 +222,68 @@ function init(root) {
     const frameGeo = new THREE.BufferGeometry();
     frameGeo.setAttribute('position', new THREE.Float32BufferAttribute([-2.2, 0, 0, 2.2, 0, 0, 2.2, 0, 0, 2.2, 2.8, 0, 2.2, 2.8, 0, -2.2, 2.8, 0, -2.2, 2.8, 0, -2.2, 0, 0], 3));
     const fillGeo = new THREE.PlaneGeometry(4.4, 2.8); fillGeo.translate(0, 1.4, 0);
-    const ringGeo = new THREE.RingGeometry(0.155, 0.185, 48);
-    const faceGeo = new THREE.CircleGeometry(0.155, 40);
-    const handGeo = new THREE.PlaneGeometry(0.018, 0.15); handGeo.translate(0, 0.068, 0);
-    const CLK = new THREE.Vector3(0.02, 0.86, -0.42);     // годинник стоїть на столі з моделі кімнати
+    const CLK = new THREE.Vector3(-0.18, 0.78, 0.2);      // годинник лежить на стільниці столу з моделі кімнати (верх столу y = 0.78)
 
+    /* ── годинник Мерф: кишеньковий годинник Poly Haven (CC0, assets/interstellar/pocket-watch.glb) ──
+       Стрілки в моделі — окремі деталі з віссю в центрі циферблата, тож крутимо саме їх. Циферблат дивиться вздовж +Z моделі,
+       «12» — уздовж +Y. Якщо GLB не завантажився — процедурний годинник із власними стрілками. */
+    const WATCH = {
+      url: 'assets/interstellar/pocket-watch.glb', scale: 1.5,               // метри моделі → одиниці сцени; майже справжній розмір (≈ 9 см), трохи крупніше, щоб читався
+      center: new THREE.Vector3(0, 0, 0),                                     // центр циферблата (вісь стрілок) у координатах моделі
+      normal: new THREE.Vector3(0, 0, 1),                                     // нормаль циферблата
+      up12: new THREE.Vector3(0, 1, 0),                                       // напрям на «12»
+      r: 0.025, lift: 0.0035,                                                 // радіус циферблата; висота стрілок процедурного годинника
+      lay: -72 * Math.PI / 180,                                               // лежить на столі, циферблат трохи до камери
+      hands: { hh: ['pocket_watch_hand_hours', 147.1], mh: ['pocket_watch_hand_minutes', -54.5], sh: ['pocket_watch_hand_secondes', 29.7] },  // кут стрілки в моделі, ° за годинниковою від «12»
+    };
+    const dialQ = (() => { const x = new THREE.Vector3().crossVectors(WATCH.up12, WATCH.normal).normalize(); return new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(x, WATCH.up12, WATCH.normal)); })();
+    const handGeo = (w, l, back) => { const g = new THREE.PlaneGeometry(w, l + back); g.translate(0, (l - back) / 2, 0); return g; };
+    const H_GEO = handGeo(0.0036, 0.016, 0.004), M_GEO = handGeo(0.0028, 0.025, 0.004), S_GEO = handGeo(0.0011, 0.028, 0.007);
+    const DISC_GEO = new THREE.CircleGeometry(WATCH.r * 0.97, 48), HUB_GEO = new THREE.CircleGeometry(0.0022, 16);
+    const watchSrc = { mesh: null };                                             // меш із GLB (спільна геометрія/текстура на всі зрізи)
+    function makeWatch(fallback) {
+      const g = new THREE.Group(), inner = new THREE.Group(), mats = [];
+      inner.position.copy(WATCH.center).negate(); g.add(inner);            // обертаємо навколо центра циферблата
+      if (watchSrc.mesh && !fallback) {
+        const m = watchSrc.mesh.clone(true), cache = new Map();
+        m.traverse((o) => { if (!o.isMesh) return; const one = (x) => { if (!cache.has(x)) { const c = x.clone(); c.userData.o0 = x.transparent ? x.opacity : 1; c.transparent = true; cache.set(x, c); mats.push(c); } return cache.get(x); };
+          o.material = Array.isArray(o.material) ? o.material.map(one) : one(o.material); });
+        inner.add(m);
+        const hands = {};
+        for (const [k, [name, a0]] of Object.entries(WATCH.hands)) {
+          const n = m.getObjectByName(name); if (!n) continue;
+          const pv = new THREE.Group(); pv.position.copy(n.position); n.parent.add(pv); n.position.set(0, 0, 0); n.rotation.z = a0 * Math.PI / 180; pv.add(n);
+          hands[k] = pv;
+        }
+        const sn = m.getObjectByName(WATCH.hands.sh[0]), secMat = sn && sn.isMesh ? sn.material.clone() : null;
+        // секундна — підсвічена кольором дії статті: власне світіння, щоб читалась і на загальному плані, і в лупі
+        if (secMat) { secMat.userData.o0 = 1; secMat.map = null; secMat.color.set(0xff6a2a); if (secMat.emissive) { secMat.emissive.set(0xff5a1a); secMat.emissiveIntensity = 1.6; } secMat.needsUpdate = true; sn.material = secMat; mats.push(secMat); }
+        g.scale.setScalar(WATCH.scale); g.rotation.x = WATCH.lay; g.position.copy(CLK);
+        g.updateMatrixWorld(true); const bb = new THREE.Box3().setFromObject(g); g.position.y += CLK.y - bb.min.y;
+        const nop = new THREE.Object3D(), disc = new THREE.Mesh(DISC_GEO, new THREE.MeshBasicMaterial({ visible: false }));
+        return { g, inner, mats, hh: hands.hh || nop, mh: hands.mh || nop, sh: hands.sh || nop, disc, discA: 0, secMat, secC: secMat ? secMat.color.clone() : null };
+      } else {                                                                   // процедурний: корпус, циферблат, ремінець
+        const caseMat = new THREE.MeshStandardMaterial({ color: 0xd9d9d6, metalness: .8, roughness: .35, transparent: true });
+        const strapMat = new THREE.MeshStandardMaterial({ color: 0x6b3f22, roughness: .9, transparent: true });
+        const dialMat = new THREE.MeshStandardMaterial({ color: 0xf1e9d4, roughness: .7, transparent: true });
+        mats.push(caseMat, strapMat, dialMat);
+        const cs = new THREE.Mesh(new THREE.CylinderGeometry(WATCH.r + .006, WATCH.r + .006, .009, 48), caseMat);
+        cs.position.copy(WATCH.center); cs.quaternion.copy(dialQ); cs.rotateX(Math.PI / 2); cs.translateY(.0045); inner.add(cs);
+        const dl = new THREE.Mesh(new THREE.CircleGeometry(WATCH.r, 48), dialMat); dl.position.copy(WATCH.center); dl.quaternion.copy(dialQ); dl.translateZ(.0005); inner.add(dl);
+        [1, -1].forEach(sg => { const st = new THREE.Mesh(new THREE.BoxGeometry(.11, .003, .022), strapMat); st.position.copy(WATCH.center).addScaledVector(WATCH.up12, sg * .085).addScaledVector(WATCH.normal, -.006); st.quaternion.copy(dialQ); st.rotateX(Math.PI / 2); inner.add(st); });
+      }
+      // диск-«скло» над намальованими стрілками + власні стрілки
+      const discMat = new THREE.MeshBasicMaterial({ color: 0x9c9382, transparent: true, depthWrite: false }); mats.push(discMat);
+      const disc = new THREE.Mesh(DISC_GEO, discMat); disc.position.copy(WATCH.center).addScaledVector(WATCH.normal, WATCH.lift * .6); disc.quaternion.copy(dialQ); inner.add(disc);
+      const dial = new THREE.Group(); dial.position.copy(WATCH.center).addScaledVector(WATCH.normal, WATCH.lift); dial.quaternion.copy(dialQ); inner.add(dial);
+      const hmMat = new THREE.MeshBasicMaterial({ color: 0x1b1b1f, transparent: true, side: THREE.DoubleSide }), secMat = new THREE.MeshBasicMaterial({ color: 0xd62839, transparent: true, side: THREE.DoubleSide });
+      mats.push(hmMat, secMat);
+      const hh = new THREE.Mesh(H_GEO, hmMat), mh = new THREE.Mesh(M_GEO, hmMat), sh = new THREE.Mesh(S_GEO, secMat), hub = new THREE.Mesh(HUB_GEO, secMat);
+      mh.position.z = .0006; sh.position.z = .0012; hub.position.z = .0014; dial.add(hh, mh, sh, hub);
+      g.scale.setScalar(WATCH.scale); g.rotation.x = WATCH.lay; g.position.copy(CLK);
+      g.updateMatrixWorld(true); const bb = new THREE.Box3().setFromObject(g); g.position.y += CLK.y - bb.min.y;   // поставити на стільницю
+      return { g, inner, mats, hh, mh, sh, dial, disc, discA: 0, secMat, secC: RED.clone() };
+    }
     // меблі кімнати (GLB): стіл із надбудовою, стілець, ліжко — одна геометрія/текстура, 24 копії з власною прозорістю
     scene.add(new THREE.HemisphereLight(0x9fb8ff, 0x1a1626, 1.1));
     const key = new THREE.DirectionalLight(0xffe0c0, 1.6); key.position.set(3, 5, 4); scene.add(key);
@@ -244,15 +301,18 @@ function init(root) {
       const frame = new THREE.LineSegments(frameGeo, new THREE.LineBasicMaterial({ color: BASE, ...tr }));
       const fill = new THREE.Mesh(fillGeo, new THREE.MeshBasicMaterial({ color: BASE, side: THREE.DoubleSide, opacity: 0.03, ...tr }));
       const room = new THREE.LineSegments(roomGeo, new THREE.LineBasicMaterial({ color: ROOM, ...tr }));
-      const face = new THREE.Mesh(faceGeo, new THREE.MeshBasicMaterial({ color: 0x0b0e18, ...tr }));
-      const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: ROOM, ...tr }));
-      const hand = new THREE.Mesh(handGeo, new THREE.MeshBasicMaterial({ color: WHITE, ...tr }));
-      face.position.copy(CLK); ring.position.copy(CLK); hand.position.copy(CLK); hand.position.z += 0.005;
+      const watch = makeWatch(true); g.add(watch.g);
       const lbl = label(`+${i}`); lbl.position.set(-1.75, 3.05, 0);
-      g.add(fill, frame, room, face, ring, hand, lbl);
+      g.add(fill, frame, room, lbl);
       scene.add(g);
-      slices.push({ g, frame, fill, room, ring, face, hand, lbl, off: 0, flash: 0, flashC: ACT });
+      slices.push({ g, frame, fill, room, watch, lbl, off: 0, flash: 0, flashC: ACT });
     }
+    new GLTFLoader().setDRACOLoader(new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/'))
+      .load(WATCH.url, (gl) => {
+        watchSrc.mesh = gl.scene;
+        slices.forEach((s) => { s.g.remove(s.watch.g); s.watch = makeWatch(false); s.g.add(s.watch.g); });
+        kick();
+      }, undefined, () => {});
     function label(t) {
       const c = document.createElement('canvas'); c.width = 192; c.height = 64;
       const x = c.getContext('2d'); x.font = '600 40px "Roboto Mono", ui-monospace, monospace'; x.fillStyle = '#fff'; x.textBaseline = 'middle';
@@ -334,6 +394,49 @@ function init(root) {
     }
     flowPts(0);
 
+    /* лупа: макрокамера над циферблатом обраного зрізу → невелика текстура → круг у куті з м'яким краєм (мала глибина різкості) */
+    const LUPE_PX = 320;
+    const rtLupe = new THREE.WebGLRenderTarget(LUPE_PX, LUPE_PX, { samples: 0 });
+    const macroCam = new THREE.PerspectiveCamera(30, 1, 0.02, 10);
+    const lupeMat = new THREE.ShaderMaterial({
+      uniforms: { tD: { value: rtLupe.texture }, uA: { value: 1 } }, transparent: true, depthTest: false, depthWrite: false,
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
+      fragmentShader: `uniform sampler2D tD; uniform float uA; varying vec2 vUv;
+        void main(){
+          vec2 q = vUv - .5; float r = length(q) * 2.;
+          float k = smoothstep(.35, 1., r) * 6. / 320.;                       // різко в центрі, розмито до краю
+          vec4 c = texture2D(tD, vUv) * 2.;
+          c += texture2D(tD, vUv + vec2(k, 0.)) + texture2D(tD, vUv - vec2(k, 0.)) + texture2D(tD, vUv + vec2(0., k)) + texture2D(tD, vUv - vec2(0., k));
+          c += texture2D(tD, vUv + vec2(k, k) * .7) + texture2D(tD, vUv - vec2(k, k) * .7) + texture2D(tD, vUv + vec2(k, -k) * .7) + texture2D(tD, vUv - vec2(k, -k) * .7);
+          c /= 10.; c.rgb *= .7 * (1. - .35 * smoothstep(.6, 1., r));
+          float ring = (1. - smoothstep(.965, .985, r)) * smoothstep(.93, .945, r);
+          c.rgb = mix(c.rgb, vec3(.85, .88, 1.), ring * .8);
+          gl_FragColor = vec4(c.rgb, uA * (1. - smoothstep(.985, 1., r)));
+          #include <tonemapping_fragment>
+          #include <colorspace_fragment>
+        }` });
+    const hudScene = new THREE.Scene(), hudCam = new THREE.OrthographicCamera(0, 1, 1, 0, -1, 1);
+    const lupe = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), lupeMat); hudScene.add(lupe);
+    const lupeEl = document.createElement('span'); lupeEl.className = 'tss-lupe'; stage.appendChild(lupeEl);
+    const mv = new THREE.Vector3(), mn = new THREE.Vector3(), mu = new THREE.Vector3();
+    function renderLupe(w, h) {
+      const si = Math.max(0, Math.min(N - 1, Math.round(cur))), wt = slices[si].watch;
+      wt.inner.updateWorldMatrix(true, false);
+      mv.copy(WATCH.center).applyMatrix4(wt.inner.matrixWorld);
+      mn.copy(WATCH.normal).transformDirection(wt.inner.matrixWorld); mu.copy(WATCH.up12).transformDirection(wt.inner.matrixWorld);
+      const dist = WATCH.r * wt.g.scale.x * 4.4;
+      macroCam.position.copy(mv).addScaledVector(mn, dist); macroCam.up.copy(mu); macroCam.lookAt(mv);
+      const keep = slices.map(s => s.g.visible); slices.forEach((s, i) => { s.g.visible = i === si; });   // у лупі — лише обраний зріз
+      renderer.setRenderTarget(rtLupe); renderer.setClearColor(0x04050a, 1); renderer.clear(); renderer.render(scene, macroCam); renderer.setRenderTarget(null);
+      slices.forEach((s, i) => { s.g.visible = keep[i]; });
+      const d = Math.min(170, Math.round(Math.min(w, h) * 0.36)), m = 14;
+      lupe.scale.set(d / w, d / h, 1); lupe.position.set(1 - (m + d / 2) / w, (m + d / 2) / h, 0);
+      lupeMat.uniforms.uA.value = fade;
+      renderer.autoClear = false; renderer.render(hudScene, hudCam); renderer.autoClear = true;
+      lupeEl.style.right = m + 'px'; lupeEl.style.bottom = (m + d + 4) + 'px'; lupeEl.textContent = `лупа · секундна стрілка · рік +${si}`;
+      lupeEl.style.opacity = fade.toFixed(2);
+    }
+
     let fade = 1, tSec = 0;
     function resize() {
       const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
@@ -384,6 +487,10 @@ function init(root) {
       const sw = RM ? 0 : 1, sx = .08 * Math.sin(tSec * .23) * sw, sy = .05 * Math.sin(tSec * .17 + 1.) * sw;   // ледь помітне «дихання» камери
       if (narrow) { camera.position.set(1.5 + sx, 2.0 + sy, zc + 6.4); camera.lookAt(0, 1.25, zc - 0.6); }
       else { camera.position.set(3.1 + sx, 2.15 + sy, zc + 5.3); camera.lookAt(-0.15, 1.15, zc - 1.2); }
+      // живий час: година, хвилина, секунда (крок раз на секунду); gOff — ривок Морзе з передачі
+      const now = new Date(), secI = now.getSeconds(), minI = now.getMinutes(), hrI = now.getHours() % 12;
+      const secA = RM ? 0 : secI * Math.PI / 30, minA = (minI + secI / 60) * Math.PI / 30, hourA = (hrI + minI / 60) * Math.PI / 6;
+      let gOff = 0; for (let i = 0; i < N; i++) gOff = Math.max(gOff, slices[i].off);
 
       for (let i = 0; i < N; i++) {
         const s = slices[i], d = Math.abs(i - cur), sel = Math.max(0, 1 - d), vis = pastVis(i);
@@ -395,13 +502,15 @@ function init(root) {
         s.fill.material.opacity = (0.012 + 0.05 * sel) * fade + 0.08 * s.flash;
         s.room.material.color.copy(ROOM).lerp(ACT, 0.35 * sel * fade);
         s.room.material.opacity = 0.08 * fade + 0.72 * w;
-        s.ring.material.opacity = 0.1 * fade + 0.85 * w; s.face.material.opacity = 0.9 * w;
-        s.hand.material.opacity = 0.1 * fade + 0.9 * w;
-        s.hand.material.color.copy(WHITE).lerp(ACT, s.off > 0.05 ? 1 : 0);
         s.lbl.material.opacity = 0.2 * fade + 0.8 * w; s.lbl.material.color.copy(WHITE).lerp(ACT, sel * fade);
         if (s.model) { s.model.material.opacity = Math.min(1, (0.08 * fade + 0.92 * w) * vis); s.model.visible = s.model.material.opacity > 0.02; }
-        const base = RM ? 0 : -Math.floor(tSec) * Math.PI / 30;     // секундна стрілка: 6° щосекунди
-        s.hand.rotation.z = base - s.off;
+        // годинник: той самий у кожному зрізі; в обраному — крупніший; секундна стрілка крокує за живим часом,
+        // а під час передачі смикається в такт Морзе в усіх зрізах одразу — повідомлення йде крізь час
+        const wt = s.watch, wo = Math.min(1, (0.1 * fade + 0.9 * w) * vis);
+        wt.mats.forEach(m => { m.opacity = wo * (m.userData.o0 ?? 1); }); wt.disc.material.opacity = wo * wt.discA; wt.g.visible = wo > 0.02;
+        wt.g.scale.setScalar(WATCH.scale * (1 + 0.25 * sel));
+        wt.hh.rotation.z = -hourA; wt.mh.rotation.z = -minA; wt.sh.rotation.z = -secA - gOff;
+        if (wt.secMat) wt.secMat.color.copy(wt.secC).lerp(WHITE, gOff > 0.05 ? 0.7 : 0);
         if (ghosts[i]) {
           const gh = ghosts[i]; gh.glow = Math.max(0, gh.glow - dt * 0.35);
           gh.ln.material.color.copy(GHOST).lerp(gh.glowC, Math.min(1, gh.glow * 1.5));
@@ -419,10 +528,11 @@ function init(root) {
       if (!RM) flowPts(dt);
       const moved = stepBooks(dt);
       grade.tick(tSec, stage.clientWidth, stage.clientHeight); composer.render();
+      renderLupe(stage.clientWidth, stage.clientHeight);
       return moved;
     }
 
-    window.IS_TESS = { renderer, composer, bloom, grade, frame };
+    window.IS_TESS = { renderer, composer, bloom, grade, frame, rtLupe, macroCam, scene, slices, lupeMat };
     return { frame, startFall, startReturn, resetSlice, slices, ghosts, marks, NB, ACT, RED, ROOM };
   }
 

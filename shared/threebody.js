@@ -4,6 +4,7 @@
 (function () {
   'use strict';
   const $ = (s) => document.querySelector(s);
+  const EN = window.PMP_LANG === 'en', _t = (uk, en) => (EN ? en : uk);
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 
   /* ── фізика ─────────────────────────────────────────────────── */
@@ -118,12 +119,12 @@
       }
       $('#chaosT').textContent = st.t.toFixed(1); $('#chaosD').textContent = sep().toExponential(1);
       draw();
-      if (st.t >= 70) { st.run = false; $('#chaosGo').textContent = '▶ ще раз'; return; }
+      if (st.t >= 70) { st.run = false; $('#chaosGo').textContent = _t('▶ ще раз', "▶ again"); return; }
       st.raf = requestAnimationFrame(loop);
     }
-    $('#chaosGo').addEventListener('click', () => { if (st.run) { st.run = false; $('#chaosGo').textContent = '▶ продовжити'; return; }
-      if (st.t >= 70) reset(); st.run = true; $('#chaosGo').textContent = '❚❚ пауза'; loop(); });
-    $('#chaosReset').addEventListener('click', () => { st.run = false; reset(); draw(); $('#chaosGo').textContent = '▶ запустити'; });
+    $('#chaosGo').addEventListener('click', () => { if (st.run) { st.run = false; $('#chaosGo').textContent = _t('▶ продовжити', "▶ continue"); return; }
+      if (st.t >= 70) reset(); st.run = true; $('#chaosGo').textContent = _t('❚❚ пауза', "❚❚ pause"); loop(); });
+    $('#chaosReset').addEventListener('click', () => { st.run = false; reset(); draw(); $('#chaosGo').textContent = _t('▶ запустити', "▶ run"); });
     reset(); draw(); addEventListener('resize', draw);
     window.TB.chaos = st;
   })();
@@ -147,16 +148,16 @@
     window.TB.lag = { points, phi };          // 3D-сцена точок Лагранжа бере розрахунок звідси
     if (!cv) return;
     const NOTE = {
-      L1: 'між тілами; нестійка. Сонце — Земля: обсерваторія SOHO дивиться на Сонце без затемнень.',
-      L2: 'за меншим тілом; нестійка. Сонце — Земля: телескоп «Джеймс Вебб», раніше — Gaia.',
-      L3: 'з протилежного боку від більшого тіла; нестійка, апаратів там немає.',
-      L4: 'попереду меншого тіла на його орбіті; стійка, якщо менше тіло легше за ~4% загальної маси. Тут троянські астероїди Юпітера.',
-      L5: 'позаду меншого тіла; так само стійка за малої маси. Друга група троянців Юпітера.',
+      L1: _t('між тілами; нестійка. Сонце — Земля: обсерваторія SOHO дивиться на Сонце без затемнень.', "between the bodies; unstable. Sun — Earth: the SOHO observatory watches the Sun without eclipses."),
+      L2: _t('за меншим тілом; нестійка. Сонце — Земля: телескоп «Джеймс Вебб», раніше — Gaia.', "behind the smaller body; unstable. Sun — Earth: the James Webb telescope, formerly Gaia."),
+      L3: _t('з протилежного боку від більшого тіла; нестійка, апаратів там немає.', "on the opposite side of the larger body; unstable, there are no spacecraft there."),
+      L4: _t('попереду меншого тіла на його орбіті; стійка, якщо менше тіло легше за ~4% загальної маси. Тут троянські астероїди Юпітера.', "ahead of the smaller body on its orbit; stable if the smaller body is lighter than ~4% of the total mass. Jupiter's Trojan asteroids are here."),
+      L5: _t('позаду меншого тіла; так само стійка за малої маси. Друга група троянців Юпітера.', "behind the smaller body; likewise stable when its mass is small. The second group of Jupiter's Trojans."),
     };
     const dpr = Math.min(2, devicePixelRatio || 1);
     function draw() {
       $('#lagMu').textContent = st.mu < .001 ? st.mu.toExponential(2) : st.mu.toFixed(4);     // повзунок видно і в 3D
-      $('#lagStab').textContent = st.mu < 0.0385 ? 'L4 і L5 стійкі' : 'L4 і L5 вже нестійкі (μ > 0,0385)';
+      $('#lagStab').textContent = st.mu < 0.0385 ? _t('L4 і L5 стійкі', "L4 and L5 are stable") : _t('L4 і L5 вже нестійкі (μ > 0,0385)', "L4 and L5 are no longer stable (μ > 0.0385)");
       if (!cv.clientWidth) return;                    // карта схована (вигляд 3D) — намалюємо, коли відкриють
       const w = cv.clientWidth, h = Math.round(w * .62); cv.width = w * dpr; cv.height = h * dpr; cv.style.height = h + 'px';
       const x = cv.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -182,7 +183,7 @@
       st.pts = pts.map((p) => { const [a, b] = P(p.x, p.y); x.fillStyle = css('--act'); x.beginPath(); x.arc(a, b, 5, 0, 7); x.fill();
         x.fillStyle = css('--ink'); x.fillText(p.id, a, b - 10); return { ...p, sx: a, sy: b }; });
       $('#lagMu').textContent = mu < .001 ? mu.toExponential(2) : mu.toFixed(4);
-      $('#lagStab').textContent = mu < 0.0385 ? 'L4 і L5 стійкі' : 'L4 і L5 вже нестійкі (μ > 0,0385)';
+      $('#lagStab').textContent = mu < 0.0385 ? _t('L4 і L5 стійкі', "L4 and L5 are stable") : _t('L4 і L5 вже нестійкі (μ > 0,0385)', "L4 and L5 are no longer stable (μ > 0.0385)");
     }
     const sl = $('#lagSl'), lin = (v) => Math.pow(10, -4 + v / 100 * Math.log10(0.5 / 1e-4));
     sl.addEventListener('input', () => { st.mu = lin(+sl.value); draw(); });

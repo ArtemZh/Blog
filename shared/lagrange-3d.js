@@ -16,32 +16,35 @@ const box = document.getElementById('lag3'), card = document.getElementById('lag
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const D = 10;                                   // відстань між важкими тілами в одиницях сцени
 const TEX = 'assets/threebody/tex/';
+const EN = window.PMP_LANG === 'en', _t = (uk, en) => (EN ? en : uk);
+const JW = _t('«Джеймс Вебб»', 'James Webb'), QQ = _t('«Цюецяо»', 'Queqiao');   // назви апаратів — і підпис, і ключ у CRAFT
+if (EN) document.getElementById('lagMiniBtn').title = 'Open the top-down map';
 
 const SYS = {
-  se: { name: 'Сонце — Земля', mu: 3.003e-6, big: 'sun', small: 'earth', bigR: 1.5, smallR: .48, exag: 2.6,
-    craft: { L1: 'SOHO', L2: '«Джеймс Вебб»' },
-    about: 'μ ≈ 3·10⁻⁶: Земля в 333 тисячі разів легша за Сонце. L1 і L2 лежать приблизно за 1,5 млн км від Землі — у сто разів ближче, ніж до Сонця.',
-    scale: 'Розміри тіл збільшено, а відстані від Землі до L1, L2 і Місяця на сцені — у кілька разів більші, ніж насправді, інакше все злилося б із Землею. Насправді L1 і L2 приблизно вчетверо далі від Землі, ніж Місяць.' },
-  em: { name: 'Земля — Місяць', mu: 0.0121505, big: 'earth', small: 'moon', bigR: .78, smallR: .22,
-    craft: { L2: '«Цюецяо»' },
-    about: 'μ ≈ 0,012: Місяць у 81 раз легший за Землю. L1 — приблизно за 326 тисяч км від Землі, за 58 тисяч км від Місяця.',
-    scale: 'Розміри Землі й Місяця збільшено; відстані між тілами й точками — у масштабі.' },
-  sj: { name: 'Сонце — Юпітер', mu: 0.000954, big: 'sun', small: 'jupiter', bigR: 1.5, smallR: .46, trojans: true,
+  se: { name: _t('Сонце — Земля', 'Sun — Earth'), mu: 3.003e-6, big: 'sun', small: 'earth', bigR: 1.5, smallR: .48, exag: 2.6,
+    craft: { L1: 'SOHO', L2: JW },
+    about: _t('μ ≈ 3·10⁻⁶: Земля в 333 тисячі разів легша за Сонце. L1 і L2 лежать приблизно за 1,5 млн км від Землі — у сто разів ближче, ніж до Сонця.', "μ ≈ 3·10⁻⁶: the Earth is 333 thousand times lighter than the Sun. L1 and L2 lie about 1.5 million km from the Earth — a hundred times closer than the Sun."),
+    scale: _t('Розміри тіл збільшено, а відстані від Землі до L1, L2 і Місяця на сцені — у кілька разів більші, ніж насправді, інакше все злилося б із Землею. Насправді L1 і L2 приблизно вчетверо далі від Землі, ніж Місяць.', "The bodies are enlarged, and the distances from the Earth to L1, L2 and the Moon on the scene are several times larger than in reality, otherwise everything would merge with the Earth. In reality L1 and L2 are about four times farther from the Earth than the Moon.") },
+  em: { name: _t('Земля — Місяць', 'Earth — Moon'), mu: 0.0121505, big: 'earth', small: 'moon', bigR: .78, smallR: .22,
+    craft: { L2: QQ },
+    about: _t('μ ≈ 0,012: Місяць у 81 раз легший за Землю. L1 — приблизно за 326 тисяч км від Землі, за 58 тисяч км від Місяця.', "μ ≈ 0.012: the Moon is 81 times lighter than the Earth. L1 is about 326 thousand km from the Earth and 58 thousand km from the Moon."),
+    scale: _t('Розміри Землі й Місяця збільшено; відстані між тілами й точками — у масштабі.', "The Earth and the Moon are enlarged; the distances between the bodies and the points are to scale.") },
+  sj: { name: _t('Сонце — Юпітер', 'Sun — Jupiter'), mu: 0.000954, big: 'sun', small: 'jupiter', bigR: 1.5, smallR: .46, trojans: true,
     craft: {},
-    about: 'μ ≈ 0,001: Юпітер у тисячу разів легший за Сонце. У L4 і L5 зібралися понад десять тисяч відомих троянських астероїдів; рух рою на сцені порахований за законом тяжіння.',
-    scale: 'Розміри Сонця й Юпітера збільшено; положення точок і рух троянців — у масштабі. Нахил орбіт астероїдів показано умовно.' },
+    about: _t('μ ≈ 0,001: Юпітер у тисячу разів легший за Сонце. У L4 і L5 зібралися понад десять тисяч відомих троянських астероїдів; рух рою на сцені порахований за законом тяжіння.', "μ ≈ 0.001: Jupiter is a thousand times lighter than the Sun. More than ten thousand known Trojan asteroids have gathered at L4 and L5; the motion of the swarm on the scene is computed from the law of gravitation."),
+    scale: _t('Розміри Сонця й Юпітера збільшено; положення точок і рух троянців — у масштабі. Нахил орбіт астероїдів показано умовно.', "The Sun and Jupiter are enlarged; the positions of the points and the motion of the Trojans are to scale. The inclination of the asteroid orbits is shown schematically.") },
 };
 const NOTE = {
-  L1: { t: 'L1 — між тілами', b: 'Тут притягання двох тіл і відцентрова сила врівноважуються на прямій між ними. Точка нестійка: апарати літають навколо неї й регулярно підправляють орбіту.' },
-  L2: { t: 'L2 — за меншим тілом', b: 'Теж на прямій, але з зовнішнього боку. Нестійка. Для телескопів зручна тим, що Сонце, Земля й Місяць завжди з одного боку — їх легко затулити одним щитом.' },
-  L3: { t: 'L3 — по той бік більшого тіла', b: 'Майже на орбіті меншого тіла, але навпроти нього. Нестійка й далека; апаратів тут немає.' },
-  L4: { t: 'L4 — попереду на орбіті', b: 'Вершина рівностороннього трикутника з двома тілами. Стійка, якщо менше тіло легше за ~4% загальної маси: тіло, що звідси зісковзує, сила Коріоліса заводить на петлю навколо точки.' },
-  L5: { t: 'L5 — позаду на орбіті', b: 'Дзеркальна до L4 і так само стійка за малої маси меншого тіла.' },
+  L1: { t: _t('L1 — між тілами', "L1 — between the bodies"), b: _t('Тут притягання двох тіл і відцентрова сила врівноважуються на прямій між ними. Точка нестійка: апарати літають навколо неї й регулярно підправляють орбіту.', "Here the pull of the two bodies and the centrifugal force balance on the line between them. The point is unstable: spacecraft fly around it and regularly correct their orbits.") },
+  L2: { t: _t('L2 — за меншим тілом', "L2 — behind the smaller body"), b: _t('Теж на прямій, але з зовнішнього боку. Нестійка. Для телескопів зручна тим, що Сонце, Земля й Місяць завжди з одного боку — їх легко затулити одним щитом.', "Also on the line, but on the outer side. Unstable. It suits telescopes because the Sun, the Earth and the Moon are always on one side — easy to block with a single shield.") },
+  L3: { t: _t('L3 — по той бік більшого тіла', "L3 — on the far side of the larger body"), b: _t('Майже на орбіті меншого тіла, але навпроти нього. Нестійка й далека; апаратів тут немає.', "Almost on the orbit of the smaller body, but opposite it. Unstable and distant; there are no spacecraft here.") },
+  L4: { t: _t('L4 — попереду на орбіті', "L4 — ahead on the orbit"), b: _t('Вершина рівностороннього трикутника з двома тілами. Стійка, якщо менше тіло легше за ~4% загальної маси: тіло, що звідси зісковзує, сила Коріоліса заводить на петлю навколо точки.', "The apex of an equilateral triangle with the two bodies. Stable if the smaller body is lighter than ~4% of the total mass: a body sliding off it is steered by the Coriolis force into a loop around the point.") },
+  L5: { t: _t('L5 — позаду на орбіті', "L5 — behind on the orbit"), b: _t('Дзеркальна до L4 і так само стійка за малої маси меншого тіла.', "The mirror image of L4, and just as stable when the smaller body has a small mass.") },
 };
 const CRAFT = {
-  SOHO: 'Сонячна обсерваторія ESA і NASA, з 1996 року в околі L1: бачить Сонце безперервно, без затемнень.',
-  '«Джеймс Вебб»': 'Інфрачервоний телескоп NASA, ESA і CSA, з 2022 року на гало-орбіті навколо L2.',
-  '«Цюецяо»': 'Китайський супутник-ретранслятор (2018) на гало-орбіті навколо L2 системи Земля — Місяць: тримає зв’язок із апаратами на зворотному боці Місяця.',
+  SOHO: _t('Сонячна обсерваторія ESA і NASA, з 1996 року в околі L1: бачить Сонце безперервно, без затемнень.', 'A solar observatory of ESA and NASA, near L1 since 1996: it sees the Sun continuously, without eclipses.'),
+  [JW]: _t('Інфрачервоний телескоп NASA, ESA і CSA, з 2022 року на гало-орбіті навколо L2.', 'An infrared telescope of NASA, ESA and CSA, in a halo orbit around L2 since 2022.'),
+  [QQ]: _t('Китайський супутник-ретранслятор (2018) на гало-орбіті навколо L2 системи Земля — Місяць: тримає зв’язок із апаратами на зворотному боці Місяця.', 'A Chinese relay satellite (2018) in a halo orbit around L2 of the Earth — Moon system: it keeps contact with spacecraft on the far side of the Moon.'),
 };
 
 let started = false;
@@ -50,7 +53,7 @@ new IntersectionObserver((es) => { if (es[0].isIntersecting && !started) { start
 function init() {
   let renderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: true }); } catch (e) { renderer = null; }
-  if (!renderer) { box.insertAdjacentHTML('beforeend', '<div class="fail">Тривимірна сцена не запустилась: браузер не дав доступу до WebGL.</div>'); window.LAG3 = { ok: false }; return; }
+  if (!renderer) { box.insertAdjacentHTML('beforeend', _t('<div class="fail">Тривимірна сцена не запустилась: браузер не дав доступу до WebGL.</div>', "<div class=\"fail\">The 3D scene did not start: the browser did not grant access to WebGL.</div>")); window.LAG3 = { ok: false }; return; }
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
   box.insertBefore(renderer.domElement, box.firstChild);
   const labels = new CSS2DRenderer(); labels.domElement.className = 'lag3__labels'; box.appendChild(labels.domElement);
@@ -168,14 +171,14 @@ function init() {
       const m = body('moon', .14); world.add(m);
       const ring = new THREE.BufferGeometry().setFromPoints(Array.from({ length: 129 }, (_, i) => { const a = i / 128 * Math.PI * 2; return new THREE.Vector3(xSmall + Math.cos(a) * 1.05, Math.sin(a) * 1.05, 0); }));
       world.add(new THREE.Line(ring, new THREE.LineBasicMaterial({ color: 0x8a90a0, transparent: true, opacity: .3 })));
-      const ml = label('Місяць', 'is-body'); world.add(ml);
+      const ml = label(_t('Місяць', 'Moon'), 'is-body'); world.add(ml);
       S.moon = { m, ml, cx: xSmall, R: 1.05 };
     }
     if (cfg.big !== 'sun') {            // без Сонця в кадрі — світло здалеку
       const dl = new THREE.DirectionalLight(0xfff1dc, 2.6); dl.position.set(-30, 18, 6); world.add(dl);
     }
-    world.add(label(cfg.big === 'sun' ? 'Сонце' : 'Земля', 'is-body')); world.children[world.children.length - 1].position.set(xBig, 0, -(cfg.bigR + .45));
-    world.add(label({ earth: 'Земля', moon: 'Місяць', jupiter: 'Юпітер' }[cfg.small], 'is-body')); world.children[world.children.length - 1].position.set(xSmall, 0, -(cfg.smallR + .4));
+    world.add(label(cfg.big === 'sun' ? _t('Сонце', 'Sun') : _t('Земля', 'Earth'), 'is-body')); world.children[world.children.length - 1].position.set(xBig, 0, -(cfg.bigR + .45));
+    world.add(label({ earth: _t('Земля', 'Earth'), moon: _t('Місяць', 'Moon'), jupiter: _t('Юпітер', 'Jupiter') }[cfg.small], 'is-body')); world.children[world.children.length - 1].position.set(xSmall, 0, -(cfg.smallR + .4));
     // орбіта меншого тіла — тонке коло
     const orb = new THREE.BufferGeometry().setFromPoints(Array.from({ length: 257 }, (_, i) => { const a = i / 256 * Math.PI * 2; return new THREE.Vector3(Math.cos(a) * xSmall, Math.sin(a) * xSmall, 0); }));
     const ol = new THREE.Line(orb, new THREE.LineDashedMaterial({ color: 0x8a90a0, dashSize: .25, gapSize: .25, transparent: true, opacity: .35 })); ol.computeLineDistances(); world.add(ol);
@@ -198,7 +201,8 @@ function init() {
       lb.visible = false; S.crafts.push({ c, a, b, dot, lb, ph: k * 2, pid });
     });
     if (cfg.trojans) makeTrojans(mu);
-    cap.textContent = real ? cfg.scale : `Маси змінено повзунком: μ = ${mu < .001 ? mu.toExponential(2) : mu.toFixed(4)} замість справжніх ${cfg.mu < .001 ? cfg.mu.toExponential(2) : cfg.mu.toFixed(4)}. Положення точок і рух троянців пораховано для нового μ.`;
+    const muS = mu < .001 ? mu.toExponential(2) : mu.toFixed(4), mu0S = cfg.mu < .001 ? cfg.mu.toExponential(2) : cfg.mu.toFixed(4);
+    cap.textContent = real ? cfg.scale : _t(`Маси змінено повзунком: μ = ${muS} замість справжніх ${mu0S}. Положення точок і рух троянців пораховано для нового μ.`, `Masses changed with the slider: μ = ${muS} instead of the real ${mu0S}. The positions of the points and the motion of the Trojans are computed for the new μ.`);
     window.TB.lag.mini(document.getElementById('lagMini'), mu); window.TB.lag.setMu(mu);   // карта зверху — та сама система
     select(S.sel && S.L[S.sel] ? S.sel : null);
     document.querySelectorAll('#lgSys button').forEach((b) => b.classList.toggle('on', b.dataset.s === S.sys));
@@ -244,8 +248,8 @@ function init() {
     const cfg = SYS[S.sys];
     let h = `<span class="k">${cfg.name}</span><p>${cfg.about}</p>`;
     if (id) { const n = NOTE[id]; h += `<b>${n.t}</b><p>${n.b}</p>`; const cr = craft || cfg.craft[id]; if (cr) h += `<p><b>${cr}.</b> ${CRAFT[cr]}</p>`;
-      if (cfg.trojans && (id === 'L4' || id === 'L5')) h += '<p><b>Троянці.</b> Рій навколо точки — справжні рівняння руху: астероїди не стоять, а повільно гойдаються навколо точки витягнутими петлями.</p>'; }
-    else h += '<p class="chint">Клікніть L1–L5 на сцені, щоб прочитати про точку.</p>';
+      if (cfg.trojans && (id === 'L4' || id === 'L5')) h += _t('<p><b>Троянці.</b> Рій навколо точки — справжні рівняння руху: астероїди не стоять, а повільно гойдаються навколо точки витягнутими петлями.</p>', "<p><b>Trojans.</b> The swarm around the point follows the real equations of motion: the asteroids do not stand still but slowly sway around the point in elongated loops.</p>"); }
+    else h += _t('<p class="chint">Клікніть L1–L5 на сцені, щоб прочитати про точку.</p>', "<p class=\"chint\">Click L1–L5 on the scene to read about a point.</p>");
     card.innerHTML = h;
   }
 

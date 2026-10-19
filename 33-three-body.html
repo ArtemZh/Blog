@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Задача трьох тіл · Draft</title>
+<title data-en="The three-body problem · Draft">Задача трьох тіл · Draft</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared/tokens.css?v=20261018220026">
-<link rel="stylesheet" href="shared/style.css?v=20261018220026">
-<link rel="stylesheet" href="shared/threebody.css?v=20261018220026">
+<link rel="stylesheet" href="shared/style.css?v=20261019100150">
+<link rel="stylesheet" href="shared/threebody.css?v=20261019183857">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
 </script>
 </head>
-<body>
+<body data-lang-reload>
 <div class="page">
 <header class="topbar">
-  <a class="brand" href="#top">Задача трьох тіл</a>
+  <a class="brand" href="#top" data-en="The three-body problem">Задача трьох тіл</a>
   <nav class="toc" id="toc" aria-label="Розділи">
-    <a href="#why">Чому</a><a href="#sim-sec">Симуляція</a><a href="#chaos-sec">Хаос</a><a href="#map">Карта</a>
-    <a href="#lag-sec">Точки Лагранжа</a><a href="#history">Історія</a><a href="#known">Що відомо</a>
+    <a href="#why" data-en="Why">Чому</a><a href="#sim-sec" data-en="Simulation">Симуляція</a><a href="#chaos-sec" data-en="Chaos">Хаос</a><a href="#map" data-en="Map">Карта</a>
+    <a href="#lag-sec" data-en="Lagrange points">Точки Лагранжа</a><a href="#history" data-en="History">Історія</a><a href="#known" data-en="What is known">Що відомо</a>
   </nav>
 </header>
 
@@ -34,151 +34,151 @@
       <ellipse class="acc" cx="1560" cy="430" rx="1330" ry="410" transform="rotate(-12 1560 430)"/>
     </svg>
     <div class="hero3__txt">
-      <div class="hero3__kick">Стаття · фізика й математика · чернетка</div>
-      <h1>Задача трьох тіл</h1>
-      <p class="hero3__sub">Коли гравітація грає в хаос</p>
+      <div class="hero3__kick" data-en="Article · physics and mathematics · draft">Стаття · фізика й математика · чернетка</div>
+      <h1 data-en="The three-body problem">Задача трьох тіл</h1>
+      <p class="hero3__sub" data-en="When gravity plays at chaos">Коли гравітація грає в хаос</p>
     </div>
   </header>
-  <div class="wrap"><p class="lede lede3">Якщо два небесні тіла завзято притягують одне одного, їхній танець цілком передбачуваний — ще 1687 року Ньютон розклав усе по поличках своїми формулами. Але варто запросити до цієї компанії третє тіло, як математична ідилія миттєво руйнується. У цій статті ми розберемося, чому так відбувається, що вченим усе ж вдалося відшукати за три століття і як космічним апаратам вдається жити в цьому гравітаційному хаосі. До речі, орбіти на цій сторінці ніхто не малював вручну — вони розраховуються прямо у вашому браузері за законом всесвітнього тяжіння.</p></div>
+  <div class="wrap"><p class="lede lede3" data-en="When two celestial bodies pull hard on each other, their dance is entirely predictable — back in 1687 Newton laid it all out neatly with his formulas. But invite a third body into the company and the mathematical idyll collapses at once. In this article we look at why that happens, what scientists have still managed to find over three centuries, and how spacecraft manage to live in this gravitational chaos. By the way, nobody drew the orbits on this page by hand — they are computed right in your browser from the law of universal gravitation.">Якщо два небесні тіла завзято притягують одне одного, їхній танець цілком передбачуваний — ще 1687 року Ньютон розклав усе по поличках своїми формулами. Але варто запросити до цієї компанії третє тіло, як математична ідилія миттєво руйнується. У цій статті ми розберемося, чому так відбувається, що вченим усе ж вдалося відшукати за три століття і як космічним апаратам вдається жити в цьому гравітаційному хаосі. До речі, орбіти на цій сторінці ніхто не малював вручну — вони розраховуються прямо у вашому браузері за законом всесвітнього тяжіння.</p></div>
 
   <div class="wrap">
 
   <section class="sec" id="why">
-    <h2><span class="num">01</span>Чому поява третього гравця все руйнує</h2>
-    <p>Коли у нас є лише два тіла, складну задачу можна граціозно звести до однієї: кожне з них просто мандрує навколо спільного центру мас по еліпсу, параболі або гіперболі. Наприкінці отримуємо чітку формулу, яка дозволяє дізнатися положення об'єктів хоч через рік, хоч через мільйон років.</p>
-    <p>Щойно з'являється третій учасник, ситуація кардинально змінюється: кожне тіло відчуває притягання двох інших, а ці сили невпинно змінюються щомиті. Універсальної формули через звичні математичні функції, яка б видала точне положення системи в довільний момент часу, просто не існує. Генріх Брунс та Анрі Пуанкаре наприкінці XIX століття довели: стандартні спроби відшукати таке рішення через додаткові закони збереження тут безсилі.</p>
-    <p>Проте це зовсім не означає, що рух неможливо вирахувати. На допомогу приходять комп'ютери, які діють методично, крок за кроком: фіксують поточні позиції та швидкості тіл, обчислюють сили, зсувають об'єкти на крихітний часовий відрізок і знову повторюють цикл. Саме за цим алгоритмом і працює симуляція нижче.</p>
-    <p class="trap"><b>Пастка.</b> Сприймати слово «нерозв'язна» як «абсолютно непередбачувана». Насправді йдеться лише про відсутність єдиної загальної формули. Чисельними методами траєкторії обчислюють дуже точно, а для особливих початкових умов давно знайдені точні розв'язки.</p>
+    <h2 data-en="<span class='num'>01</span>Why a third player breaks everything"><span class="num">01</span>Чому поява третього гравця все руйнує</h2>
+    <p data-en="With only two bodies, a hard problem can be gracefully reduced to a single one: each body simply travels around the common centre of mass along an ellipse, a parabola or a hyperbola. In the end we get a clear formula that tells us where the objects will be a year or a million years from now.">Коли у нас є лише два тіла, складну задачу можна граціозно звести до однієї: кожне з них просто мандрує навколо спільного центру мас по еліпсу, параболі або гіперболі. Наприкінці отримуємо чітку формулу, яка дозволяє дізнатися положення об'єктів хоч через рік, хоч через мільйон років.</p>
+    <p data-en="As soon as a third participant appears, the picture changes radically: each body feels the pull of the other two, and these forces keep changing every moment. A universal formula in familiar mathematical functions that would give the exact state of the system at an arbitrary moment simply does not exist. At the end of the 19th century Heinrich Bruns and Henri Poincaré proved that the standard attempts to find such a solution through additional conservation laws are powerless here.">Щойно з'являється третій учасник, ситуація кардинально змінюється: кожне тіло відчуває притягання двох інших, а ці сили невпинно змінюються щомиті. Універсальної формули через звичні математичні функції, яка б видала точне положення системи в довільний момент часу, просто не існує. Генріх Брунс та Анрі Пуанкаре наприкінці XIX століття довели: стандартні спроби відшукати таке рішення через додаткові закони збереження тут безсилі.</p>
+    <p data-en="That does not mean the motion cannot be calculated, though. Computers come to the rescue, working methodically, step by step: they record the current positions and velocities of the bodies, compute the forces, move the objects forward by a tiny time interval and repeat the cycle. This is exactly the algorithm the simulation below uses.">Проте це зовсім не означає, що рух неможливо вирахувати. На допомогу приходять комп'ютери, які діють методично, крок за кроком: фіксують поточні позиції та швидкості тіл, обчислюють сили, зсувають об'єкти на крихітний часовий відрізок і знову повторюють цикл. Саме за цим алгоритмом і працює симуляція нижче.</p>
+    <p class="trap" data-en="<b>Trap.</b> Taking the word “unsolvable” to mean “completely unpredictable”. In fact it only means there is no single general formula. Numerical methods compute trajectories very accurately, and exact solutions for special initial conditions were found long ago."><b>Пастка.</b> Сприймати слово «нерозв'язна» як «абсолютно непередбачувана». Насправді йдеться лише про відсутність єдиної загальної формули. Чисельними методами траєкторії обчислюють дуже точно, а для особливих початкових умов давно знайдені точні розв'язки.</p>
   </section>
 
   <section class="sec" id="sim-sec">
-    <h2><span class="num">02</span>Симуляція</h2>
-    <p>Оберіть сценарій до душі. Тіла тут рухаються згідно із законом всесвітнього тяжіння в умовних одиницях, де маси й гравітаційна стала підібрані як зручні числа. Лічильник під сценою показує зміну повної енергії системи: в ідеалі вона має залишатися сталою, тож будь-які коливання сигналізують про похибку обчислень. Якщо цей показник стрімко зростає, довіряти симуляції вже не варто.</p>
-    <div class="ctl" style="margin-bottom:0"><span class="seg" id="simMode" role="group" aria-label="Вигляд"><button type="button" data-m="space" class="on">Космос</button><button type="button" data-m="draw">Креслення</button></span>
-      <span class="chint">«Космос» — як виглядало б у небі; «Креслення» — чисті орбіти на світлому тлі.</span></div>
+    <h2 data-en="<span class='num'>02</span>Simulation"><span class="num">02</span>Симуляція</h2>
+    <p data-en="Pick a scenario you like. The bodies here move according to the law of universal gravitation in arbitrary units, with the masses and the gravitational constant chosen as convenient numbers. The counter below the scene shows the change in the total energy of the system: ideally it should stay constant, so any fluctuation signals a computational error. If this figure shoots up, the simulation can no longer be trusted.">Оберіть сценарій до душі. Тіла тут рухаються згідно із законом всесвітнього тяжіння в умовних одиницях, де маси й гравітаційна стала підібрані як зручні числа. Лічильник під сценою показує зміну повної енергії системи: в ідеалі вона має залишатися сталою, тож будь-які коливання сигналізують про похибку обчислень. Якщо цей показник стрімко зростає, довіряти симуляції вже не варто.</p>
+    <div class="ctl" style="margin-bottom:0"><span class="seg" id="simMode" role="group" aria-label="Вигляд"><button type="button" data-m="space" class="on" data-en="Space">Космос</button><button type="button" data-m="draw" data-en="Drawing">Креслення</button></span>
+      <span class="chint" data-en="“Space” — how it would look in the sky; “Drawing” — clean orbits on a light background.">«Космос» — як виглядало б у небі; «Креслення» — чисті орбіти на світлому тлі.</span></div>
     <div class="chips" id="simPre">
-      <button type="button" class="chipbtn" data-p="fig8">Вісімка</button>
-      <button type="button" class="chipbtn" data-p="lagrange">Трикутник Лагранжа</button>
-      <button type="button" class="chipbtn" data-p="euler">Пряма Ейлера</button>
-      <button type="button" class="chipbtn" data-p="pyth">Піфагорова задача</button>
-      <button type="button" class="chipbtn" data-p="hier">Зоря, планета, супутник</button>
-      <button type="button" class="chipbtn" data-p="random">Випадковий старт</button>
-      <button type="button" class="chipbtn" data-p="custom">Свої маси</button>
+      <button type="button" class="chipbtn" data-p="fig8" data-en="Figure-eight">Вісімка</button>
+      <button type="button" class="chipbtn" data-p="lagrange" data-en="Lagrange triangle">Трикутник Лагранжа</button>
+      <button type="button" class="chipbtn" data-p="euler" data-en="Euler line">Пряма Ейлера</button>
+      <button type="button" class="chipbtn" data-p="pyth" data-en="Pythagorean problem">Піфагорова задача</button>
+      <button type="button" class="chipbtn" data-p="hier" data-en="Star, planet, moon">Зоря, планета, супутник</button>
+      <button type="button" class="chipbtn" data-p="random" data-en="Random start">Випадковий старт</button>
+      <button type="button" class="chipbtn" data-p="custom" data-en="Custom masses">Свої маси</button>
     </div>
     <div class="ctl simmass" id="simMass" hidden>
-      <span class="seg" id="simShape" role="group" aria-label="Старт"><button type="button" data-s="tri" class="on">Трикутник</button><button type="button" data-s="line">Пряма</button></span>
+      <span class="seg" id="simShape" role="group" aria-label="Старт"><button type="button" data-s="tri" class="on" data-en="Triangle">Трикутник</button><button type="button" data-s="line" data-en="Line">Пряма</button></span>
       <label>m₁ <input type="range" id="simM0" min="0" max="100" value="100"><output id="simM0o"></output></label>
       <label>m₂ <input type="range" id="simM1" min="0" max="100" value="40"><output id="simM1o"></output></label>
       <label>m₃ <input type="range" id="simM2" min="0" max="100" value="25"><output id="simM2o"></output></label>
-      <button type="button" class="chipbtn" id="simKick">штовхнути</button>
+      <button type="button" class="chipbtn" id="simKick" data-en="nudge">штовхнути</button>
       <span class="chint" id="simRouth"></span>
     </div>
     <div class="simw">
       <div>
         <div class="sim" id="sim"></div>
-        <div class="simbar"><span>час <b id="simT">0</b></span><span>кроків обчислення <b id="simN">0</b></span><span>похибка енергії <b id="simErr">0</b></span></div>
+        <div class="simbar"><span><span data-en="time">час</span> <b id="simT">0</b></span><span><span data-en="computation steps">кроків обчислення</span> <b id="simN">0</b></span><span><span data-en="energy error">похибка енергії</span> <b id="simErr">0</b></span></div>
         <div class="ctl">
           <button type="button" class="chipbtn" id="simPlay">❚❚ пауза</button>
-          <button type="button" class="chipbtn" id="simRe">↺ з початку</button>
+          <button type="button" class="chipbtn" id="simRe" data-en="↺ restart">↺ з початку</button>
           <button type="button" class="chipbtn" id="simDim">вид згори (2D)</button>
-          <label>Швидкість <input type="range" id="simSpeed" min="0.25" max="4" step="0.25" value="1"><output id="simSpeedO">×1</output></label>
-          <label>Слід <input type="range" id="simTrail" min="50" max="1300" step="50" value="700"></label>
+          <label><span data-en="Speed">Швидкість</span> <input type="range" id="simSpeed" min="0.25" max="4" step="0.25" value="1"><output id="simSpeedO">×1</output></label>
+          <label><span data-en="Trail">Слід</span> <input type="range" id="simTrail" min="50" max="1300" step="50" value="700"></label>
         </div>
       </div>
       <div class="simside">
-        <div class="simnote" data-p="fig8"><b>Вісімка.</b> Танець трьох однакових тіл, що женуться одне за одним уздовж замкненої траєкторії у формі вісімки. Чисельно цей розв'язок знайшов Кріс Мур 1993 року, а 2000 року Ален Шенсінер і Річард Монтгомері строго довели, що він справді існує.</div>
-        <div class="simnote" data-p="lagrange" hidden><b>Трикутник Лагранжа.</b> Три тіла у вершинах рівностороннього трикутника синхронно обертаються, не деформуючи фігури. Цей розв'язок відкрив Жозеф-Луї Лагранж 1772 року. Щоправда, для рівних мас ця конфігурація хитка: найменше відхилення накопичується, і трикутник розпадається — ви побачите це, якщо трохи почекаєте.</div>
-        <div class="simnote" data-p="euler" hidden><b>Пряма Ейлера.</b> Три тіла вишикувалися на одній прямій: середнє залишається нерухомим, а крайні кружляють навколо нього. Такі розв'язки опублікував Леонард Ейлер 1767 року, і вони також нестійкі.</div>
-        <div class="simnote" data-p="pyth" hidden><b>Піфагорова задача.</b> Тіла з масами 3, 4 та 5 спочатку нерухомо стоять у вершинах прямокутного трикутника зі сторонами 3, 4 і 5. Задачу поставили 1893 року, Карл Буррау досліджував її 1913-го, а 1967 року Віктор Себехей і Кеннет Пітерс чисельно показали фінал цієї драми: після тривалого хаотичного танцю найлегше тіло вилітає геть, а два важчі парою відлітають у протилежний бік.</div>
-        <div class="simnote" data-p="hier" hidden><b>Зоря, планета й супутник.</b> Якщо одне тіло набагато масивніше за інші, а третє обертається близько до другого, система поводиться майже як дві окремі пари. Саме так живуть Сонце, Земля та Місяць, і тому їхній рух передбачуваний на тисячоліття вперед. У «Космосі» тут і показано Сонце, Землю й Місяць. Розміри тіл збільшено, а відстань Місяця від Землі на сцені — втричі, інакше їх не було б видно; рахується все в справжньому масштабі моделі.</div>
-        <div class="simnote" data-p="custom" hidden><b>Свої маси.</b> Ейлер (1767) і Лагранж (1772) знайшли два розв'язки, що працюють за будь-яких трьох мас: тіла на одній прямій або у вершинах рівностороннього трикутника, і вся фігура обертається як одне ціле. Задайте маси повзунками. Чи переживе фігура легкий поштовх, вирішує умова, яку для трикутника вивів Гаско (1843) і узагальнив Раут (1875): 27(m₁m₂ + m₂m₃ + m₃m₁) має бути меншим за (m₁ + m₂ + m₃)². Простіше кажучи, одне тіло має бути важчим за два інші разом приблизно у 25 разів. Так живуть троянські астероїди Юпітера. Однакові маси умову не виконують, і пряма Ейлера нестійка завжди. Натисніть «штовхнути» й подивіться, що буде.</div>
-        <div class="simnote" data-p="random" hidden><b>Випадковий старт.</b> Розмістимо три однакові тіла в довільних точках. Найчастіше фінал виявиться типовим: двоє утворюють тісну пару, а третє викидається геть.</div>
-        <p class="chint" style="margin-top:10px">Колір і розмір зорі в «Космосі» залежать від маси, як у справжніх зір: однакові маси — однакові жовті зорі; коли маси різні, найважча біло-блакитна й найбільша, найлегша червона й найменша. У «Кресленні» кольори лише розрізняють тіла. Сцену можна обертати мишею, колесо — масштаб.</p>
+        <div class="simnote" data-p="fig8" data-en="<b>Figure-eight.</b> A dance of three identical bodies chasing one another along a closed figure-eight path. Cris Moore found this solution numerically in 1993, and in 2000 Alain Chenciner and Richard Montgomery rigorously proved that it really exists."><b>Вісімка.</b> Танець трьох однакових тіл, що женуться одне за одним уздовж замкненої траєкторії у формі вісімки. Чисельно цей розв'язок знайшов Кріс Мур 1993 року, а 2000 року Ален Шенсінер і Річард Монтгомері строго довели, що він справді існує.</div>
+        <div class="simnote" data-p="lagrange" hidden data-en="<b>Lagrange triangle.</b> Three bodies at the vertices of an equilateral triangle rotate in sync without deforming the figure. Joseph-Louis Lagrange discovered this solution in 1772. For equal masses, however, the configuration is unstable: the slightest deviation builds up and the triangle falls apart — you will see this if you wait a little."><b>Трикутник Лагранжа.</b> Три тіла у вершинах рівностороннього трикутника синхронно обертаються, не деформуючи фігури. Цей розв'язок відкрив Жозеф-Луї Лагранж 1772 року. Щоправда, для рівних мас ця конфігурація хитка: найменше відхилення накопичується, і трикутник розпадається — ви побачите це, якщо трохи почекаєте.</div>
+        <div class="simnote" data-p="euler" hidden data-en="<b>Euler line.</b> Three bodies lined up on a single straight line: the middle one stays still while the outer ones circle around it. Leonhard Euler published such solutions in 1767, and they are unstable too."><b>Пряма Ейлера.</b> Три тіла вишикувалися на одній прямій: середнє залишається нерухомим, а крайні кружляють навколо нього. Такі розв'язки опублікував Леонард Ейлер 1767 року, і вони також нестійкі.</div>
+        <div class="simnote" data-p="pyth" hidden data-en="<b>Pythagorean problem.</b> Bodies with masses 3, 4 and 5 start at rest at the vertices of a right triangle with sides 3, 4 and 5. The problem was posed in 1893, Carl Burrau studied it in 1913, and in 1967 Victor Szebehely and C. Frederick Peters showed the finale of this drama numerically: after a long chaotic dance the lightest body flies away, and the two heavier ones leave as a pair in the opposite direction."><b>Піфагорова задача.</b> Тіла з масами 3, 4 та 5 спочатку нерухомо стоять у вершинах прямокутного трикутника зі сторонами 3, 4 і 5. Задачу поставили 1893 року, Карл Буррау досліджував її 1913-го, а 1967 року Віктор Себехей і Фредерік Пітерс чисельно показали фінал цієї драми: після тривалого хаотичного танцю найлегше тіло вилітає геть, а два важчі парою відлітають у протилежний бік.</div>
+        <div class="simnote" data-p="hier" hidden data-en="<b>Star, planet and moon.</b> If one body is far more massive than the others and the third orbits close to the second, the system behaves almost like two separate pairs. This is how the Sun, the Earth and the Moon live, which is why their motion is predictable millennia ahead. In “Space” this scenario shows the Sun, the Earth and the Moon. The bodies are enlarged, and the distance of the Moon from the Earth on the scene is tripled, otherwise they would not be visible; everything is computed at the true scale of the model."><b>Зоря, планета й супутник.</b> Якщо одне тіло набагато масивніше за інші, а третє обертається близько до другого, система поводиться майже як дві окремі пари. Саме так живуть Сонце, Земля та Місяць, і тому їхній рух передбачуваний на тисячоліття вперед. У «Космосі» тут і показано Сонце, Землю й Місяць. Розміри тіл збільшено, а відстань Місяця від Землі на сцені — втричі, інакше їх не було б видно; рахується все в справжньому масштабі моделі.</div>
+        <div class="simnote" data-p="custom" hidden data-en="<b>Custom masses.</b> Euler (1767) and Lagrange (1772) found two solutions that work for any three masses: the bodies on one straight line or at the vertices of an equilateral triangle, with the whole figure rotating as a single unit. Set the masses with the sliders. Whether the figure survives a light nudge depends on a condition derived for the triangle by Gascheau (1843) and generalised by Routh (1875): 27(m₁m₂ + m₂m₃ + m₃m₁) must be less than (m₁ + m₂ + m₃)². Put simply, one body must be heavier than the other two combined by a factor of about 25. This is how Jupiter's Trojan asteroids live. Equal masses do not satisfy the condition, and the Euler line is always unstable. Press “nudge” and see what happens."><b>Свої маси.</b> Ейлер (1767) і Лагранж (1772) знайшли два розв'язки, що працюють за будь-яких трьох мас: тіла на одній прямій або у вершинах рівностороннього трикутника, і вся фігура обертається як одне ціле. Задайте маси повзунками. Чи переживе фігура легкий поштовх, вирішує умова, яку для трикутника вивів Гаско (1843) і узагальнив Раут (1875): 27(m₁m₂ + m₂m₃ + m₃m₁) має бути меншим за (m₁ + m₂ + m₃)². Простіше кажучи, одне тіло має бути важчим за два інші разом приблизно у 25 разів. Так живуть троянські астероїди Юпітера. Однакові маси умову не виконують, і пряма Ейлера нестійка завжди. Натисніть «штовхнути» й подивіться, що буде.</div>
+        <div class="simnote" data-p="random" hidden data-en="<b>Random start.</b> Let us place three identical bodies at arbitrary points. Most often the finale turns out to be typical: two of them form a tight pair and the third is thrown out."><b>Випадковий старт.</b> Розмістимо три однакові тіла в довільних точках. Найчастіше фінал виявиться типовим: двоє утворюють тісну пару, а третє викидається геть.</div>
+        <p class="chint" style="margin-top:10px" data-en="In “Space” the colour and size of a star depend on its mass, as with real stars: equal masses give identical yellow stars; when the masses differ, the heaviest is bluish-white and the largest, the lightest is red and the smallest. In “Drawing” the colours only tell the bodies apart. You can rotate the scene with the mouse; the wheel zooms.">Колір і розмір зорі в «Космосі» залежать від маси, як у справжніх зір: однакові маси — однакові жовті зорі; коли маси різні, найважча біло-блакитна й найбільша, найлегша червона й найменша. У «Кресленні» кольори лише розрізняють тіла. Сцену можна обертати мишею, колесо — масштаб.</p>
       </div>
     </div>
-    <p class="trap"><b>Пастка.</b> Сліпо вірити симуляції без запобіжників. У моменти найтісніших зближень тіла стрімко розганяються, і грубий крок обчислень дає хибний результат. Тому тут крок часу автоматично зменшується, коли тіла близько, а похибка енергії завжди перед очима.</p>
+    <p class="trap" data-en="<b>Trap.</b> Blindly trusting a simulation without safeguards. During the closest approaches the bodies accelerate sharply, and a coarse computation step gives a wrong result. That is why the time step here shrinks automatically when the bodies are close, and the energy error is always in view."><b>Пастка.</b> Сліпо вірити симуляції без запобіжників. У моменти найтісніших зближень тіла стрімко розганяються, і грубий крок обчислень дає хибний результат. Тому тут крок часу автоматично зменшується, коли тіла близько, а похибка енергії завжди перед очима.</p>
   </section>
 
   <section class="sec" id="chaos-sec">
-    <h2><span class="num">03</span>Хаос: коли вирішує мільярдна частка</h2>
-    <p>Уявімо експеримент: запускаємо дві ідентичні симуляції, які відрізняються лише тим, що одне з тіл у другій системі зміщене на одну мільярдну. Спочатку обидві картини рухаються синхронно. Проте згодом розбіжність лавиноподібно наростає — і невдовзі траєкторії стають геть різними.</p>
-    <div class="ctl"><button type="button" class="qbtn" id="chaosGo">▶ запустити</button><button type="button" class="qbtn ghost" id="chaosReset">↺ скинути</button>
-      <span class="simbar" style="margin:0"><span>час <b id="chaosT">0</b></span><span>найбільша розбіжність <b id="chaosD">1.0e-9</b></span></span></div>
+    <h2 data-en="<span class='num'>03</span>Chaos: when a billionth decides everything"><span class="num">03</span>Хаос: коли вирішує мільярдна частка</h2>
+    <p data-en="Imagine an experiment: we run two identical simulations that differ only in that one of the bodies in the second system is shifted by one billionth. At first both pictures move in sync. But over time the divergence grows like an avalanche — and soon the trajectories become completely different.">Уявімо експеримент: запускаємо дві ідентичні симуляції, які відрізняються лише тим, що одне з тіл у другій системі зміщене на одну мільярдну. Спочатку обидві картини рухаються синхронно. Проте згодом розбіжність лавиноподібно наростає — і невдовзі траєкторії стають геть різними.</p>
+    <div class="ctl"><button type="button" class="qbtn" id="chaosGo" data-en="▶ run">▶ запустити</button><button type="button" class="qbtn ghost" id="chaosReset" data-en="↺ reset">↺ скинути</button>
+      <span class="simbar" style="margin:0"><span><span data-en="time">час</span> <b id="chaosT">0</b></span><span><span data-en="largest divergence">найбільша розбіжність</span> <b id="chaosD">1.0e-9</b></span></span></div>
     <div class="chw"><canvas id="chaos" role="img" aria-label="Дві копії піфагорової задачі"></canvas><canvas id="chaosGraph" role="img" aria-label="Відстань між копіями"></canvas></div>
-    <div class="legend"><span><i class="lg-dot"></i>копія без зміни</span><span><i class="lg-dot" style="background:var(--act)"></i>копія зі зсувом 10⁻⁹ і графік відстані між копіями</span></div>
-    <p>Графік показує відстань між копіями в логарифмічному масштабі. Пряма лінія, що злітає вгору, означає, що різниця множиться в однакову кількість разів за рівні проміжки часу. Це і є хаос: рух повністю визначений законами, але передбачити його надовго неможливо, бо будь-яка неточність початкових даних росте.</p>
-    <p>Саме цю властивість відкрив Анрі Пуанкаре, намагаючись довести стійкість Сонячної системи. Згодом подібна поведінка отримає назву ефекту метелика.</p>
-    <p class="trap"><b>Пастка.</b> Сподіватися, що потужніший комп'ютер раз і назавжди вирішить проблему. Подвоєння точності обчислень лише трохи відсуває момент, коли копії розійдуться: похибка зростає експоненційно, а точність додається лінійно.</p>
+    <div class="legend"><span data-en="<i class='lg-dot'></i>unchanged copy"><i class="lg-dot"></i>копія без зміни</span><span data-en="<i class='lg-dot' style='background:var(--act)'></i>copy shifted by 10⁻⁹, and the graph of the distance between the copies"><i class="lg-dot" style="background:var(--act)"></i>копія зі зсувом 10⁻⁹ і графік відстані між копіями</span></div>
+    <p data-en="The graph shows the distance between the copies on a logarithmic scale. A straight line shooting upwards means the difference is multiplied by the same factor over equal intervals of time. This is chaos: the motion is fully determined by the laws, yet it cannot be predicted for long, because any inaccuracy in the initial data grows.">Графік показує відстань між копіями в логарифмічному масштабі. Пряма лінія, що злітає вгору, означає, що різниця множиться в однакову кількість разів за рівні проміжки часу. Це і є хаос: рух повністю визначений законами, але передбачити його надовго неможливо, бо будь-яка неточність початкових даних росте.</p>
+    <p data-en="This is exactly the property Henri Poincaré discovered while trying to prove the stability of the Solar System. Later this kind of behaviour would come to be known as the butterfly effect.">Саме цю властивість відкрив Анрі Пуанкаре, намагаючись довести стійкість Сонячної системи. Згодом подібна поведінка отримає назву ефекту метелика.</p>
+    <p class="trap" data-en="<b>Trap.</b> Hoping that a more powerful computer will solve the problem once and for all. Doubling the precision of the computation only slightly postpones the moment the copies diverge: the error grows exponentially, while precision is added linearly."><b>Пастка.</b> Сподіватися, що потужніший комп'ютер раз і назавжди вирішить проблему. Подвоєння точності обчислень лише трохи відсуває момент, коли копії розійдуться: похибка зростає експоненційно, а точність додається лінійно.</p>
   </section>
 
   <section class="sec" id="map">
-    <h2><span class="num">04</span>Карта розв'язків</h2>
-    <p>Задача трьох тіл — це не одна ізольована головоломка, а ціле сімейство задач. Схема показує, як воно розгалужується: від задачі двох тіл, де все зрозуміло, до спрощеної «обмеженої» моделі з легким третім тілом, особливих періодичних орбіт і реальних систем у космосі. Наведіть курсор на блок, щоб побачити зв'язки, або запустіть історію кнопкою ▶.</p>
+    <h2 data-en="<span class='num'>04</span>Map of solutions"><span class="num">04</span>Карта розв'язків</h2>
+    <p data-en="The three-body problem is not one isolated puzzle but a whole family of problems. The diagram shows how it branches: from the two-body problem, where everything is clear, to the simplified “restricted” model with a light third body, special periodic orbits and real systems in space. Hover over a block to see its links, or play the story with the ▶ button.">Задача трьох тіл — це не одна ізольована головоломка, а ціле сімейство задач. Схема показує, як воно розгалужується: від задачі двох тіл, де все зрозуміло, до спрощеної «обмеженої» моделі з легким третім тілом, особливих періодичних орбіт і реальних систем у космосі. Наведіть курсор на блок, щоб побачити зв'язки, або запустіть історію кнопкою ▶.</p>
     <div class="cbox" data-comp="tb"></div>
-    <p class="chint">Що означає кожен блок — написано під схемою, згруповано за колонками: читати можна без кліків.</p>
+    <p class="chint" data-en="What each block means is written below the diagram, grouped by column: you can read it without clicking.">Що означає кожен блок — написано під схемою, згруповано за колонками: читати можна без кліків.</p>
   </section>
 
   <section class="sec" id="lag-sec">
-    <h2><span class="num">05</span>Точки Лагранжа</h2>
-    <p>Спростимо умову: два масивні тіла рухаються коловими орбітами одне навколо одного, а третє настільки легке, що ніяк не впливає на їхній рух. Це обмежена задача трьох тіл. У системі відліку, що обертається разом із важкими тілами, існує рівно п'ять місць, де тяжіння і відцентрова сила повністю врівноважуються. Це і є точки Лагранжа.</p>
-    <p>Три з них — L1, L2 та L3 — розташовані на прямій, що з'єднує важкі тіла, і нестійкі: апаратам у цих точках доводиться регулярно вмикати двигуни для корекції. Дві інші — L4 та L5 — утворюють рівносторонні трикутники з масивними тілами і стійкі, якщо одне з них значно важче за інше.</p>
-    <p>Карта показує «рельєф» ефективного потенціалу в системі, що обертається. L1, L2 і L3 — це перевали між ямами, L4 і L5 — вершини. Дивно, але саме вершини стійкі: тіло, що з них зісковзує, сила Коріоліса заводить на петлю навколо точки. Посуньте повзунок співвідношення мас і подивіться, як точки зсуваються; наведіть на точку, щоб прочитати, що там відбувається.</p>
+    <h2 data-en="<span class='num'>05</span>Lagrange points"><span class="num">05</span>Точки Лагранжа</h2>
+    <p data-en="Let us simplify the setup: two massive bodies move in circular orbits around each other, and the third is so light that it does not affect their motion at all. This is the restricted three-body problem. In the frame of reference rotating with the heavy bodies there are exactly five places where gravity and the centrifugal force balance completely. These are the Lagrange points.">Спростимо умову: два масивні тіла рухаються коловими орбітами одне навколо одного, а третє настільки легке, що ніяк не впливає на їхній рух. Це обмежена задача трьох тіл. У системі відліку, що обертається разом із важкими тілами, існує рівно п'ять місць, де тяжіння і відцентрова сила повністю врівноважуються. Це і є точки Лагранжа.</p>
+    <p data-en="Three of them — L1, L2 and L3 — lie on the line joining the heavy bodies and are unstable: spacecraft at these points have to fire their engines regularly for corrections. The other two — L4 and L5 — form equilateral triangles with the massive bodies and are stable if one of those bodies is much heavier than the other.">Три з них — L1, L2 та L3 — розташовані на прямій, що з'єднує важкі тіла, і нестійкі: апаратам у цих точках доводиться регулярно вмикати двигуни для корекції. Дві інші — L4 та L5 — утворюють рівносторонні трикутники з масивними тілами і стійкі, якщо одне з них значно важче за інше.</p>
+    <p data-en="The map shows the “relief” of the effective potential in the rotating system. L1, L2 and L3 are passes between the wells, L4 and L5 are peaks. Surprisingly, it is the peaks that are stable: a body sliding off them is steered by the Coriolis force into a loop around the point. Move the mass-ratio slider and watch the points shift; hover over a point to read what happens there.">Карта показує «рельєф» ефективного потенціалу в системі, що обертається. L1, L2 і L3 — це перевали між ямами, L4 і L5 — вершини. Дивно, але саме вершини стійкі: тіло, що з них зісковзує, сила Коріоліса заводить на петлю навколо точки. Посуньте повзунок співвідношення мас і подивіться, як точки зсуваються; наведіть на точку, щоб прочитати, що там відбувається.</p>
     <div class="ctl">
-      <span class="seg" id="lgSys" role="group" aria-label="Система"><button type="button" data-s="se" class="on">Сонце — Земля</button><button type="button" data-s="em">Земля — Місяць</button><button type="button" data-s="sj">Сонце — Юпітер</button></span>
-      <span class="seg" id="lgView" role="group" aria-label="Вигляд"><button type="button" data-v="3d" class="on">3D</button><button type="button" data-v="2d">Карта зверху</button></span>
+      <span class="seg" id="lgSys" role="group" aria-label="Система"><button type="button" data-s="se" class="on" data-en="Sun — Earth">Сонце — Земля</button><button type="button" data-s="em" data-en="Earth — Moon">Земля — Місяць</button><button type="button" data-s="sj" data-en="Sun — Jupiter">Сонце — Юпітер</button></span>
+      <span class="seg" id="lgView" role="group" aria-label="Вигляд"><button type="button" data-v="3d" class="on">3D</button><button type="button" data-v="2d" data-en="Top-down map">Карта зверху</button></span>
     </div>
     <div class="simw">
       <div>
-          <div class="ctl" style="margin:0 0 10px"><label>Частка меншого тіла μ <input type="range" id="lagSl" min="0" max="100" value="58"><output id="lagMu"></output></label><span class="chint" id="lagStab"></span></div>
-        <div class="lag3" id="lag3"><button type="button" class="lag-minibtn" id="lagMiniBtn" title="Відкрити карту зверху"><canvas id="lagMini" class="lag-mini"></canvas><span>карта зверху</span></button></div>
+          <div class="ctl" style="margin:0 0 10px"><label><span data-en="Mass fraction of the smaller body μ">Частка меншого тіла μ</span> <input type="range" id="lagSl" min="0" max="100" value="58"><output id="lagMu"></output></label><span class="chint" id="lagStab"></span></div>
+        <div class="lag3" id="lag3"><button type="button" class="lag-minibtn" id="lagMiniBtn" title="Відкрити карту зверху"><canvas id="lagMini" class="lag-mini"></canvas><span data-en="top-down map">карта зверху</span></button></div>
         <div class="lagmap" id="lagMap" hidden>
           <div id="lagPre" hidden></div>
           <div class="lagw"><canvas id="lag" role="img" aria-label="Ефективний потенціал і точки Лагранжа"></canvas><div class="tipx" id="lagTip"></div></div>
-          <p class="chint" style="margin-top:6px">Світле кільце — «хребет», на якому лежать L4 і L5. Темне — ями навколо двох тіл і схил назовні, куди в системі, що обертається, тіло зісковзує. Смуги — лінії однакового рівня. </p>
+          <p class="chint" style="margin-top:6px" data-en="The light ring is the “ridge” on which L4 and L5 lie. The dark areas are the wells around the two bodies and the outward slope down which a body slides in the rotating system. The bands are lines of equal level. ">Світле кільце — «хребет», на якому лежать L4 і L5. Темне — ями навколо двох тіл і схил назовні, куди в системі, що обертається, тіло зісковзує. Смуги — лінії однакового рівня. </p>
         </div>
         <p class="chint" id="lagScale" style="margin-top:6px"></p>
       </div>
       <div class="simside"><div class="simnote" id="lagCard"></div>
-        <p class="chint" style="margin-top:10px">Сцену можна обертати мишею, колесо — масштаб. У куті — та сама система на карті зверху; клік відкриває її великою. Повзунок μ змінює співвідношення мас: точки зсуваються, а в системі Сонце — Юпітер видно, як за μ більше 0,0385 троянці розбігаються з L4 і L5.</p></div>
+        <p class="chint" style="margin-top:10px" data-en="You can rotate the scene with the mouse; the wheel zooms. In the corner is the same system on a top-down map; a click opens it full size. The μ slider changes the mass ratio: the points shift, and in the Sun — Jupiter system you can see the Trojans scatter from L4 and L5 once μ exceeds 0.0385.">Сцену можна обертати мишею, колесо — масштаб. У куті — та сама система на карті зверху; клік відкриває її великою. Повзунок μ змінює співвідношення мас: точки зсуваються, а в системі Сонце — Юпітер видно, як за μ більше 0,0385 троянці розбігаються з L4 і L5.</p></div>
     </div>
-    <p>У системі Сонце — Земля точка L1 стала домівкою для сонячної обсерваторії SOHO, у точці L2 працює космічний телескоп «Джеймс Вебб» (а до 2025 року там працювала й обсерваторія Gaia). Тим часом у точках L4 та L5 орбіти Юпітера скупчилися тисячі астероїдів-троянців, дослідити які вирушила місія NASA Lucy.</p>
-    <p class="trap"><b>Пастка.</b> Уявляти точку Лагранжа як нерухому крапку в космосі, де апарат просто зависає. Насправді вона обертається разом із системою, а апарати в L1 чи L2 літають навколо неї великими гало-орбітами.</p>
+    <p data-en="In the Sun — Earth system, L1 has become home to the SOHO solar observatory, and the James Webb Space Telescope operates at L2 (until 2025 the Gaia observatory worked there too). Meanwhile thousands of Trojan asteroids have gathered at L4 and L5 of Jupiter's orbit, and NASA's Lucy mission has set out to explore them.">У системі Сонце — Земля точка L1 стала домівкою для сонячної обсерваторії SOHO, у точці L2 працює космічний телескоп «Джеймс Вебб» (а до 2025 року там працювала й обсерваторія Gaia). Тим часом у точках L4 та L5 орбіти Юпітера скупчилися тисячі астероїдів-троянців, дослідити які вирушила місія NASA Lucy.</p>
+    <p class="trap" data-en="<b>Trap.</b> Picturing a Lagrange point as a fixed dot in space where a spacecraft simply hovers. In reality it rotates with the system, and spacecraft at L1 or L2 fly around it in large halo orbits."><b>Пастка.</b> Уявляти точку Лагранжа як нерухому крапку в космосі, де апарат просто зависає. Насправді вона обертається разом із системою, а апарати в L1 чи L2 літають навколо неї великими гало-орбітами.</p>
   </section>
 
   <section class="sec" id="history">
-    <h2><span class="num">06</span>Історія</h2>
+    <h2 data-en="<span class='num'>06</span>History"><span class="num">06</span>Історія</h2>
     <ol class="hist">
-      <li><span class="y">1687</span><span class="d"></span><p>Ісаак Ньютон у «Началах» розв'язує задачу двох тіл і робить сміливу спробу підкорити три: Сонце, Землю й Місяць. За переказами, саме теорія руху Місяця була єдиною задачею, від якої в нього боліла голова.</p></li>
-      <li><span class="y">1767</span><span class="d"></span><p>Леонард Ейлер знаходить конфігурації, де всі три тіла постійно лишаються на одній прямій.</p></li>
-      <li><span class="y">1772</span><span class="d"></span><p>Жозеф-Луї Лагранж знаходить свій знаменитий трикутний розв'язок.</p></li>
-      <li><span class="y">1887</span><span class="d"></span><p>Генріх Брунс доводить, що нових алгебраїчних законів збереження, які допомогли б знайти формулу, немає.</p></li>
-      <li><span class="y">1885–1890</span><span class="d"></span><p>Король Швеції Оскар II започатковує премію за розв'язок задачі багатьох тіл. У журі — Міттаг-Леффлер, Вейєрштрасс та Ерміт. 21 січня 1889 року золоту медаль і 2500 крон присуджують Анрі Пуанкаре. Під час підготовки праці до друку редактор Едвард Фрагмен ставить уточнювальні запитання, і, відповідаючи на них, Пуанкаре знаходить у власних міркуваннях серйозну помилку. 30 листопада 1889 року він телеграфує з проханням зупинити друк. Частину тиражу журналу вже розіслано, тож його відкликають; передрук автор оплачує з власної кишені — понад 3500 крон, більше за саму премію. Виправлена праця виходить у грудні 1890 року, і саме в ній уперше з'являються зачатки майбутньої теорії хаосу.</p></li>
-      <li><span class="y">1912</span><span class="d"></span><p>Карл Зундман доводить, що розв'язок задачі можна подати у вигляді нескінченного ряду. Але 1930 року Давид Белоріський підраховує: для практичної точності знадобилося б понад 10<sup>8 000 000</sup> членів цього ряду.</p></li>
-      <li><span class="y">1967</span><span class="d"></span><p>Віктор Себехей і Кеннет Пітерс за допомогою комп'ютера доводять піфагорову задачу до фіналу.</p></li>
-      <li><span class="y">1993–2000</span><span class="d"></span><p>«Вісімка»: Кріс Мур знаходить траєкторію чисельно, а Шенсінер і Монтгомері дають їй строге доведення.</p></li>
-      <li><span class="y">2008</span><span class="d"></span><p>Лю Цисінь публікує науково-фантастичний роман «Задача трьох тіл», де цивілізація з планети в потрійній зоряній системі виживає в умовах непередбачуваного клімату. До речі, у найближчій до нас зоряній системі Альфа Центавра справді три зорі.</p></li>
-      <li><span class="y">2013</span><span class="d"></span><p>Мілован Шуваков та Велько Дмітрашинович відкривають одразу 13 нових сімейств періодичних орбіт для трьох однакових мас.</p></li>
-      <li><span class="y">2017 і далі</span><span class="d"></span><p>Сяомін Лі, Шиджун Ляо та їхні колеги з допомогою суперкомп'ютерів знаходять сотні, а згодом і тисячі нових періодичних орбіт.</p></li>
+      <li><span class="y">1687</span><span class="d"></span><p data-en="Isaac Newton solves the two-body problem in the <i>Principia</i> and makes a bold attempt to tame three: the Sun, the Earth and the Moon. According to legend, the theory of the Moon's motion was the only problem that ever gave him a headache.">Ісаак Ньютон у «Началах» розв'язує задачу двох тіл і робить сміливу спробу підкорити три: Сонце, Землю й Місяць. За переказами, саме теорія руху Місяця була єдиною задачею, від якої в нього боліла голова.</p></li>
+      <li><span class="y">1767</span><span class="d"></span><p data-en="Leonhard Euler finds configurations in which all three bodies always stay on one straight line.">Леонард Ейлер знаходить конфігурації, де всі три тіла постійно лишаються на одній прямій.</p></li>
+      <li><span class="y">1772</span><span class="d"></span><p data-en="Joseph-Louis Lagrange finds his famous triangular solution.">Жозеф-Луї Лагранж знаходить свій знаменитий трикутний розв'язок.</p></li>
+      <li><span class="y">1887</span><span class="d"></span><p data-en="Heinrich Bruns proves that there are no new algebraic conservation laws that would help to find a formula.">Генріх Брунс доводить, що нових алгебраїчних законів збереження, які допомогли б знайти формулу, немає.</p></li>
+      <li><span class="y">1885–1890</span><span class="d"></span><p data-en="King Oscar II of Sweden establishes a prize for a solution of the n-body problem. The jury: Mittag-Leffler, Weierstrass and Hermite. On 21 January 1889 the gold medal and 2,500 crowns are awarded to Henri Poincaré. While the work is being prepared for print, the editor Edvard Phragmén asks clarifying questions, and in answering them Poincaré finds a serious error in his own reasoning. On 30 November 1889 he sends a telegram asking for the printing to be stopped. Part of the print run of the journal has already been sent out, so it is recalled; the author pays for the reprint out of his own pocket — more than 3,500 crowns, more than the prize itself. The corrected work appears in December 1890, and it is there that the rudiments of the future chaos theory first appear.">Король Швеції Оскар II започатковує премію за розв'язок задачі багатьох тіл. У журі — Міттаг-Леффлер, Вейєрштрасс та Ерміт. 21 січня 1889 року золоту медаль і 2500 крон присуджують Анрі Пуанкаре. Під час підготовки праці до друку редактор Едвард Фрагмен ставить уточнювальні запитання, і, відповідаючи на них, Пуанкаре знаходить у власних міркуваннях серйозну помилку. 30 листопада 1889 року він телеграфує з проханням зупинити друк. Частину тиражу журналу вже розіслано, тож його відкликають; передрук автор оплачує з власної кишені — понад 3500 крон, більше за саму премію. Виправлена праця виходить у грудні 1890 року, і саме в ній уперше з'являються зачатки майбутньої теорії хаосу.</p></li>
+      <li><span class="y">1912</span><span class="d"></span><p data-en="Karl Sundman proves that the solution of the problem can be written as an infinite series. But in 1930 David Beloriszky calculates that practical accuracy would require more than 10<sup>8,000,000</sup> terms of this series.">Карл Зундман доводить, що розв'язок задачі можна подати у вигляді нескінченного ряду. Але 1930 року Давид Белоріський підраховує: для практичної точності знадобилося б понад 10<sup>8 000 000</sup> членів цього ряду.</p></li>
+      <li><span class="y">1967</span><span class="d"></span><p data-en="Victor Szebehely and C. Frederick Peters use a computer to carry the Pythagorean problem through to its finale.">Віктор Себехей і Фредерік Пітерс за допомогою комп'ютера доводять піфагорову задачу до фіналу.</p></li>
+      <li><span class="y">1993–2000</span><span class="d"></span><p data-en="The “figure-eight”: Cris Moore finds the trajectory numerically, and Chenciner and Montgomery give it a rigorous proof.">«Вісімка»: Кріс Мур знаходить траєкторію чисельно, а Шенсінер і Монтгомері дають їй строге доведення.</p></li>
+      <li><span class="y">2008</span><span class="d"></span><p data-en="Liu Cixin publishes the science-fiction novel <i>The Three-Body Problem</i>, in which a civilisation from a planet in a triple star system survives an unpredictable climate. Incidentally, Alpha Centauri, the star system closest to us, really does have three stars.">Лю Цисінь публікує науково-фантастичний роман «Задача трьох тіл», де цивілізація з планети в потрійній зоряній системі виживає в умовах непередбачуваного клімату. До речі, у найближчій до нас зоряній системі Альфа Центавра справді три зорі.</p></li>
+      <li><span class="y">2013</span><span class="d"></span><p data-en="Milovan Šuvakov and Veljko Dmitrašinović discover 13 new families of periodic orbits for three equal masses at once.">Мілован Шуваков та Велько Дмітрашинович відкривають одразу 13 нових сімейств періодичних орбіт для трьох однакових мас.</p></li>
+      <li><span class="y" data-en="2017 onwards">2017 і далі</span><span class="d"></span><p data-en="Xiaoming Li, Shijun Liao and their colleagues use supercomputers to find hundreds, and later thousands, of new periodic orbits.">Сяомін Лі, Шиджун Ляо та їхні колеги з допомогою суперкомп'ютерів знаходять сотні, а згодом і тисячі нових періодичних орбіт.</p></li>
     </ol>
-    <figure class="illu"><img src="assets/threebody/prize.jpg" alt="Рукопис, золота медаль і заплутана орбіта — ілюстрація до історії премії" width="1400" height="788" loading="lazy"><figcaption>Рукопис, медаль і заплутана орбіта — історія премії короля Оскара II.</figcaption></figure>
+    <figure class="illu"><img src="assets/threebody/prize.jpg" alt="Рукопис, золота медаль і заплутана орбіта — ілюстрація до історії премії" width="1400" height="788" loading="lazy"><figcaption data-en="Manuscript, medal and a tangled orbit — the story of King Oscar II's prize.">Рукопис, медаль і заплутана орбіта — історія премії короля Оскара II.</figcaption></figure>
   </section>
 
   <section class="sec" id="known">
-    <h2><span class="num">07</span>Що відомо сьогодні</h2>
-    <p>Універсальної формули через звичні функції для задачі трьох тіл не існує: Брунс і Пуанкаре показали, що бракує необхідних законів збереження. Ряд Зундмана формально є загальним розв'язком, проте на практиці непридатний через неймовірно повільну збіжність. Сьогодні ми маємо окремі точні розв'язки та тисячі періодичних орбіт, знайдених комп'ютерами. Найчастіше доля системи трьох тіл однакова: пара об'єктів залишається разом, а третій відлітає у відкритий космос. Стійкі конфігурації — рідкісні острівці в океані хаосу.</p>
-    <p>Для потреб астронавтики цього цілком досить. Траєкторії міжпланетних апаратів розраховують чисельно з великою точністю на потрібний час, а гравітаційні маневри, як у місій «Вояджер», спираються саме на взаємодію трьох тіл — апарата, планети та Сонця.</p>
-    <p class="trap"><b>Пастка.</b> Мислити за принципом «задачу не розв'язано, отже, ми нічого не знаємо». Ми розуміємо, чому формули немає, вміємо прораховувати рух на практиці й маємо великі каталоги розв'язків. Нерозв'язною задача є лише в одному, дуже вузькому сенсі.</p>
-    <p>Продовження про гравітацію в кіно — стаття <a href="34-interstellar.html">«Фізика „Інтерстеллара“»</a>: чорна діра Гаргантюа, сповільнення часу і червоточина.</p>
-    <h3>Джерела</h3>
+    <h2 data-en="<span class='num'>07</span>What is known today"><span class="num">07</span>Що відомо сьогодні</h2>
+    <p data-en="There is no universal formula in familiar functions for the three-body problem: Bruns and Poincaré showed that the necessary conservation laws are missing. The Sundman series is formally a general solution, but in practice it is useless because of its incredibly slow convergence. Today we have individual exact solutions and thousands of periodic orbits found by computers. Most often the fate of a three-body system is the same: a pair of objects stays together while the third flies off into open space. Stable configurations are rare islands in an ocean of chaos.">Універсальної формули через звичні функції для задачі трьох тіл не існує: Брунс і Пуанкаре показали, що бракує необхідних законів збереження. Ряд Зундмана формально є загальним розв'язком, проте на практиці непридатний через неймовірно повільну збіжність. Сьогодні ми маємо окремі точні розв'язки та тисячі періодичних орбіт, знайдених комп'ютерами. Найчастіше доля системи трьох тіл однакова: пара об'єктів залишається разом, а третій відлітає у відкритий космос. Стійкі конфігурації — рідкісні острівці в океані хаосу.</p>
+    <p data-en="For the needs of spaceflight this is quite enough. The trajectories of interplanetary spacecraft are computed numerically with high accuracy for the required time span, and gravity assists, like those of the Voyager missions, rely precisely on the interaction of three bodies — the spacecraft, a planet and the Sun.">Для потреб астронавтики цього цілком досить. Траєкторії міжпланетних апаратів розраховують чисельно з великою точністю на потрібний час, а гравітаційні маневри, як у місій «Вояджер», спираються саме на взаємодію трьох тіл — апарата, планети та Сонця.</p>
+    <p class="trap" data-en="<b>Trap.</b> Thinking along the lines of “the problem is unsolved, so we know nothing”. We understand why there is no formula, we can compute the motion in practice and we have large catalogues of solutions. The problem is unsolvable only in one very narrow sense."><b>Пастка.</b> Мислити за принципом «задачу не розв'язано, отже, ми нічого не знаємо». Ми розуміємо, чому формули немає, вміємо прораховувати рух на практиці й маємо великі каталоги розв'язків. Нерозв'язною задача є лише в одному, дуже вузькому сенсі.</p>
+    <p data-en="Gravity in film continues in the article <a href='34-interstellar.html'>“The physics of <i>Interstellar</i>”</a>: the black hole Gargantua, time dilation and the wormhole.">Продовження про гравітацію в кіно — стаття <a href="34-interstellar.html">«Фізика „Інтерстеллара“»</a>: чорна діра Гаргантюа, сповільнення часу і червоточина.</p>
+    <h3 data-en="Sources">Джерела</h3>
     <ul class="src29">
-      <li><a href="https://en.wikipedia.org/wiki/Three-body_problem" target="_blank" rel="noopener">Wikipedia — Three-body problem</a>: Ейлер, Лагранж, Брунс, Зундман і Белоріський, вісімка, піфагорова задача, каталоги орбіт</li>
-      <li><a href="https://www.mittag-leffler.se/about-us/history/prize-competition/" target="_blank" rel="noopener">Institut Mittag-Leffler — Prize Competition</a>: премія короля Оскара II і помилка Пуанкаре</li>
+      <li data-en="<a href='https://en.wikipedia.org/wiki/Three-body_problem' target='_blank' rel='noopener'>Wikipedia — Three-body problem</a>: Euler, Lagrange, Bruns, Sundman and Beloriszky, the figure-eight, the Pythagorean problem, orbit catalogues"><a href="https://en.wikipedia.org/wiki/Three-body_problem" target="_blank" rel="noopener">Wikipedia — Three-body problem</a>: Ейлер, Лагранж, Брунс, Зундман і Белоріський, вісімка, піфагорова задача, каталоги орбіт</li>
+      <li data-en="<a href='https://www.mittag-leffler.se/about-us/history/prize-competition/' target='_blank' rel='noopener'>Institut Mittag-Leffler — Prize Competition</a>: King Oscar II's prize and Poincaré's error"><a href="https://www.mittag-leffler.se/about-us/history/prize-competition/" target="_blank" rel="noopener">Institut Mittag-Leffler — Prize Competition</a>: премія короля Оскара II і помилка Пуанкаре</li>
       <li><a href="https://arxiv.org/abs/math/0011268" target="_blank" rel="noopener">A. Chenciner, R. Montgomery — A remarkable periodic solution of the three-body problem (2000)</a></li>
       <li><a href="https://arxiv.org/abs/1303.0181" target="_blank" rel="noopener">M. Šuvakov, V. Dmitrašinović — Three classes of Newtonian three-body planar periodic orbits (2013)</a></li>
-      <li><a href="https://www.esa.int/Science_Exploration/Space_Science/Gaia" target="_blank" rel="noopener">ESA — Gaia</a> і <a href="https://science.nasa.gov/mission/webb/" target="_blank" rel="noopener">NASA — James Webb Space Telescope</a>: апарати в точці L2</li>
-      <li><a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope — текстури планет</a> (CC BY 4.0)</li>
-      <li><a href="https://science.nasa.gov/mission/lucy/" target="_blank" rel="noopener">NASA — Lucy</a>: троянські астероїди Юпітера</li>
-      <li>Текст відредаговано з допомогою Gemini, факти звірено з джерелами вище.</li>
+      <li data-en="<a href='https://www.esa.int/Science_Exploration/Space_Science/Gaia' target='_blank' rel='noopener'>ESA — Gaia</a> and <a href='https://science.nasa.gov/mission/webb/' target='_blank' rel='noopener'>NASA — James Webb Space Telescope</a>: spacecraft at L2"><a href="https://www.esa.int/Science_Exploration/Space_Science/Gaia" target="_blank" rel="noopener">ESA — Gaia</a> і <a href="https://science.nasa.gov/mission/webb/" target="_blank" rel="noopener">NASA — James Webb Space Telescope</a>: апарати в точці L2</li>
+      <li data-en="<a href='https://www.solarsystemscope.com/textures/' target='_blank' rel='noopener'>Solar System Scope — planet textures</a> (CC BY 4.0)"><a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope — текстури планет</a> (CC BY 4.0)</li>
+      <li data-en="<a href='https://science.nasa.gov/mission/lucy/' target='_blank' rel='noopener'>NASA — Lucy</a>: Jupiter's Trojan asteroids"><a href="https://science.nasa.gov/mission/lucy/" target="_blank" rel="noopener">NASA — Lucy</a>: троянські астероїди Юпітера</li>
+      <li data-en="The text was edited with the help of Gemini; the facts were checked against the sources above.">Текст відредаговано з допомогою Gemini, факти звірено з джерелами вище.</li>
     </ul>
   </section>
 
@@ -186,46 +186,48 @@
 </main>
 </div>
 
+<script src="shared/lang.js?v=20261019183630"></script>
 <script>
 /* Схема для shared/comp.js: колонка × рядок, дроти з id; пов'язане — в одному рядку. */
+const _t = (uk, en) => (window.PMP_LANG === 'en' ? en : uk);
 window.COMP_DATA = {
   tb: {
-    ui: { play: 'Програти історію', prev: 'Попередній крок', next: 'Наступний крок' },
+    ui: { play: _t('Програти історію', "Play the story"), prev: _t('Попередній крок', "Previous step"), next: _t('Наступний крок', "Next step") },
     lanes: [
-      { id: 'p', t: 'Задача', w: 200 },
-      { id: 's', t: 'Особливі розв’язки', w: 200 },
-      { id: 'm', t: 'Методи', w: 200 },
-      { id: 'u', t: 'У космосі', w: 210 }
+      { id: 'p', t: _t('Задача', "Problem"), w: 200 },
+      { id: 's', t: _t('Особливі розв’язки', "Special solutions"), w: 200 },
+      { id: 'm', t: _t('Методи', "Methods"), w: 200 },
+      { id: 'u', t: _t('У космосі', "In space"), w: 210 }
     ],
     nodes: [
-      { id: 'two', lane: 'p', row: 0, t: 'Два тіла', s: 'розв’язано · 1687',
-        b: 'Еліпс, парабола або гіпербола навколо спільного центру мас. Відповідь — формула.' },
-      { id: 'three', lane: 'p', row: 1, t: 'Три тіла', s: 'загальної формули немає',
-        b: 'Кожне тіло тягне два інші. Брунс і Пуанкаре довели, що бракує законів збереження для формули.' },
-      { id: 'restr', lane: 'p', row: 3, t: 'Обмежена задача', s: 'третє тіло легке',
-        b: 'Два важкі тіла на колових орбітах, третє на них не впливає. Модель для апаратів і астероїдів.' },
-      { id: 'euler', lane: 's', row: 0, t: 'Пряма Ейлера', s: '1767 · нестійка',
-        b: 'Три тіла весь час на одній прямій.' },
-      { id: 'lagr', lane: 's', row: 1, t: 'Трикутник Лагранжа', s: '1772',
-        b: 'Рівносторонній трикутник, що обертається. Для однакових мас нестійкий.' },
-      { id: 'fig8', lane: 's', row: 2, t: 'Вісімка', s: '1993 · доведено 2000',
-        b: 'Три однакові тіла на одній кривій у формі вісімки.' },
-      { id: 'fam', lane: 's', row: 3, t: 'Каталоги орбіт', s: '2013 → тисячі',
-        b: 'Сімейства періодичних орбіт, знайдені комп’ютером: 13 у 2013 році, згодом — тисячі.' },
-      { id: 'series', lane: 'm', row: 0, t: 'Ряд Зундмана', s: '1912 · непридатний',
-        b: 'Формально загальний розв’язок у вигляді ряду, але потрібно понад 10<sup>8 000 000</sup> членів.' },
-      { id: 'chaos', lane: 'm', row: 1, t: 'Хаос', s: 'Пуанкаре · 1890',
-        b: 'Мала зміна старту дає зовсім інший рух. Відкрито під час роботи над премією короля Оскара II.' },
-      { id: 'num', lane: 'm', row: 2, t: 'Чисельний розрахунок', s: 'крок за кроком',
-        b: 'Так рахує симуляція на цій сторінці і так рахують траєкторії апаратів.' },
-      { id: 'l45', lane: 'u', row: 1, t: 'L4 і L5', s: 'троянці Юпітера',
-        b: 'Стійкі точки попереду й позаду планети. Там тисячі астероїдів; до них летить місія Lucy.' },
-      { id: 'stars', lane: 'u', row: 2, t: 'Потрійні зорі', s: 'Альфа Центавра',
-        b: 'Найближча до нас зоряна система — потрійна: дві зорі тісною парою і далекий супутник.' },
-      { id: 'l12', lane: 'u', row: 3, t: 'L1 і L2', s: 'SOHO · «Джеймс Вебб»',
-        b: 'Нестійкі точки на лінії Сонце — Земля; апарати літають навколо них і підправляють орбіту.' },
-      { id: 'assist', lane: 'u', row: 4, t: 'Гравітаційні маневри', s: '«Вояджери»',
-        b: 'Апарат, планета й Сонце: зближення з планетою змінює швидкість апарата без пального.' }
+      { id: 'two', lane: 'p', row: 0, t: _t('Два тіла', "Two bodies"), s: _t('розв’язано · 1687', "solved · 1687"),
+        b: _t('Еліпс, парабола або гіпербола навколо спільного центру мас. Відповідь — формула.', "An ellipse, parabola or hyperbola around the common centre of mass. The answer is a formula.") },
+      { id: 'three', lane: 'p', row: 1, t: _t('Три тіла', "Three bodies"), s: _t('загальної формули немає', "no general formula"),
+        b: _t('Кожне тіло тягне два інші. Брунс і Пуанкаре довели, що бракує законів збереження для формули.', "Each body pulls on the other two. Bruns and Poincaré proved that there are not enough conservation laws for a formula.") },
+      { id: 'restr', lane: 'p', row: 3, t: _t('Обмежена задача', "Restricted problem"), s: _t('третє тіло легке', "the third body is light"),
+        b: _t('Два важкі тіла на колових орбітах, третє на них не впливає. Модель для апаратів і астероїдів.', "Two heavy bodies on circular orbits; the third does not affect them. A model for spacecraft and asteroids.") },
+      { id: 'euler', lane: 's', row: 0, t: _t('Пряма Ейлера', "Euler line"), s: _t('1767 · нестійка', "1767 · unstable"),
+        b: _t('Три тіла весь час на одній прямій.', "Three bodies stay on one straight line all the time.") },
+      { id: 'lagr', lane: 's', row: 1, t: _t('Трикутник Лагранжа', "Lagrange triangle"), s: '1772',
+        b: _t('Рівносторонній трикутник, що обертається. Для однакових мас нестійкий.', "A rotating equilateral triangle. Unstable for equal masses.") },
+      { id: 'fig8', lane: 's', row: 2, t: _t('Вісімка', "Figure-eight"), s: _t('1993 · доведено 2000', "1993 · proved 2000"),
+        b: _t('Три однакові тіла на одній кривій у формі вісімки.', "Three identical bodies on a single figure-eight curve.") },
+      { id: 'fam', lane: 's', row: 3, t: _t('Каталоги орбіт', "Orbit catalogues"), s: _t('2013 → тисячі', "2013 → thousands"),
+        b: _t('Сімейства періодичних орбіт, знайдені комп’ютером: 13 у 2013 році, згодом — тисячі.', "Families of periodic orbits found by computer: 13 in 2013, thousands later.") },
+      { id: 'series', lane: 'm', row: 0, t: _t('Ряд Зундмана', "Sundman series"), s: _t('1912 · непридатний', "1912 · impractical"),
+        b: _t('Формально загальний розв’язок у вигляді ряду, але потрібно понад 10<sup>8 000 000</sup> членів.', "Formally a general solution in the form of a series, but it needs more than 10<sup>8,000,000</sup> terms.") },
+      { id: 'chaos', lane: 'm', row: 1, t: _t('Хаос', "Chaos"), s: _t('Пуанкаре · 1890', "Poincaré · 1890"),
+        b: _t('Мала зміна старту дає зовсім інший рух. Відкрито під час роботи над премією короля Оскара II.', "A small change at the start gives a completely different motion. Discovered during the work for King Oscar II's prize.") },
+      { id: 'num', lane: 'm', row: 2, t: _t('Чисельний розрахунок', "Numerical computation"), s: _t('крок за кроком', "step by step"),
+        b: _t('Так рахує симуляція на цій сторінці і так рахують траєкторії апаратів.', "This is how the simulation on this page computes, and how spacecraft trajectories are computed.") },
+      { id: 'l45', lane: 'u', row: 1, t: _t('L4 і L5', "L4 and L5"), s: _t('троянці Юпітера', "Jupiter's Trojans"),
+        b: _t('Стійкі точки попереду й позаду планети. Там тисячі астероїдів; до них летить місія Lucy.', "Stable points ahead of and behind the planet. Thousands of asteroids live there; the Lucy mission is on its way to them.") },
+      { id: 'stars', lane: 'u', row: 2, t: _t('Потрійні зорі', "Triple stars"), s: _t('Альфа Центавра', "Alpha Centauri"),
+        b: _t('Найближча до нас зоряна система — потрійна: дві зорі тісною парою і далекий супутник.', "The star system closest to us is triple: two stars in a tight pair and a distant companion.") },
+      { id: 'l12', lane: 'u', row: 3, t: _t('L1 і L2', "L1 and L2"), s: _t('SOHO · «Джеймс Вебб»', "SOHO · James Webb"),
+        b: _t('Нестійкі точки на лінії Сонце — Земля; апарати літають навколо них і підправляють орбіту.', "Unstable points on the Sun — Earth line; spacecraft fly around them and correct their orbits.") },
+      { id: 'assist', lane: 'u', row: 4, t: _t('Гравітаційні маневри', "Gravity assists"), s: _t('«Вояджери»', "the Voyagers"),
+        b: _t('Апарат, планета й Сонце: зближення з планетою змінює швидкість апарата без пального.', "Spacecraft, planet and Sun: a close pass by a planet changes the spacecraft's speed without fuel.") }
     ],
     links: [
       { from: 'two', to: 'three' },
@@ -245,21 +247,21 @@ window.COMP_DATA = {
       { from: 'lagr', to: 'l45', kind: 'rule' }
     ],
     scenario: { steps: [
-      { n: ['two'], d: '1. 1687 — Ньютон розв’язує задачу двох тіл.' },
-      { w: ['three', 'euler'], d: '2. 1767 — Ейлер: три тіла на одній прямій.' },
-      { w: ['three', 'lagr'], d: '3. 1772 — Лагранж: рівносторонній трикутник.' },
-      { w: ['three', 'chaos'], d: '4. 1889–1890 — Пуанкаре і премія короля Оскара II: народження теорії хаосу.' },
-      { w: ['three', 'series'], d: '5. 1912 — ряд Зундмана: розв’язок є, але користі з нього мало.' },
-      { w: ['fig8', 'num'], d: '6. 1993–2000 — вісімка: знайдено комп’ютером, потім доведено.' },
-      { w: ['lagr', 'l45'], d: '7. Трикутник Лагранжа в природі — троянські астероїди Юпітера.' }
+      { n: ['two'], d: _t('1. 1687 — Ньютон розв’язує задачу двох тіл.', "1. 1687 — Newton solves the two-body problem.") },
+      { w: ['three', 'euler'], d: _t('2. 1767 — Ейлер: три тіла на одній прямій.', "2. 1767 — Euler: three bodies on one straight line.") },
+      { w: ['three', 'lagr'], d: _t('3. 1772 — Лагранж: рівносторонній трикутник.', "3. 1772 — Lagrange: an equilateral triangle.") },
+      { w: ['three', 'chaos'], d: _t('4. 1889–1890 — Пуанкаре і премія короля Оскара II: народження теорії хаосу.', "4. 1889–1890 — Poincaré and King Oscar II's prize: the birth of chaos theory.") },
+      { w: ['three', 'series'], d: _t('5. 1912 — ряд Зундмана: розв’язок є, але користі з нього мало.', "5. 1912 — the Sundman series: a solution exists, but it is of little use.") },
+      { w: ['fig8', 'num'], d: _t('6. 1993–2000 — вісімка: знайдено комп’ютером, потім доведено.', "6. 1993–2000 — the figure-eight: found by computer, then proved.") },
+      { w: ['lagr', 'l45'], d: _t('7. Трикутник Лагранжа в природі — троянські астероїди Юпітера.', "7. The Lagrange triangle in nature — Jupiter's Trojan asteroids.") }
     ] }
   }
 };
 </script>
-<script src="shared/nav.js?v=20261018220026"></script>
+<script src="shared/nav.js?v=20261019081700"></script>
 <script src="shared/comp.js?v=20261018220026"></script>
-<script src="shared/threebody.js?v=20261018220026"></script>
-<script type="module" src="shared/lagrange-3d.js?v=20261018220026"></script>
-<script type="module" src="shared/threebody-3d.js?v=20261018220026"></script>
+<script src="shared/threebody.js?v=20261019183630"></script>
+<script type="module" src="shared/lagrange-3d.js?v=20261019183630"></script>
+<script type="module" src="shared/threebody-3d.js?v=20261019183630"></script>
 </body>
 </html>

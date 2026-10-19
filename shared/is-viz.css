@@ -67,12 +67,12 @@
 .vz-td__ctl output{font:600 13px var(--mono);color:var(--ink);min-width:9ch}
 
 /* ── 4. Спектрометр ── */
-.vz-bl{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:14px;align-items:stretch}
+.vz-bl{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;align-items:stretch}
 .vz-bl__plot{border-radius:var(--r-lg);background:#05060c;overflow:hidden;position:relative}
 .vz-bl__plot canvas{display:block;width:100%;height:clamp(260px,40vw,340px)}
 .vz-bl__sky{border-radius:var(--r-lg);background:#05060c;color:#fff;padding:14px;display:flex;flex-direction:column;align-items:center;gap:10px}
 .vz-bl__sky .vz-k{color:rgba(255,255,255,.55);align-self:flex-start}
-.vz-bl__sky canvas{width:150px;height:150px;display:block}
+.vz-bl__sky canvas{width:340px;height:340px;max-width:100%;aspect-ratio:1;display:block}
 .vz-bl__sky p{margin:0;font-size:12.5px;line-height:1.4;color:rgba(255,255,255,.75);text-align:center;min-height:3.6em}
 .vz-bl__ctl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:var(--sp-sm) 0}
 .vz-bl__ctl label{font-size:12.5px;color:var(--ink-3);display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -82,9 +82,9 @@
 
 @media(max-width:720px){
   .vz-bl{grid-template-columns:1fr}
-  .vz-bl__sky{flex-direction:row;flex-wrap:wrap;justify-content:center}
-  .vz-bl__sky canvas{width:110px;height:110px}
-  .vz-bl__sky p{flex:1;min-width:150px;text-align:left}
+  .vz-bl__sky{flex-direction:column}
+  .vz-bl__sky canvas{width:min(340px,100%);height:auto}
+  .vz-bl__sky p{text-align:center}
 }
 @media(max-width:520px){
   .vz-mx__head,.vz-mx__row{grid-template-columns:minmax(0,1fr) repeat(3,46px);padding-left:10px;padding-right:6px}

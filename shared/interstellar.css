@@ -50,3 +50,8 @@
 /* бокова панель налаштувань сцени (lil-gui) */
 .bhw .bh-gui{position:absolute;top:10px;right:10px;z-index:3;max-height:calc(100% - 20px);overflow:auto;--width:250px;--font-size:11px;--input-font-size:11px;cursor:auto}
 @media(max-width:620px){.bhw .bh-gui{--width:200px}}
+/* кнопка фонового гулу діри (shared/is-bh-sound.js) */
+.bh-snd{font:600 12.5px/1 var(--sans);padding:8px 12px 8px 30px;border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--ground);color:var(--ink-2);cursor:pointer;position:relative}
+.bh-snd::before{content:"🔇";position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px}
+.bh-snd.on{background:var(--act);border-color:var(--act);color:#fff}
+.bh-snd.on::before{content:"🔊"}

@@ -12,7 +12,7 @@ const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls)
 (function css() {
   if (document.querySelector('link[data-vz]')) return;
   const l = document.createElement('link');
-  l.rel = 'stylesheet'; l.href = new URL('./is-viz.css?v=1', import.meta.url).href; l.dataset.vz = '1';
+  l.rel = 'stylesheet'; l.href = new URL('./is-viz.css?v=20261019083636', import.meta.url).href; l.dataset.vz = '1';
   document.head.appendChild(l);
 })();
 
@@ -245,12 +245,13 @@ async function initTides(slot) {
     <div class="vz-td__ctl">
       <span class="seg" role="group" aria-label="Маса діри"><button type="button" data-m="star">Зоряна діра · 10 Сонць</button><button type="button" data-m="garg" class="on">Гаргантюа · 10⁸ Сонць</button></span>
       <label>Відстань <input type="range" min="0" max="6" step="0.01" value="0" aria-label="Відстань у радіусах горизонту"><output></output></label>
+      <button type="button" class="vz-btn" data-again hidden>ще раз</button>
     </div>`;
   slot.appendChild(box);
   slot.appendChild(el('p', 'chint', 'Оцінка за Ньютоном: приплив на поверхні 2GM·R/r³ порівнюємо з власним тяжінням планети g (планета розміру Землі, g — 130 % земного, як у фільмі). Якщо приплив більший за g, планету розриває; межа Роша точніша, але того самого порядку. Витяг рідкої однорідної планети — ε ≈ 15/8 · приплив/g (лінійна теорія, показано без перебільшення; понад 60 % вона не працює, тож форму обмежено пропорцією ≈ 2 : 1, як у еліпсоїда Роша біля межі розпаду). Хвилі на поверхні — модель для наочності, не розрахунок. Діра й планета не в масштабі. Біля горизонту діри, що обертається, ньютонівська оцінка лише порядок величини.'));
   const wrap = box.querySelector('.vz-td'), hud = box.querySelector('.vz-td__hud'), hudB = hud.querySelector('b'), hudE = hud.querySelector('[data-e]');
   const stat = box.querySelector('.vz-td__st'), rng = box.querySelector('input'), out = box.querySelector('output');
-  const segB = [...box.querySelectorAll('.seg button')];
+  const segB = [...box.querySelectorAll('.seg button')], againB = box.querySelector('[data-again]');
 
   const phys = () => {
     const M = MASS[st.m], rs = 2 * G * M / C ** 2, r = rs * 10 ** st.lx;
@@ -274,12 +275,12 @@ async function initTides(slot) {
   let THREE, makeSky, EffectComposer, RenderPass, UnrealBloomPass, OutputPass, gradePass;
   try {
     THREE = await import('three');
-    ({ makeSky } = await import('./space-bg.js?v=20261018235830'));
+    ({ makeSky } = await import('./space-bg.js?v=20261019085437'));
     ({ EffectComposer } = await import('three/addons/postprocessing/EffectComposer.js'));
     ({ RenderPass } = await import('three/addons/postprocessing/RenderPass.js'));
     ({ UnrealBloomPass } = await import('three/addons/postprocessing/UnrealBloomPass.js'));
     ({ OutputPass } = await import('three/addons/postprocessing/OutputPass.js'));
-    ({ gradePass } = await import('./is-post.js?v=20261018235830'));
+    ({ gradePass } = await import('./is-post.js?v=20261019085437'));
   } catch (e) { wrap.appendChild(el('div', 'fail', 'Не вдалося завантажити 3D-сцену. Числа вище все одно рахуються.')); bindOnly(); return; }
   let renderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' }); }
@@ -327,92 +328,201 @@ async function initTides(slot) {
   bhM.renderOrder = 1; bh.add(bhM);
   const disk = { material: bhM.material };
 
-  // ── планета: сфера 64×64, деформація й хвилі у шейдері ──
-  const uni = { uS: { value: 0 }, uT: { value: 0 }, uA: { value: 0 }, uL: { value: new THREE.Vector3() } };
-  const planet = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), new THREE.ShaderMaterial({
-    uniforms: uni,
-    vertexShader: `
-      uniform float uS, uT, uA; varying vec3 vN, vV; varying float vH;
-      void main(){
-        vec3 p = position;
-        float phi = atan(p.z, p.x);
-        float lat = 1. - p.y*p.y;
-        float big = pow(.5 + .5*sin(2.*phi - uT*.55 + p.y*1.2), 14.);      // хвиля-гора, що біжить по екватору
-        float rip = (.5 + .5*sin(11.*phi + 6.*p.y - uT*1.9)) * (.5 + .5*sin(7.*p.y - 5.*phi + uT*1.3));
-        float h = uA*(big + .06*rip) * lat;
-        vH = big*lat;
-        p *= 1. + h;
-        float k = 1. + uS;                                                  // витяг уздовж осі на діру, об'єм сталий
-        p.x *= k; p.yz /= sqrt(k);
-        vec3 n = normal; n.x /= k; n.yz *= sqrt(k);
-        vN = normalize(normalMatrix * n);
-        vec4 mv = modelViewMatrix * vec4(p, 1.); vV = mv.xyz;
-        gl_Position = projectionMatrix * mv;
-      }`,
-    fragmentShader: `
-      uniform vec3 uL; uniform float uA; varying vec3 vN, vV; varying float vH;
+  // ── планета Міллер шарами: океан-світ (мілини, острівці піску, шорсткість — блиск Гаргантюа), хмари, атмосфера.
+  //    Приплив чесно: еліпсоїд (витяг uS) уздовж осі на діру; вісь повільно ходить (лібрація uPhi) — припливні горби
+  //    пливуть по океану, а слідом біжить хвиля-гора (світла смуга піни). Світло — широке тепле джерело (диск Гаргантюа). ──
+  const uni = { uS: { value: 0 }, uT: { value: 0 }, uA: { value: 0 }, uPhi: { value: 0 }, uL: { value: new THREE.Vector3() }, uLay: { value: 0 } };
+  const NOISE3 = `
+    vec3 h3(vec3 p){ p=fract(p*vec3(.1031,.103,.0973)); p+=dot(p,p.yxz+33.33); return fract((p.xxy+p.yxx)*p.zyx)*2.-1.; }
+    float n3(vec3 p){ vec3 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);
+      return mix(mix(mix(dot(h3(i),f),dot(h3(i+vec3(1,0,0)),f-vec3(1,0,0)),u.x),mix(dot(h3(i+vec3(0,1,0)),f-vec3(0,1,0)),dot(h3(i+vec3(1,1,0)),f-vec3(1,1,0)),u.x),u.y),
+                 mix(mix(dot(h3(i+vec3(0,0,1)),f-vec3(0,0,1)),dot(h3(i+vec3(1,0,1)),f-vec3(1,0,1)),u.x),mix(dot(h3(i+vec3(0,1,1)),f-vec3(0,1,1)),dot(h3(i+vec3(1,1,1)),f-vec3(1,1,1)),u.x),u.y),u.z); }
+    float fbm(vec3 p){ float s=0., a=.5; for(int k=0;k<5;k++){ s+=a*n3(p); p=p*2.03+vec3(1.7,9.2,3.1); a*=.5; } return s; }`;
+  // спільна деформація: витяг уздовж осі ax = (cos φ, 0, sin φ) при сталому об'ємі; хвиля-гора біжить по екватору
+  const DEFORM = `
+    uniform float uS, uT, uA, uPhi, uLay;
+    vec3 deform(vec3 p, vec3 nIn, out vec3 nOut, out float vh){
+      float phi = atan(p.z, p.x), lat = 1. - p.y*p.y;
+      // хвиля-гора — здуття самої поверхні: пологий схил позаду, крутіший фронт (асиметрія), без окремого «гребеня-об'єкта»
+      float sw = .5 + .5*sin(2.*phi - uT*.55 + p.y*1.2), big = pow(sw, 5.) * (.75 + .25*sin(2.*phi - uT*.55 + p.y*1.2 + 1.1));
+      float rip = (.5 + .5*sin(11.*phi + 6.*p.y - uT*1.9)) * (.5 + .5*sin(7.*p.y - 5.*phi + uT*1.3));
+      float h = uA*(big + .06*rip) * lat * (1. - uLay*.7);
+      vh = big*lat;
+      p *= 1. + h;
+      vec3 ax = vec3(cos(uPhi), 0., sin(uPhi)); float k = 1. + uS;
+      float d = dot(p, ax); p = (p - ax*d) / sqrt(k) + ax*d*k;
+      float dn = dot(nIn, ax); nOut = normalize((nIn - ax*dn) * sqrt(k) + ax*dn / k);
+      return p; }`;
+  const VTX = `varying vec3 vN, vV, vP; varying float vH; ${DEFORM}
+    void main(){ vec3 n; float vh; vec3 p = deform(position, normal, n, vh); vP = position; vH = vh;
+      // нормаль — з реальної форми: деформуємо дві сусідні точки й беремо векторний добуток (схил хвилі ловить світло)
+      { float R0 = length(position), e = .012; vec3 nn = normalize(position);
+        vec3 t1 = normalize(cross(nn, abs(nn.y) > .99 ? vec3(1., 0., 0.) : vec3(0., 1., 0.))), t2 = cross(nn, t1), dn; float dv;
+        vec3 p1 = deform(normalize(position + t1*e)*R0, nn, dn, dv), p2 = deform(normalize(position + t2*e)*R0, nn, dn, dv);
+        vec3 nr = normalize(cross(p1 - p, p2 - p)); if (dot(nr, p) < 0.) nr = -nr; n = nr; }
+      vN = normalize(normalMatrix * n); vec4 mv = modelViewMatrix * vec4(p, 1.); vV = mv.xyz; gl_Position = projectionMatrix * mv; }`;
+  const planet = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 96), new THREE.ShaderMaterial({
+    uniforms: uni, vertexShader: VTX,
+    fragmentShader: `uniform vec3 uL; uniform float uA, uT, uPhi, uS; varying vec3 vN, vV, vP; varying float vH; ${NOISE3}
       void main(){
         vec3 n = normalize(vN), v = normalize(-vV), l = normalize(uL);
-        float d = max(dot(n, l), 0.);
-        float crest = smoothstep(.25, .95, vH) * clamp(uA*14., 0., 1.);
-        vec3 deep = vec3(.02, .09, .16), sea = vec3(.06, .30, .40);
-        vec3 col = mix(deep, sea, .45 + .55*d);
-        col = mix(col, vec3(.86, .94, .97), crest*.75);
-        vec3 lightC = vec3(1., .78, .55);
-        float spec = pow(max(dot(reflect(-l, n), v), 0.), 40.) * (1. - crest);
-        vec3 c = col*(.07 + 1.15*d*lightC) + spec*lightC*.55;
-        float rim = pow(1. - max(dot(n, v), 0.), 3.);
-        c += rim * vec3(.25, .45, .75) * (.35 + .65*d);
+        // водний світ: мілини й острівці піску з fbm; океан сіро-сталевий, мілина світліша й зеленіша
+        vec3 q = normalize(vP);
+        float m = fbm(q*2.6 + 3.) * .6 + fbm(q*7. + 1.) * .4;
+        float shallow = smoothstep(.08, .3, m), sand = smoothstep(.3, .38, m);
+        vec3 deep = vec3(.09, .15, .2), sea = vec3(.2, .33, .4), shoal = vec3(.33, .5, .52), land = vec3(.6, .56, .46) * (.85 + .3*n3(q*40.));
+        vec3 col = mix(mix(deep, sea, .5 + .5*smoothstep(-.2, .1, m)), shoal, shallow); col = mix(col, land, sand);
+        // припливний горб: піна-смуга на фронті хвилі-гори й біля осі припливу
+        vec3 ax = vec3(cos(uPhi), 0., sin(uPhi)); float bulge = pow(abs(dot(q, ax)), 6.);
+        float crest = smoothstep(.7, .98, vH) * clamp(uA*14., 0., 1.) * .45;   // піна лише на самому гребені
+        float foam = crest*.8 + bulge * smoothstep(.1, .25, uS) * .35 * (.5 + .5*n3(q*25. + uT*.2));
+        col = mix(col, vec3(.86, .9, .92), clamp(foam, 0., 1.) * (1. - sand));
+        // широке тепле джерело (диск): «обгорнуте» освітлення, м'який термінатор
+        float d = clamp(dot(n, l)*.78 + .22, 0., 1.); d = d*d;
+        vec3 lightC = vec3(1., .8, .58);
+        float gloss = (1. - sand) * (1. - crest*.7);
+        float spec = pow(max(dot(reflect(-l, n), v), 0.), mix(60., 18., shallow)) * gloss;
+        vec3 c = col*(.04 + 1.2*d*lightC) + spec*lightC*.7*d;
+        float rim = pow(1. - max(dot(n, v), 0.), 2.2);
+        c = mix(c, vec3(.42, .6, .9) * (.15 + 1.1*d), rim * .75);                // повітря над диском планети: ближче до краю — товща серпанку
         gl_FragColor = vec4(c, 1.);
       }`
   }));
   scene.add(planet);
+  // хмари — частки, не оболонка: ~10 тис. м'яких пластівців купчастими скупченнями на висоті 2–5 % радіуса.
+  //    Хвиля-гора їх не прогинає смугою, а розганяє: на гребені частки здіймаються й розлітаються вперед і в боки,
+  //    за хвилею повільно стягуються назад. Деформація (приплив, витяг) — та сама, що в планети.
+  const cloudsU = Object.assign({}, uni, { uLay: { value: 1 }, uH: { value: 600 } });
+  const clouds = (() => {
+    const NC = 7000, pos = new Float32Array(NC * 3), sz = new Float32Array(NC), sd = new Float32Array(NC);
+    const g = () => { let u = 0; for (let k = 0; k < 4; k++) u += Math.random(); return (u - 2) / 1.15; };   // ≈ нормальний розподіл
+    const cl = Array.from({ length: 90 }, () => { const z = Math.random() * 2 - 1, a = Math.random() * 6.283, r = Math.sqrt(1 - z * z);
+      return { c: [r * Math.cos(a), z * .9, r * Math.sin(a)], s: .05 + .13 * Math.random() }; });
+    for (let i = 0; i < NC; i++) {
+      const C = cl[(Math.random() * cl.length) | 0], v = [C.c[0] + g() * C.s, C.c[1] + g() * C.s * .6, C.c[2] + g() * C.s], l = Math.hypot(...v), R = 1.02 + .03 * Math.random();
+      pos.set([v[0] / l * R, v[1] / l * R, v[2] / l * R], i * 3); sz[i] = .05 + .07 * Math.random(); sd[i] = Math.random();
+    }
+    const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('aS', new THREE.BufferAttribute(sz, 1)); geo.setAttribute('aD', new THREE.BufferAttribute(sd, 1));
+    return new THREE.Points(geo, new THREE.ShaderMaterial({ uniforms: cloudsU, transparent: true, depthWrite: false,
+      vertexShader: `attribute float aS, aD; uniform float uH; varying float vA, vL; uniform vec3 uL; ${DEFORM}
+        void main(){
+          vec3 p = position; float cs = cos(uT*.012), sn = sin(uT*.012); p = vec3(p.x*cs - p.z*sn, p.y, p.x*sn + p.z*cs);   // дрейф з атмосферою
+          // хвиля-гора в цій точці (та сама формула, що в deform): штовхає частку вперед по ходу хвилі, вгору й трохи вбік
+          float phi = atan(p.z, p.x), lat = 1. - p.y*p.y;
+          float sw = .5 + .5*sin(2.*phi - uT*.55 + p.y*1.2), wv = pow(sw, 5.) * lat * clamp(uA*14., 0., 1.);
+          vec3 tg = normalize(vec3(-p.z, 0., p.x)), up = normalize(p), sd = normalize(cross(up, tg));
+          float R0 = length(p);
+          p += tg * wv * (.05 + .1*aD) + sd * wv * (aD - .5) * .12 + up * wv * (.01 + .05*aD);
+          p = normalize(p) * (R0 + wv * .03 * aD);
+          vec3 n; float vh; vec3 q = deform(p, normalize(p), n, vh);
+          vec4 mv = modelViewMatrix * vec4(q, 1.); gl_Position = projectionMatrix * mv;
+          gl_PointSize = aS * (1. + .8*wv) * uH * projectionMatrix[1][1] * .5 / -mv.z;
+          vL = clamp(dot(normalize(mat3(modelMatrix) * n), normalize(uL))*.8 + .2, 0., 1.);
+          vA = .3 * (1. - .55*wv);                                                       // розігнані — рідшають
+        }`,
+      fragmentShader: `varying float vA, vL; void main(){ vec2 c = gl_PointCoord - .5; float r2 = dot(c, c)*4.; if (r2 > 1.) discard;
+        float a = exp(-r2*2.2) * (1. - r2) * vA; gl_FragColor = vec4(vec3(.92, .92, .94) * (.06 + .94*vL*vec3(1., .9, .78)), a); }` }));
+  })();
+  scene.add(clouds);
+  // атмосфера: товстий шар (до 1,2 радіуса). Яскравість — оптична товща вздовж променя: для прицільної відстані b
+  //    густина ∝ exp(−(b − 1)/H) — щільна біля поверхні й м'яко сходить нанівець до зовнішньої межі, без різкого обідка
+  const ATM_R = 1.2;
+  const atmo = new THREE.Mesh(new THREE.SphereGeometry(ATM_R, 96, 96), new THREE.ShaderMaterial({
+    uniforms: Object.assign({}, uni, { uLay: { value: 1 } }), vertexShader: VTX, transparent: true, depthWrite: false, side: THREE.BackSide, blending: THREE.AdditiveBlending,
+    fragmentShader: `uniform vec3 uL; varying vec3 vN, vV; void main(){ vec3 n = normalize(vN), v = normalize(-vV);
+      // c = |n·v| на оболонці: 0 на зовнішній межі, c0 — там, де промінь дотикається поверхні (для еліпсоїда пропорції ті самі)
+      float c = abs(dot(n, v)), c0 = sqrt(1. - 1./(${ATM_R.toFixed(2)}*${ATM_R.toFixed(2)}));
+      float dens = exp(-max(0., c0 - c) / .16) * smoothstep(0., .1, c);
+      float d = clamp(dot(n, normalize(uL))*.65 + .4, 0., 1.);                                 // світиться бік, звернений до диска діри
+      vec3 sky = mix(vec3(.35, .55, .95), vec3(1., .72, .45), pow(1. - d, 3.) * .6);          // на термінаторі — теплий захід
+      gl_FragColor = vec4(sky * dens * d * 1.2, 1.); }`
+  }));
+  scene.add(atmo);
 
-  // ── уламки (якщо приплив сильніший за тяжіння) ──
-  const NP = 6000, pos = new Float32Array(NP * 3), rnd = new Float32Array(NP), colA = new Float32Array(NP * 3);
+  // ── уламки (якщо приплив сильніший за тяжіння): кожна частинка летить у полі діри — псевдоньютонівський потенціал
+  //    Пачинського–Вііта Φ = −GM/(r − r_s) (є ISCO = 3 r_s і падіння), стартує зі швидкістю планети на орбіті (трохи нижчою
+  //    за колову) + кеплерівський зсув: ближчі до діри частинки випереджають — потік тягнеться в стрічку й закручується
+  //    спіраллю, частина лягає в тимчасовий диск, решта падає; біля горизонту — гравітаційне почервоніння g = √(1 − r_s/r),
+  //    зникають лише на горизонті. Інтегрування — leapfrog, 4 підкроки на кадр; масштаб часу: ~15 с реального часу. ──
+  const NP = 4200, pos = new Float32Array(NP * 3), vel = new Float32Array(NP * 3), colA = new Float32Array(NP * 3), gA = new Float32Array(NP), seedP = new Float32Array(NP * 3);
   for (let i = 0; i < NP; i++) {
     let x, y, z, q; do { x = Math.random() * 2 - 1; y = Math.random() * 2 - 1; z = Math.random() * 2 - 1; q = x * x + y * y + z * z; } while (q > 1 || q < .02);
-    const s = Math.cbrt(Math.random()) / Math.sqrt(q) * (Math.random() < .55 ? 1 : .8);
-    pos.set([x * s, y * s, z * s], i * 3); rnd[i] = Math.random();
-    const w = Math.random() < .6; colA.set(w ? [.2, .5, .62] : [.55, .42, .32], i * 3);
+    const sr = Math.cbrt(Math.random()) / Math.sqrt(q) * (Math.random() < .55 ? 1 : .85);
+    seedP.set([x * sr, y * sr, z * sr], i * 3);
+    const w = Math.random() < .6; colA.set(w ? [.25, .5, .6] : [.6, .5, .38], i * 3);     // океан / пісок — кольори поверхні зберігаються
   }
   const pg = new THREE.BufferGeometry();
   pg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  pg.setAttribute('aR', new THREE.BufferAttribute(rnd, 1));
   pg.setAttribute('aC', new THREE.BufferAttribute(colA, 3));
-  const pu = { uT: { value: 0 }, uPx: { value: 1 }, uX: { value: -4 } };
+  pg.setAttribute('aG', new THREE.BufferAttribute(gA, 1));
+  const pu = { uPx: { value: 1 } };
   const debris = new THREE.Points(pg, new THREE.ShaderMaterial({
     uniforms: pu, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     vertexShader: `
-      uniform float uT, uPx, uX; attribute float aR; attribute vec3 aC; varying vec3 vC; varying float vA;
+      uniform float uPx; attribute vec3 aC; attribute float aG; varying vec3 vC; varying float vA;
       void main(){
-        vec3 p = position; float s = uT;
-        float k = 1. + 4.5*s*s*(.6 + aR);
-        p.x *= k; p.yz *= 1./(1. + 1.8*s);
-        p.x += uX * s*s * (.4 + aR) * .5;                                   // потік до діри
-        float sw = s*s*(p.x)*.12; p.z += sw; p.y += sw*.3;
-        vC = aC; vA = (1. - smoothstep(.75, 1., s)) * smoothstep(0., .05, s + .02);
-        vec4 mv = modelViewMatrix * vec4(p, 1.);
-        gl_PointSize = uPx * (2. + 2.*aR) * (6. / -mv.z);
+        // g — гравітаційне почервоніння: яскравість ∝ g³, колір зсувається до червоного; g = 0 — частинка «впала» (невидима)
+        vC = mix(vec3(.9, .2, .05), aC, smoothstep(.3, .95, aG)) * (.35 + .65*aG*aG*aG);
+        vA = aG > .02 ? smoothstep(.0, .3, aG) : 0.;
+        vec4 mv = modelViewMatrix * vec4(position, 1.);
+        gl_PointSize = uPx * 2.6 * (6. / -mv.z);
         gl_Position = projectionMatrix * mv;
       }`,
     fragmentShader: `varying vec3 vC; varying float vA;
-      void main(){ vec2 q = gl_PointCoord - .5; float r = dot(q,q); if (r > .25) discard;
-        gl_FragColor = vec4(vC*1.6, vA*(1. - r*4.)); }`
+      void main(){ vec2 q = gl_PointCoord - .5; float r = dot(q,q); if (r > .25 || vA <= 0.) discard;
+        gl_FragColor = vec4(vC*1.5, vA*(1. - r*4.)); }`
   }));
   debris.visible = false; scene.add(debris);
+  const DB = { on: false, t: 0, rs: .8, GM: 1, c: new THREE.Vector3(), alive: 0 };
+  const acc = (x, y, z, out) => {                                            // прискорення в потенціалі Пачинського–Вііта
+    const dx = x - DB.c.x, dy = y - DB.c.y, dz = z - DB.c.z, r = Math.hypot(dx, dy, dz), d = Math.max(r - DB.rs, .03);
+    const k = -DB.GM / (d * d * r); out[0] = dx * k; out[1] = dy * k; out[2] = dz * k; return r; };
+  function debrisStart() {
+    DB.on = true; DB.t = 0; DB.c.copy(bh.position); DB.rs = .8 * bh.scale.x; DB.alive = NP;
+    const er = new THREE.Vector3().sub(DB.c).normalize(), n = new THREE.Vector3(.12, 1, .08).normalize(), et = new THREE.Vector3().crossVectors(n, er).normalize();
+    for (let i = 0; i < NP; i++) {
+      const x = seedP[i * 3], y = seedP[i * 3 + 1], z = seedP[i * 3 + 2];
+      pos[i * 3] = x; pos[i * 3 + 1] = y; pos[i * 3 + 2] = z; gA[i] = 1;
+      const r = Math.hypot(x - DB.c.x, y - DB.c.y, z - DB.c.z), vc = Math.sqrt(DB.GM * r) / (r - DB.rs);  // колова швидкість у PW-потенціалі
+      const v = vc * .86;                                                      // трохи нижча за колову: орбіта витягнута, ближній край іде всередину ISCO
+      vel[i * 3] = et.x * v + (Math.random() - .5) * .03; vel[i * 3 + 1] = et.y * v + (Math.random() - .5) * .03; vel[i * 3 + 2] = et.z * v + (Math.random() - .5) * .03;
+    }
+    pg.attributes.position.needsUpdate = true; pg.attributes.aG.needsUpdate = true;
+  }
+  const a3 = [0, 0, 0];
+  function debrisStep(dt) {
+    const h = dt * 2.6 / 4;                                                  // масштаб часу: оберт ≈ 12 с; 4 підкроки
+    let alive = 0;
+    for (let i = 0; i < NP; i++) {
+      if (gA[i] <= 0) continue;
+      let x = pos[i * 3], y = pos[i * 3 + 1], z = pos[i * 3 + 2], vx = vel[i * 3], vy = vel[i * 3 + 1], vz = vel[i * 3 + 2], r = 1;
+      for (let k = 0; k < 4; k++) {
+        r = acc(x, y, z, a3); vx += a3[0] * h * .5; vy += a3[1] * h * .5; vz += a3[2] * h * .5;
+        x += vx * h; y += vy * h; z += vz * h;
+        r = acc(x, y, z, a3); vx += a3[0] * h * .5; vy += a3[1] * h * .5; vz += a3[2] * h * .5;
+        if (r < DB.rs * 1.02) break;
+      }
+      pos[i * 3] = x; pos[i * 3 + 1] = y; pos[i * 3 + 2] = z; vel[i * 3] = vx; vel[i * 3 + 1] = vy; vel[i * 3 + 2] = vz;
+      gA[i] = r < DB.rs * 1.02 ? 0 : Math.sqrt(Math.max(0, 1 - DB.rs / r));
+      if (gA[i] > 0) alive++;
+    }
+    DB.alive = alive; DB.t += dt;
+    pg.attributes.position.needsUpdate = true; pg.attributes.aG.needsUpdate = true;
+  }
 
   let W = 1, H = 1, ready = false;
   function resize() {
     W = wrap.clientWidth || 1; H = wrap.clientHeight || 1;
     renderer.setSize(W, H, false); composer.setSize(W, H); cam.aspect = W / H;
     cam.fov = 40; cam.updateProjectionMatrix(); if (typeof layout === 'function' && ready) layout();
-    pu.uPx.value = renderer.getPixelRatio();
+    pu.uPx.value = renderer.getPixelRatio(); cloudsU.uH.value = H * renderer.getPixelRatio();
   }
   new ResizeObserver(() => { resize(); if (!running) frame(performance.now()); }).observe(wrap);
   resize();
 
-  let p = ui(), t = 0, last = performance.now(), breakT = 0, running = false, vis = false, raf = 0;
+  let p = ui(), t = 0, last = performance.now(), running = false, vis = false, raf = 0;
+  const camBase = new THREE.Vector3(.9, .9, 8);
   function layout() {
     const bx = -3.4 - 1.25 * st.lx;           // дальше — менша діра на екрані (лише наочно)
     bh.position.set(bx, .35, -1.2 - .6 * st.lx);
@@ -422,24 +532,27 @@ async function initTides(slot) {
     uni.uL.value.copy(bh.position).normalize().add(new THREE.Vector3(.2, .55, .5));
     const hf = 2 * Math.atan(Math.tan(cam.fov * Math.PI / 360) * cam.aspect);
     const d = Math.max(6.2, Math.min(15, 4.4 / Math.tan(hf / 2)));
-    cam.position.set(.9, .9, d);
+    camBase.set(.9, .9, d); cam.position.copy(camBase);
     cam.lookAt(-1.4, .1, -.6);
     bh.lookAt(cam.position.x, bh.position.y, cam.position.z);
-    pu.uX.value = bx;
   }
   function frame(now) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
     if (!REDUCE) t += dt;
     uni.uT.value = t; disk.material.uniforms.uT.value = t;
+    if (!REDUCE && ready) { cam.position.set(camBase.x + Math.sin(t * .09) * 1.1, camBase.y + Math.sin(t * .07 + 1.) * .35, camBase.z + Math.cos(t * .09) * .6); cam.lookAt(-1.4, .1, -.6); bh.lookAt(cam.position.x, bh.position.y, cam.position.z); }   // повільний обліт
     if (p.broken) {
-      planet.visible = false; debris.visible = true;
-      if (!REDUCE) breakT = (breakT + dt / 6) % 1; else breakT = .45;
-      pu.uT.value = breakT;
+      planet.visible = clouds.visible = atmo.visible = false; debris.visible = true;
+      if (!DB.on) { debrisStart(); if (REDUCE) for (let k = 0; k < 60; k++) debrisStep(.05); }   // без анімації — застиглий кадр стрічки
+      else if (!REDUCE) { debrisStep(dt); if (DB.t > 36 || DB.alive < NP * .04) debrisStart(); }   // усе впало або минуло пів хвилини — ще раз
+      againB.hidden = false;
     } else {
-      planet.visible = true; debris.visible = false; breakT = 0;
+      DB.on = false; againB.hidden = true;
+      planet.visible = clouds.visible = atmo.visible = true; debris.visible = false;
       uni.uS.value = p.eps;
       uni.uA.value = Math.min(.09, .015 + p.eps * .55) * (p.eps > 1e-4 ? 1 : .3);
-      planet.rotation.y = REDUCE ? 0 : Math.sin(t * .35) * Math.min(.14, p.eps * 1.4);   // гойдання відносно діри
+      uni.uPhi.value = REDUCE ? 0 : Math.sin(t * .35) * Math.min(.14, p.eps * 1.4);     // лібрація: вісь припливу ходить, горби пливуть по океану
+      if (!REDUCE) planet.rotation.y = clouds.rotation.y = atmo.rotation.y = t * .01;
     }
     grade.tick(t, W, H); composer.render();
   }
@@ -448,7 +561,10 @@ async function initTides(slot) {
   const halt = () => { running = false; cancelAnimationFrame(raf); };
   const changed = () => { p = ui(); layout(); if (!running) frame(performance.now()); };
   rng.addEventListener('input', () => { st.lx = +rng.value; changed(); });
-  segB.forEach((b) => b.addEventListener('click', () => { st.m = b.dataset.m; changed(); }));
+  segB.forEach((b) => b.addEventListener('click', () => { st.m = b.dataset.m;
+    if (st.m === 'star' && st.lx < 1) { st.lx = 1; rng.value = '1'; }     // зоряна діра: старт на 10 r_г — усередині межі Роша, але так, щоб стрічка встигла закрутитися спіраллю
+    changed(); }));
+  againB.addEventListener('click', () => { if (p.broken) { debrisStart(); if (!running) frame(performance.now()); } });
   visible(wrap, (v) => { vis = v; v ? start() : halt(); });
   window.IS_TIDES = { renderer, composer, bloom, grade, frame };
   ready = true; layout(); frame(performance.now());
@@ -485,7 +601,7 @@ function initBlue(slot) {
       </div>
     </div>`;
   slot.appendChild(box);
-  slot.appendChild(el('p', 'chint', 'Умовний розрахунок для заданого множника: реліктове випромінювання 2,7 К, підняте в B разів, лишається чорнотільним (закон Планка) з температурою B·2,7 К. Крива — спектральна яскравість на одиницю довжини хвилі, нормована на свій пік; сіра — наше небо. Реальний спектр на планеті залежить від геометрії Керра й руху планети: у напрямку руху зсув сильніший, позаду — слабший. Колір неба — інтеграл Планка з кривими чутливості ока CIE 1931 (наближення Ваймана — Слоуна — Ширлі).'));
+  slot.appendChild(el('p', 'chint', 'Умовний розрахунок для заданого множника: реліктове випромінювання 2,7 К, підняте в B разів, лишається чорнотільним (закон Планка) з температурою B·2,7 К. Крива — спектральна яскравість на одиницю довжини хвилі, нормована на свій пік; сіра — наше небо. Реальний спектр на планеті залежить від геометрії Керра й руху планети: у напрямку руху зсув сильніший, позаду — слабший. Колір неба — інтеграл Планка з кривими чутливості ока CIE 1931 (наближення Ваймана — Слоуна — Ширлі). Кадр «небо планети» — погляд угору з поверхні об’єктивом «риб’яче око» (180°): унизу кола — вода з відбиттям, у небі — Гаргантюа, зорі гаснуть, щойно небо світлішає; понад видимим діапазоном око вже нічого не побачить — лише прилади реєструють УФ і рентген.'));
 
   const cv = box.querySelector('.vz-bl__plot canvas'), sky = box.querySelector('.vz-bl__sky canvas'), skyP = box.querySelector('.vz-bl__sky p');
   const rng = box.querySelector('input'), out = box.querySelector('output'), spinB = box.querySelector('[data-spin]');
@@ -568,8 +684,104 @@ function initBlue(slot) {
     ctx.textAlign = 'left'; ctx.fillStyle = '#ffd6c2'; ctx.fillText(lab, Math.min(R - tw, Math.max(L, xp + 8)) , TOP - 12 + (xp + 8 + tw > R ? 0 : 0));
   }
 
+  /* «небо планети» об'єктивом «риб'яче око» (WebGL): вигляд угору з поверхні Міллер, по краю кола — вода з відбиттям,
+     небо — колір і яскравість чорного тіла T = B·2,7 К (той самий розрахунок CIE → sRGB), зорі гаснуть, коли небо світлішає,
+     Гаргантюа в небі (тінь, кільце, «обійми») — її світло теж зсунуте; проєкція equisolid r = 2f·sin(θ/2), віньєтка й аберація по краю;
+     кадр повільно дихає, вода брижиться в реальному часі. Без WebGL лишається круг кольору (канвас 2D). */
+  let fish = null;
+  const fcv = document.createElement('canvas'); fcv.width = fcv.height = 640; fcv.setAttribute('aria-label', 'Небо планети об’єктивом «риб’яче око»');
+  (async () => {
+    try {
+      const THREE = await import('three');
+      const R = new THREE.WebGLRenderer({ canvas: fcv, antialias: false }); R.setPixelRatio(1); R.setSize(640, 640, false);
+      R.toneMapping = THREE.ACESFilmicToneMapping; R.toneMappingExposure = 1.1;
+      const U = { uT: { value: 0 }, uCol: { value: new THREE.Vector3(0, 0, 0) }, uBr: { value: 0 }, uOver: { value: 0 }, uStars: { value: 1 }, uYaw: { value: 0 } };
+      const mat = new THREE.ShaderMaterial({ uniforms: U, depthTest: false, depthWrite: false,
+        vertexShader: 'varying vec2 vU; void main(){ vU = uv*2.-1.; gl_Position = vec4(position.xy, 0., 1.); }',
+        fragmentShader: `uniform float uT, uBr, uOver, uStars, uYaw; uniform vec3 uCol; varying vec2 vU;
+          float h21(vec2 p){ p = fract(p*vec2(123.34,456.21)); p += dot(p, p+45.32); return fract(p.x*p.y); }
+          float vn(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(h21(i),h21(i+vec2(1,0)),f.x), mix(h21(i+vec2(0,1)),h21(i+vec2(1,1)),f.x), f.y); }
+          float hash3(vec3 p){ return fract(sin(dot(p, vec3(12.9898,78.233,37.719)))*43758.5453); }
+          const vec3 G = normalize(vec3(.35, .42, -.84));                      // Гаргантюа: ~25° над обрієм
+          vec3 skyc(vec3 d){
+            // небо: чорне тіло з повзунка; трохи яскравіше до зеніту; зорі — лише поки небо темне
+            vec3 c = uCol * uBr * (.75 + .45*pow(max(d.y, 0.), .6));
+            vec3 q = floor(d*260.); float st = hash3(q); float tw = .7 + .3*sin(uT*2. + st*60.);
+            c += vec3(.9, .93, 1.) * step(.9975, st) * uStars * tw * smoothstep(.0, .2, d.y);
+            c += uCol * .08 * uStars * (vn(d.xz*4. + d.y*3.)*.5);                   // слабкий реліктовий серпанок
+            // Гаргантюа: координати в площині, перпендикулярній до напряму на неї
+            vec3 up = normalize(vec3(0., 1., 0.) - G*G.y), rt = cross(G, up);
+            float along = dot(d, G); vec2 p = vec2(dot(d, rt), dot(d, up)) / max(along, .05) * 1.7;
+            if (along > .2) {
+              float rs = .36, r = length(p); float sh = 1. - smoothstep(rs*.97, rs*1.03, r);
+              float ring = exp(-pow((r - rs*1.05)/.012, 2.));
+              float u2 = smoothstep(-.3, .7, abs(p.y)/max(r, 1e-3)), below = p.y < 0. ? .6 : 1.;
+              float halo = exp(-pow((r - rs*(1.3 + .25*u2))/(rs*(.12 + .35*u2)), 2.)) * u2 * below * smoothstep(rs, rs*1.08, r);
+              float th = .016 + .02*min(abs(p.x), 2.); float band = exp(-pow((p.y + .01*p.x)/th, 2.)) * smoothstep(2., .7, abs(p.x));
+              float lum = ring*3.2 + halo*2.6 + band*2.8;
+              vec3 gcol = mix(mix(vec3(.95,.45,.16), vec3(1.,.9,.74), clamp(lum*.6-.1, 0., 1.)), uCol, uOver*.8) * min(lum, 1.6);   // її світло теж зсунуте
+              float e = smoothstep(2.6, 1.6, abs(p.x)) * smoothstep(1.3, .8, abs(p.y));
+              float dark = smoothstep(rs*2.8, rs*1.05, r) * .5;
+              c = mix(c, c*(1. - dark), e); c = mix(c, vec3(0.), sh*e); c += gcol * e;
+            }
+            c += uCol * uOver * .3;                                                  // засліплення, коли небо гаряче
+            return c; }
+          void main(){
+            vec3 col = vec3(0.); float r0 = length(vU);
+            for (int k = 0; k < 3; k++) {
+              vec2 uv = vU * (1. + (float(k) - 1.) * .012 * r0*r0);               // хроматична аберація по краю
+              float r = length(uv); if (r > 1.) { continue; }
+              float th = 2.*asin(clamp(r*.7071, 0., 1.)); vec2 dir2 = r > 1e-4 ? uv/r : vec2(0., 1.);
+              vec3 d = vec3(sin(th)*dir2.x, cos(th), sin(th)*dir2.y);
+              // об'єктив нахилено: центр кадру — 30° над обрієм у бік Гаргантюа, тож нижня третина кола — вода
+              const float TA = 1.05; d = vec3(d.x, d.y*cos(TA) + d.z*sin(TA), -d.y*sin(TA) + d.z*cos(TA));
+              float cy = cos(uYaw), sy = sin(uYaw); d = vec3(d.x*cy - d.z*sy, d.y, d.x*sy + d.z*cy);
+              vec3 c;
+              if (d.y > 0.) c = skyc(d);
+              else {
+                // вода внизу кола: брижі в реальному часі, Френель, під ковзним кутом — дзеркало неба; серпанок біля обрію
+                vec2 w = d.xz / max(-d.y, .03) * 2.;
+                float e = .2, a = vn(w*1.5 + uT*.3) + .5*vn(w*3.1 - uT*.4), ax = vn((w+vec2(e,0.))*1.5 + uT*.3) + .5*vn((w+vec2(e,0.))*3.1 - uT*.4), az = vn((w+vec2(0.,e))*1.5 + uT*.3) + .5*vn((w+vec2(0.,e))*3.1 - uT*.4);
+                vec3 n = normalize(vec3(-(ax-a)/e*.08, 1., -(az-a)/e*.08));
+                vec3 rf = reflect(d, n); rf.y = abs(rf.y);
+                float fr = .04 + .96*pow(1. - max(dot(-d, n), 0.), 4.);
+                vec3 deep = (uCol*uBr*.35 + vec3(.02,.03,.04)) * (.6 + .4*vn(w*.7));
+                c = mix(deep, skyc(rf), fr); }
+              c = mix(c, uCol*uBr*.9 + vec3(.01), smoothstep(.12, 0., abs(d.y)) * .35);
+              if (k == 0) col.r = c.r; else if (k == 1) col.g = c.g; else col.b = c.b;
+            }
+            col *= 1. - .55*smoothstep(.7, 1., r0);                                   // віньєтка по краю кола
+            col += (h21(vU*300. + fract(uT)) - .5) * .03;
+            gl_FragColor = vec4(col, 1.);
+            #include <tonemapping_fragment>
+            #include <colorspace_fragment>
+          }` });
+      const sc = new THREE.Scene(), cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1); sc.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat));
+      let t = 0, last = 0, raf = 0, vis = false;
+      const render = () => { U.uYaw.value = REDUCE ? 0 : Math.sin(t * .05) * .25; U.uT.value = t; R.render(sc, cam); };
+      const loop = (now) => { raf = 0; if (!vis) return; const dt = Math.min(.05, last ? (now - last) / 1000 : 0); last = now; if (!REDUCE) t += dt; render(); raf = requestAnimationFrame(loop); };
+      fish = { U, render, kick: () => { if (vis && !raf) { last = 0; raf = requestAnimationFrame(loop); } } };
+      sky.after(fcv); sky.style.display = 'none';
+      visible(fcv, (v) => { vis = v; if (v) fish.kick(); else { cancelAnimationFrame(raf); raf = 0; } });
+      drawSky();
+    } catch (e) { fish = null; }
+  })();
+
   function drawSky() {
-    const T = B * T0, S = sky.width, g = sctx; g.clearRect(0, 0, S, S);
+    const T = B * T0, S = sky.width, g = sctx;
+    const lyF = lY(T), brF = Math.max(0, Math.min(1, (lyF - Y800) / (Y6000 - Y800)));
+    if (fish) {
+      const [fr, fg, fb] = bbRGB(Math.min(T, 4e5)), overF = Math.max(0, Math.min(1, (Math.log10(T) - 3.6) / 1.6));
+      fish.U.uCol.value.set(fr, fg, fb); fish.U.uBr.value = brF * (1 + overF * .5); fish.U.uOver.value = overF; fish.U.uStars.value = Math.max(0, 1 - brF * 2.5);
+      fish.render(); fish.kick();
+      skyP.textContent = T > 1e5 ? 'Блакитно-біле й сліпуче: небо світить у рентгені й ультрафіолеті, око цього вже не бачить, лише прилади.'
+        : T > 7000 ? 'Блакитно-біле сяйво з усього неба, гарячіше за поверхню Сонця.'
+        : T > 2500 ? 'Небо світиться, як розпечений метал або зоря.'
+        : brF > .01 ? 'Ледь помітне темно-червоне жевріння над обрієм.'
+        : 'Небо темне: усе випромінювання — поза видимим світлом.';
+      return;
+    }
+    g.clearRect(0, 0, S, S);
     const ly = lY(T), br = Math.max(0, Math.min(1, (ly - Y800) / (Y6000 - Y800)));
     const [r, gg, bb] = bbRGB(Math.min(T, 4e5));
     const cx = S / 2, R = S * .42;

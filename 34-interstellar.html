@@ -7,10 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/tokens.css?v=20261019000506">
-<link rel="stylesheet" href="shared/style.css?v=20261019000506">
-<link rel="stylesheet" href="shared/threebody.css?v=20261019000506">
-<link rel="stylesheet" href="shared/interstellar.css?v=20261019000506">
+<link rel="stylesheet" href="shared/tokens.css?v=20261019002319">
+<link rel="stylesheet" href="shared/style.css?v=20261019100150">
+<link rel="stylesheet" href="shared/threebody.css?v=20261019183857">
+<link rel="stylesheet" href="shared/interstellar.css?v=20261019094636">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
@@ -22,7 +22,7 @@
   <a class="brand" href="#top">Фізика «Інтерстеллара»</a>
   <nav class="toc" id="toc" aria-label="Розділи">
     <a href="#film">Фільм</a><a href="#bh-sec">Гаргантюа</a><a href="#time">Час</a><a href="#twins-sec">Купер і Мерф</a>
-    <a href="#tides">Хвилі</a><a href="#blue">Зсув</a><a href="#worm">Червоточина</a><a href="#tess">Тесеракт</a><a href="#map">Карта</a><a href="#known">Що відомо</a>
+    <a href="#tides">Хвилі</a><a href="#blue">Зсув</a><a href="#worm">Червоточина</a><a href="#tess">Тесеракт</a><a href="#map">Карта</a><a href="#refs">Відсилки</a><a href="#known">Що відомо</a>
   </nav>
 </header>
 
@@ -101,6 +101,7 @@
     <h2><span class="num">04</span><span class="badge sci">наука</span>Близнюки, які не близнюки</h2>
     <p>Купер залишає Землю, коли його доньці Мерф лише десять років. Наприкінці фільму вона вже сива старенька, а він майже не змінився. Це варіант знаменитого «парадоксу близнюків»: два годинники розходяться, бо пройшли різними шляхами в просторі-часі. Парадоксу тут насправді немає — кожен прожив свій відрізок, і вони просто різні за довжиною.</p>
     <div id="viz-twins" class="viz-slot"></div>
+    <div id="viz-dust" class="viz-slot"></div>
     <p class="trap"><b>Пастка.</b> Пояснювати різницю віку лише швидкістю польоту. У «Інтерстелларі» головна причина — тяжіння Гаргантюа, а не швидкість корабля.</p>
   </section>
 
@@ -151,8 +152,14 @@
     <div class="cbox" data-comp="is"></div>
   </section>
 
+  <section class="sec" id="refs">
+    <h2><span class="num">10</span>Відсилки й пасхалки</h2>
+    <p>«Інтерстеллар» перегукується з іншими фільмами, книжками й реальною історією. Деякі відсилки — данина кіно, інші ведуть просто до науки.</p>
+    <div id="viz-refs" class="viz-slot"></div>
+  </section>
+
   <section class="sec" id="known">
-    <h2><span class="num">10</span>Що відомо сьогодні</h2>
+    <h2><span class="num">11</span>Що відомо сьогодні</h2>
     <p>Через п'ять років після фільму телескоп Event Horizon показав першу справжню тінь чорної діри — у галактиці M87. Вона виявилася схожою на Гаргантюа, але з однобоким яскравим кільцем: саме той доплерівський ефект, який фільм свідомо прибрав. 2022 року той самий телескоп показав тінь діри в центрі нашої Галактики. Гравітаційне сповільнення часу виміряне з величезною точністю, від GPS до атомних годинників, які помічають різницю висот у кілька сантиметрів.</p>
     <p>Червоточини й тесеракти поки лишаються на папері. А про те, як рахують рух трьох тіл, з яких і починається історія Ендюранса в системі Гаргантюа, — у статті <a href="33-three-body.html">«Задача трьох тіл»</a>.</p>
     <p class="trap"><b>Пастка.</b> Судити про фізику за висновком «у кіно показали, отже, можливо» або «це кіно, отже, вигадка». Корисніше питати про кожен ефект окремо, як у цій статті.</p>
@@ -231,12 +238,16 @@ window.COMP_DATA = {
   }
 };
 </script>
-<script src="shared/nav.js?v=20261019000506"></script>
-<script src="shared/comp.js?v=20261019000506"></script>
-<script src="shared/interstellar.js?v=20261019000506"></script>
-<script type="module" src="shared/is-time-3d.js?v=20261019000506"></script>
-<script type="module" src="shared/is-tesseract.js?v=20261019000506"></script>
-<script type="module" src="shared/is-viz.js?v=20261019000506"></script>
-<script type="module" src="shared/blackhole-3d.js?v=20261019000506"></script>
+<script src="shared/nav.js?v=20261019081700"></script>
+<script src="shared/comp.js?v=20261019002319"></script>
+<script src="shared/interstellar.js?v=20261019002319"></script>
+<script src="shared/is-fx.js?v=20261019100940"></script>
+<script type="module" src="shared/is-dust.js?v=20261019094000"></script>
+<script src="shared/is-refs.js?v=20261019082740"></script>
+<script src="shared/is-bh-sound.js?v=20261019094636"></script>
+<script type="module" src="shared/is-time-3d.js?v=20261019101156"></script>
+<script type="module" src="shared/is-tesseract.js?v=20261019095653"></script>
+<script type="module" src="shared/is-viz.js?v=20261019100059"></script>
+<script type="module" src="shared/blackhole-3d.js?v=20261019093943"></script>
 </body>
 </html>

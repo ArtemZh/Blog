@@ -1,0 +1,35 @@
+/* Стаття 34, розділ 04: макросцена «Пил у кімнаті Мерф» (shared/is-dust.js). Префікс .dst- */
+.dst{margin:var(--sp-md) 0}
+.dst-stage{position:relative;height:min(62vh,520px);min-height:340px;border-radius:var(--r-lg);overflow:hidden;
+  background:#0b0906;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.dst-stage canvas{display:block;width:100%;height:100%}
+.dst-stage .fail{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#cbb;padding:24px;text-align:center;font-size:14px}
+.dst-hud{position:absolute;left:16px;top:14px;pointer-events:none;color:rgba(255,240,220,.62);font:500 11px/1.35 var(--mono);max-width:60%}
+.dst-hud b{display:block;font:600 15px/1.2 var(--mono);color:#fff;letter-spacing:.02em}
+.dst-hud .badge{margin:0 0 6px;pointer-events:none}
+.dst-cap{position:absolute;left:16px;bottom:12px;font:500 11px/1.3 var(--mono);color:rgba(255,240,220,.5);pointer-events:none;transition:opacity .4s}
+.dst-stage.is-code .dst-cap{opacity:0}
+.dst-bits{position:absolute;right:14px;bottom:12px;left:auto;display:flex;gap:4px;align-items:flex-end;pointer-events:none;opacity:0;transition:opacity .5s}
+.dst-stage.is-code .dst-bits{opacity:1}
+.dst-bits i{display:block;height:8px;border-radius:2px;background:rgba(255,220,170,.25);transition:background .3s}
+.dst-bits i.w{width:14px}
+.dst-bits i.n{width:5px}
+.dst-bits i.on{background:#ffd79a}
+.dst-bits u{display:block;width:8px}
+
+.dst-ctl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:12px 0}
+.dst-go{appearance:none;border:1px solid var(--act);background:var(--act);color:#fff;border-radius:var(--r-md);
+  padding:8px 16px;font:600 13.5px/1 var(--sans);cursor:pointer}
+.dst-go{display:inline-flex;align-items:center;gap:8px;box-shadow:0 2px 0 color-mix(in srgb,var(--act) 45%,#000);transition:transform .12s,box-shadow .12s,filter .12s}
+.dst-go:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 3px 0 color-mix(in srgb,var(--act) 45%,#000)}
+.dst-go:active{transform:translateY(1px);box-shadow:0 1px 0 color-mix(in srgb,var(--act) 45%,#000)}
+.dst-go::before{content:"✦";font-size:12px}
+.dst-go[aria-pressed="true"]{background:var(--ground);color:var(--act);border-width:1.5px}
+.dst-go[aria-pressed="true"]::before{content:"↺";font-size:15px}
+.dst-go:disabled{opacity:.4;cursor:default}
+.dst-read{flex:1 1 260px;min-width:0;font:500 12px/1.5 var(--mono);color:var(--ink-3)}
+.dst-read b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.dst-read em{font-style:normal;color:var(--act)}
+.dst-read .dst-dec{display:inline-block;min-width:1.5em}
+.dst-read .q{color:var(--act)}
+@media(max-width:720px){.dst-stage{height:min(56vh,420px);min-height:300px}.dst-hud{max-width:70%}}

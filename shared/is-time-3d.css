@@ -5,6 +5,8 @@
 .itm-btn:hover{border-color:var(--act);color:var(--act)}
 .itm-btn.on{background:var(--act);border-color:var(--act);color:#fff}
 .itm-btn:focus-visible{outline:2px solid var(--act);outline-offset:2px}
+.itm-spd button{padding:8px 10px;font:600 12px/1 var(--sans)}
+.itm-spd-l{font:500 11px/1.2 var(--mono);color:var(--ink-3);white-space:nowrap}
 .itm-cnt{display:flex;flex-wrap:wrap;gap:4px 18px;margin-left:auto;font-size:12px;color:var(--ink-3);align-items:baseline}
 .itm-cnt b{font:600 15px/1.2 var(--mono);color:var(--ink);margin-left:5px;font-variant-numeric:tabular-nums}
 .itm-cnt .itm-e b{color:var(--act)}

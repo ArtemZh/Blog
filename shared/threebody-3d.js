@@ -14,6 +14,7 @@ import { makeSky } from './space-bg.js?v=20261018213705';
 import { makeStar, STAR_TINTS } from './sun-fx.js?v=20261018213705';
 
 const TB = window.TB;
+const EN = window.PMP_LANG === 'en', _t = (uk, en) => (EN ? en : uk);
 const $ = (id) => document.getElementById(id);
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const box = $('sim');
@@ -24,7 +25,7 @@ const MAXTR = 1400;
 let renderer;
 try { renderer = new THREE.WebGLRenderer({ antialias: true }); } catch (e) { renderer = null; }
 if (!renderer) {
-  box.insertAdjacentHTML('beforeend', '<div class="fail">Тривимірна сцена не запустилась: браузер не дав доступу до WebGL. Решта статті працює без неї.</div>');
+  box.insertAdjacentHTML('beforeend', _t('<div class="fail">Тривимірна сцена не запустилась: браузер не дав доступу до WebGL. Решта статті працює без неї.</div>', "<div class=\"fail\">The 3D scene did not start: the browser did not grant access to WebGL. The rest of the article works without it.</div>"));
   window.TB3 = { ok: false };
 } else {
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
@@ -117,8 +118,8 @@ if (!renderer) {
   function massUI() {
     const m = customMasses(); [0, 1, 2].forEach((k) => { $('simM' + k + 'o').textContent = m[k] < .01 ? m[k].toExponential(1) : m[k].toFixed(2); });
     const q = 27 * (m[0] * m[1] + m[1] * m[2] + m[2] * m[0]) / 9, r = $('simRouth');
-    if (S.shape === 'line') { r.textContent = 'Пряма Ейлера нестійка за будь-яких мас'; r.className = 'chint bad'; }
-    else { const ok = q < 1; r.textContent = `27·Σmᵢmⱼ / M² = ${q < .01 ? q.toExponential(1) : q.toFixed(2)} → ${ok ? 'стійкий: менше за 1' : 'нестійкий: більше за 1'}`; r.className = 'chint ' + (ok ? 'ok' : 'bad'); }
+    if (S.shape === 'line') { r.textContent = _t('Пряма Ейлера нестійка за будь-яких мас', "The Euler line is unstable for any masses"); r.className = 'chint bad'; }
+    else { const ok = q < 1; r.textContent = `27·Σmᵢmⱼ / M² = ${q < .01 ? q.toExponential(1) : q.toFixed(2)} → ${ok ? _t('стійкий: менше за 1', 'stable: less than 1') : _t('нестійкий: більше за 1', 'unstable: greater than 1')}`; r.className = 'chint ' + (ok ? 'ok' : 'bad'); }
     document.querySelectorAll('#simShape button').forEach((x) => x.classList.toggle('on', x.dataset.s === S.shape));
   }
   function load(preset) {
@@ -153,7 +154,7 @@ if (!renderer) {
     const dist = R0 / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     if (hard) { camera.position.copy(dir.multiplyScalar(dist)); controls.target.set(0, 0, 0); }
     controls.enableRotate = S.dim3; camera.up.set(0, S.dim3 ? 0 : 1, S.dim3 ? 1 : 0); camera.lookAt(0, 0, 0);
-    $('simDim').textContent = S.dim3 ? 'вид згори (2D)' : 'під кутом (3D)';
+    $('simDim').textContent = S.dim3 ? _t('вид згори (2D)', 'top view (2D)') : _t('під кутом (3D)', 'angled view (3D)');
   }
   function resize() { const w = box.clientWidth, h = box.clientHeight; if (!w || !h) return;
     renderer.setSize(w, h, false); composer.setSize(w, h); bloom.resolution.set(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); }
@@ -181,7 +182,7 @@ if (!renderer) {
     });
     const err = Math.abs((TB.energy(S.bodies) - S.E0) / S.E0);
     const e = $('simErr'); e.textContent = err < 1e-12 ? '< 10⁻¹²' : err.toExponential(1).replace('e', '·10^'); e.classList.toggle('bad', err > 1e-3);
-    $('simT').textContent = S.t.toFixed(1); $('simN').textContent = S.steps.toLocaleString('uk');
+    $('simT').textContent = S.t.toFixed(1); $('simN').textContent = S.steps.toLocaleString(EN ? 'en' : 'uk');
   }
   let last = performance.now(), visible = false;
   function loop(now) {
@@ -195,7 +196,7 @@ if (!renderer) {
   document.querySelectorAll('#simPre button').forEach((b) => b.addEventListener('click', () => { if (b.dataset.p === 'random') S.seed = 1 + Math.floor(Math.random() * 9999); load(b.dataset.p); }));
   document.querySelectorAll('#simMode button').forEach((b) => b.addEventListener('click', () => { S.space = b.dataset.m === 'space';
     if (S.space && !S.dim3) { S.dim3 = true; frame(true); } paint(); }));
-  $('simPlay').addEventListener('click', () => { S.run = !S.run; $('simPlay').textContent = S.run ? '❚❚ пауза' : '▶ рух'; });
+  $('simPlay').addEventListener('click', () => { S.run = !S.run; $('simPlay').textContent = S.run ? _t('❚❚ пауза', '❚❚ pause') : _t('▶ рух', '▶ play'); });
   $('simRe').addEventListener('click', () => load(S.preset));
   let mT; [0, 1, 2].forEach((k) => $('simM' + k).addEventListener('input', () => { massUI(); clearTimeout(mT); mT = setTimeout(() => load('custom'), 120); }));
   document.querySelectorAll('#simShape button').forEach((b) => b.addEventListener('click', () => { S.shape = b.dataset.s; load('custom'); }));
@@ -204,7 +205,7 @@ if (!renderer) {
   $('simDim').addEventListener('click', () => { S.dim3 = !S.dim3; frame(true); });
   const sp = $('simSpeed'); sp.addEventListener('input', () => { S.speed = +sp.value; $('simSpeedO').textContent = '×' + S.speed; });
   const tr = $('simTrail'); tr.addEventListener('input', () => { S.trail = +tr.value; });
-  $('simPlay').textContent = S.run ? '❚❚ пауза' : '▶ рух';
+  $('simPlay').textContent = S.run ? _t('❚❚ пауза', '❚❚ pause') : _t('▶ рух', '▶ play');
   resize(); load('fig8'); requestAnimationFrame(loop);
   window.TB3 = { ok: true, S, load, tick, paint, camera, controls, stars: () => stars };
 }

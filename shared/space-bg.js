@@ -7,10 +7,14 @@ export function makeSky(THREE, opts = {}) {
   /* ── туманності: сфера зсередини, колір рахується з напрямку погляду ── */
   const neb = new THREE.Mesh(new THREE.SphereGeometry(R, 64, 32), new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite: false,
-    uniforms: { uSeed: { value: opts.seed || 3.7 }, uAmt: { value: opts.amount ?? 1 }, uCore: { value: opts.core ?? 1 } },
+    uniforms: { uSeed: { value: opts.seed || 3.7 }, uAmt: { value: opts.amount ?? 1 }, uCore: { value: opts.core ?? 1 },
+      // Чумацький Шлях (лише за opts.galaxy): площина Галактики, напрям на ядро, сила, відтінки країв і ядра
+      uGal: { value: opts.galaxy ? (opts.galaxy.amount ?? 1) : 0 }, uGalN: { value: new THREE.Vector3(...((opts.galaxy && opts.galaxy.normal) || [.35, .25, .9])).normalize() },
+      uGalC: { value: new THREE.Vector3(...((opts.galaxy && opts.galaxy.core) || [-.9, .1, .4])).normalize() },
+      uGalA: { value: new THREE.Vector3(...((opts.galaxy && opts.galaxy.edge) || [.55, .64, .9])) }, uGalB: { value: new THREE.Vector3(...((opts.galaxy && opts.galaxy.coreCol) || [1, .84, .6])) } },
     vertexShader: 'varying vec3 vDir; void main(){ vDir = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
     fragmentShader: `
-      varying vec3 vDir; uniform float uSeed; uniform float uAmt; uniform float uCore;
+      varying vec3 vDir; uniform float uSeed; uniform float uAmt; uniform float uCore; uniform float uGal; uniform vec3 uGalN, uGalC, uGalA, uGalB;
       vec3 hash3(vec3 p){ p = fract(p*vec3(.1031,.1030,.0973)); p += dot(p, p.yxz+33.33); return fract((p.xxy+p.yxx)*p.zyx)*2.-1.; }
       float noise(vec3 p){ vec3 i=floor(p), f=fract(p); vec3 u=f*f*(3.-2.*f);
         return mix(mix(mix(dot(hash3(i),f), dot(hash3(i+vec3(1,0,0)),f-vec3(1,0,0)),u.x),
@@ -33,19 +37,35 @@ export function makeSky(THREE, opts = {}) {
         col += vec3(.32,.10,.42) * pow(blue, 2.2) * .22;
         col += vec3(.60,.25,.06) * dust * .34;
         col *= 1. - dark * .72;
+        if (uGal > 0.) {
+          // смуга Галактики: профіль по широті над площиною, ширша й тепліша в бік ядра; клуби зоряного світла з fbm,
+          // темні пилові прожилки вздовж смуги (щільніші біля ядра), блакитніші краї
+          float lat = dot(vDir, uGalN), along = dot(vDir, uGalC);
+          float w = .09 + .07 * (along * .5 + .5);
+          float prof = exp(-pow(lat / w, 2.)) + .35 * exp(-pow(lat / (w * 2.6), 2.));
+          float core = pow(max(along, 0.), 2.5);
+          float cl = fbm(vDir * 3.2 + uSeed * .7 + 4.) * .5 + .5, cl2 = fbm(vDir * 8. + 9.) * .5 + .5;
+          float lanes = smoothstep(.42, .72, fbm(vec3(vDir * 6.5) + uSeed * .3 + 2.) * .5 + .5 + .15 * fbm(vDir * 19.)) * exp(-pow(lat / (w * .6), 2.)) * (.45 + .55 * core);
+          vec3 gc = mix(uGalA, uGalB, clamp(core * .9 + cl2 * .25, 0., 1.));
+          float g = prof * (.35 + .65 * cl) * (.5 + .9 * core) * uGal;
+          col += gc * g * (1. - lanes * .9) * .3;
+        }
         gl_FragColor = vec4(col * uAmt, 1.);
       }` }));
   neb.renderOrder = -10; group.add(neb);
 
   /* ── зорі: три шари. Розмір і яскравість — атрибути точки ── */
   const rnd = (s => () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296))(opts.starSeed || 99);
-  const N = 5200, pos = new Float32Array(N * 3), col = new Float32Array(N * 3), size = new Float32Array(N);
+  const N = opts.stars || 5200, pos = new Float32Array(N * 3), col = new Float32Array(N * 3), size = new Float32Array(N);
+  const gal = opts.galaxy, gn = gal ? new THREE.Vector3(...(gal.normal || [.35, .25, .9])).normalize() : null;
   const tint = [[.75, .85, 1], [1, 1, 1], [1, .93, .8], [1, .78, .6]];
   for (let i = 0; i < N; i++) {
     const u = rnd() * 2 - 1, th = rnd() * Math.PI * 2, s = Math.sqrt(1 - u * u), r = R * .92;
     let x = s * Math.cos(th), y = s * Math.sin(th), z = u;
     // частину зір стягуємо до смуги — небо виходить неоднорідним, як справжнє
     if (rnd() < .45) { const n = [.35, .25, .9], l = Math.hypot(...n), k = (x * n[0] + y * n[1] + z * n[2]) / l * .75; x -= n[0] / l * k; y -= n[1] / l * k; z -= n[2] / l * k; const m = Math.hypot(x, y, z); x /= m; y /= m; z /= m; }
+    // Чумацький Шлях: більшість дрібних зір стягнуто до площини Галактики
+    if (gn && rnd() < .72) { const k = (x * gn.x + y * gn.y + z * gn.z) * (.86 + rnd() * .12); x -= gn.x * k; y -= gn.y * k; z -= gn.z * k; const m = Math.hypot(x, y, z); x /= m; y /= m; z /= m; }
     pos.set([x * r, y * r, z * r], i * 3);
     const t = tint[Math.floor(rnd() * tint.length)], b = Math.pow(rnd(), 3) * .9 + .1;
     col.set([t[0] * b, t[1] * b, t[2] * b], i * 3); size[i] = 1 + Math.pow(rnd(), 6) * 3.5;

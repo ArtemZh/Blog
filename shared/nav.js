@@ -41,8 +41,15 @@
   var here = location.pathname.split('/').pop() || 'index.html';
   if (PARENT[here]) here = PARENT[here];
 
+  /* Широка бічна панель (як у каталогах компонентів): групи з підзаголовками, повні назви,
+     крапка «нове» біля трьох останніх статей. Поки що — на сторінках трьох останніх статей. */
+  var NEWEST = ['32-french-past.html', '33-three-body.html', '34-interstellar.html'];
+  var WIDE = NEWEST.indexOf(here) >= 0;
+  var GROUPS = { 1: t('Профіль', 'Profile'), 2: t('Як я веду доставку', 'How I run delivery'), 3: t('На чому це стоїть', 'Foundations'), 4: t('Статті й приклади', 'Articles and examples') };
+  if (WIDE) document.body.classList.add('rail-wide');
+
   var rail = document.createElement('nav');
-  rail.className = 'railnav';
+  rail.className = 'railnav' + (WIDE ? ' wide' : '');
   rail.setAttribute('aria-label', t('Модулі портфоліо', 'Portfolio sections'));
 
   function item(href, label, inner, cls) {
@@ -54,19 +61,23 @@
     return a;
   }
 
+  if (WIDE) { var brand = document.createElement('a'); brand.href = 'index.html'; brand.className = 'rw-brand';
+    brand.innerHTML = '<span class="rw-mark"></span>' + t('Портфоліо', 'Portfolio'); rail.appendChild(brand); }
   rail.appendChild(item('index.html', t('Усі розділи', 'All sections'),
     '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">' +
     '<rect x="2.5" y="2.5" width="6" height="6" rx="1.4"/><rect x="11.5" y="2.5" width="6" height="6" rx="1.4"/>' +
     '<rect x="2.5" y="11.5" width="6" height="6" rx="1.4"/><rect x="11.5" y="11.5" width="6" height="6" rx="1.4"/></svg>',
     'home'));
 
-  var prev = 0;
+  var prev = 0, prev2 = 0;
   MODULES.forEach(function (m) {
-    if (prev && m.g !== prev) {
+    if (prev && m.g !== prev && !WIDE) {
       var hr = document.createElement('span'); hr.className = 'sep'; rail.appendChild(hr);
     }
     prev = m.g;
-    var a = item(m.f, m.t, '<span class="nm">' + m.n + '</span>');
+    if (WIDE && m.g !== prev2) { var gh = document.createElement('span'); gh.className = 'rw-group'; gh.textContent = GROUPS[m.g] || ''; rail.appendChild(gh); }
+    prev2 = m.g;
+    var a = item(m.f, m.t, '<span class="nm">' + m.n + '</span>' + (WIDE ? '<span class="rw-t">' + m.t + '</span>' + (NEWEST.indexOf(m.f) >= 0 ? '<i class="rw-new" aria-label="' + t('нове', 'new') + '"></i>' : '') : ''));
     if (m.ext) { a.target = '_blank'; a.rel = 'noopener'; }
     rail.appendChild(a);
   });
@@ -77,6 +88,7 @@
   pop.className = 'railpop';
   document.body.appendChild(pop);
   function showPop(a) {
+    if (WIDE && innerWidth > 1080) return;
     var tip = a.querySelector('.tip'); if (!tip) return;
     pop.textContent = tip.textContent;
     var r = a.getBoundingClientRect(), bottom = getComputedStyle(rail).flexDirection === 'row';
@@ -115,4 +127,56 @@
   if (sw) { var s2 = document.createElement('span'); s2.className = 'sep'; rail.appendChild(s2); rail.appendChild(sw); }
 
   document.body.appendChild(rail);
+
+  /* «Відгортання» (peel): широке меню лежить ПІД сторінкою. Курсор біля лівого краю —
+     сторінка відгортається, як наклейка, і відкриває меню; відвели курсор — лягає назад.
+     Клавіатура: фокус у меню теж відгортає. На вузьких екранах — звичайна нижня смуга. */
+  if (WIDE) {
+    /* Згин не рівна лінія: край сторінки вигинається хвилею навколо курсора, ніби простір
+       прогинається біля маленької чорної діри. x(y) = база + A·exp(−((y−yc)/σ)²)·(1 + хвилька). */
+    var NS = 'http://www.w3.org/2000/svg', page = document.querySelector('.page');
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'peel-svg'); svg.setAttribute('aria-hidden', 'true');
+    svg.innerHTML = '<defs><linearGradient id="pgF" x1="0" x2="1"><stop offset="0" stop-color="#cfd2d8"/><stop offset=".45" stop-color="#f4f5f7"/><stop offset=".8" stop-color="#fbfbfc"/><stop offset="1" stop-color="#e2e4e8"/></linearGradient>' +
+      '<filter id="pgS" x="-50%" y="-5%" width="200%" height="110%"><feDropShadow dx="-8" dy="0" stdDeviation="9" flood-color="#14181d" flood-opacity=".22"/></filter></defs>' +
+      '<path class="pf" fill="url(#pgF)" filter="url(#pgS)"/>';
+    var flapP = svg.querySelector('path'), tab = document.createElement('div');
+    tab.className = 'peel-tab'; tab.setAttribute('aria-hidden', 'true'); tab.innerHTML = '<span>' + t('меню', 'menu') + '</span>';
+    document.body.appendChild(svg); document.body.appendChild(tab);
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, MENU = 272;
+    var open = false, base = 0, amp = 0, cy = innerHeight / 2, ty = cy, t0 = performance.now(), raf = 0, timer = 0;
+    function edge(y, tt) { var d = (y - cy) / 150, g = Math.exp(-d * d); return base + amp * g * (1 + .18 * Math.sin(d * 5 - tt * 3)); }
+    function draw(now) {
+      var tt = (now - t0) / 1000, tgtB = open ? MENU : 0, tgtA = open ? 46 : 0, k = reduce ? 1 : .16;
+      base += (tgtB - base) * k; amp += (tgtA - amp) * k * .8; cy += (ty - cy) * .2;
+      var H = innerHeight, pts = [], y;
+      for (y = -20; y <= H + 20; y += 12) pts.push([edge(y, tt), y]);
+      // сторінка: відрізаємо зліва по кривій (координати path — від верху .page)
+      var top = page.getBoundingClientRect().top, ph = page.scrollHeight;
+      var d = 'M ' + Math.max(0, pts[0][0]).toFixed(1) + ' 0 L ' + pts[0][0].toFixed(1) + ' ' + (pts[0][1] - top).toFixed(1);
+      pts.forEach(function (p) { d += ' L ' + p[0].toFixed(1) + ' ' + (p[1] - top).toFixed(1); });
+      d += ' L ' + base.toFixed(1) + ' ' + ph + ' L 99999 ' + ph + ' L 99999 0 Z';
+      page.style.clipPath = base < .5 ? '' : 'path("' + d + '")';
+      // загнутий край — зворотний бік паперу вздовж тієї ж кривої, ширший там, де вигин
+      if (base < .5) flapP.setAttribute('d', ''); else {
+        var f = 'M ' + pts[0][0] + ' ' + pts[0][1], back = [];
+        pts.forEach(function (p) { f += ' L ' + p[0].toFixed(1) + ' ' + p[1]; var w = 14 + (p[0] - base) * .45; back.push([p[0] - w, p[1]]); });
+        back.reverse().forEach(function (p) { f += ' L ' + p[0].toFixed(1) + ' ' + p[1]; });
+        flapP.setAttribute('d', f + ' Z'); }
+      var moving = Math.abs(tgtB - base) > .3 || Math.abs(tgtA - amp) > .3 || (open && !reduce);
+      raf = moving ? requestAnimationFrame(draw) : 0;
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(draw); }
+    function set(v) { if (innerWidth <= 1080) v = false; if (v === open) return; open = v; document.body.classList.toggle('peeled', v); kick(); }
+    document.addEventListener('pointermove', function (e) {
+      if (innerWidth <= 1080) return; ty = e.clientY;
+      if (e.clientX < 22) { clearTimeout(timer); set(true); }
+      else if (open && e.clientX > MENU + 70) { clearTimeout(timer); timer = setTimeout(function () { set(false); }, 220); }
+      if (open) kick();
+    });
+    document.addEventListener('pointerleave', function () { set(false); });
+    rail.addEventListener('focusin', function () { set(true); });
+    rail.addEventListener('focusout', function (e) { if (!rail.contains(e.relatedTarget)) set(false); });
+    tab.addEventListener('pointerenter', function () { set(true); });
+    addEventListener('scroll', function () { if (open) kick(); }, { passive: true });
+  }
 })();

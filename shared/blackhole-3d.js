@@ -11,8 +11,8 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-import { makeSky } from './space-bg.js?v=20261018235830';
-import { gradePass } from './is-post.js?v=20261018235830';
+import { makeSky } from './space-bg.js?v=20261019083324';
+import { gradePass } from './is-post.js?v=20261019083324';
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -44,14 +44,23 @@ const COMMON = `
 const BH = `
   uniform float uReal;     // 0 — як у фільмі, 1 — насправді
   // параметри диска — з панелі налаштувань
-  uniform float uSwirl, uNoise, uRelief, uRamp1, uRamp2, uEmis, uAbs, uThick, uOuter, uFlow; uniform vec3 uCol1, uCol2, uGlow;
+  uniform float uSwirl, uNoise, uRelief, uRamp1, uRamp2, uEmis, uAbs, uThick, uOuter, uFlow, uPlume, uPatch; uniform vec3 uCol1, uCol2, uGlow;
   // об'ємний диск: густина газу — гаусіан по висоті, товщина росте з радіусом; з краю — пухнасті «клапті»
   float dens(vec3 p, float r, out float ang){
     ang = atan(p.z, p.x);
     float H = .03 + uThick*r;
     float rim = smoothstep(2.6, 3.4, r) * smoothstep(uOuter, uOuter - 5., r);
-    float fluff = .75 + .5*n3(vec3(r*1.3, ang*2., p.y*3.) + vec3(0., -uT*.05, 0.));
-    return exp(-pow(p.y/(H*fluff), 2.)) * rim;
+    // викиди: подекуди газ здіймається клубами над і під площиною; клуби пливуть по орбіті (кутова швидкість ∝ r^-1,5)
+    float a = ang + uT*uFlow*.6*pow(3./r, 1.5);
+    vec3 pc = vec3(cos(a)*1.4, sin(a)*1.4, r*.55);                       // кут — по колу в просторі шуму, без шва
+    float P = n3(pc*1.7)*.5 + .5;
+    float plume = pow(smoothstep(.42, .9, P), 1.4) * uPlume;
+    float Hl = H * (1. + plume*7.);
+    // рваний край: шум уздовж висоти — пасма, витягнуті вгору
+    float edge = n3(vec3(pc.xy*5., p.y*4.5/(1. + plume*2.) - uT*.08)) * .5 + .5;
+    float fluff = .55 + .9*edge;
+    float y = abs(p.y) / (Hl*fluff);
+    return exp(-y*y*(1. - .55*plume) - y*.35*plume) * rim;
   }
   void main(){
     vec3 d = rayDir(), p = uCam;
@@ -59,6 +68,9 @@ const BH = `
     vec3 col = vec3(0.); float tr = 1.;              // tr — скільки світла ще проходить крізь газ
     bool hole = false;
     bool done = false;
+    // jitter (як у singularity): кожен піксель стартує з випадковим зсувом на частку кроку — замість смуг-«сходинок»
+    // від однакових кроків маємо дрібне зерно, яке ховає сяйво й грейд
+    float jit = hash(vec3(gl_FragCoord.xy, fract(uT*.37)*61.));
     for (int i=0; i<520; i++){
       float r = length(p);
       if (r < 1.) { hole = true; break; }
@@ -66,6 +78,7 @@ const BH = `
       float dt = clamp(.07*r, .02, 1.5);
       float rq = length(p.xz);
       if (rq > 2.4 && rq < 14.5) dt = min(dt, max(.03, abs(p.y)*.35 + .025));   // біля диска — дрібний крок
+      dt *= .75 + .5*fract(jit + float(i)*.618034);                        // довжина кожного кроку трохи «гуляє»
       vec3 acc = -1.5*h2*p/pow(r, 5.);
       if (rq > 2.4 && rq < 14.5 && abs(p.y) < 1.2) {
         float ang; float rho = dens(p, rq, ang);
@@ -82,8 +95,11 @@ const BH = `
           float v = (rq - 3.)/11. + (N - .05)*.45 + (N - N2)*uRelief;
           vec3 c = v < uRamp1 ? uCol1 : v < uRamp2 ? mix(uCol1, uCol2, (v-uRamp1)/(uRamp2-uRamp1)) : mix(uCol2, vec3(0.), clamp((v-uRamp2)/(1.-uRamp2), 0., 1.));
           float heat = pow(3./rq, 1.5);
-          float E = uEmis * (.1 + .9*heat*heat);                 // внутрішній край розпечений, зовнішній — тьмяний
-          c = mix(c, vec3(1., .96, .88), smoothstep(.45, 1., heat) * .55);   // біля діри газ біло-гарячий
+          float E = uEmis * (.1 + .9*heat*heat);
+          // нерівномірність: великі ділянки пекучі, інші тьмяні — як у живого диска
+          float bigN = n3(vec3(cos(an)*.9, sin(an)*.9, rq*.22 + uT*.01))*.5 + .5;
+          E *= mix(1., .2 + 2.2*bigN*bigN*bigN, uPatch);                 // внутрішній край розпечений, зовнішній — тьмяний
+          c = mix(c, vec3(1., .9, .72), smoothstep(.45, 1., heat) * .4);   // біля діри газ біло-гарячий
           if (uReal > .5) {
             // g = √(1 − r_s/r) / (γ(1 − v·n)); v = √(r_s / 2(r − r_s)), n = −d
             vec3 vdir = normalize(vec3(-p.z, 0., p.x)); float vv = sqrt(.5/(rq-1.)), gam = 1./sqrt(1.-vv*vv);
@@ -169,7 +185,10 @@ function scene(box, frag, extra, opt) {
   // небо — те саме, що в статті 33 (space-bg.js), один раз знімаємо в кубічну текстуру; шейдер бере з неї колір уздовж зігнутого променя
   const cube = (o) => { const ss = new THREE.Scene(); ss.add(makeSky(THREE, o)); const rt = new THREE.WebGLCubeRenderTarget(1024);
     new THREE.CubeCamera(.1, 3000, rt).update(renderer, ss); return rt.texture; };
-  U.uSky = { value: cube({ spikes: 12, spikeSize: .26 }) }; U.uSky2 = { value: opt.sky2 ? cube({ seed: 11.3, starSeed: 7, spikes: 16, spikeSize: .3, amount: 1.7 }) : U.uSky.value };
+  // наше небо — з Чумацьким Шляхом (смуга проходить навскіс через кадр біля кулі/діри); за горлом — інша галактика, під іншим кутом і в бузкових тонах
+  U.uSky = { value: cube({ spikes: 12, spikeSize: .26, stars: 9000, galaxy: { amount: .3, normal: [.6, .8, 0], core: [-.56, .42, -.7] } }) };   // фон майже чорний, як у singularity
+  U.uSky2 = { value: opt.sky2 ? cube({ seed: 11.3, starSeed: 7, spikes: 16, spikeSize: .3, amount: 1.5, stars: 9000,
+    galaxy: { amount: 1.3, normal: [-.3, .9, .3], core: [.6, .2, -.77], edge: [.6, .45, .95], coreCol: [1, .7, .95] } }) : U.uSky.value };
   const sc = new THREE.Scene(), cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   sc.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat));
   const composer = new EffectComposer(renderer); composer.addPass(new RenderPass(sc, cam));
@@ -243,6 +262,7 @@ async function panel(s) {
   add('uSwirl', 0, 1.5, .01, 'Закрут'); add('uFlow', 0, .6, .01, 'Швидкість потоку'); add('uNoise', .05, 2, .01, 'Частота клубів');
   add('uRelief', 0, 80, .5, 'Рельєф клубів'); add('uEmis', 0, 40, .1, 'Світіння'); add('uAbs', 0, 20, .1, 'Щільність');
   add('uThick', 0, .08, .001, 'Товщина'); add('uOuter', 8, 20, .1, 'Зовнішній радіус');
+  add('uPlume', 0, 2, .01, 'Висота викидів'); add('uPatch', 0, 1, .01, 'Нерівномірність');
   add('uRamp1', 0, .4, .005, 'Шкала: світле до'); add('uRamp2', .1, .9, .005, 'Шкала: темне до');
   const col = (k, n) => { const o = { c: '#' + new THREE.Color(...U[k].value.toArray()).getHexString() };
     d.addColor(o, 'c').name(n).onChange((v) => { const c = new THREE.Color(v); U[k].value.set(c.r, c.g, c.b); }); };
@@ -253,8 +273,8 @@ async function panel(s) {
 const bhBox = document.getElementById('bh');
 if (bhBox) {
   const V = (v) => ({ value: v }), C3 = (r, g, b) => ({ value: new THREE.Vector3(r, g, b) });
-  const s = scene(bhBox, BH, { uReal: V(0), uSwirl: V(.35), uFlow: V(.12), uNoise: V(.45), uRelief: V(26), uEmis: V(16), uAbs: V(7), uThick: V(.022), uOuter: V(14),
-    uRamp1: V(.08), uRamp2: V(.5), uCol1: C3(1, .74, .42), uCol2: C3(.22, .08, .03), uGlow: C3(.056, .052, .036) }, { dist: 19, pitch: .035, bloom: .55, scale: innerWidth < 700 ? .6 : .7, exposure: 1.1, spin: .02, min: 5, max: 60, grade: { vignette: .42, grain: .05, ca: 1.6, sat: 1.04, tint: [1, .985, .96] }, onFrame: (t, dt, cam) => { if (!ship) return; if (!reduce) { ship.rotation.x = t * .3; shipPiv.rotation.z = .15 + .03 * Math.sin(t * .4); }     // колесо крутиться навколо осі хаба (у моделі — X)
+  const s = scene(bhBox, BH, { uReal: V(0), uSwirl: V(.35), uFlow: V(.12), uNoise: V(.45), uRelief: V(26), uEmis: V(14), uAbs: V(4.5), uThick: V(.012), uOuter: V(14), uPlume: V(.3), uPatch: V(.7),
+    uRamp1: V(.05), uRamp2: V(.42), uCol1: C3(1, .64, .32), uCol2: C3(.16, .045, .015), uGlow: C3(.02, .018, .012) }, { dist: 19, pitch: .035, bloom: .55, scale: innerWidth < 700 ? .6 : .7, exposure: 1.1, spin: .02, min: 5, max: 60, grade: { vignette: .42, grain: .05, ca: 1.6, sat: 1.18, tint: [1, .97, .92] }, onFrame: (t, dt, cam) => { if (!ship) return; if (!reduce) { ship.rotation.x = t * .3; shipPiv.rotation.z = .15 + .03 * Math.sin(t * .4); }     // колесо крутиться навколо осі хаба (у моделі — X)
     cam.getWorldDirection(_f); _r.crossVectors(_f, cam.up).normalize(); _u.crossVectors(_r, _f);
     shipPiv.position.copy(cam.position).addScaledVector(_f, 10).addScaledVector(_r, -3.2).addScaledVector(_u, -1.6); } });
   if (s) {
