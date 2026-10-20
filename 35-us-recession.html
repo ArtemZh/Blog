@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Рецесія в США · Draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20261019002319">
+<link rel="stylesheet" href="shared/style.css?v=20261019100150">
+<link rel="stylesheet" href="shared/threebody.css?v=20261019183857">
+<link rel="stylesheet" href="shared/interstellar.css?v=20261019094636">
+<link rel="stylesheet" href="shared/recession.css?v=20261020183733">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top">Рецесія в США</a>
+  <nav class="toc" id="toc" aria-label="Розділи">
+    <a href="#almost">Шість разів</a><a href="#who">Хто вирішує</a><a href="#years">П'ять років</a><a href="#broken">Сигнали</a><a href="#now">Сьогодні</a>
+    <a href="#oil">Нафта</a><a href="#ai">ШІ</a><a href="#kshape">K</a><a href="#map">Карта</a><a href="#ahead">Сценарії</a><a href="#known">Що відомо</a>
+  </nav>
+</header>
+
+<main class="main" id="top">
+  <header class="hero3 rc-hero">
+    <img class="hero3__img" src="assets/recession/banner.jpg" alt="Нічне місто згори: вогні вулиць перетворюються на лінії графіків, праворуч частина кварталів гасне" width="1918" height="820">
+    <div class="hero3__txt">
+      <div class="hero3__kick">Стаття · економіка · чернетка</div>
+      <h1>Рецесія в США</h1>
+      <p class="hero3__sub">П'ять років на межі: що кричало, що сталося і що показують прилади зараз</p>
+    </div>
+    <div class="rc-baro" id="rcBaro" aria-label="Оцінки ймовірності рецесії"></div>
+  </header>
+  <div class="wrap"><p class="lede lede3">З 2021 по 2026 рік американська економіка кілька разів опинялася на межі спаду: знижувався ВВП, перевернулася крива дохідності, спрацювало «безпомилкове» правило, злітали ціни на пальне, а настрої споживачів падали нижче за рівень 2008 року. Утім, офіційної рецесії за цей час так і не зафіксували. З’ясуймо, чому класичні сигнали схибили, що показують ключові індикатори станом на 20 жовтня 2026 року і де ховаються справжні ризики. Кожне твердження марковано: <span class="badge fact">факт</span><span class="badge disp">дискусійне</span><span class="badge myth">міф</span>.</p></div>
+
+  <div class="wrap">
+
+  <section class="sec" id="almost">
+    <h2><span class="num">01</span>Шість разів «майже»</h2>
+    <p>На рецесію в США чекали майже безперервно: спершу через післяпандемійну інфляцію, згодом — через найстрімкіше за сорок років підвищення ставок, банкрутство банків, торговельні мита, урядовий шатдаун і нафтову кризу. Щоразу знаходився індикатор, який «гарантував» спад. Таблиця нижче підсумовує ці епізоди: що кричало, що сталося насправді й чому. Натисніть на рядок — і графік у розділі 03 перенесе вас у відповідний місяць.</p>
+    <div id="rc-almost" class="viz-slot"></div>
+  </section>
+
+  <section class="sec" id="who">
+    <h2><span class="num">02</span><span class="badge fact">факт</span>Хто вирішує, що це рецесія</h2>
+    <p>Офіційні дати рецесій у США оголошує не уряд і не ФРС, а Комітет з датування ділових циклів Національного бюро економічних досліджень (NBER) — група незалежних економістів. За їхнім визначенням, рецесія — це суттєве зниження економічної активності, яке є <b>глибоким</b>, <b>широким</b> (охоплює багато галузей) і <b>тривалим</b> (довше кількох місяців). Критерії не застосовують механічно: дуже глибокий спад може бути короткочасним, як навесні 2020 року.</p>
+    <p>Комітет аналізує не лише ВВП, а й щомісячні показники: зайнятість, реальні доходи без урахування соцвиплат, промислове виробництво та реальні продажі в промисловості й торгівлі. Популярне ж правило «два квартали поспіль падіння ВВП» — медійне спрощення, а не офіційний критерій. Порівняйте епізоди: коли просідали всі чотири показники, а коли — тільки ВВП.</p>
+    <div id="rc-who" class="viz-slot"></div>
+    <p class="trap"><b>Не плутати.</b> Рецесію 2001 року визнали офіційно, хоча двох кварталів поспіль зі спадом ВВП тоді не було. У 2022-му перші оцінки показали два квартали падіння, проте рецесію так і не оголосили. Ба більше, після переглядів даних Бюро економічного аналізу (BEA) другий квартал 2022 року виявився плюсовим, тож «технічна рецесія» зникла навіть за власним правилом.</p>
+  </section>
+
+  <section class="sec" id="years">
+    <h2><span class="num">03</span>П'ять років на одному графіку</h2>
+    <p>Сім показників за 2019–2026 роки на спільній шкалі часу: безробіття і правило Сам, інфляція, ставка ФРС, крива дохідності, ціна нафти та настрої споживачів. Тягніть повзунок або натисніть «▶ прожити», щоб простежити хронологію подій. Клік по будь-якому місяцю відкриє картку з усіма значеннями. Сіра смуга — офіційна рецесія 2020 року, пунктир — пороги тривоги.</p>
+    <div id="rc-years" class="viz-slot"></div>
+    <p class="chint">Дані: FRED (Federal Reserve Bank of St. Louis), знімок на 20.10.2026; середні за місяць. Жовтень 2025-го частково порожній: під час шатдауну статистику не публікували.</p>
+  </section>
+
+  <section class="sec" id="broken">
+    <h2><span class="num">04</span><span class="badge disp">дискусійне</span>Сигнали, що зламалися</h2>
+    <p>Економісти спираються на кілька «перевірених» провісників рецесії. За останні п’ять років спрацював майже кожен із них — і жоден не вгадав. Чотири історії, кожну можна розібрати перемикачем.</p>
+    <div id="rc-broken" class="viz-slot"></div>
+    <p class="trap"><b>Насправді.</b> Індикатори не «зламалися» назавжди — вони відреагували на нетипові причини. Інверсію кривої зумовили інфляційні очікування й рекордне підвищення ставок, правило Сам — приплив нової робочої сили, а «спад» ВВП 2025 року — особливості обліку імпорту. Урок: аналізувати, <i>чому</i> рухається показник, а не лише чи перетнув він поріг.</p>
+  </section>
+
+  <section class="sec" id="now">
+    <h2><span class="num">05</span>Панель приладів: жовтень 2026</h2>
+    <p>Усі ключові індикатори на одній панелі: поточне значення, поріг тривоги й динаміка за останні місяці. Зелений — безпечна відстань від порогу, жовтий — варто стежити, червоний — тиск. Натисніть на прилад, щоб дізнатися, що він означає і звідки цифра.</p>
+    <div id="rc-now" class="viz-slot"></div>
+    <p class="trap"><b>Висновок.</b> Ознак рецесії наразі немає: ВВП зростає, хвилі звільнень немає, правило Сам біля нуля. Утім, червоні прилади згрупувалися довкола цін: інфляція, пальне, іпотека, настрої. Це картина не спаду, а <i>стагфляційного тиску</i> — і саме він змушує ФРС підвищувати ставку, хоча найм майже зупинився.</p>
+  </section>
+
+  <section class="sec" id="oil">
+    <h2><span class="num">06</span><span class="badge fact">факт</span>Нафтовий шок 2026 року</h2>
+    <figure class="rc-fig"><img src="assets/recession/strait.jpg" alt="Вузька протока на заході сонця, ланцюжок танкерів, на обрії дим" loading="lazy" width="1600" height="900"></figure>
+    <p>28 лютого 2026 року США та Ізраїль завдали ударів по Ірану, і рух Ормузькою протокою, через яку йде близько п’ятої частини світової нафти, заблоковано. За кілька тижнів нафта подорожчала з ~$65 до ~$90, а в жовтні WTI знову сягнула ~$109, Brent — понад $111 за барель. У вересні бензин був на 34 % дорожчим, ніж торік, і дав понад половину місячного зростання цін.</p>
+    <p>За оцінкою ФРБ Чикаго, шок відбирає 0,8–1,7 відсоткового пункту зростання 2026 року й за будь-якого сценарію підштовхує вгору інфляцію та ставки. Утім, це не 1979-й: нині економіка США витрачає значно менше нафти на долар ВВП, а самі Штати — потужний видобувник. Порахуйте, скільки подорожчання коштує саме вашому гаманцю.</p>
+    <div id="rc-oil" class="viz-slot"></div>
+  </section>
+
+  <section class="sec" id="ai">
+    <h2><span class="num">07</span><span class="badge disp">дискусійне</span>Економіка на одній нозі: ШІ</h2>
+    <p>Поки нафта й ставки тиснуть, зростання тягне один сектор — будівництво дата-центрів і закупівля обчислювального обладнання для штучного інтелекту. Чотири найбільші хмарні компанії планують на 2026 рік $650–730 млрд капітальних витрат — орієнтовно на 78 % більше, ніж у 2025-му. Скільки з цього потрапляє у зростання ВВП, залежить від методики: частина обладнання імпортна, а імпорт ВВП не збільшує.</p>
+    <p>Ролик нижче пояснює цю залежність за 48 секунд, а під ним — вежа витрат і діаграма внеску, з якими можна погратися самому.</p>
+    <div id="rc-reel" class="viz-slot"></div>
+    <div id="rc-ai" class="viz-slot"></div>
+    <p class="trap"><b>Важливо.</b> Якщо віддача від ШІ розчарує, удар буде потрійним: скоротяться інвестиції, подешевшають акції найдорожчих компаній (а з ними — витрати заможних домогосподарств) і постраждають портфелі приватного кредиту, які фінансують будівництво. За схожим сценарієм розгорталася рецесія 2001 року — інвестиційна, а не споживча.</p>
+  </section>
+
+  <section class="sec" id="kshape">
+    <h2><span class="num">08</span><span class="badge disp">дискусійне</span>K-подібний споживач</h2>
+    <p>Споживання — дві третини економіки США — останніми роками зростає нерівномірно: заможні домогосподарства, яких підтримують акції та нерухомість, витрачають більше, а решта потерпає від цін і боргів. Звідси парадокс: магазини звітують про рекордні продажі, а настрої споживачів — біля історичного мінімуму (44,8 у травні 2026 року). Часто кажуть, що верхні 10 % дають «половину всіх витрат». Перевіримо, звідки ця цифра.</p>
+    <div id="rc-k" class="viz-slot"></div>
+    <p class="trap"><b>Цікавий факт.</b> У II кварталі 2026 року борг домогосподарств уперше за шість років трохи скоротився (до $18,8 трлн) — завдяки іпотеці. Водночас борги за кредитними картками ($1,26 трлн) і автокредитами ($1,71 трлн, рекорд) продовжили зростати. Безробіття серед нещодавніх випускників вишів — близько 5,6 % проти 3,6 % у 2019-му.</p>
+  </section>
+
+  <section class="sec" id="map">
+    <h2><span class="num">09</span>Карта ризиків</h2>
+    <p>Звідки може прийти рецесія: першопричини, канали, якими вони поширюються, і прилади, що відреагують першими. Наведіть курсор на блок або запустіть маршрут.</p>
+    <div class="cbox" data-comp="rc"></div>
+  </section>
+
+  <section class="sec" id="ahead">
+    <h2><span class="num">10</span>Три дороги на рік уперед</h2>
+    <p>Оцінки ймовірності рецесії на наступні 12 місяців різняться в кілька разів: ринки прогнозів (Polymarket, Kalshi) дають 6–8 % на рецесію до кінця 2026 року за «технічним» правилом, банківські аналітики — 25–35 % на рік уперед. Три сценарії нижче — ілюстрація можливої динаміки ключових показників, а не прогноз.</p>
+    <div id="rc-ahead" class="viz-slot"></div>
+  </section>
+
+  <section class="sec" id="known">
+    <h2><span class="num">11</span>Що відомо і що дивитися далі</h2>
+    <p>Станом на 20 жовтня 2026 року: реальний ВВП у II кварталі зріс на 2,2 % річних, модель GDPNow ФРБ Атланти оцінює III квартал близько 3,5 %; безробіття — 4,2 %; інфляція — 3,7 %, базова — 2,6 %; ставка ФРС — 3,75–4,00 % після першого з 2023 року підвищення (16 вересня). Головні невідомі — тривалість конфлікту довкола Ормузької протоки, реакція ФРС на інфляцію та реальна віддача від інвестицій у ШІ.</p>
+    <div id="rc-cal" class="viz-slot"></div>
+    <p class="trap"><b>Висновок.</b> Питання «чи буде рецесія» поставлене не зовсім точно. Корисніше стежити, які саме прилади червоніють і чому. Рецесія настає не тоді, коли спрацьовує одне правило, а коли спад стає глибоким, широким і тривалим водночас.</p>
+    <h3>Джерела</h3>
+    <ul class="src29">
+      <li><a href="https://www.nber.org/research/business-cycle-dating" target="_blank" rel="noopener">NBER — Business Cycle Dating</a></li>
+      <li><a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED, Federal Reserve Bank of St. Louis</a>: UNRATE, SAHMREALTIME, CPIAUCSL, CPILFESL, FEDFUNDS, T10Y2Y, T10Y3M, DCOILWTICO, UMCSENT, ICSA, MORTGAGE30US, PAYEMS, INDPRO, W875RX1, CMRMTSPL, A191RL1Q225SBEA</li>
+      <li><a href="https://www.bea.gov/sites/default/files/2026-09/gdp2q26-3rd.pdf" target="_blank" rel="noopener">BEA — GDP, 2nd Quarter 2026 (Third Estimate)</a></li>
+      <li><a href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank" rel="noopener">BLS — Employment Situation, September 2026</a>; <a href="https://www.bls.gov/news.release/cpi.htm" target="_blank" rel="noopener">CPI, September 2026</a></li>
+      <li><a href="https://www.federalreserve.gov/monetarypolicy/files/monetary20260916a1.pdf" target="_blank" rel="noopener">Federal Reserve — FOMC statement, 16.09.2026</a></li>
+      <li><a href="https://www.atlantafed.org/research-and-data/data/gdpnow/current-and-past-gdpnow-commentaries" target="_blank" rel="noopener">Atlanta Fed — GDPNow</a></li>
+      <li><a href="https://www.chicagofed.org/publications/chicago-fed-letter/2026/523" target="_blank" rel="noopener">Chicago Fed Letter — The Aftermath of the 2026 Oil Shock</a>; <a href="https://budgetlab.yale.edu/research/what-are-macroeconomic-implications-recent-turmoil-oil-markets" target="_blank" rel="noopener">Yale Budget Lab</a>; <a href="https://economics.td.com/us-energy-shock-2026" target="_blank" rel="noopener">TD Economics</a></li>
+      <li><a href="https://www.newyorkfed.org/newsevents/news/research/2026/20260811" target="_blank" rel="noopener">New York Fed — Household Debt and Credit, Q2 2026</a>; <a href="https://www.newyorkfed.org/research/college-labor-market" target="_blank" rel="noopener">The Labor Market for Recent College Graduates</a></li>
+      <li><a href="https://www.minneapolisfed.org/article/2026/have-us-consumers-gone-k-shaped-a-review-of-the-data" target="_blank" rel="noopener">Minneapolis Fed — Have U.S. consumers gone K-shaped?</a>; <a href="https://www.dallasfed.org/research/economics/2025/1125-yang-consume" target="_blank" rel="noopener">Dallas Fed — Consumption concentration</a></li>
+      <li><a href="https://epoch.ai/data-insights/ai-datacenter-share-gdp" target="_blank" rel="noopener">Epoch AI — Data center buildout share of US GDP</a>; ING — оцінка внеску ШІ-інвестицій у зростання (через <a href="https://www.indexbox.io/blog/ai-investment-drives-one-third-of-us-gdp-growth-in-2026/" target="_blank" rel="noopener">IndexBox</a>)</li>
+      <li><a href="https://www.cfr.org/articles/the-supreme-court-clipped-trumps-tariff-powers-and-opened-new-trade-battle-fronts" target="_blank" rel="noopener">CFR — рішення Верховного суду щодо мит (20.02.2026)</a>; <a href="https://budgetmodel.wharton.upenn.edu/p/2026-09-09-effective-tariff-rates-and-revenues-updated-september-9-2026/" target="_blank" rel="noopener">Penn Wharton — Effective Tariff Rates</a></li>
+      <li><a href="https://fortune.com/2024/08/02/recession-indicator-claudia-sahm-rule-trigger-unemployment-rate-jobs-report" target="_blank" rel="noopener">Fortune — спрацювання правила Сам (2024)</a>; <a href="https://britannica.com/money/sahm-rule-recession-indicator" target="_blank" rel="noopener">Britannica — Sahm Rule</a></li>
+      <li><a href="https://www.jpmorgan.com/insights/global-research/economy/recession-probability" target="_blank" rel="noopener">J.P. Morgan</a>, <a href="https://fortune.com/2026/03/25/will-there-be-recession-goldman-forecast-oil-price-inflation-economy/" target="_blank" rel="noopener">Goldman Sachs (Fortune)</a>, <a href="https://www.usbank.com/corporate-and-commercial-banking/insights/economy/outlook/monthly.html" target="_blank" rel="noopener">U.S. Bank</a>, <a href="https://polymarket.com/event/us-recession-by-end-of-2026" target="_blank" rel="noopener">Polymarket</a> — оцінки ймовірності</li>
+      <li>Зображення — власні згенеровані ілюстрації; графіки побудовано з даних.</li>
+      <li>Текст відредаговано з допомогою Gemini, факти звірено з джерелами вище.</li>
+    </ul>
+  </section>
+
+  </div>
+</main>
+</div>
+
+<script src="shared/rc-data.js?v=20261020183303"></script>
+<script>
+window.COMP_DATA = {
+  rc: {
+    ui: { play: 'Програти маршрут', prev: 'Попередній крок', next: 'Наступний крок' },
+    lanes: [
+      { id: 'cause', t: 'Причини', w: 200 },
+      { id: 'chan', t: 'Як передається', w: 200 },
+      { id: 'sig', t: 'Що покаже першим', w: 200 },
+      { id: 'out', t: 'Наслідок', w: 200 }
+    ],
+    nodes: [
+      { id: 'oil', lane: 'cause', row: 0, t: 'Нафта й Ормуз', s: 'WTI ~$100+',
+        b: 'Блокада протоки з лютого 2026. Бензин +34 % за рік. Chicago Fed: −0,8…−1,7 п.п. зростання.' },
+      { id: 'fed', lane: 'cause', row: 1, t: 'ФРС підвищує', s: '3,75–4,00 %',
+        b: 'Перше підвищення з 2023 року (вересень 2026), медіана — ще одне до кінця року.' },
+      { id: 'ai', lane: 'cause', row: 2, t: 'ШІ-капекс', s: '$650–730 млрд',
+        b: 'Близько третини зростання ВВП 2026 року. Ризик — розчарування у віддачі.' },
+      { id: 'tar', lane: 'cause', row: 3, t: 'Мита', s: 'ефективна ~11 %',
+        b: 'Після рішення Верховного суду мита переведено на інші статті; невизначеність гальмує інвестиції.' },
+      { id: 'cpi', lane: 'chan', row: 0, t: 'Інфляція', s: '3,7 % р/р',
+        b: 'Ціни ростуть швидше за зарплати (+3,0 %): реальні доходи стискаються.' },
+      { id: 'rates', lane: 'chan', row: 1, t: 'Дорогі кредити', s: 'іпотека ~7,4 %',
+        b: 'Найвища ставка з 2023 року. Житло й автомобілі — першими під ударом.' },
+      { id: 'stocks', lane: 'chan', row: 2, t: 'Ринок акцій', s: 'CAPE біля рекорду',
+        b: 'Падіння акцій б\'є по витратах заможних, які тягнуть споживання.' },
+      { id: 'credit', lane: 'chan', row: 3, t: 'Приватний кредит', s: 'дефолти ~5 %',
+        b: 'З урахуванням реструктуризацій; фонди обмежують викуп.' },
+      { id: 'sent', lane: 'sig', row: 0, t: 'Настрої', s: '46,3',
+        b: 'Мічиган, жовтень 2026; рекордний мінімум — 44,8 у травні.' },
+      { id: 'jobs', lane: 'sig', row: 1, t: 'Найм', s: '+29 тис. у вересні',
+        b: 'Ринок «без найму й без звільнень»: заявки на допомогу ~199 тис./тиждень.' },
+      { id: 'sahm', lane: 'sig', row: 2, t: 'Правило Сам', s: '0,00 з 0,50',
+        b: 'Спрацює, якщо безробіття підніметься приблизно до 4,7–4,8 %.' },
+      { id: 'capx', lane: 'sig', row: 3, t: 'Замовлення техніки', s: 'ISM 54,5',
+        b: 'Промисловість поки росте, але ціни на вході — 77,9.' },
+      { id: 'rec', lane: 'out', row: 1, t: 'Рецесія', s: 'глибоко · широко · довго',
+        b: 'Офіційно її визначить NBER — заднім числом, через місяці.' },
+      { id: 'stag', lane: 'out', row: 0, t: 'Стагфляційне сповільнення', s: 'ціни ↑, зростання ↓',
+        b: 'Без формальної рецесії, але з болем для гаманців.' },
+      { id: 'soft', lane: 'out', row: 3, t: 'М\'яка посадка', s: 'базовий сценарій',
+        b: 'Нафта стабілізується, інфляція спадає, ФРС зупиняється.' }
+    ],
+    links: [
+      { from: 'oil', to: 'cpi' }, { from: 'fed', to: 'rates' }, { from: 'ai', to: 'stocks' }, { from: 'tar', to: 'cpi', kind: 'rule' },
+      { from: 'ai', to: 'credit' }, { from: 'cpi', to: 'sent' }, { from: 'rates', to: 'jobs' }, { from: 'stocks', to: 'capx', kind: 'rule' },
+      { from: 'credit', to: 'capx' }, { from: 'jobs', to: 'sahm' }, { from: 'sent', to: 'stag' }, { from: 'sahm', to: 'rec' }, { from: 'capx', to: 'soft', kind: 'rule' }
+    ],
+    scenario: { steps: [
+      { n: ['oil'], d: '1. Маршрут «нафта»: блокада Ормузу піднімає ціну барелю.' },
+      { w: ['oil', 'cpi'], d: '2. Бензин тягне вгору інфляцію.' },
+      { w: ['cpi', 'sent'], d: '3. Реальні доходи падають — настрої біля мінімуму.' },
+      { w: ['sent', 'stag'], d: '4. Без звільнень це стагфляційне сповільнення, а не рецесія.' },
+      { n: ['fed'], d: '5. Маршрут «ставки»: ФРС відповідає на інфляцію підвищенням.' },
+      { w: ['fed', 'rates'], d: '6. Кредити дорожчають — іпотека понад 7 %.' },
+      { w: ['rates', 'jobs'], d: '7. Компанії перестають наймати.' },
+      { w: ['jobs', 'sahm'], d: '8. Якщо почнуться звільнення — безробіття росте, спрацьовує правило Сам.' },
+      { w: ['sahm', 'rec'], d: '9. Так виглядав би шлях до справжньої рецесії.' }
+    ] }
+  }
+};
+</script>
+<script src="shared/nav.js?v=20261020144826"></script>
+<script src="shared/comp.js?v=20261019002319"></script>
+<script src="shared/rc-viz.js?v=20261020183303"></script>
+<script src="shared/rc-reel.js?v=20261020183805"></script>
+<script src="shared/rc-sound.js?v=20261020183303"></script>
+<script src="shared/is-hint.js?v=20261020160943"></script>
+<script type="module" src="shared/rc-ai3d.js?v=20261020183303"></script>
+</body>
+</html>
