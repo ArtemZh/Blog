@@ -17,6 +17,8 @@
     const x = c.getContext('2d'); x.setTransform(d, 0, 0, d, 0, 0); x.clearRect(0, 0, w, h); return { x, w, h }; }
   function seen(el, cb, th = .25) { const io = new IntersectionObserver((es) => es.forEach((e) => cb(e.isIntersecting)), { threshold: th }); io.observe(el); }
   function once(el, cb, th = .25) { const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { io.disconnect(); cb(); } }, { threshold: th }); io.observe(el); }
+  // текст-результат під міні-графіками 04 змінюється ASCII-змітанням (rc-fx.js), перший раз — без ефекту
+  const rsSet = (e, t) => { if (e.textContent === t) return; if (window.RC_SWEEP && e.dataset.init) RC_SWEEP(e, t, { dur: 700 }); else { e.textContent = t; e.dataset.init = 1; } };
   const SND = (k, a) => { if (window.RC_SND) RC_SND.fx(k, a); };   // звук сторінки (rc-sound.js), якщо увімкнено
   const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
 
@@ -215,14 +217,14 @@
     { const p = fig('Крива дохідності', 'Коли короткі ставки вищі за довгі (спред нижче нуля), рецесія з 1970-х приходила в середньому за рік. 2022–2024: найдовша інверсія в історії — і жодної рецесії.');
       let m3 = false; const inv = C.t10y2y.filter((v, i) => v != null && v < 0 && M[i] >= '2022-01').length;
       const d = () => { lines(p.cv, '2019-01', M[N - 1], [{ k: 't10y2y', col: '#8a63d2', fill: 'rgba(224,83,42,.22)' }].concat(m3 ? [{ k: 't10y3m', col: '#1E968C' }] : []), -2, 2, { th: [[0, 'інверсія нижче']] });
-        p.rs.textContent = m3 ? 'Спред 10р−3міс (бірюзовий) — улюблений індикатор ФРС — теж був нижче нуля понад два роки.' : `Спред 10р−2р нижче нуля ${inv} місяців поспіль (середні за місяць). Попередній рекорд — 1978 рік.`; };
+        rsSet(p.rs, m3 ? 'Спред 10р−3міс (бірюзовий) — улюблений індикатор ФРС — теж був нижче нуля понад два роки.' : `Спред 10р−2р нижче нуля ${inv} місяців поспіль (середні за місяць). Попередній рекорд — 1978 рік.`); };
       const b = btn(p, 'додати 10р−3міс'); b.addEventListener('click', () => { m3 = !m3; b.classList.toggle('on', m3); d(); }); new ResizeObserver(d).observe(p.cv); }
     // б) правило Сам
     { const p = fig('Правило Сам', 'Якщо середнє безробіття за 3 місяці на 0,5 п.п. вище за мінімум попередніх 12 місяців — рецесія вже почалася. Улітку 2024-го правило спрацювало.');
       let cl = false; const d = () => { const sers = [{ k: 'sahm', col: '#E0532A' }];
         if (cl) { const a = C.claims.map((v) => v == null ? null : (v - 100) / 400); sers.push({ data: a, col: '#4678DC' }); }
         lines(p.cv, '2023-01', M[N - 1], sers, -.2, 1, { th: [[.5, 'поріг 0,50']], f: 2 });
-        p.rs.textContent = cl ? 'Сині — первинні заявки на допомогу (шкала умовна: 0,25 ≈ 200 тис., 0,5 ≈ 300 тис. на тиждень): трималися близько 200–260 тис., звільнень не побільшало. Безробіття росло, бо швидко росла робоча сила — переважно через імміграцію.' : 'Пік — 0,57 у серпні 2024. Рецесії не було; показник відкотився до нуля.'; };
+        rsSet(p.rs, cl ? 'Сині — первинні заявки на допомогу (шкала умовна: 0,25 ≈ 200 тис., 0,5 ≈ 300 тис. на тиждень): трималися близько 200–260 тис., звільнень не побільшало. Безробіття росло, бо швидко росла робоча сила — переважно через імміграцію.' : 'Пік — 0,57 у серпні 2024. Рецесії не було; показник відкотився до нуля.'); };
       const b = btn(p, 'накласти звільнення'); b.addEventListener('click', () => { cl = !cl; b.classList.toggle('on', cl); d(); }); new ResizeObserver(d).observe(p.cv); }
     // в) ВВП I кв. 2025 — бухгалтерія імпорту
     { const p = fig('«Спад» ВВП на початку 2025-го', 'Імпорт віднімається з ВВП. Перед митами компанії скуповували товари за кордоном, імпорт злетів на 38 % — і перша оцінка показала мінус.');
@@ -233,14 +235,14 @@
         r.forEach(([t, v], i) => { const cx = 20 + (w - 40) * (i + .5) / r.length; x.fillStyle = v < 0 ? '#E0532A' : '#1E968C'; x.fillRect(cx - bw / 2, v < 0 ? z : z - v * sc, bw, Math.abs(v) * sc);
           x.font = `600 12px ${MONO}`; x.fillStyle = css('--ink') || '#111'; x.textAlign = 'center'; x.fillText(sgn(v, 1) + (t === 'внесок імпорту' ? ' п.п.' : ' %'), cx, v < 0 ? z + Math.abs(v) * sc + 14 : z - v * sc - 6);
           x.font = `500 11px ${SANS}`; x.fillStyle = css('--ink-3') || '#667'; x.fillText(t, cx, 14); });
-        p.rs.textContent = T[st]; };
+        rsSet(p.rs, T[st]); };
       const bs = [['a', 'перша оцінка'], ['b', 'прибрати імпорт'], ['c', 'сьогоднішні дані']].map(([k, t]) => { const b = btn(p, t, k === 'a'); b.addEventListener('click', () => { st = k; bs.forEach((z) => z.classList.toggle('on', z === b)); d(); }); return b; });
       new ResizeObserver(d).observe(p.cv); }
     // г) настрої проти витрат
     { const p = fig('Опитування кричать, гаманці — ні', 'Індекс настроїв Мічигану у 2022 і 2026 роках опускався нижче, ніж у 2008-му. Але реальні витрати споживачів (з поправкою на ціни) за ці роки майже не падали.');
       let pce = false; const pc = M.map((m) => RD.pce[m] ?? null), pcS = pc.map((v) => v == null ? null : 40 + v * 6);
       const d = () => { lines(p.cv, '2022-01', M[N - 1], [{ k: 'umcs', col: '#4678DC' }].concat(pce ? [{ data: pcS, col: '#1E968C' }] : []), 40, 100, { f: 0, th: pce ? [[40, 'витрати: 0 % р/р']] : [] });
-        p.rs.textContent = pce ? 'Бірюзова — реальні витрати споживачів, % за рік (0 % — на нижній межі, крок шкали ≈ 1,7 п.п.): увесь час вище нуля.' : 'Рекордний мінімум — 44,8 у травні 2026 року. Люди скаржаться на ціни, але купують.'; };
+        rsSet(p.rs, pce ? 'Бірюзова — реальні витрати споживачів, % за рік (0 % — на нижній межі, крок шкали ≈ 1,7 п.п.): увесь час вище нуля.' : 'Рекордний мінімум — 44,8 у травні 2026 року. Люди скаржаться на ціни, але купують.'); };
       const b = btn(p, 'накласти реальні витрати'); b.addEventListener('click', () => { pce = !pce; b.classList.toggle('on', pce); d(); }); new ResizeObserver(d).observe(p.cv); }
   })();
 
@@ -278,7 +280,7 @@
   (function () {
     const s = $('rc-oil'); if (!s) return;
     const box = el('div', 'rc-oil');
-    box.innerHTML = `<canvas aria-label="Схема протоки з танкерами"></canvas><div><div class="ctl"><label>Нафта WTI <input type="range" min="55" max="160" value="100" step="1" aria-label="Ціна нафти"> <b data-p></b></label>
+    box.innerHTML = `<canvas aria-label="Схема протоки з танкерами"></canvas><div><div class="rc-ink" id="rcInk" role="button" aria-label="Бочка нафти: клік — підкинути"><span class="rc-ink__lab">1 барель = 159 л = 42 галони</span><small>клік — підкинути</small></div><div class="ctl"><label>Нафта WTI <input type="range" min="55" max="160" value="100" step="1" aria-label="Ціна нафти"> <b data-p></b></label>
       <span class="seg" role="group" aria-label="Протока"><button type="button" data-s="open">прохід відкрито</button><button type="button" data-s="block" class="on">блокада</button></span></div>
       <div class="calc calc--col"><div><span>бензин, приріст на заправці</span><b data-k="g"></b></div><div><span>домогосподарство за рік, лише бензин</span><b data-k="h"></b></div>
       <div><span>прямий внесок в інфляцію</span><b data-k="c"></b></div><div><span>оцінка Chicago Fed для 2026 року</span><b>−0,8…−1,7 п.п. ВВП</b></div></div>
