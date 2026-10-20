@@ -40,7 +40,7 @@
     const mn = +r.min || 0, mx = +r.max || 100, st = r.step === 'any' ? 0 : (+r.step || 1), v0 = +r.value, A = Math.max(st, (mx - mn) * .08);
     const span = Math.min(mx - v0, v0 - mn) >= A ? A : Math.max(st, Math.min(A, Math.max(mx - v0, v0 - mn)));
     const dir = mx - v0 >= v0 - mn ? 1 : -1, T = 3800, t0 = performance.now(); let stop = false;
-    const cancel = () => { stop = true; }; r.addEventListener('pointerdown', cancel, { once: true }); r.addEventListener('keydown', cancel, { once: true });
+    const cancel = () => { stop = true; }; (r.closest('.vz, .rr, section') || r).addEventListener('pointerdown', cancel, { once: true }); r.addEventListener('keydown', cancel, { once: true });   // будь-який дотик до цієї сцени зупиняє підказку
     const set = (v) => { r.value = String(st ? Math.round(v / st) * st : v); r.dispatchEvent(new Event('input', { bubbles: true })); };
     (function f(now) { if (stop) return; const u = Math.min(1, (now - t0) / T);
       const k = Math.sin(u * Math.PI * 3) * (1 - u) * (1 - u * .3);              // три гойдання, що згасають

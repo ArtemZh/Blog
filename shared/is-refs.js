@@ -121,12 +121,25 @@ function init(slot) {
     btn.addEventListener('click', () => { want = want ? 0 : 1; btn.textContent = want ? 'сховати розміри' : 'показати розміри'; L.kick(); });
     el.addEventListener('pointermove', (e) => { const r = el.getBoundingClientRect(); mx = (e.clientX - r.left) / r.width - .5; my = (e.clientY - r.top) / r.height - .5; L.kick(); });
     el.addEventListener('pointerleave', () => { mx = my = 0; });
+    // клік: по грані моноліта пробігає відблиск, над верхнім краєм — спалах (як у кадрі з вирівнюванням світил), і тихий гул, якщо звук статті увімкнено
+    let gl = -1; el.style.cursor = 'pointer';
+    el.addEventListener('click', () => { gl = 0; L.kick(); window.IS_SOUND && IS_SOUND.fx && IS_SOUND.fx('hum'); });
     const L = live(el, (dt) => {
       seen = Math.min(1, seen + dt * .5); show += (want * sm(.2, 1, seen) - show) * Math.min(1, dt * 3);
       tx += (mx - tx) * Math.min(1, dt * 4); ty += (my - ty) * Math.min(1, dt * 4);
       bg.style.transform = `translate(${(-tx * 1.6).toFixed(2)}%, ${(-ty * 1.2).toFixed(2)}%)`;
       const [W, H] = C2.size(), bw = W * 1.06, bh = H * 1.06, k = Math.max(bw / IW, bh / IH), ox = (bw - IW * k) / 2 - W * .03 - tx * .016 * W, oy = (bh - IH * k) / 2 - H * .03 - ty * .012 * H;
       const X = (u) => ox + u * k, Y = (v) => oy + v * k;
+      if (gl >= 0) { gl += dt; const u = gl / 1.8;
+        if (u > 1) gl = -1; else {
+          const yb = Y(M.t) + (Y(M.b) - Y(M.t)) * (u * 1.3 - .15), band = (Y(M.b) - Y(M.t)) * .16;      // смуга світла ковзає грань згори донизу
+          x.save(); x.beginPath(); x.rect(X(M.l), Y(M.t), X(M.r) - X(M.l), Y(M.b) - Y(M.t)); x.clip();
+          const g = x.createLinearGradient(0, yb - band, 0, yb + band); g.addColorStop(0, 'rgba(255,236,200,0)'); g.addColorStop(.5, 'rgba(255,236,200,.38)'); g.addColorStop(1, 'rgba(255,236,200,0)');
+          x.fillStyle = g; x.fillRect(X(M.l), yb - band, X(M.r) - X(M.l), band * 2); x.restore();
+          const fl = Math.sin(Math.min(1, u * 1.6) * Math.PI), fx0 = (X(M.l) + X(M.r)) / 2, fy0 = Y(M.t) - 4, R0 = 70 * fl;   // спалах над верхнім краєм
+          if (R0 > 1) { const rg = x.createRadialGradient(fx0, fy0, 0, fx0, fy0, R0); rg.addColorStop(0, `rgba(255,248,230,${.9 * fl})`); rg.addColorStop(1, 'rgba(255,220,170,0)');
+            x.fillStyle = rg; x.fillRect(fx0 - R0, fy0 - R0, R0 * 2, R0 * 2); x.fillStyle = `rgba(255,250,240,${.7 * fl})`; x.fillRect(fx0 - R0 * 1.6, fy0 - .75, R0 * 3.2, 1.5); }
+          L.kick(); } }
       if (show < .01) return;
       x.globalAlpha = show; x.strokeStyle = 'rgba(255,214,160,.9)'; x.fillStyle = '#fff'; x.lineWidth = 1.2; x.font = '600 13px ui-monospace,monospace'; x.textAlign = 'center';
       x.shadowColor = 'rgba(0,0,0,.8)'; x.shadowBlur = 6;
@@ -384,12 +397,29 @@ function init(slot) {
     const C2 = canvas2d(el), x = C2.x;
     cap(el, 'будова віланели: рефрен 1 — рядки 1, 6, 12, 18; рефрен 2 — 3, 9, 15, 19');
     const A1 = [1, 6, 12, 18], A2 = [3, 9, 15, 19];
-    let t = 0;
-    live(el, (dt) => {
-      t = (t + (reduce ? 30 : dt)) % 26;
+    let t = 0, sel = 0, selT = 0, Yf = null, x0f = 0;
+    /* клік по рядку: якщо це рефрен — підсвічуються всі місця, де він повертається; інакше — підпис, яку риму рядок тримає */
+    const tip = document.createElement('span'); tip.className = 'rr-hud'; tip.style.cssText = 'top:auto;bottom:30px;opacity:0;transition:opacity .35s'; el.appendChild(tip);
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', (e) => { if (!Yf) return; const r = el.getBoundingClientRect(), y = e.clientY - r.top;
+      let best = 1, bd = 1e9; for (let i = 1; i <= 19; i++) { const d = Math.abs(Yf(i) - y); if (d < bd) { bd = d; best = i; } }
+      sel = best; selT = 0; t = Math.max(t, 19 * 1.1);                                                      // показуємо одразу весь вірш
+      const st = Math.min(6, Math.ceil(best / 3)), inSt = best > 18 ? 4 : (best - 1) % 3 + 1;
+      tip.innerHTML = A1.includes(best) ? `рядок ${best} — <b style="color:#ff9a5a;font-size:15px;display:inline">рефрен 1</b>: повертається в рядках ${A1.join(', ')}`
+        : A2.includes(best) ? `рядок ${best} — <b style="color:#8fb6ff;font-size:15px;display:inline">рефрен 2</b>: повертається в рядках ${A2.join(', ')}`
+        : `рядок ${best}, строфа ${st}: ${inSt === 2 ? 'середній рядок — друга рима (b), що проходить крізь усі строфи' : 'рима a — та сама, що в рефренах'}`;
+      tip.style.opacity = 1; clearTimeout(tip.t); tip.t = setTimeout(() => { tip.style.opacity = 0; sel = 0; }, 6000); L.kick(); });
+    const L = live(el, (dt) => {
+      t = (t + (reduce ? 30 : dt)) % 26; if (sel) { t = Math.max(t, 19 * 1.1); selT += dt; }
       const [W, H] = C2.size(), shown = Math.min(19, Math.floor(t / 1.1) + 1), x0 = W * .56, x1 = W - 22, y0 = 26, gap = (H - 64) / 19.6;
       const Y = (i) => y0 + (i - 1) * gap + Math.min(5, Math.floor((i - 1) / 3)) * gap * .12;     // між строфами — невеликий проміжок
+      Yf = Y; x0f = x0;
       let pulse = 0;
+      const grp = sel ? (A1.includes(sel) ? A1 : A2.includes(sel) ? A2 : [sel]) : [];
+      if (grp.length) { const c = A1.includes(sel) ? '255,154,90' : A2.includes(sel) ? '143,182,255' : '255,255,255';
+        grp.forEach((i, k) => { const a = Math.max(0, Math.min(1, (selT - k * .18) * 3)); x.fillStyle = `rgba(${c},${.22 * a})`; x.fillRect(x0 - 8, Y(i) - gap * .32, x1 - x0 + 14, gap * .64 + 3);
+          x.fillStyle = `rgba(${c},${a})`; x.font = '600 10px ui-monospace,monospace'; x.textAlign = 'right'; x.fillText(String(i), x0 - 40, Y(i) + 4); });
+        x.textAlign = 'left'; if (grp.length > 1) pulse = Math.max(0, 1 - ((selT % 1.2) / .6)) * .8; }
       for (let i = 1; i <= 19; i++) {
         const r1 = A1.includes(i), r2 = A2.includes(i), on = i <= shown, len = (r1 || r2) ? 1 : .55 + .35 * ((i * 37) % 10) / 10;
         x.globalAlpha = on ? 1 : .16; x.fillStyle = r1 ? '#ff9a5a' : r2 ? '#8fb6ff' : 'rgba(255,255,255,.6)';

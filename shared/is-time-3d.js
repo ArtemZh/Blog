@@ -467,13 +467,19 @@ function init(slot) {
   // вітер: один час для кукурудзи й трави; зміщення у вершинному шейдері росте з висотою стебла; uSy — «ріст» по висоті (замість scale.y сітки,
   // бо масштаб сітки зсунув би й основи на рельєфі)
   const windU = { value: 0 };
-  const windy = (amp, freq, sy) => (mt) => { mt.onBeforeCompile = (sh) => { sh.uniforms.uWind = windU; sh.uniforms.uSy = sy;
-      sh.vertexShader = 'uniform float uWind, uSy;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+  // порив від кліку по фермі: до 4 кілець (x, z, час старту, активне), розходяться по траві й кукурудзі зі швидкістю 9 м/с
+  const gustU = { value: Array.from({ length: 4 }, () => new THREE.Vector4(0, 0, -99, 0)) };
+  const windy = (amp, freq, sy) => (mt) => { mt.onBeforeCompile = (sh) => { sh.uniforms.uWind = windU; sh.uniforms.uSy = sy; sh.uniforms.uGust = gustU;
+      sh.vertexShader = 'uniform float uWind, uSy; uniform vec4 uGust[4];\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
         transformed.y *= uSy;
         { vec3 ip = vec3(instanceMatrix[3][0], instanceMatrix[3][1], instanceMatrix[3][2]);
           float ph = ip.x*${freq} + ip.z*${(freq*.6).toFixed(3)};
           float g = sin(uWind*1.4 + ph) + .5*sin(uWind*2.7 + ph*2.3 + 1.7) + .3*sin(uWind*.6 + ip.z*.05);
-          transformed.x += g * position.y*position.y * ${amp}; transformed.z += g * position.y*position.y * ${(amp*.35).toFixed(3)}; }`); }; };
+          transformed.x += g * position.y*position.y * ${amp}; transformed.z += g * position.y*position.y * ${(amp*.35).toFixed(3)};
+        for (int k = 0; k < 4; k++) { vec4 gu = uGust[k]; float age = uWind - gu.z; if (gu.w < .5 || age < 0. || age > 6.) continue;
+          vec2 dd = ip.xz - gu.xy; float dr = length(dd) + 1e-3, rq = (dr - age * 9.) / 2.2, ring = exp(-rq * rq) * exp(-age * .55);
+          vec3 ld = normalize((vec4(dd.x, 0., dd.y, 0.) * instanceMatrix).xyz);
+          transformed += ld * ring * position.y * position.y * .35; } }`); }; };
   // небо Землі
   const skyBU = { uSun: { value: new THREE.Vector3(0, 1, 0) }, uHor: { value: new THREE.Vector3() }, uZen: { value: new THREE.Vector3() }, uDay: { value: 1 }, uGlow: { value: 1 } };
   const skyB = new THREE.Mesh(new THREE.SphereGeometry(1500, 48, 24), new THREE.ShaderMaterial({
@@ -613,13 +619,17 @@ function init(slot) {
     g.setIndex([0, 1, 2, 1, 3, 2, 2, 3, 4, 3, 5, 4, 4, 5, 6]); return g; })();
   const grassM = new THREE.MeshLambertMaterial({ color: 0x6f8f3a, side: THREE.DoubleSide });
   const grassSy = { value: 1 };
-  grassM.onBeforeCompile = (sh) => { sh.uniforms.uWind = windU; sh.uniforms.uSy = grassSy;
-    sh.vertexShader = 'uniform float uWind, uSy; varying float vGy;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+  grassM.onBeforeCompile = (sh) => { sh.uniforms.uWind = windU; sh.uniforms.uSy = grassSy; sh.uniforms.uGust = gustU;
+    sh.vertexShader = 'uniform float uWind, uSy; uniform vec4 uGust[4]; varying float vGy;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
       vGy = position.y; transformed.y *= uSy;
       { vec3 ip = vec3(instanceMatrix[3][0], instanceMatrix[3][1], instanceMatrix[3][2]);
         float ph = ip.x*1.3 + ip.z*.78;
         float g = sin(uWind*1.4 + ph) + .5*sin(uWind*2.7 + ph*2.3 + 1.7) + .3*sin(uWind*.6 + ip.z*.05);
-        transformed.x += g * position.y*position.y * .3; transformed.z += g * position.y*position.y * .1; }`);
+        transformed.x += g * position.y*position.y * .3; transformed.z += g * position.y*position.y * .1;
+        for (int k = 0; k < 4; k++) { vec4 gu = uGust[k]; float age = uWind - gu.z; if (gu.w < .5 || age < 0. || age > 6.) continue;
+          vec2 dd = ip.xz - gu.xy; float dr = length(dd) + 1e-3, rq = (dr - age * 9.) / 2.2, ring = exp(-rq * rq) * exp(-age * .55);
+          vec3 ld = normalize((vec4(dd.x, 0., dd.y, 0.) * instanceMatrix).xyz);
+          transformed += ld * ring * position.y * position.y * 1.1; } }`);
     sh.fragmentShader = 'varying float vGy;\n' + sh.fragmentShader.replace('#include <color_fragment>', `#include <color_fragment>
       diffuseColor.rgb *= mix(vec3(.42, .5, .3), vec3(1.08, 1.12, .92), smoothstep(0., 1., vGy));`); };
   const NG = 110000, grass = new THREE.InstancedMesh(bladeGeo, grassM, NG);
@@ -859,7 +869,7 @@ function init(slot) {
   const M = new THREE.Matrix4(), QQ = new THREE.Quaternion(), V1 = new THREE.Vector3(), V2 = new THREE.Vector3(), SC = new THREE.Vector3(), CC = new THREE.Color();
   const C = (h) => new THREE.Color(h);
   const COL = { bloom: C(0xf4dde6), spring: C(0x8db84a), summer: C(0x3f7a2a), yellow: C(0xe0b42a), orange: C(0xc8621e), red: C(0xa8301c), brown: C(0x8a6a3c) };
-  let lastTree = { h: 0, age: -1 };
+  let lastTree = { h: 0, age: -1, ext: 1, f: 0 }, shakeT0 = -99;          // shakeT0 — коли дерево струсили кліком
   function polyAt(n, t, out) {                                              // точка на полілінії гілки n за параметром 0…1
     const K = n.dirs.length, u = Math.min(K - 1e-6, Math.max(0, t * K)), k = Math.floor(u), fr = u - k;
     const a = k ? n.pts[k - 1] : n.p0, b = n.pts[k]; return out.copy(a).lerp(b, fr);
@@ -917,7 +927,7 @@ function init(slot) {
       let q = L.q; const drop = LF[i] = sm(L.ft, L.ft + .06, f);             // листки облітають з пагона по одному (маска в шейдері)
       if (drop >= 1) s = 0;
       else if (!RM) {                                  // вітер: пагін гойдається навколо точки кріплення (основа лишається на гілці), вгорі сильніше
-        const hy = Math.max(0, V1.y - TREE.y) / hT; QW.setFromAxisAngle(XAX, Math.sin(T * 1.7 + L.ph) * .12 + Math.sin(T * 1.1 + V1.x * .7) * .1 * hy); q = QW2.copy(L.q).multiply(QW); }
+        const hy = Math.max(0, V1.y - TREE.y) / hT; QW.setFromAxisAngle(XAX, Math.sin(T * 1.7 + L.ph) * .12 + Math.sin(T * 1.1 + V1.x * .7) * .1 * hy + (T > shakeT0 ? Math.exp(-(T - shakeT0) * 1.6) * Math.sin(T * 17 + L.ph) * .45 : 0)); q = QW2.copy(L.q).multiply(QW); }
       if (f > .8 && f > L.ft + .03) s *= 1 - sm(.84, .9, f);
       SC.setScalar(Math.max(s, 0)); M.compose(V1, q, SC); leaves.setMatrixAt(i, M);
       // осінь: кожен листок за своїм розкладом (hue): одні жовтіють рано, інші червоніють, треті довго лишаються зеленими
@@ -945,7 +955,7 @@ function init(slot) {
       else CC.copy(COL.yellow).lerp(COL.orange, .6);
       heroM.color.copy(CC).multiplyScalar(1.3); }
     heroLeaf();                                        // лише після хвилі (до повернення на корабель) — саме ця година коштувала роки
-    lastTree = { h: treeH(age), age };
+    lastTree = { h: treeH(age), age, ext, f };
   }
 
   /* стан Землі на момент tP */
@@ -979,8 +989,9 @@ function init(slot) {
     sunSpr.position.copy(sd).multiplyScalar(1200); sunSpr.material.opacity = (1 - fast) * sm(-.03, .02, sd.y) * (1 - .4 * dustA);
     moonSpr.position.copy(md).multiplyScalar(1200); moonSpr.material.opacity = (1 - fast) * sm(-.03, .02, md.y) * (1 - .6 * dI) * (.25 + .75 * Math.abs(Math.cos(Math.PI * ph)));
     sunBand.userData.u.uAmt.value = fast * (1 - .45 * dustA); moonBand.userData.u.uAmt.value = fast * (1 - .45 * dustA);
-    winM.emissive.setRGB(.55, .4, .18).multiplyScalar(1 - day1);
-    porch.intensity = 6 * (1 - day1); porchGlow.material.opacity = .55 * (1 - day1);
+    const lk = lightsMan === null ? 1 - day1 : lightsMan ? 1 : 0; lastDay1 = day1;         // клік по будинку перемикає світло вручну
+    winM.emissive.setRGB(.55, .4, .18).multiplyScalar(lk);
+    porch.intensity = 6 * lk; porchGlow.material.opacity = .55 * lk;
     // пори року: земля, поле, сніг
     const snow = sm(.82, .86, f) * (1 - sm(.99, 1, f)) + (f < .02 ? 1 - sm(0, .02, f) : 0);
     CC.copy(C(0x8a7a52)).lerp(C(0x7d9a46), sm(.04, .2, f)).lerp(C(0x66853a), sm(.2, .35, f)).lerp(C(0x9a8a58), sm(.52, .66, f)).lerp(C(0xf2f4f6), snow);
@@ -1017,13 +1028,81 @@ function init(slot) {
   let ripK = 0; const ray = new THREE.Raycaster(), hit = new THREE.Vector3(), ndc = new THREE.Vector2();
   stage.addEventListener('pointerdown', (e) => {
     const r = stage.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-    const inA = mob ? py < .5 : px < .5; if (!inA) return;
+    // табличка з годинниками на стику кадрів — перемикає «одну шкалу» (дві секундні стрілки поруч)
+    if (plq) { const qx = e.clientX - r.left, qy = e.clientY - r.top; if (qx > plq[0] && qx < plq[2] && qy > plq[1] && qy < plq[3]) { oneScale = !oneScale; need = true; kick(); return; } }
+    const inA = mob ? py < .5 : px < .5; if (!inA) { farmClick(px, py); return; }
     ndc.set((mob ? px : px * 2) * 2 - 1, -((mob ? py * 2 : py) * 2 - 1));
     ray.setFromCamera(ndc, camA);
     const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -waveH(0, waveZ(tP)) * .98);
     if (!ray.ray.intersectPlane(plane, hit) || hit.distanceTo(camA.position) > 400) return;
     watU.uRip.value[ripK % 8].set(hit.x, hit.z, T, 1); ripK++; FOC.clickT = T; FOC.clickP.copy(hit); need = true; kick();
+    wNote = { p: hit.clone(), t0: performance.now() };                       // біля брижі — живий лічильник: скільки минає на Землі, поки вона розходиться
   });
+  let wNote = null, plq = null, oneScale = false, osA = 0;
+  stage.addEventListener('pointermove', (e) => { if (!plq) return; const r = stage.getBoundingClientRect(), qx = e.clientX - r.left, qy = e.clientY - r.top;
+    if (qx > plq[0] && qx < plq[2] && qy > plq[1] && qy < plq[3]) stage.style.cursor = 'pointer'; });
+
+  /* ── ферма відповідає на клік, як вода Міллер: порив по траві від точки, хмарка пилу, струснуте дерево (листя або сніг), зграйка птахів, світло в будинку ── */
+  let lightsMan = null, lastDay1 = 1, gustK = 0;
+  const FXC = new THREE.Color(), FV = new THREE.Vector3(), FV2 = new THREE.Vector3(), FV3 = new THREE.Vector3(), FB = new THREE.Box3();
+  // пил: 60 частинок, пул
+  const PD = 60, pdPos = new Float32Array(PD * 3), pdS = Array.from({ length: PD }, () => ({ life: 0, v: new THREE.Vector3() }));
+  const pdGeo = new THREE.BufferGeometry(); pdGeo.setAttribute('position', new THREE.BufferAttribute(pdPos, 3));
+  const puff = new THREE.Points(pdGeo, new THREE.PointsMaterial({ map: glowTex([[0, 'rgba(255,255,255,1)'], [1, 'rgba(255,255,255,0)']]), color: 0xa08a62, size: .2, transparent: true, opacity: .32, depthWrite: false }));
+  puff.frustumCulled = false; sB.add(puff);
+  // сніг із крони: 80 частинок
+  const PS = 80, psPos = new Float32Array(PS * 3), psS = Array.from({ length: PS }, () => ({ life: 0, v: new THREE.Vector3() }));
+  const psGeo = new THREE.BufferGeometry(); psGeo.setAttribute('position', new THREE.BufferAttribute(psPos, 3));
+  const snowFx = new THREE.Points(psGeo, new THREE.PointsMaterial({ map: glowTex([[0, 'rgba(255,255,255,1)'], [1, 'rgba(255,255,255,0)']]), color: 0xffffff, size: .12, transparent: true, depthWrite: false }));
+  snowFx.frustumCulled = false; sB.add(snowFx);
+  // листки, що падають зі струснутої крони: 10, пул
+  const fLeafM = new THREE.MeshLambertMaterial({ map: leafTex, alphaTest: .45, side: THREE.DoubleSide });
+  const fLeaves = Array.from({ length: 10 }, () => { const m = new THREE.Mesh(new THREE.PlaneGeometry(.17, .23), fLeafM); m.visible = false; sB.add(m); return { m, life: 0, v: new THREE.Vector3(), ph: 0 }; });
+  // птахи: 10 «галочок» із двох крил, що махають
+  const birdM = new THREE.MeshBasicMaterial({ color: 0x1e2226, side: THREE.DoubleSide, transparent: true });
+  const wingG = new THREE.BufferGeometry(); wingG.setAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, .22, 0, -.04, .05, 0, .06], 3));
+  const birds = Array.from({ length: 10 }, () => { const g = new THREE.Group(), l = new THREE.Mesh(wingG, birdM), r = new THREE.Mesh(wingG, birdM); r.scale.x = -1; g.add(l, r); g.visible = false; sB.add(g); return { g, l, r, life: 0, v: new THREE.Vector3(), ph: Math.random() * 6 }; });
+  function spawnBirds(at, n) { if (lastDay1 < .3) return; let k = 0; for (const b of birds) { if (b.life > 0 || k >= n) continue; k++;
+      b.life = 7; b.g.visible = true; b.g.position.copy(at).add(FV.set((Math.random() - .5) * 1.5, Math.random() * .8, (Math.random() - .5) * 1.5));
+      const a = Math.random() * 6.28; b.v.set(Math.cos(a) * 4 + 2, 2.2 + Math.random() * 1.5, Math.sin(a) * 4 - 3); b.g.scale.setScalar(1.6 + Math.random()); } }
+  function gust(x, z) { gustU.value[gustK++ % 4].set(x, z, T, 1);
+    for (let i = 0, k = 0; i < PD && k < 26; i++) { const p = pdS[i]; if (p.life > 0) continue; k++; p.life = 1.2 + Math.random() * .8;
+      pdPos.set([x + (Math.random() - .5) * .6, groundH(x, z) + .05, z + (Math.random() - .5) * .6], i * 3); const a = Math.random() * 6.28; p.v.set(Math.cos(a) * 1.4, .6 + Math.random() * 1.2, Math.sin(a) * 1.4); } }
+  function shakeTree() { shakeT0 = T; const h = Math.max(1.2, lastTree.h), e = Math.max(.8, lastTree.ext), f = lastTree.f, winter = f > .82 || f < .02, leafy = f > .06 && f < .8;
+    if (winter) { for (let i = 0; i < PS; i++) { const p = psS[i]; p.life = 1.5 + Math.random() * 2; psPos.set([TREE.x + (Math.random() - .5) * e * 1.6, TREE.y + h * (.45 + .5 * Math.random()), TREE.z + (Math.random() - .5) * e * 1.6], i * 3); p.v.set((Math.random() - .5) * .3, -.4 - Math.random() * .6, (Math.random() - .5) * .3); } }
+    else if (leafy) { FXC.copy(heroM.color).multiplyScalar(.77); fLeafM.color.copy(FXC); for (const L of fLeaves) { L.life = 3 + Math.random() * 2; L.m.visible = true; L.ph = Math.random() * 6;
+        L.m.position.set(TREE.x + (Math.random() - .5) * e * 1.4, TREE.y + h * (.5 + .45 * Math.random()), TREE.z + (Math.random() - .5) * e * 1.4); L.v.set((Math.random() - .5) * .6, -.7 - Math.random() * .4, (Math.random() - .5) * .6); } }
+    spawnBirds(FV2.set(TREE.x, TREE.y + h * .85, TREE.z), 5 + (Math.random() * 4 | 0)); }
+  function farmClick(px, py) {
+    if (mob) ndc.set(px * 2 - 1, -((py - .5) * 2 * 2 - 1)); else ndc.set((px - .5) * 2 * 2 - 1, -(py * 2 - 1));
+    ray.setFromCamera(ndc, camB);
+    FB.setFromObject(house); if (ray.ray.intersectsBox(FB)) { lightsMan = !(lightsMan === null ? lastDay1 < .3 : lightsMan); need = true; kick(); return; }
+    const h = Math.max(1.2, lastTree.h), e = Math.max(.6, lastTree.ext);
+    if (ray.ray.distanceSqToSegment(FV.set(TREE.x, TREE.y + h * .3, TREE.z), FV3.set(TREE.x, TREE.y + h, TREE.z)) < (e * .9) ** 2) { shakeTree(); need = true; kick(); return; }
+    if (!ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), hit)) return;
+    if (hit.distanceTo(camB.position) > 90) return;
+    gust(hit.x, hit.z); if (Math.random() < .35) spawnBirds(FV2.set(hit.x, groundH(hit.x, hit.z) + .4, hit.z), 4 + (Math.random() * 3 | 0)); need = true; kick();
+  }
+  function farmFx(dt) {
+    if (!dt) return; let any = false;
+    for (let i = 0; i < PD; i++) { const p = pdS[i]; if (p.life <= 0) { pdPos[i * 3 + 1] = -99; continue; } any = true; p.life -= dt; p.v.y -= dt * .5; p.v.multiplyScalar(1 - dt * 1.2);
+      pdPos[i * 3] += p.v.x * dt; pdPos[i * 3 + 1] += p.v.y * dt; pdPos[i * 3 + 2] += p.v.z * dt; }
+    pdGeo.attributes.position.needsUpdate = true;
+    for (let i = 0; i < PS; i++) { const p = psS[i]; if (p.life <= 0) { psPos[i * 3 + 1] = -99; continue; } any = true; p.life -= dt;
+      psPos[i * 3] += p.v.x * dt + Math.sin(T * 2 + i) * .004; psPos[i * 3 + 1] = Math.max(groundH(psPos[i * 3], psPos[i * 3 + 2]) + .02, psPos[i * 3 + 1] + p.v.y * dt); psPos[i * 3 + 2] += p.v.z * dt; }
+    psGeo.attributes.position.needsUpdate = true;
+    for (const L of fLeaves) { if (L.life <= 0) { L.m.visible = false; continue; } any = true; L.life -= dt; const gy = groundH(L.m.position.x, L.m.position.z) + .02;
+      if (L.m.position.y > gy) { L.m.position.addScaledVector(L.v, dt); L.m.position.x += Math.sin(T * 2.3 + L.ph) * .01; L.m.rotation.set(Math.sin(T * 3 + L.ph) * 1.2, T * 1.5 + L.ph, Math.cos(T * 2.4 + L.ph) * .9); }
+      else { L.m.position.y = gy; L.m.rotation.set(-Math.PI / 2, L.ph, 0); } }
+    for (const b of birds) { if (b.life <= 0) { b.g.visible = false; continue; } any = true; b.life -= dt; b.v.y += dt * .25; b.g.position.addScaledVector(b.v, dt);
+      b.g.rotation.y = Math.atan2(b.v.x, b.v.z); const fl = Math.sin(T * 18 + b.ph) * .9; b.l.rotation.z = fl; b.r.rotation.z = -fl;
+      birdM.opacity = 1; if (b.life < 1.5) b.g.scale.multiplyScalar(1 - dt * .6); }
+    return any;
+  }
+  // підказка: коли сцена вперше видна — один порив сам пробігає травою перед деревом, курсор над фермою — «рука»
+  let farmHinted = false;
+  stage.addEventListener('pointermove', (e) => { const r = stage.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height; stage.style.cursor = (mob ? py > .5 : px > .5) ? 'pointer' : ''; });
+  new IntersectionObserver((es) => { if (es[0].isIntersecting && !farmHinted) { farmHinted = true; setTimeout(() => { gust(TREE.x + 2.5, TREE.z + 4); need = true; kick(); }, 1800); } }, { threshold: .5 }).observe(stage);
 
   const EPOCH = Date.UTC(2067, 3, 28, 10, 0);                              // день відльоту (кінець квітня, F0), 10:00 — умовна дата
   function overlay(st) {
@@ -1057,7 +1136,35 @@ function init(slot) {
       x.fillStyle = 'rgba(255,255,255,.96)'; x.textAlign = 'right'; x.fillText(A, sx - gap, y0 + big + 4);
       x.textAlign = 'left'; x.fillText(B, sx + gap, y0 + big + 4);
       x.font = '500 10.5px ' + mono; x.fillStyle = 'rgba(255,255,255,.7)'; x.textAlign = 'right'; x.fillText('на планеті', sx - gap, y0 + big + 18);
-      x.textAlign = 'left'; x.fillText('на Землі', sx + gap, y0 + big + 18); }
+      x.textAlign = 'left'; x.fillText('на Землі', sx + gap, y0 + big + 18);
+      plq = [x0, y0, x1, y0 + hh];
+      // «одна шкала» (клік по табличці): дві секундні стрілки поруч. Тут стрілка робить оберт за хвилину,
+      // а земна за ту саму хвилину — K обертів, тож замість стрілки — суцільний розмитий диск
+      osA += ((oneScale ? 1 : 0) - osA) * .18; if (Math.abs(osA - (oneScale ? 1 : 0)) > .01) need = true;
+      if (osA > .02) { const rr = Math.round(big * 1.25), ph = rr * 2 + 46, pw = Math.max(x1 - x0, 300), px0 = sx - pw / 2, py0 = y0 - 10 - ph;
+        x.globalAlpha = osA; x.fillStyle = 'rgba(8,10,16,.72)'; x.beginPath(); x.roundRect ? x.roundRect(px0, py0, pw, ph, 10) : x.rect(px0, py0, pw, ph); x.fill();
+        const dial = (cx, cy, a, blur) => { x.strokeStyle = 'rgba(255,255,255,.7)'; x.lineWidth = 1.2; x.beginPath(); x.arc(cx, cy, rr, 0, 7); x.stroke();
+          for (let k = 0; k < 12; k++) { const q = k / 12 * 6.283; x.beginPath(); x.moveTo(cx + Math.sin(q) * rr * .82, cy - Math.cos(q) * rr * .82); x.lineTo(cx + Math.sin(q) * rr * .95, cy - Math.cos(q) * rr * .95); x.stroke(); }
+          if (blur) { x.fillStyle = 'rgba(234,82,18,.28)'; x.beginPath(); x.arc(cx, cy, rr * .86, 0, 7); x.fill(); }
+          else { x.strokeStyle = '#EA5212'; x.lineWidth = 1.6; x.beginPath(); x.moveTo(cx, cy); x.lineTo(cx + Math.sin(a) * rr * .86, cy - Math.cos(a) * rr * .86); x.stroke(); }
+          x.fillStyle = '#EA5212'; x.beginPath(); x.arc(cx, cy, 2.2, 0, 7); x.fill(); };
+        const cyD = py0 + 12 + rr; dial(sx - pw * .25, cyD, tP / 60 * 6.283, false); dial(sx + pw * .25, cyD, 0, true);
+        x.font = '500 10.5px ' + mono; x.fillStyle = 'rgba(255,255,255,.85)'; x.textAlign = 'center';
+        x.fillText('секундна стрілка тут', sx - pw * .25, cyD + rr + 13); x.fillText('там: ' + fmt0(K, 0) + ' об./хв', sx + pw * .25, cyD + rr + 13);
+        x.fillStyle = 'rgba(255,255,255,.95)'; x.font = '600 11px ' + mono;
+        x.fillText('1 оберт тут = ' + earthSpan(60 * K / 3600) + ' на Землі', sx, py0 + ph - 8);
+        x.textAlign = 'left'; x.globalAlpha = 1; } }
+    // живий лічильник біля брижі на воді Міллер: секунди тут → час, що минає на Землі за той самий проміжок
+    if (wNote) { const e = (performance.now() - wNote.t0) / 1000, fade = 1 - sm(7, 9, e);
+      if (fade <= 0) wNote = null; else { V1.copy(wNote.p); V1.y += 2; V1.project(camA);
+        if (V1.z < 1 && Math.abs(V1.x) < 1 && Math.abs(V1.y) < 1) { const sx = (V1.x * .5 + .5) * vw, sy = (-V1.y * .5 + .5) * vh + (mob ? 0 : 0), ee = Math.min(e, 7);
+          const mono = getComputedStyle(document.body).getPropertyValue('--mono');
+          x.globalAlpha = fade * sm(0, .3, e); x.textAlign = 'center'; x.shadowColor = 'rgba(0,0,0,.7)'; x.shadowBlur = 6;
+          const t2 = 'на Землі — ' + earthSpan(ee * K / 3600); x.font = '500 11px ' + mono; const bw = Math.max(110, x.measureText(t2).width + 20);
+          x.shadowBlur = 0; x.fillStyle = 'rgba(8,10,16,.55)'; x.beginPath(); x.roundRect ? x.roundRect(sx - bw / 2, sy - 36, bw, 38, 8) : x.rect(sx - bw / 2, sy - 36, bw, 38); x.fill(); x.shadowBlur = 6;   // підкладка — на світлій воді текст інакше губиться
+          x.font = '600 13px ' + mono; x.fillStyle = '#fff'; x.fillText(fmt(ee, 1) + ' с тут', sx, sy - 20);
+          x.font = '500 11px ' + mono; x.fillStyle = 'rgba(255,214,170,.95)'; x.fillText('на Землі — ' + earthSpan(ee * K / 3600), sx, sy - 6);
+          x.shadowBlur = 0; x.globalAlpha = 1; x.textAlign = 'left'; } need = true; } }
     // годинник планети
     const r = Math.max(26, Math.min(38, vw * .07)), cx = 14 + r, cy = vh - 14 - r - 12;
     x.fillStyle = 'rgba(10,14,20,.55)'; x.beginPath(); x.arc(cx, cy, r, 0, 7); x.fill();
@@ -1257,7 +1364,7 @@ function init(slot) {
     watU.uFeet.value[2].w = .7 * (1 - sm(0, .1, lift));
     skyA.position.copy(camA.position); garg.position.copy(camA.position).addScaledVector(GDIR, 9000); garg.lookAt(camA.position);
     // праворуч
-    const st = earth(T);
+    const st = earth(T); if (farmFx(dtReal)) need = true;
     // кадр дерева: камера відходить, поки дерево росте (повільний від'їзд у таймлапсі), дерево — у лівій третині, крона на тлі неба
     { const h = Math.max(1.2, lastTree.h), dist = 6 + h * 1.3;
       camD += (dist - camD) * Math.min(1, dt * 1.5);

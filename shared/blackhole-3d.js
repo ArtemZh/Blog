@@ -123,6 +123,7 @@ const BH = `
 
 const WH = `
   uniform float uA;        // радіус «горла» на сцені
+  uniform float uSide;     // 0 — ми біля Сатурна, 1 — після стрибка: по той бік горла (небеса поміняно місцями, Сатурн — за горлом)
   // Сатурн: куля з поясами і кільця, освітлені збоку
   vec4 saturn(vec3 ro, vec3 rd){
     vec3 c = vec3(-34., 7., -58.); float R = 5.;
@@ -144,6 +145,10 @@ const WH = `
           else if (res.a < 1.) res = vec4(ring.rgb*ring.a, ring.a); } } }
     return res;
   }
+  // інше небо: ті самі туманності, перефарбовані в пурпурово-бузкові — інша галактика
+  vec3 far(vec3 dd) { vec3 o = textureCube(uSky2, dd).rgb;
+    vec3 c = vec3(o.r*1.7 + o.b*.5, o.g*.8 + o.b*.3, o.b*1.5 + o.r*.2) * 1.9;
+    return c + vec3(.55,.25,.7) * pow(max(fbm(dd*1.4 + 3.), 0.), 2.) * .9; }        // додаткова густа туманність по той бік
   void main(){
     vec3 d = rayDir(), ro = uCam;
     // прицільна відстань променя до центру червоточини (центр у 0)
@@ -154,17 +159,16 @@ const WH = `
       float k = b/uA; vec3 ax = normalize(cross(d, cp + vec3(1e-4)));
       float ang = 3.14159 * pow(k, 3.);
       vec3 dd = d*cos(ang) + cross(ax, d)*sin(ang) + ax*dot(ax, d)*(1.-cos(ang));
-      vec3 o = textureCube(uSky2, dd).rgb;
-      col = vec3(o.r*1.7 + o.b*.5, o.g*.8 + o.b*.3, o.b*1.5 + o.r*.2) * 1.9;   // інше небо: ті самі туманності, перефарбовані в пурпурово-бузкові — інша галактика
-      col += vec3(.55,.25,.7) * pow(max(fbm(dd*1.4 + 3.), 0.), 2.) * .9;           // додаткова густа туманність по той бік
+      if (uSide < .5) col = far(dd);
+      else { col = textureCube(uSky, dd).rgb * 1.6; vec4 s = saturn(vec3(-34.,7.,-58.) + normalize(uCam)*62., dd); col = mix(col, s.rgb, s.a); }   // після стрибка крізь горло видно наш дім: наше небо й Сатурн
       col *= smoothstep(1., .9, k) * .9 + .1;
       col += vec3(.75,.85,1.) * pow(k, 9.) * .35;                                      // край горла світлішає — те саме кільце зсередини
     } else {
       // наше небо, лінзоване біля краю: відхилення ~ a²/b
       float bend = (tc > 0.) ? uA*uA/(b*b+1e-3) * .9 : 0.;
       vec3 out_ = normalize(d - normalize(cp)*bend*.6);
-      col = textureCube(uSky, out_).rgb;
-      vec4 s = saturn(ro, out_); col = mix(col, s.rgb, s.a);
+      col = uSide < .5 ? textureCube(uSky, out_).rgb : far(out_) * .8;
+      if (uSide < .5) { vec4 s = saturn(ro, out_); col = mix(col, s.rgb, s.a); }
       if (tc > 0.) { col += vec3(.65,.8,1.) * exp(-pow((b-uA)/(uA*.035), 2.)) * .9;   // тонкий світлий обідок — кільце Ейнштейна
         col += vec3(.45,.6,1.) * exp(-(b-uA)/(uA*.22)) * .07; }                        // м'яке сяйво назовні від кільця
     }
@@ -204,9 +208,12 @@ function scene(box, frag, extra, opt) {
     const v = new THREE.Vector2(); renderer.getDrawingBufferSize(v); U.uRes.value.copy(v); pcam.aspect = w / h; pcam.updateProjectionMatrix(); }
   new ResizeObserver(resize).observe(box); resize();
   const el = renderer.domElement;
-  el.addEventListener('pointerdown', (e) => { st.drag = [e.clientX, e.clientY]; st.auto = false; el.setPointerCapture(e.pointerId); });
+  let down = null;                                                     // клік = короткий дотик без зсуву (інакше — обертання)
+  el.addEventListener('pointerdown', (e) => { st.drag = [e.clientX, e.clientY]; down = [e.clientX, e.clientY, performance.now()]; st.auto = false; el.setPointerCapture(e.pointerId); });
   el.addEventListener('pointermove', (e) => { if (!st.drag) return; st.yaw -= (e.clientX - st.drag[0]) * .006; st.pitch = Math.max(-1.4, Math.min(1.4, st.pitch + (e.clientY - st.drag[1]) * .006)); st.drag = [e.clientX, e.clientY]; });
-  el.addEventListener('pointerup', () => { st.drag = null; });
+  el.addEventListener('pointerup', (e) => { st.drag = null;
+    if (down && opt.onClick && Math.hypot(e.clientX - down[0], e.clientY - down[1]) < 6 && performance.now() - down[2] < 400) { const r = el.getBoundingClientRect(); opt.onClick((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height * 2 - 1), pcam); }
+    down = null; });
   el.addEventListener('wheel', (e) => { e.preventDefault(); st.dist = Math.max(opt.min || 6, Math.min(opt.max || 45, st.dist * (1 + Math.sign(e.deltaY) * .08))); }, { passive: false });
   let visible = false, last = performance.now(), t = 0;
   new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { threshold: .02 }).observe(box);
@@ -228,7 +235,7 @@ function scene(box, frag, extra, opt) {
   }
   requestAnimationFrame(frame);
   st.quality = scale; const setQuality = (q) => { renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1) * q); resize(); };
-  return { U, st, renderer, fg, bloom, grade, composer, setQuality, skyTex: U.uSky.value };
+  return { U, st, renderer, fg, bloom, grade, composer, setQuality, skyTex: U.uSky.value, pcam };
 }
 
 /* корабель (модель: ChatGPT → Tripo → Blender) — летить перед діркою; світло на нього — від диска. Лінзування його не торкається */
@@ -273,8 +280,9 @@ async function panel(s) {
 const bhBox = document.getElementById('bh');
 if (bhBox) {
   const V = (v) => ({ value: v }), C3 = (r, g, b) => ({ value: new THREE.Vector3(r, g, b) });
+  let probe = null;
   const s = scene(bhBox, BH, { uReal: V(0), uSwirl: V(.35), uFlow: V(.12), uNoise: V(.45), uRelief: V(26), uEmis: V(14), uAbs: V(4.5), uThick: V(.012), uOuter: V(14), uPlume: V(.3), uPatch: V(.7),
-    uRamp1: V(.05), uRamp2: V(.42), uCol1: C3(1, .64, .32), uCol2: C3(.16, .045, .015), uGlow: C3(.02, .018, .012) }, { dist: 19, pitch: .035, bloom: .55, scale: innerWidth < 700 ? .6 : .7, exposure: 1.1, spin: .02, min: 5, max: 60, grade: { vignette: .42, grain: .05, ca: 1.6, sat: 1.18, tint: [1, .97, .92] }, onFrame: (t, dt, cam) => { if (!ship) return; if (!reduce) { ship.rotation.x = t * .3; shipPiv.rotation.x = .009 * Math.sin(t * .4); }     // вісь хаба (у моделі X) повернута вертикально: кільце паралельне диску, як у гіроскопа на екваторіальній орбіті; ледь помітне погойдування ±0,5°
+    uRamp1: V(.05), uRamp2: V(.42), uCol1: C3(1, .64, .32), uCol2: C3(.16, .045, .015), uGlow: C3(.02, .018, .012) }, { dist: 19, pitch: .035, bloom: .55, scale: innerWidth < 700 ? .6 : .7, exposure: 1.1, spin: .02, min: 5, max: 60, grade: { vignette: .42, grain: .05, ca: 1.6, sat: 1.18, tint: [1, .97, .92] }, onClick: (x, y, cam) => { if (!probe) probe = probes(s, bhBox); probe(x, y, cam); }, onFrame: (t, dt, cam) => { if (probes.step) probes.step(dt); if (!ship) return; if (!reduce) { ship.rotation.x = t * .3; shipPiv.rotation.x = .009 * Math.sin(t * .4); }     // вісь хаба (у моделі X) повернута вертикально: кільце паралельне диску, як у гіроскопа на екваторіальній орбіті; ледь помітне погойдування ±0,5°
     cam.getWorldDirection(_f); _r.crossVectors(_f, cam.up).normalize(); _u.crossVectors(_r, _f);
     shipPiv.position.copy(cam.position).addScaledVector(_f, 10).addScaledVector(_r, -3.1).addScaledVector(_u, -1.1); } });   // перед діркою, ліворуч, трохи нижче смуги диска — на темному тлі
   if (s) {
@@ -289,5 +297,65 @@ if (bhBox) {
     addShip(s.fg, s);
   }
 }
+/* ── 02: клік по сцені — «пробний промінь». Світло запускається з точки кліку (у площині, що проходить через діру поперек погляду)
+   вбік, і летить за тим самим рівнянням, що й промені в шейдері: d²x/dλ² = −1,5·h²·x/r⁵ (r_s = 1). Видно, як воно згинається,
+   обертається навколо діри (фотонна сфера — 1,5 r_s) або падає за горизонт. ── */
+const RADS = 5;
+{ const css = document.createElement('style'); css.textContent = '.bhprobe{position:absolute;left:14px;bottom:34px;max-width:min(460px,80%);font:500 12px/1.4 var(--mono);color:#cfe2ff;text-shadow:0 1px 4px #000;pointer-events:none;opacity:0;transition:opacity .4s}.bhprobe.on{opacity:1}';
+  document.head.appendChild(css); }   // підпис-результат для 02 і 07
+function probes(s, box) {
+  const lines = [], V = (x, y, z) => new THREE.Vector3(x, y, z);
+  const hud = document.createElement('span'); hud.className = 'bhprobe'; box.appendChild(hud);
+  const cv = document.createElement('canvas'); cv.width = cv.height = 64; const cx = cv.getContext('2d'), gr = cx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, '#fff'); gr.addColorStop(.25, 'rgba(190,225,255,.8)'); gr.addColorStop(1, 'rgba(120,180,255,0)'); cx.fillStyle = gr; cx.fillRect(0, 0, 64, 64);
+  const head = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthTest: false, blending: THREE.AdditiveBlending }));   // м'яка кругла «голівка» фотона
+  function trace(p, d) {
+    const pts = [p.clone()], x = p.clone(), v = d.clone().normalize(), a = new THREE.Vector3(); let rmin = 1e9, fate = 'out';
+    for (let i = 0; i < 6000; i++) { const r = x.length(); rmin = Math.min(rmin, r); if (r < 1.01) { fate = 'in'; break; } if (r > 45 && x.dot(v) > 0) break;
+      const h2 = a.crossVectors(x, v).lengthSq(), dl = Math.min(.25, Math.max(.01, .03 * r)); a.copy(x).multiplyScalar(-1.5 * h2 / Math.pow(r, 5));
+      v.addScaledVector(a, dl).normalize(); x.addScaledVector(v, dl); if (i % 3 === 0) pts.push(x.clone()); }
+    pts.push(x.clone()); return { pts, rmin, fate, out: v.clone() };
+  }
+  // анімація: промінь «біжить» ~1,6 с, потім згасає за 3 с
+  probes.step = (dt) => { for (let i = lines.length - 1; i >= 0; i--) { const o = lines[i]; o.t += dt; const k = Math.min(1, o.t / 1.6), c = Math.max(2, Math.floor(o.n * k));
+    o.g.setDrawRange(0, (c - 1) * RADS * 6); o.hd.position.copy(o.pts[Math.min(o.n - 1, c - 1)]); o.hd.material.opacity = k < 1 ? 1 : 0;
+    o.m.opacity = o.t < 2 ? 1 : Math.max(0, 1 - (o.t - 2) / 3); if (o.t > 5) { kill(o); lines.splice(i, 1); } } };
+  return function (nx, ny, cam) {
+    const dir = V(nx, ny, .5).unproject(cam).sub(cam.position).normalize(), n = cam.position.clone().normalize();
+    const t = -cam.position.dot(n) / dir.dot(n), p = cam.position.clone().addScaledVector(dir, t);   // перетин з площиною через діру поперек погляду
+    if (p.length() < 2.2) p.setLength(2.2);
+    const d0 = V().crossVectors(n, p).normalize();                                                    // вбік, поперек радіуса — промінь пролітає повз діру
+    const tr = trace(p.clone().addScaledVector(d0, -14), d0);                                          // стартуємо здалеку, щоб було видно підліт
+    // тонка трубка замість лінії (лінія завжди 1 px — на ретині її не видно); малюємо її поступово через drawRange по сегментах
+    const SEG = tr.pts.length - 1, RAD = RADS, g = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(tr.pts), SEG, .045, RAD, false);
+    const m = new THREE.MeshBasicMaterial({ color: 0x9fd0ff, transparent: true, depthTest: false, blending: THREE.AdditiveBlending });
+    const ln = new THREE.Mesh(g, m); ln.renderOrder = 5; s.fg.add(ln); g.setDrawRange(0, 0);
+    const hd = head.clone(); hd.material = head.material.clone(); hd.scale.setScalar(1.1); s.fg.add(hd);
+    lines.push({ ln, g, m, hd, n: tr.pts.length, pts: tr.pts, t: 0 }); if (lines.length > 3) kill(lines.shift());
+    const defl = Math.acos(Math.max(-1, Math.min(1, tr.out.dot(d0)))) * 180 / Math.PI;
+    hud.textContent = tr.fate === 'in' ? `промінь підійшов ближче за 1,5 r_s — фотонну сферу — і впав за горизонт` :
+      tr.rmin < 2 ? `пройшов на ${tr.rmin.toFixed(2).replace(".", ",")} r_s — майже біля фотонної сфери; повернув на ${Math.round(defl)}°` : `пройшов на ${tr.rmin.toFixed(1).replace(".", ",")} r_s від центру й відхилився на ${Math.round(defl)}°`;
+    hud.classList.add('on'); clearTimeout(hud.t); hud.t = setTimeout(() => hud.classList.remove('on'), 5000);
+  };
+  function kill(o) { s.fg.remove(o.ln); s.fg.remove(o.hd); o.g.dispose(); o.m.dispose(); }
+}
+
 const whBox = document.getElementById('wh');
-if (whBox) { const s = scene(whBox, WH, { uA: { value: 3 } }, { dist: 16, pitch: .05, yaw: .35, bloom: .75, spin: .025, min: 5, max: 40, sky2: true, grade: { vignette: .4, grain: .045, ca: 1.8, sat: 1.1, tint: [.97, .98, 1.03] } }); if (s) window.WH = s; }
+/* ── 07: клік — короткий «стрибок» крізь горло: камера пірнає в горло (спалах, хроматичне розщеплення), виринає по той бік
+   і дивиться назад — тепер у горлі видно наш дім (Сатурн), а навколо — чуже небо. Ще клік — назад. ── */
+function jumper(s, box) {
+  const hud = document.createElement('span'); hud.className = 'bhprobe'; box.appendChild(hud);
+  let busy = false;
+  return function () { if (busy) return; busy = true; const d0 = s.st.dist, t0 = performance.now(), b0 = s.bloom.strength, ca0 = s.grade.uniforms?.uCA?.value;
+    window.IS_SOUND && IS_SOUND.fx && IS_SOUND.fx('whoosh'); let flipped = false;
+    (function f(now) { const u = Math.min(1, (now - t0) / 2600), dive = u < .5 ? u / .5 : (1 - u) / .5, e = dive * dive * (3 - 2 * dive);
+      s.st.dist = u < .5 ? d0 + (.4 - d0) * e : .4 + (d0 - .4) * (1 - e);
+      s.bloom.strength = b0 + 2.2 * e; if (ca0 != null) s.grade.uniforms.uCA.value = ca0 + 9 * e;
+      if (u >= .5 && !flipped) { flipped = true; s.U.uSide.value = 1 - s.U.uSide.value; s.st.yaw += Math.PI;
+        hud.textContent = s.U.uSide.value ? 'ви по той бік: у горлі — наш Сатурн, навколо — чужа галактика. Клік — назад' : 'знову біля Сатурна'; hud.classList.add('on');
+        clearTimeout(hud.t); hud.t = setTimeout(() => hud.classList.remove('on'), 5000); }
+      if (u < 1) requestAnimationFrame(f); else { s.st.dist = d0; s.bloom.strength = b0; if (ca0 != null) s.grade.uniforms.uCA.value = ca0; busy = false; } })(t0);
+  };
+}
+let jump = null;
+if (whBox) { const s = scene(whBox, WH, { uA: { value: 3 }, uSide: { value: 0 } }, { onClick: () => { if (!jump) jump = jumper(window.WH, whBox); jump(); }, dist: 16, pitch: .05, yaw: .35, bloom: .75, spin: .025, min: 5, max: 40, sky2: true, grade: { vignette: .4, grain: .045, ca: 1.8, sat: 1.1, tint: [.97, .98, 1.03] } }); if (s) window.WH = s; }

@@ -188,6 +188,9 @@
       n.buffer = b; const bp = x.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 1.2; bp.frequency.setValueAtTime(300, t); bp.frequency.exponentialRampToValueAtTime(2400, t + len);
       const g = x.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.12, t + len * .55); g.gain.linearRampToValueAtTime(0, t + len);
       n.connect(bp).connect(g); g.connect(master); g.connect(verb); n.start(t);
+    } else if (kind === 'hum') {                                              // тихий гул моноліта: низький акорд із повільним наростанням і довгим згасанням
+      [[55, .05], [110, .035], [164.8, .02], [220.4, .012]].forEach(([f, v]) => { const o = x.createOscillator(), g = x.createGain(); o.frequency.value = f; o.detune.value = (Math.random() - .5) * 8;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .9); g.gain.setTargetAtTime(0, t + 1.6, 1.1); o.connect(g); g.connect(master); g.connect(verb); o.start(t); o.stop(t + 7); });
     } else if (kind === 'chime') {
       [880, 1318.5].forEach((f, k) => { const o = x.createOscillator(), g = x.createGain(); o.frequency.value = f; const s = t + k * .12;
         g.gain.setValueAtTime(0, s); g.gain.linearRampToValueAtTime(.09, s + .01); g.gain.setTargetAtTime(0, s + .05, .5); o.connect(g); g.connect(master); g.connect(verb); o.start(s); o.stop(s + 3); });

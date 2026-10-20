@@ -12,7 +12,7 @@ const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls)
 (function css() {
   if (document.querySelector('link[data-vz]')) return;
   const l = document.createElement('link');
-  l.rel = 'stylesheet'; l.href = new URL('./is-viz.css?v=20261020150921', import.meta.url).href; l.dataset.vz = '1';
+  l.rel = 'stylesheet'; l.href = new URL('./is-viz.css?v=20261020161007', import.meta.url).href; l.dataset.vz = '1';
   document.head.appendChild(l);
 })();
 
@@ -157,7 +157,7 @@ function initTwins(slot) {
   const mk = (t, at, p = svg) => { const e = document.createElementNS(NS, t); for (const k in at) e.setAttribute(k, at[k]); p.appendChild(e); return e; };
 
   // Стрічка: доріжка, заливка «до місії» та етапи, позначки десятиліть, «кіноплівкові» перфорації
-  let rows, gapT;
+  let rows, gapT, pin;
   function build() {
   VW = Math.max(280, Math.round(svg.clientWidth || box.clientWidth || 800)); X1 = VW - 12;
   svg.setAttribute('viewBox', `0 0 ${VW} 196`); svg.textContent = '';
@@ -186,6 +186,10 @@ function initTwins(slot) {
   mk('line', { x1: docX, x2: docX, y1: 118, y2: 178, stroke: 'var(--act)', 'stroke-width': 1.5, 'stroke-dasharray': '3 3' });
   const docT = mk('text', { x: docX, y: 191, 'text-anchor': 'end', style: 'font:600 10.5px var(--mono);fill:var(--act)' }); docT.textContent = '124 за документами';
   gapT = mk('text', { y: 97, 'text-anchor': 'middle', style: 'font:600 11px var(--mono);fill:var(--ink-2)' });
+  // клік по стрічці: вертикальна мітка в цьому місці й підпис «коли одному X — іншому Y»
+  pin = { ln: mk('line', { y1: 22, y2: 164, stroke: 'var(--ink)', 'stroke-width': 1.2, 'stroke-dasharray': '2 3', opacity: 0 }),
+    tx: mk('text', { y: 14, 'text-anchor': 'middle', style: 'font:600 11px var(--mono);fill:var(--ink);paint-order:stroke;stroke:var(--paper,#fff);stroke-width:4px', opacity: 0 }) };
+  pin.ln.style.transition = pin.tx.style.transition = 'opacity .4s';
   }
 
   function draw(u) {
@@ -254,6 +258,22 @@ function initTwins(slot) {
       anim = requestAnimationFrame(step);
     };
     next();
+  });
+  /* клік по точці стрічки: знаходимо момент місії, коли в цієї людини був такий вік, і показуємо вік обох у той момент */
+  const inv = (k, a) => { const base = k === 'm' ? M0 : C0, idx = k === 'm' ? 1 : 2; if (a <= base) return null; let a0 = base;
+    for (let i = 0; i < N; i++) { const d = ST[i][idx]; if (d > 0 && a <= a0 + d) return i + (a - a0) / d; a0 += d; } return N; };
+  svg.style.cursor = 'pointer';
+  svg.addEventListener('click', (e) => {
+    const r = svg.getBoundingClientRect(), x = (e.clientX - r.left) * VW / r.width, y = (e.clientY - r.top) * 196 / r.height;
+    const k = y < 92 ? 'm' : 'c', a = Math.max(0, Math.min(AMAX, (x - X0) / (X1 - X0) * AMAX)), uu = inv(k, a); stop();
+    let txt;
+    if (uu === null) { const m = k === 'm' ? a : a - (C0 - M0), c = k === 'c' ? a : a + (C0 - M0);   // до місії обоє старіють однаково
+      txt = m < 0 ? `Мерф ще не народилась — Куперу ${nf(c, 0)}` : `до місії: Мерф ${nf(m, 0)}, Куперу ${nf(c, 0)}`; tween(0, 500); }
+    else { const w = at(uu); txt = `коли Мерф ${nf(w.m, 0)} — Куперу ${nf(w.c, 1)}`; tween(uu, 700);
+      if (k === 'c' && a > at(N).c + .3) txt = `Купер не доживе до ${nf(a, 0)} у цій історії — у фіналі йому ${nf(at(N).c, 1)}`; }
+    pin.ln.setAttribute('x1', x); pin.ln.setAttribute('x2', x); pin.tx.setAttribute('x', Math.max(120, Math.min(VW - 120, x))); pin.tx.textContent = txt;
+    pin.ln.setAttribute('opacity', .8); pin.tx.setAttribute('opacity', 1); clearTimeout(pin.t);
+    pin.t = setTimeout(() => { pin.ln.setAttribute('opacity', 0); pin.tx.setAttribute('opacity', 0); }, 4500);
   });
   build(); set(0);
   let lastW = 0;
@@ -543,6 +563,47 @@ async function initTides(slot) {
     pg.attributes.position.needsUpdate = true; pg.attributes.aG.needsUpdate = true;
   }
 
+  /* ── клік по сцені: кидаємо шматок речовини (кульку з 360 часток). Кожна частка падає в діру сама по собі (той самий потенціал
+     Пачинського–Вііта), тож ближній край тягне сильніше за дальній: кулька витягується вздовж напрямку на діру й стискається впоперек —
+     «спагетифікація». Наочно: діра не в масштабі, час прискорено. ── */
+  const BN = 360, BL = [], bTex = new Float32Array(BN * 3);
+  for (let i = 0; i < BN; i++) { let x, y, z; do { x = Math.random() * 2 - 1; y = Math.random() * 2 - 1; z = Math.random() * 2 - 1; } while (x * x + y * y + z * z > 1); bTex.set([x, y, z], i * 3); }
+  const blobM = new THREE.PointsMaterial({ color: 0xffc08a, size: .08, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, vertexColors: true });
+  const tipEl = el('span', 'vz-td__tip'); wrap.appendChild(tipEl);
+  function drop(nx, ny) {
+    const rc = new THREE.Raycaster(); rc.setFromCamera(new THREE.Vector2(nx, ny), cam);
+    const n = cam.getWorldDirection(new THREE.Vector3()), c = bh.position, rs = .8 * bh.scale.x;
+    const hit = new THREE.Vector3(); if (!rc.ray.intersectPlane(new THREE.Plane().setFromNormalAndCoplanarPoint(n, c.clone().lerp(new THREE.Vector3(), .5)), hit)) return;
+    if (hit.distanceTo(c) < rs * 2.2) hit.sub(c).setLength(rs * 2.2).add(c);           // не в саму діру — трохи осторонь
+    const g = new THREE.BufferGeometry(), P = new Float32Array(BN * 3), V = new Float32Array(BN * 3), Cc = new Float32Array(BN * 3), R0 = .16;
+    const er = hit.clone().sub(c), r = er.length(), et = new THREE.Vector3(0, 1, 0).cross(er).normalize(), v0 = Math.sqrt(DB.GM * r) / (r - rs) * .35;   // мала бічна швидкість — падає майже прямо, трохи закручуючись
+    for (let i = 0; i < BN; i++) { P.set([hit.x + bTex[i * 3] * R0, hit.y + bTex[i * 3 + 1] * R0, hit.z + bTex[i * 3 + 2] * R0], i * 3);
+      V.set([et.x * v0, et.y * v0, et.z * v0], i * 3); Cc.set([1, .75, .5], i * 3); }
+    g.setAttribute('position', new THREE.BufferAttribute(P, 3)); g.setAttribute('color', new THREE.BufferAttribute(Cc, 3));
+    const pts = new THREE.Points(g, blobM.clone()); scene.add(pts);
+    BL.push({ pts, P, V, Cc, c: c.clone(), rs, t: 0, gone: new Uint8Array(BN) }); if (BL.length > 3) { const o = BL.shift(); scene.remove(o.pts); o.pts.geometry.dispose(); }
+    tipEl.textContent = 'шматок падає: ближній до діри край тягне сильніше за дальній — його витягує в нитку («спагетифікація»). Наочно, час прискорено';
+    tipEl.classList.add('on'); clearTimeout(tipEl.t); tipEl.t = setTimeout(() => tipEl.classList.remove('on'), 6000);
+    if (!running) start();
+  }
+  window.IS_BLOBS = BL;
+  function blobStep(dt) {
+    const h = dt * 1.6 / 3, a = [0, 0, 0];
+    for (let j = BL.length - 1; j >= 0; j--) { const o = BL[j]; o.t += dt; let alive = 0;
+      for (let i = 0; i < BN; i++) { if (o.gone[i]) continue; let x = o.P[i * 3], y = o.P[i * 3 + 1], z = o.P[i * 3 + 2], vx = o.V[i * 3], vy = o.V[i * 3 + 1], vz = o.V[i * 3 + 2], r = 9;
+        for (let k = 0; k < 3; k++) { const dx = x - o.c.x, dy = y - o.c.y, dz = z - o.c.z; r = Math.hypot(dx, dy, dz); const d = Math.max(r - o.rs, .03), q = -DB.GM / (d * d * r);
+          vx += dx * q * h; vy += dy * q * h; vz += dz * q * h; x += vx * h; y += vy * h; z += vz * h; if (r < o.rs * 1.02) break; }
+        o.P[i * 3] = x; o.P[i * 3 + 1] = y; o.P[i * 3 + 2] = z; o.V[i * 3] = vx; o.V[i * 3 + 1] = vy; o.V[i * 3 + 2] = vz;
+        const gr = Math.sqrt(Math.max(0, 1 - o.rs / r));                                  // біля горизонту — тьмяніє й червоніє
+        o.Cc[i * 3] = gr; o.Cc[i * 3 + 1] = .75 * gr * gr; o.Cc[i * 3 + 2] = .5 * gr * gr * gr;
+        if (r < o.rs * 1.02) { o.gone[i] = 1; o.Cc.fill(0, i * 3, i * 3 + 3); } else alive++; }
+      o.pts.geometry.attributes.position.needsUpdate = o.pts.geometry.attributes.color.needsUpdate = true;
+      if (!alive || o.t > 20) { scene.remove(o.pts); o.pts.geometry.dispose(); BL.splice(j, 1); } }
+  }
+  renderer.domElement.style.cursor = 'crosshair';
+  renderer.domElement.addEventListener('click', (e) => { const r = renderer.domElement.getBoundingClientRect();
+    drop((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height * 2 - 1)); });
+
   let W = 1, H = 1, ready = false;
   function resize() {
     W = wrap.clientWidth || 1; H = wrap.clientHeight || 1;
@@ -586,6 +647,7 @@ async function initTides(slot) {
       uni.uPhi.value = REDUCE ? 0 : Math.sin(t * .35) * Math.min(.14, p.eps * 1.4);     // лібрація: вісь припливу ходить, горби пливуть по океану
       if (!REDUCE) planet.rotation.y = clouds.rotation.y = atmo.rotation.y = t * .01;
     }
+    if (BL.length) blobStep(REDUCE ? .05 : dt);
     grade.tick(t, W, H); composer.render();
   }
   const loop = (now) => { frame(now); raf = running ? requestAnimationFrame(loop) : 0; };
@@ -666,7 +728,7 @@ function initBlue(slot) {
   const wlRGB = (l) => { const [x, y, z] = cmf(l); let r = 3.2406 * x - 1.5372 * y - .4986 * z, g = -.9689 * x + 1.8758 * y + .0415 * z, bb = .0557 * x - .204 * y + 1.057 * z;
     const m = Math.max(r, g, bb, .3); return [r, g, bb].map((v) => Math.round(255 * Math.max(0, v / m) ** .6)); };
 
-  const fmtL = (m) => m >= 1e-3 ? `${nf(m * 1e3, m >= 1e-2 ? 0 : 2)} мм` : m >= 1e-6 ? `${nf(m * 1e6, m >= 1e-5 ? 0 : 2)} мкм` : `${nf(m * 1e9, m >= 1e-8 ? 0 : 1)} нм`;
+  const fmtL = (m) => m >= 1e-3 ? `${nf(m * 1e3, m >= 1e-2 ? 0 : 2)} мм` : m >= 1e-6 ? `${nf(m * 1e6, m >= 1e-5 ? 0 : 2)} мкм` : m >= 1e-9 ? `${nf(m * 1e9, m >= 1e-8 ? 0 : 1)} нм` : `${nf(m * 1e12, m >= 1e-11 ? 0 : 1)} пм`;
   const bandOf = (lnu) => (BANDS.find((x) => lnu >= x[0] && lnu < x[1]) || BANDS[4])[2];
 
   let B = 61000, W = 1, H = 1, dpr = 1;
@@ -794,6 +856,26 @@ function initBlue(slot) {
       const loop = (now) => { raf = 0; if (!vis) return; const dt = Math.min(.05, last ? (now - last) / 1000 : 0); last = now; if (!REDUCE) t += dt; render(); raf = requestAnimationFrame(loop); };
       fish = { U, render, kick: () => { if (vis && !raf) { last = 0; raf = requestAnimationFrame(loop); } } };
       sky.after(fcv); sky.style.display = 'none';
+      /* клік по небу: що там — зоря (її колір до і після зсуву), Гаргантюа чи вода. Напрям рахуємо тією ж проєкцією, що й шейдер */
+      const fwrap = el('div', 'vz-bl__fw'); fcv.before(fwrap); fwrap.appendChild(fcv);
+      const ring = el('span', 'vz-bl__ring'), card = el('div', 'vz-bl__card'); fwrap.append(ring, card); fcv.style.cursor = 'crosshair';
+      const sw = (rgb) => `<i style="background:rgb(${rgb.map((v) => Math.round(v * 255)).join(',')})"></i>`;
+      fcv.addEventListener('click', (e) => {
+        const r0 = fcv.getBoundingClientRect(), ux = (e.clientX - r0.left) / r0.width * 2 - 1, uy = -((e.clientY - r0.top) / r0.height * 2 - 1), rr = Math.hypot(ux, uy);
+        if (rr > 1) return;
+        const th = 2 * Math.asin(Math.min(1, rr * .7071)), dx = rr > 1e-4 ? ux / rr : 0, dy = rr > 1e-4 ? uy / rr : 1;
+        let d = [Math.sin(th) * dx, Math.cos(th), Math.sin(th) * dy]; const TA = 1.05, cy = Math.cos(U.uYaw.value), sy = Math.sin(U.uYaw.value);
+        d = [d[0], d[1] * Math.cos(TA) + d[2] * Math.sin(TA), -d[1] * Math.sin(TA) + d[2] * Math.cos(TA)]; d = [d[0] * cy - d[2] * sy, d[1], d[0] * sy + d[2] * cy];
+        const G = [.35, .42, -.84], gl = Math.hypot(...G), along = (d[0] * G[0] + d[1] * G[1] + d[2] * G[2]) / gl;
+        ring.style.left = (e.clientX - r0.left) + 'px'; ring.style.top = (e.clientY - r0.top) + 'px'; ring.classList.remove('on'); void ring.offsetWidth; ring.classList.add('on');
+        let html;
+        if (d[1] < 0) html = '<b>Вода</b> — дзеркало неба: під ковзним кутом відбиває той самий зсунутий колір.';
+        else if (along > .975) html = '<b>Гаргантюа</b> — її диск теж світить зсунутим світлом, а тінь лишається чорною.';
+        else { // «зоря» в цьому місці: температура — від напрямку (відтворюваний хеш), як у справжньому небі: здебільшого холодні червонуваті, зрідка гарячі блакитні
+          const hs = Math.abs(Math.sin(d[0] * 127.1 + d[1] * 311.7 + d[2] * 74.7) * 43758.5453) % 1, Ts = Math.round((3000 + 27000 * hs ** 3) / 100) * 100, T2 = Ts * B;
+          html = `<b>Зоря</b> ${sw(bbRGB(Ts))} ${nf(Ts, 0)} К → ×${nf(B, 0)} → ${sw(bbRGB(Math.min(T2, 4e5)))} ${sci(T2, 1)} К<br>пік ${fmtL(b / T2)} — ${bandOf(Math.log10(c * T2 / b))}${T2 > 1e5 ? '; око її вже не бачить — лише прилади' : ''}`; }
+        card.innerHTML = html; card.classList.add('on'); clearTimeout(card.t); card.t = setTimeout(() => card.classList.remove('on'), 6000);
+      });
       visible(fcv, (v) => { vis = v; if (v) fish.kick(); else { cancelAnimationFrame(raf); raf = 0; } });
       drawSky();
     } catch (e) { fish = null; }
