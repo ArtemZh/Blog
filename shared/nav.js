@@ -43,9 +43,9 @@
   if (PARENT[here]) here = PARENT[here];
 
   /* Широка бічна панель (як у каталогах компонентів): групи з підзаголовками, повні назви,
-     крапка «нове» біля трьох останніх статей. Поки що — на сторінках трьох останніх статей. */
+     крапка «нове» біля трьох останніх статей. Сама широка панель із хвилею — лише на статті 34. */
   var NEWEST = ['32-french-past.html', '33-three-body.html', '34-interstellar.html'];
-  var WIDE = NEWEST.indexOf(here) >= 0;
+  var WIDE = here === '34-interstellar.html';                     // меню-«хвиля» (широке, під сторінкою) — лише на статті 34; крапки «нове» — як і раніше, для трьох останніх
   var GROUPS = { 1: t('Профіль', 'Profile'), 2: t('Як я веду доставку', 'How I run delivery'), 3: t('На чому це стоїть', 'Foundations'), 4: t('Статті й приклади', 'Articles and examples') };
   if (WIDE) document.body.classList.add('rail-wide');
 

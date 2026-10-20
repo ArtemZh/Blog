@@ -22,7 +22,8 @@
       box-shadow:0 4px 18px rgba(0,0,0,.18);cursor:pointer;font-size:18px;opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none}
     .snd-fab.show{opacity:1;transform:none;pointer-events:auto}
     .snd-fab.on{background:var(--act);border-color:var(--act)}
-    @media(max-width:1080px){.snd-fab{bottom:86px;right:12px}}`;
+    @media(max-width:1080px){.snd-fab{bottom:86px;right:12px}}
+    @media(max-width:1080px){.snd-all{left:auto;right:14px;bottom:auto;top:14px;padding:8px 12px;font-size:12px}}   /* на вузькому банері тексти внизу — кнопку вгору праворуч */`;
   document.head.appendChild(css);
   const hero = document.querySelector('.hero3');                              // кнопка — над лінзою банера (у неї z-index 4)
   const b1 = document.createElement('button'); b1.type = 'button'; b1.className = 'snd-all'; if (hero) hero.appendChild(b1);
@@ -134,27 +135,41 @@
      тіки годинника, скрип дверей, скрип дощок, стук книжки (STAY з полиці Мерф), порив вітру з пилом, потріскування ефіру з писком Морзе, далекий грім */
   function noiseBuf(x, sec) { const b = x.createBuffer(1, Math.round(x.sampleRate * sec), x.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; return b; }
   function out(x, pan, v) { const g = x.createGain(), p = x.createStereoPanner ? x.createStereoPanner() : null; g.gain.value = v; if (p) { p.pan.value = pan; g.connect(p); p.connect(master); p.connect(verb); } else { g.connect(master); g.connect(verb); } return g; }
+  // гучність кожного звуку — плавний вступ і згасання, щоб навіть довгі звуки не вривалися
+  const env = (g, t, a, hold, r, v) => { g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + a); g.gain.setValueAtTime(v, t + a + hold); g.gain.linearRampToValueAtTime(0, t + a + hold + r); };
+  const tick1 = (x, s, o, f, v) => { const src = x.createBufferSource(), bp = x.createBiquadFilter(), g = x.createGain(); src.buffer = noiseBuf(x, .03); bp.type = 'bandpass'; bp.frequency.value = f; bp.Q.value = 3;
+    g.gain.setValueAtTime(v, s); g.gain.exponentialRampToValueAtTime(.001, s + .03); src.connect(bp).connect(g).connect(o); src.start(s); };
+  const creak = (x, s, o, len, f0, f1, v, rate) => { const osc = x.createOscillator(), bp = x.createBiquadFilter(), g = x.createGain(), lfo = x.createOscillator(), lg = x.createGain();
+    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(f0, s); osc.frequency.linearRampToValueAtTime(f1, s + len); lfo.frequency.value = rate; lg.gain.value = f0 * .2; lfo.connect(lg).connect(osc.frequency);   // нерівне «тертя»
+    bp.type = 'bandpass'; bp.frequency.value = 850 + Math.random() * 300; bp.Q.value = 6; env(g, s, len * .15, len * .55, len * .3, v); osc.connect(bp).connect(g).connect(o); osc.start(s); lfo.start(s); osc.stop(s + len + .05); lfo.stop(s + len + .05); };
   const AMB = {
-    ticks(x, t, o) { const n = 3 + (Math.random() * 4 | 0); for (let i = 0; i < n; i++) { const s = t + i * .5, src = x.createBufferSource(), bp = x.createBiquadFilter(), g = x.createGain();
-      src.buffer = noiseBuf(x, .03); bp.type = 'bandpass'; bp.frequency.value = i % 2 ? 3200 : 2600; bp.Q.value = 3; g.gain.setValueAtTime(.5, s); g.gain.exponentialRampToValueAtTime(.001, s + .03); src.connect(bp).connect(g).connect(o); src.start(s); } },
-    door(x, t, o) { const len = 1.4 + Math.random(), osc = x.createOscillator(), bp = x.createBiquadFilter(), g = x.createGain(), lfo = x.createOscillator(), lg = x.createGain();
-      osc.type = 'sawtooth'; osc.frequency.setValueAtTime(140, t); osc.frequency.linearRampToValueAtTime(95 + Math.random() * 40, t + len);
-      lfo.frequency.value = 18 + Math.random() * 10; lg.gain.value = 25; lfo.connect(lg).connect(osc.frequency);   // нерівне «тертя» петлі
-      bp.type = 'bandpass'; bp.frequency.value = 900; bp.Q.value = 6; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.12, t + .15); g.gain.linearRampToValueAtTime(.08, t + len * .7); g.gain.linearRampToValueAtTime(0, t + len);
-      osc.connect(bp).connect(g).connect(o); osc.start(t); lfo.start(t); osc.stop(t + len); lfo.stop(t + len); },
-    floor(x, t, o) { [0, .35].forEach((d) => { const s = t + d, osc = x.createOscillator(), g = x.createGain(); osc.type = 'triangle'; osc.frequency.setValueAtTime(70 + Math.random() * 30, s); osc.frequency.linearRampToValueAtTime(55, s + .25);
-      g.gain.setValueAtTime(0, s); g.gain.linearRampToValueAtTime(.18, s + .04); g.gain.exponentialRampToValueAtTime(.001, s + .3); osc.connect(g).connect(o); osc.start(s); osc.stop(s + .32); }); },
-    book(x, t, o) { const osc = x.createOscillator(), g = x.createGain(), src = x.createBufferSource(), lp = x.createBiquadFilter(), g2 = x.createGain();
-      osc.frequency.setValueAtTime(110, t); osc.frequency.exponentialRampToValueAtTime(48, t + .15); g.gain.setValueAtTime(.45, t); g.gain.exponentialRampToValueAtTime(.001, t + .25); osc.connect(g).connect(o); osc.start(t); osc.stop(t + .3);
-      src.buffer = noiseBuf(x, .12); lp.type = 'lowpass'; lp.frequency.value = 1200; g2.gain.setValueAtTime(.25, t); g2.gain.exponentialRampToValueAtTime(.001, t + .12); src.connect(lp).connect(g2).connect(o); src.start(t); },
-    gust(x, t, o) { const len = 3.5, src = x.createBufferSource(), bp = x.createBiquadFilter(), g = x.createGain(); src.buffer = noiseBuf(x, len); bp.type = 'bandpass'; bp.Q.value = .8;
-      bp.frequency.setValueAtTime(250, t); bp.frequency.linearRampToValueAtTime(900, t + len * .5); bp.frequency.linearRampToValueAtTime(300, t + len);
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.14, t + len * .45); g.gain.linearRampToValueAtTime(0, t + len); src.connect(bp).connect(g).connect(o); src.start(t); },
-    radio(x, t, o) { const len = 2.6, src = x.createBufferSource(), hp = x.createBiquadFilter(), g = x.createGain(); src.buffer = noiseBuf(x, len); hp.type = 'highpass'; hp.frequency.value = 2500;
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.04, t + .3); g.gain.linearRampToValueAtTime(0, t + len); src.connect(hp).connect(g).connect(o); src.start(t);
-      [0, .18, .36, .9].forEach((d, i) => { const s = t + .6 + d, osc = x.createOscillator(), gg = x.createGain(), L = i === 3 ? .3 : .09; osc.frequency.value = 760; gg.gain.setValueAtTime(0, s); gg.gain.linearRampToValueAtTime(.05, s + .01); gg.gain.setValueAtTime(.05, s + L); gg.gain.linearRampToValueAtTime(0, s + L + .02); osc.connect(gg).connect(o); osc.start(s); osc.stop(s + L + .05); }); },
-    thunder(x, t, o) { const len = 4.5, src = x.createBufferSource(), lp = x.createBiquadFilter(), g = x.createGain(); src.buffer = noiseBuf(x, len); lp.type = 'lowpass'; lp.frequency.value = 160;
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.55, t + .5); g.gain.exponentialRampToValueAtTime(.001, t + len); src.connect(lp).connect(g).connect(o); src.start(t); },
+    // годинник: 8–12 с — тихо вступає, звучить, згасає (тік-так: дві висоти)
+    ticks(x, t, o) { const len = 8 + Math.random() * 4, n = Math.round(len / .5); for (let i = 0; i < n; i++) { const u = i / n, v = .5 * Math.min(1, u * 4, (1 - u) * 3); tick1(x, t + i * .5, o, i % 2 ? 3200 : 2600, Math.max(.02, v)); } },
+    // двері: 3–5 с — повільно відчиняються зі скрипом, пауза, тихо зачиняються з глухим стуком
+    door(x, t, o) { const l1 = 1.6 + Math.random(), gap = .6 + Math.random() * .6, l2 = .9 + Math.random() * .5;
+      creak(x, t, o, l1, 150, 100 + Math.random() * 30, .12, 16 + Math.random() * 8); creak(x, t + l1 + gap, o, l2, 120, 160, .08, 24);
+      const s = t + l1 + gap + l2, osc = x.createOscillator(), g = x.createGain(); osc.frequency.setValueAtTime(90, s); osc.frequency.exponentialRampToValueAtTime(45, s + .2); g.gain.setValueAtTime(.3, s); g.gain.exponentialRampToValueAtTime(.001, s + .35); osc.connect(g).connect(o); osc.start(s); osc.stop(s + .4); },
+    // дошки: 2–4 с — кілька кроків, кожен — короткий скрип і низький стук
+    floor(x, t, o) { const n = 3 + (Math.random() * 3 | 0); for (let i = 0; i < n; i++) { const s = t + i * (.55 + Math.random() * .3), osc = x.createOscillator(), g = x.createGain();
+      osc.type = 'triangle'; osc.frequency.setValueAtTime(70 + Math.random() * 30, s); osc.frequency.linearRampToValueAtTime(52, s + .25); g.gain.setValueAtTime(0, s); g.gain.linearRampToValueAtTime(.16, s + .04); g.gain.exponentialRampToValueAtTime(.001, s + .32); osc.connect(g).connect(o); osc.start(s); osc.stop(s + .35);
+      if (Math.random() < .6) creak(x, s + .05, o, .35 + Math.random() * .3, 260, 200, .05, 30); } },
+    // книжка: ~1,5 с — зісковзує з полиці (шерех), гортаються сторінки, глухий стук об підлогу
+    book(x, t, o) { const sl = x.createBufferSource(), bp = x.createBiquadFilter(), g0 = x.createGain(); sl.buffer = noiseBuf(x, .5); bp.type = 'bandpass'; bp.frequency.value = 1800; bp.Q.value = .9; env(g0, t, .1, .2, .2, .06); sl.connect(bp).connect(g0).connect(o); sl.start(t);
+      for (let i = 0; i < 6; i++) { const s = t + .45 + i * .07, src = x.createBufferSource(), hp = x.createBiquadFilter(), g = x.createGain(); src.buffer = noiseBuf(x, .05); hp.type = 'highpass'; hp.frequency.value = 2500; g.gain.setValueAtTime(.08, s); g.gain.exponentialRampToValueAtTime(.001, s + .05); src.connect(hp).connect(g).connect(o); src.start(s); }
+      const s = t + 1.0, osc = x.createOscillator(), g = x.createGain(); osc.frequency.setValueAtTime(110, s); osc.frequency.exponentialRampToValueAtTime(48, s + .15); g.gain.setValueAtTime(.45, s); g.gain.exponentialRampToValueAtTime(.001, s + .35); osc.connect(g).connect(o); osc.start(s); osc.stop(s + .4); },
+    // вітер: 6–10 с — наростає, 2–3 пориви, стихає
+    gust(x, t, o) { const len = 6 + Math.random() * 4, src = x.createBufferSource(), bp = x.createBiquadFilter(), g = x.createGain(); src.buffer = noiseBuf(x, len); bp.type = 'bandpass'; bp.Q.value = .8;
+      bp.frequency.setValueAtTime(250, t); const n = 2 + (Math.random() * 2 | 0); for (let i = 1; i <= n; i++) { bp.frequency.linearRampToValueAtTime(700 + Math.random() * 500, t + len * (i - .5) / n); bp.frequency.linearRampToValueAtTime(320, t + len * i / n); }
+      env(g, t, len * .3, len * .35, len * .35, .14); src.connect(bp).connect(g).connect(o); src.start(t); },
+    // ефір: 5–8 с — шум, дві-три короткі фрази Морзе, затухання
+    radio(x, t, o) { const len = 5 + Math.random() * 3, src = x.createBufferSource(), hp = x.createBiquadFilter(), g = x.createGain(); src.buffer = noiseBuf(x, len); hp.type = 'highpass'; hp.frequency.value = 2500;
+      env(g, t, .6, len - 1.6, 1, .04); src.connect(hp).connect(g).connect(o); src.start(t);
+      let s = t + .8; const f = 700 + Math.random() * 120; for (let w = 0; w < 2 + (Math.random() * 2 | 0); w++) { for (let i = 0; i < 4; i++) { const L = Math.random() < .4 ? .27 : .09, osc = x.createOscillator(), gg = x.createGain();
+        osc.frequency.value = f; gg.gain.setValueAtTime(0, s); gg.gain.linearRampToValueAtTime(.045, s + .01); gg.gain.setValueAtTime(.045, s + L); gg.gain.linearRampToValueAtTime(0, s + L + .02); osc.connect(gg).connect(o); osc.start(s); osc.stop(s + L + .05); s += L + .09; } s += .5; } },
+    // грім: 8–12 с — далекий удар і довге перекочування
+    thunder(x, t, o) { const len = 8 + Math.random() * 4, src = x.createBufferSource(), lp = x.createBiquadFilter(), g = x.createGain(); src.buffer = noiseBuf(x, len); lp.type = 'lowpass'; lp.frequency.setValueAtTime(220, t); lp.frequency.linearRampToValueAtTime(90, t + len);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.5, t + .6); g.gain.linearRampToValueAtTime(.22, t + len * .35); g.gain.linearRampToValueAtTime(.3, t + len * .5); g.gain.linearRampToValueAtTime(0, t + len);
+      src.connect(lp).connect(g).connect(o); src.start(t); },
   };
   let ambT = 0;
   function ambient() {

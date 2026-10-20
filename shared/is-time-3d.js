@@ -213,9 +213,13 @@ function init(slot) {
   const watU = { uT: { value: 0 }, uWz: { value: -9000 }, uWH: { value: 1200 }, uSig: { value: 380 }, uG: { value: GDIR }, uFeet: { value: [new THREE.Vector4(2.5, -29, .3, 1), new THREE.Vector4(5, -32, .3, 1), new THREE.Vector4(9, -38, 4.2, .7)] },
     uRip: { value: Array.from({ length: 8 }, () => new THREE.Vector4(0, 0, -99, 0)) } };
   const wgeo = new THREE.PlaneGeometry(18000, 18000, 260, 520); wgeo.rotateX(-Math.PI / 2);
+  // шість хвиль Герстнера: напрям (x, z), довжина, крутизна Q, амплітуда — одна таблиця для вершинного й фрагментного шейдера.
+  // Сітка має крок 35–70 м, тож дрібні хвилі вершини не «бачать»: їхні нахили, гребені й Якобіан рахує фрагментний, по пікселю
+  const WAV = [[.2, 1, 9, .6, .09], [-.6, .8, 5.3, .5, .05], [.9, .4, 3.1, .4, .03], [-.3, -1, 17, .5, .12], [.7, -.7, 1.9, .3, .015], [-.15, -1, 64, .35, .22]];
+  const wavN = (f, extra) => WAV.map(([dx, dz, L, Q, A]) => `${f}(x, normalize(vec2(${dx.toFixed(2)}, ${dz.toFixed(2)})), ${L.toFixed(1)}, ${Q.toFixed(2)}, ${A.toFixed(3)}${extra})`);
   const water = new THREE.Mesh(wgeo, new THREE.ShaderMaterial({
-    uniforms: watU, fog: false,
-    vertexShader: `uniform float uT, uWz, uWH, uSig; varying vec3 vW; varying vec3 vN; varying float vH; varying float vCrest; varying float vLip; varying float vTrough;
+    uniforms: watU, fog: false, extensions: { derivatives: true },
+    vertexShader: `uniform float uT, uWz, uWH, uSig; varying vec3 vW; varying vec3 vN; varying float vH; varying float vLip; varying float vTrough; varying float vFold;
       // кільця брижів від кліку: до 8 джерел (x, z, час старту, активне); фронт біжить ~5 м/с і гасне за ~4 с
       uniform vec4 uRip[8];
       float ripH(vec2 xz, out vec2 grad){ float h = 0.; grad = vec2(0.);
@@ -241,10 +245,8 @@ function init(slot) {
         lip = smoothstep(.5, 1., e / ck) * smoothstep(-.35, .15, dz) * ck;
         trough = exp(-pow((dz - 2.4)/1.2, 2.));
         return uWH * e - uWH * .018 * trough; }
-      void main(){ vec3 p = position; vec2 x = p.xz; vec3 n = vec3(0., 1., 0.);
-        vec3 d = gw(x, normalize(vec2(.2, 1.)), 9., .6, .09, n) + gw(x, normalize(vec2(-.6, .8)), 5.3, .5, .05, n)
-               + gw(x, normalize(vec2(.9, .4)), 3.1, .4, .03, n) + gw(x, normalize(vec2(-.3, -1.)), 17., .5, .12, n)
-               + gw(x, normalize(vec2(.7, -.7)), 1.9, .3, .015, n) + gw(x, normalize(vec2(-.15, -1.)), 64., .35, .22, n);   // остання — довга полога зибь здалеку
+      void main(){ vec3 p = position; vec2 x = p.xz; vec3 n = vec3(0., 1., 0.), nG = n;
+        vec3 d = ${wavN('gw', ', nG').join(' + ')};   // нахили цих хвиль (nG) тут не беремо — на рідкій сітці вони лише шум
         p += d;
         vec2 rg; p.y += ripH(x, rg); n.x -= rg.x*1.5; n.z -= rg.y*1.5;
         float e, lip, trough; float w = wallH(p.xz, e, lip, trough);
@@ -253,10 +255,12 @@ function init(slot) {
         p.y += w;
         p.z += lip * uSig * .42;                                                   // «губа»: верх переднього схилу нависає вперед
         n.x -= (wx - w) / dx; n.z -= (wz - w) / dzz; vN = normalize(n);
-        vH = e; vLip = lip; vTrough = trough; vCrest = clamp(d.y / .2, 0., 1.);
+        // Якобіан зсуву «губи» вздовж z: де він < 1, поверхня стискається, а < 0 — складається сама на себе (там і народжується піна)
+        vFold = 1. + (l2 - lip) / dzz * uSig * .42;
+        vH = e; vLip = lip; vTrough = trough;
         vW = (modelMatrix * vec4(p, 1.)).xyz;
         gl_Position = projectionMatrix * viewMatrix * vec4(vW, 1.); }`,
-    fragmentShader: `uniform float uT, uWz, uSig; uniform vec3 uG; uniform vec4 uFeet[3]; varying vec3 vW; varying vec3 vN; varying float vH; varying float vCrest; varying float vLip; varying float vTrough; ${NOISE}
+    fragmentShader: `uniform float uT, uWz, uSig; uniform vec3 uG; uniform vec4 uFeet[3]; varying vec3 vW; varying vec3 vN; varying float vH; varying float vLip; varying float vTrough; varying float vFold; ${NOISE}
       // кільця брижів від кліку: до 8 джерел (x, z, час старту, активне); фронт біжить ~5 м/с і гасне за ~4 с
       uniform vec4 uRip[8];
       float ripH(vec2 xz, out vec2 grad){ float h = 0.; grad = vec2(0.);
@@ -266,13 +270,33 @@ function init(slot) {
           float ph = r*4.5 - age*22., a = .22*env;
           h += a*sin(ph); grad += (d/r) * a*4.5*cos(ph); }
         return h; }
-      // небо планети у відбитті: холодне, сіро-сталеве; Гаргантюа — відблиск, ширший там, де вода шорсткіша
-      vec3 skyc(vec3 d, float rough){ float h = max(d.y, 0.);
+      // небо планети у відбитті: холодне, сіро-сталеве; хмари розмиваються там, де піксель усереднює багато нахилів (var — дисперсія),
+      // тож далеке море відбиває рівне світле небо, а не мерехтливі клапті. Сам диск Гаргантюа у воді — окремим блиском нижче
+      vec3 skyc(vec3 d, float var){ float h = max(d.y, 0.);
         vec3 c = mix(vec3(${HOR_A.join(',')}), vec3(.36,.46,.57), smoothstep(0., .55, h));
         vec2 q = d.xz / max(h + .08, .03) * 1.4 + vec2(uT*.006, uT*.002);
-        c = mix(c, vec3(.74,.78,.80), smoothstep(.42, .78, fbm(q)) * smoothstep(-.02, .12, h) * .55);
-        float g = max(dot(d, uG), 0.); c += vec3(1.,.8,.58) * (pow(g, 14.)*.25 + pow(g, mix(900., 140., rough))*mix(3., 1.2, rough));
+        float cl = mix(smoothstep(.42, .78, fbm(q)), .3, smoothstep(.004, .03, var));
+        c = mix(c, vec3(.74,.78,.80), cl * smoothstep(-.02, .12, h) * .55);
+        float g = max(dot(d, uG), 0.); c += vec3(1.,.8,.58) * pow(g, 14.) * .22;
         return c; }
+      // Френель Шліка для води (n = 1,333, F0 ≈ 0,02)
+      float fresW(float c){ float x = 1. - clamp(c, 0., 1.), x2 = x*x; return .02 + .98*x2*x2*x; }
+      // маскування Сміта для гаусових нахилів: частка граней, яку не ховають сусідні гребені під кутом w (апроксимація Волтера, 2007).
+      // cv — дисперсії нахилів (xx, zz, xz); беремо σ уздовж азимута напрямку
+      float smithL(vec3 w, vec3 cv){ vec2 a = w.xz; float l = max(length(a), 1e-4); a /= l;
+        float s2 = max(a.x*a.x*cv.x + a.y*a.y*cv.y + 2.*a.x*a.y*cv.z, 1e-7), m = max(w.y, 1e-3) / l / sqrt(2.*s2);
+        return m >= 1.6 ? 0. : (1. - 1.259*m + .396*m*m) / (3.535*m + 2.181*m*m); }
+      // одна хвиля Герстнера по пікселю (ідея статистики нахилів у дусі LEAN — ідея: Noniv/web-ocean (MIT), переписано аналітично):
+      // fp — розмір пікселя на воді, м. Хвиля, довша за ~8 пікселів, іде в нахил s явно; коротша — лише як дисперсія cv, яку піксель
+      // усереднив. Тож далеке море плавно переходить у рівний полиск без мерехтіння. J — Якобіан горизонтального зсуву, hc — висота гребеня
+      // wn — два повільні шумові поля на піксель (спільні для всіх хвиль): фаза «гуляє» — гребені не як по лінійці, і групи — то вищі, то нижчі хвилі
+      vec2 wn;
+      void wf(vec2 x, vec2 D, float L, float Q, float A, float fp, inout vec2 s, inout vec3 cv, inout float J, inout float hc){
+        float m = fract(L*.618), k = 6.2832/L, f = k*(dot(D, x) - sqrt(9.81/k)*uT) + 7.*mix(wn.x, wn.y, m), r = 1. - smoothstep(L*.12, L*.4, fp);
+        float kA = k*A*(.45 + 1.1*mix(wn.y, 1. - wn.x, m));
+        cv += vec3(D.x*D.x, D.y*D.y, D.x*D.y) * (kA*kA*.5*(1. - r*r));
+        if (r > 0.) { float co = cos(f), si = sin(f);                        // далеко хвиля — лише дисперсія, синуси не рахуємо
+          s += D * (kA*co*r); J -= Q*kA*si*r; hc += kA/k*si*r; } }
       // дрібні брижі: градієнт двох шарів шуму, що пливуть у різні боки
       vec2 ripple(vec2 q){ float e = .35;
         float a = vn(q*.9 + vec2(uT*.35, uT*.2)) + .5*vn(q*2.1 - vec2(uT*.5, -uT*.3));
@@ -284,10 +308,21 @@ function init(slot) {
         return pow(1. - abs(a - b), 9.) * 1.4; }
       void main(){ vec3 V = cameraPosition - vW; float dist = length(V); V /= dist;
         float att = 1. / (1. + dist*.012);
+        vec2 x = vW.xz;
+        float fp = max(length(dFdx(vW.xz)), length(dFdy(vW.xz))) + 1e-3;    // скільки метрів води вміщає піксель
         // «котячі лапки»: смуги вітру з різною шорсткістю, повільно пливуть по воді
         float paws = smoothstep(.38, .72, fbm(vec2(vW.x*.006 + uT*.012, vW.z*.018 - uT*.02)));
         float rough = .35 + .65*paws;
-        vec2 rp = ripple(vW.xz*1.6) * rough;
+        // статистика нахилів: середній нахил s, дисперсія cv (xx, zz, xz), Якобіан J і висота дрібних гребенів hc
+        vec2 s = vec2(0.); vec3 cv = vec3(0.); float J = 1., hc = 0.;
+        wn = vec2(vn(x*.045 + 7.), vn(x*.017 - 3.));
+        ${wavN('wf', ', fp, s, cv, J, hc').join(';\n        ')};
+        // брижі-шум (≈0,3–0,7 м): поблизу — явні, далі — лише дисперсія; плюс капілярні брижі, яких не видно ніде, і довгий хвіст
+        // дисперсії з відстанню — щоб далечінь набрала шорсткість, як справжнє море з висоти (≈ Кокс–Манк при слабкому вітрі)
+        float rN = 1. - smoothstep(.06, .25, fp);
+        vec2 rp = vec2(0.); if (rN > 0.) rp = ripple(vW.xz*1.6) * rough * .26 * rN;
+        float un = (.0015 + .004*rough) + .006*rough*(1. - rN) + .005*smoothstep(80., 1500., dist);
+        cv.xy += un;
         // кільця брижів і піна навколо ніг і опор модуля
         float rings = 0., foamF = 0.;
         for (int i = 0; i < 3; i++) { vec2 dxz = vW.xz - uFeet[i].xy; float dd = length(dxz) - uFeet[i].z;
@@ -295,11 +330,36 @@ function init(slot) {
           rings += sin(dd*14. - uT*5.) * w * .35;
           foamF += w * (.55 + .45*vn(vW.xz*3. + uT*.6)) * smoothstep(1.2, 0., abs(dd)); }
         vec2 rg; float rh = ripH(vW.xz, rg);
-        vec3 N = normalize(vN + vec3(rp.x, 0., rp.y) * .26 * att + vec3(rings, 0., rings*.7) * att + vec3(-rg.x, 0., -rg.y) * .9);
-        float cosv = max(dot(N, V), 0.);
-        float fr = .035 + .965 * pow(1. - cosv, 4.);
-        vec3 refl = skyc(reflect(-V, N), rough);
+        // нормаль: стіна й кільця — з вершин, хвилі й брижі — по пікселю; нахил sN — для блиску
+        vec3 N = normalize(vN + vec3(s.x + rp.x, 0., s.y + rp.y) * -1. * vN.y + vec3(rings, 0., rings*.7) * att + vec3(-rg.x, 0., -rg.y) * .9);
+        vec2 sN = -N.xz / max(N.y, .1);
+        // антиаліасинг блиску: як сильно нахил змінюється в межах пікселя — на стільки й ширшає пелюстка (обмежено, щоб не «замилити» все)
+        vec2 dsx = dFdx(sN), dsy = dFdy(sN);
+        vec3 aa = vec3(dsx.x*dsx.x + dsy.x*dsy.x, dsx.y*dsx.y + dsy.y*dsy.y, dsx.x*dsx.y + dsy.x*dsy.y) * .5;
+        cv += aa * min(1., .03 / max(max(aa.x, aa.y), 1e-8));
+        // ── блиск Гаргантюа: анізотропний гаусів розподіл нахилів + кутовий розмір джерела ──
+        // диск акреції — широка смуга вздовж обрію (≈ ±0,4 рад), тож у нахилах джерело «розмазане» по x сильніше, ніж по z
+        vec3 cvL = cv + vec3(.022, .0008, 0.);
+        vec3 Hh = normalize(V + uG); vec2 dh = -Hh.xz / max(Hh.y, 1e-3) - sN;
+        float det = max(cvL.x*cvL.y - cvL.z*cvL.z, 1e-9);
+        float ex = (dh.x*dh.x*cvL.y + dh.y*dh.y*cvL.x - 2.*dh.x*dh.y*cvL.z) / det;
+        float hy2 = Hh.y*Hh.y, Dm = exp(-.5*ex) / (6.2832*sqrt(det)) / max(hy2*hy2, 1e-4);
+        float Gs = 1. / (1. + smithL(V, cvL) + smithL(uG, cvL));
+        vec3 spec = vec3(1.,.84,.64) * .085 * fresW(dot(V, Hh)) * Dm * Gs / (4.*max(V.y, .02));
+        spec *= 1. - smoothstep(.3, .8, vH);                                   // на крутій стіні не дзеркалить
+        // ── відбиття неба під малим кутом ──
+        // при погляді навскіс сховані ті грані, що відвернуті від нас, тож «середнє дзеркало» нахилене до глядача й бачить вище, світліше небо
+        vec2 vh = normalize(V.xz + vec2(1e-5, 0.));
+        float sv = sqrt(max(vh.x*vh.x*cv.x + vh.y*vh.y*cv.y + 2.*vh.x*vh.y*cv.z, 1e-6));
+        float gv = V.y / max(length(V.xz), 1e-3) / (1.4142*sv);
+        float face = smoothstep(.03, .45, vH);                                 // крута стіна хвилі-гори — там ці поправки для рівного моря не діють
+        vec3 Nv = normalize(N + vec3(vh.x, 0., vh.y) * .35*sv*(1. - smoothstep(0., 2.5, gv)) * (1. - face));
+        vec3 Rd = reflect(-V, Nv); Rd.y = abs(Rd.y); Rd = normalize(Rd);    // промінь униз б'ється в сусідню хвилю й іде вгору
+        vec3 refl = skyc(Rd, cv.x + cv.y);
         refl = mix(refl, refl * vec3(.78,.82,.86), paws*.35);                    // шорсткі смуги темніші й матовіші
+        // Френель — від частково згладженої нормалі: під малим кутом видимі грані лишаються дзеркальними
+        float cosv = max(dot(Nv, V), 0.);
+        float fr = fresW(dot(normalize(mix(Nv, vec3(0., 1., 0.), .4*(1. - face))), V));
         // заломлення: дно на глибині ~0,3 м, промінь іде навскіс — довший шлях у воді, темніше й сіріше
         float depth = .3 + max(vW.y, 0.) * .9;
         float path = depth / max(cosv, .08);
@@ -307,30 +367,47 @@ function init(slot) {
         vec3 sand = vec3(.52,.50,.45) * (.82 + .36*vn(bp*.6)) * (.9 + .2*vn(bp*.08));
         sand += vec3(1.,.95,.86) * caust(bp*1.4) * .6 * att;
         vec3 absorb = exp(-vec3(1.6, .9, .7) * path);
-        vec3 deep = vec3(.17,.22,.25);
-        vec3 refr = mix(deep, sand, absorb);
-        // стіна хвилі-гори: товща води темна, світло Гаргантюа просвічує гребінь (підповерхневе розсіювання)
-        float face = smoothstep(.03, .45, vH);
-        // стіна: темно-сталева вода, біля гребеня тонкий шар просвічує світлом Гаргантюа (підповерхневе розсіювання)
-        float sss = pow(max(dot(-V, uG), 0.), 2.) * smoothstep(.35, 1.1, vH) * (.6 + .6*vLip);
-        refr = mix(refr, vec3(.12,.17,.21), face);
-        refr += vec3(.32,.55,.52) * sss * .55;
+        vec3 refr = mix(vec3(.17,.22,.25), sand, absorb);
+        // стіна хвилі-гори: внизу товща води темна, догори вода тоншає й світлішає
+        refr = mix(refr, mix(vec3(.10,.15,.18), vec3(.16,.27,.28), smoothstep(.4, .95, vH)), face);
+        // ── просвічений гребінь (ідея: Noniv/web-ocean (MIT)) ──
+        // світло Гаргантюа йде крізь тонкий верх хвилі назустріч камері: сильно, коли дивимось майже на джерело (back),
+        // коли грань відвернута від світла (thin) і що вище на гребені (crest²); вода фарбує його в зелено-блакитне
+        float back = pow(max(dot(-V, uG), 0.), 2.);
+        float thin = pow(clamp(.5 - .5*dot(uG, N), 0., 1.), 2.);
+        float cW = smoothstep(.45, 1., vH); cW *= cW;
+        float cS = clamp(hc / .14, 0., 1.); cS *= cS;
+        // + слабший внесок від усього світлого неба за гребенем, щоб верх стіни світився й тоді, коли диск не за ним
+        float glow = cW * (.6 + .8*vLip) * exp(-dist/7000.) * (.45 + 1.6*back*thin) + cS * .45 * exp(-dist/150.) * back * thin;
+        refr += vec3(.16,.62,.55) * glow;
         // перед хвилею вода відступила — оголена мокра мілина
         float dry = smoothstep(-.22, -.5, vW.y) * smoothstep(.2, .8, vTrough);
         refr = mix(refr, vec3(.36,.33,.28) * (.85 + .3*vn(vW.xz*.4)), dry);
-        vec3 c = mix(refr, refl, fr);
-        // піна: гребені дрібних хвиль, верх хвилі-гори, патьоки на стіні, навколо ніг
-        float foam = smoothstep(.75, 1., vCrest) * smoothstep(.55, .8, fbm(vW.xz*.6 + uT*.1)) * .5;
-        foam += smoothstep(.86, .99, vH) * smoothstep(.45, .75, fbm(vW.xz*.02 + uT*.02));
-        // патьоки піни на стіні: вертикальні прожилки, що стікають униз; ламаний гребінь і губа — білі
-        foam += smoothstep(.55, .9, fbm(vec2(vW.x*.014, vW.y*.004 - uT*.05))) * face * .3;
-        foam += smoothstep(.65, .92, fbm(vec2(vW.x*.05 + 9., vW.y*.012 - uT*.12))) * face * .12;
-        foam += smoothstep(.45, .95, vLip) * (.5 + .5*smoothstep(.3, .7, fbm(vec2(vW.x*.004, uT*.03))));
+        vec3 c = mix(refr, refl, fr * (1. - dry*.6)) + spec * (1. - dry);
+        // ── піна там, де поверхня складається ──
+        // дрібні хвилі: Якобіан < ~0,92 — гребінь стискає воду; губа хвилі-гори: Якобіан її зсуву < 0,6 — вода перекидається
+        float pat = fbm(vW.xz*.6 + uT*.1), fw = fwidth(pat) + .03;
+        float foam = clamp((.93 - J)*9., 0., 1.) * rough * smoothstep(.45 - fw, .7 + fw, pat) * .6;
+        float fold = clamp((.15 - vFold)*1.2, 0., 1.);                       // уся губа складається; піна — пасмами, щоб між ними гребінь просвічував
+        foam += fold * smoothstep(.5, .72, fbm(vec2(vW.x*.012, vW.z*.02 - uT*.05))) * (.35 + .4*(1. - cW));
+        foam += smoothstep(.9, .99, vH) * smoothstep(.55, .8, fbm(vW.xz*.02 + uT*.02)) * .35;   // верх лише плямами — решта просвічує
+        // патьоки піни на стіні: вертикальні прожилки, що стікають униз
+        foam += smoothstep(.55, .9, fbm(vec2(vW.x*.014, vW.y*.004 - uT*.05))) * face * .25 * (1. - cW);
+        foam += smoothstep(.65, .92, fbm(vec2(vW.x*.05 + 9., vW.y*.012 - uT*.12))) * face * .1;
+        foam += smoothstep(.6, .98, vLip) * smoothstep(.4, .75, fbm(vec2(vW.x*.004, uT*.03))) * .25;
         // бурун біля підніжжя — біжить попереду хвилі по мілині
         float bore = exp(-pow((vW.z - uWz - uSig*1.05)/(uSig*.22), 2.)) * (.55 + .45*fbm(vec2(vW.x*.02, vW.z*.02 - uT*.3)));
         foam += bore * .95;
+        // пінний слід за хвилею: щойно гребінь пройшов — суцільне поле, далі старіє (вік = відстань від гребеня / 4,5 м/с)
+        // і рветься на смуги вздовж вітру (вітер жене хвилю по z), поки за ~40 хв не зникає
+        float age = (uWz - uSig*.25 - vW.z) / 4.5;
+        if (age > 0. && age < 2600.) { float ag = 1. - exp(-age/600.);
+          float st = fbm(vec2(vW.x*.03, vW.z*.0035 + 3.)) * .75 + .25*vn(vW.xz*vec2(.12, .03)), sw = fwidth(st) + .02;
+          foam += smoothstep(.25 + .45*ag - sw, .5 + .35*ag + sw, st) * exp(-age/1200.) * smoothstep(0., 20., age) * smoothstep(2600., 1800., age) * (1. - .4*ag); }
         foam += foamF * att + smoothstep(.07, .13, rh) * .9;                   // піна на гребенях кілець від кліку
-        c = mix(c, vec3(.86,.88,.89), clamp(foam, 0., 1.) * .8);
+        // піна підсвічена знизу бульбашками й зверху всім небом; щільна — біла, тонка — напівпрозора плівка
+        foam = clamp(foam, 0., 1.);
+        c = mix(c, vec3(.86,.88,.89) * (.92 + .08*vn(vW.xz*2.)), foam * .8);
         // далечінь: деталі гаснуть, над водою біля обрію — імла в тон неба
         c = mix(c, vec3(${HOR_A.join(',')}), (1. - exp(-dist * .00012)) * (1. - .85*face));   // імла — для обрію, не для стіни
         gl_FragColor = vec4(c, 1.); }`
@@ -737,6 +814,10 @@ function init(slot) {
   // поки на фермі мчать роки й сезони; колір фіксується в момент відриву й далі не змінюється.
   const heroM = new THREE.MeshLambertMaterial({ map: leafTex, alphaTest: .45, side: THREE.DoubleSide }); translucent(heroM);
   const hero = new THREE.Mesh(new THREE.PlaneGeometry(.42, .55), heroM); hero.visible = false; hero.layers.set(1); sB.add(hero);
+  // підсвітка листка «з іншого часу»: тепле м'яке сяйво за ним (додавання, без глибини) і ледь помітна пульсація — щоб око одразу його знаходило
+  const heroGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex([[0, 'rgba(255,214,150,.85)'], [.35, 'rgba(255,170,90,.32)'], [1, 'rgba(255,150,60,0)']]), transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending, fog: false }));
+  heroGlow.scale.setScalar(1.1); heroGlow.layers.set(1); heroGlow.renderOrder = -1; hero.add(heroGlow);
+  heroM.emissive = new THREE.Color(0xffb060); heroM.emissiveIntensity = .35;
   // шлях: зривається з верхівки крони рівно після хвилі (tP = T_WAVE + 40 с) і летить навскіс через кадр — з лівого верху
   // в правий низ — аж до повернення на корабель (T_BACK). Положення — функція планетного часу: u = (tP − T_WAVE − 40)/(T_BACK − T_WAVE − 40),
   // тож на паузі листок завмирає, а повзунок водить його назад і вперед; до хвилі й після T_BACK його немає.
@@ -752,6 +833,7 @@ function init(slot) {
   function heroLeaf() {
     const u = (tP - T_WAVE - 40) / (T_BACK - T_WAVE - 40);
     HL.kind = u >= 0 && u < 1 ? 1 : 0; HL.t = Math.max(0, Math.min(1, u)); hero.visible = HL.kind === 1;
+    { const pz = .85 + .15 * Math.sin(performance.now() / 420); heroGlow.material.opacity = pz; heroGlow.scale.setScalar((1 / Math.max(.2, hero.scale.x)) * .55 * (1 + .08 * Math.sin(performance.now() / 420))); }
     if (!HL.kind) return;
     const h0 = treeH((T_WAVE + 40) / 3600 * K / HY), e0 = h0 * .45;           // дерево в момент відриву — точка старту не повзе вгору, поки дерево росте
     HL.a.set(TREE.x + .12 * e0, TREE.y + h0 * .93, TREE.z + e0 * .2);        // верхівка крони, з боку камери
@@ -1138,6 +1220,13 @@ function init(slot) {
     const camZ = 26 + my * 2 + 1150 * back, rideC = waveH(camZ, wz, mx * 4);
     camA.position.set(mx * 4, 34 + rideC + 260 * back, camZ);
     V2.set(mx * 4, ride * .85, -260).lerp(V1.set(mx * 4, crestY * .5, Math.min(wz, -40)), near);
+    // звичний план — ближче й нижче: камера ~9 м над водою, ліворуч позаду «Рейнджера» (модуль і люди — у правій нижній третині),
+    // дивиться майже вздовж доріжки блиску на Гаргантюа; повільний дрейф убік і погойдування на хвилях, як із човна.
+    // Коли хвиля-гора ближче ~2,5 км — плавно передаємо керування старому крану (він уміє відступати від стіни)
+    { const crane = sm(2600, 1000, Math.abs(wz)), dr = RM ? 0 : Math.sin(T * .16) * 2.2, cx = -8 + dr + mx * 3, cz = -9 + my * 1.5;
+      const cy = waveH(cz, wz, cx) + 9 + (RM ? 0 : .35 * Math.sin(T * .9)) - my * 1.2;
+      V1.set(cx, cy, cz); camA.position.lerp(V1, 1 - crane);
+      camAT.set(9 + GDIR.x * 220 + dr * .4, ride * .3 + 6, -38 + GDIR.z * 220); V2.lerp(camAT, 1 - crane); }
     // план «Дойл»: від −90 с до +20 с щодо моменту, коли фронт підхоплює Дойла, кран не від'їжджає — стоїть близько й низько над водою
     // (їде по її поверхні) і дивиться на модуль і Дойла з легким нахилом угору на гребінь; до +60 с плавно повертається до звичного плану
     { const tD = T_WAVE + (DOY.z - 420) / 4.5, cD = sm(tD - 120, tD - 90, tP) * (1 - sm(tD + 20, tD + 60, tP));

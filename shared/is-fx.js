@@ -58,7 +58,9 @@
     // лінії орбіт (SVG) — у знімок теж: копія з уже обчисленими стилями → картинка
     const orb = hero.querySelector('.hero3__orb'); let orbImg = null;
     function orbSnap() { if (!orb) return; const c = orb.cloneNode(true), src = orb.querySelectorAll('ellipse'), dst = c.querySelectorAll('ellipse');
-      src.forEach((e, i) => { const st = getComputedStyle(e); ['fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'opacity'].forEach((k) => dst[i].setAttribute(k, st.getPropertyValue(k))); dst[i].setAttribute('vector-effect', 'non-scaling-stroke'); });
+      // масштаб «польоту» вже врахований у рамці orb — у копії він дав би подвійне збільшення; прозорість — кінцевий стан появи, а не кадр анімації
+      c.removeAttribute('style');
+      src.forEach((e, i) => { const st = getComputedStyle(e); ['fill', 'stroke', 'stroke-width', 'stroke-dasharray'].forEach((k) => dst[i].setAttribute(k, st.getPropertyValue(k))); dst[i].setAttribute('opacity', '1'); dst[i].setAttribute('vector-effect', 'non-scaling-stroke'); });
       const b = orb.getBoundingClientRect(); c.setAttribute('width', b.width); c.setAttribute('height', b.height); c.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
       const im = new Image(); im.onload = () => { orbImg = im; ready = false; }; im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(c)); }
     let dpr = 1, W = 0, H = 0, ready = false;
@@ -107,7 +109,7 @@
     hero.addEventListener('pointermove', (e) => { const r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
     hero.addEventListener('pointerleave', () => { kt = 0; });
     const resnap = () => { ready = false; orbSnap(); };
-    setTimeout(orbSnap, 2600);                                       // після анімації появи орбіт
+    setTimeout(orbSnap, 3400);                                       // після анімації появи орбіт (остання закінчується на 3,1 с)
     addEventListener('resize', resnap); document.fonts && document.fonts.ready.then(resnap); img.complete || img.addEventListener('load', resnap);
   })();
 

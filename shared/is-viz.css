@@ -103,3 +103,11 @@
 @media(max-width:520px){.vz-mx__head .vz-l{display:none}.vz-mx__head .vz-s{display:inline}}
 @media(max-width:720px){.vz-bl__sky .vz-k{width:100%}}
 @media(max-width:520px){.vz-td{height:420px;min-height:0}}
+
+/* вступ таблиці: після згортання стрілки ледь хитаються — підказка, що рядок розгортається */
+.vz-mx.nudge .vz-mx__chev{animation:mxNudge .8s ease-in-out 2}
+@keyframes mxNudge{0%,100%{transform:rotate(0)}50%{transform:rotate(45deg)}}
+
+/* доміно: рядок, що згортається, ледь «падає» вперед */
+.vz-mx__item.fall .vz-mx__row{animation:mxFall .8s ease-out}
+@keyframes mxFall{0%{transform:perspective(600px) rotateX(0)}40%{transform:perspective(600px) rotateX(-14deg)}100%{transform:perspective(600px) rotateX(0)}}

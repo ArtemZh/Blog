@@ -12,7 +12,7 @@ const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls)
 (function css() {
   if (document.querySelector('link[data-vz]')) return;
   const l = document.createElement('link');
-  l.rel = 'stylesheet'; l.href = new URL('./is-viz.css?v=20261019083636', import.meta.url).href; l.dataset.vz = '1';
+  l.rel = 'stylesheet'; l.href = new URL('./is-viz.css?v=20261020150921', import.meta.url).href; l.dataset.vz = '1';
   document.head.appendChild(l);
 })();
 
@@ -40,13 +40,13 @@ function initIntro(slot) {
     { k: 'fic', l: 'вигадка', s: 'вигадка', c: 'var(--vz-fic)' }
   ];
   const ROWS = [
-    ['Тінь і лінзування', 0, '#bh-sec', '02', 'Форму тіні й диска, що «обіймає» діру, програма DNGR рахувала за рівняннями Ейнштейна, і з цього вийшла наукова стаття 2015 року. Для фільму прибрали лише частину кольорових ефектів диска.'],
-    ['Година = 7 років', 0, '#time', '03', 'Множник близько 61 тисячі справді можливий біля діри, що обертається майже з граничною швидкістю. Застереження одне: таке обертання природа навряд чи дає.'],
-    ['Купер і Мерф', 0, '#twins-sec', '04', 'Різниця віку — прямий наслідок сповільнення часу. Головна причина — тяжіння Гаргантюа, а не швидкість корабля.'],
-    ['Хвилі-гори', 1, '#tides', '05', 'Біля надмасивної діри приплив планету не рве, але помітно витягує. Хвилі від гойдання планети правдоподібні, проте у фільмі не пораховані.'],
-    ['Блакитний зсув', 1, '#blue', '06', 'Світло ззовні на планеті стискається в ту саму 61 тисячу разів і мало б випалити її ультрафіолетом і рентгеном. Фільм цей наслідок опускає.'],
-    ['Червоточина', 1, '#worm', '07', 'Вигляд кулі з іншим небом розраховано й опубліковано. Але чи можуть існувати прохідні червоточини, невідомо: для них потрібна екзотична матерія.'],
-    ['Тесеракт і петля', 2, '#tess', '08', 'Пʼятивимірний тесеракт і послання в минуле — найсміливіша спекуляція фільму. Торн сам відносить її до таких.']
+    ['Тінь і лінзування', 0, '#bh-sec', '02', 'Унікальна форма тіні та сяючого диска навколо чорної діри обчислювалася програмою DNGR на основі рівнянь Ейнштейна, з чого виросла наукова стаття 2015 року. Для фінального монтування фільму прибрали лише зайві кольорові ефекти акреційного диска.'],
+    ['Година = 7 років', 0, '#time', '03', 'Коефіцієнт сповільнення часу в 61 тисячу разів цілком реальний поблизу об\'єктів із граничною швидкістю обертання. Єдиним застереженням залишається те, що подібні швидкості навряд чи створюються в реальному космосі.'],
+    ['Купер і Мерф', 0, '#twins-sec', '04', 'Величезна різниця у віці між батьком і донькою є прямим наслідком гравітаційного уповільнення часу. Головну роль тут відіграє потужне поле тяжіння гіганта Гаргантюа, а не швидкісний переліт корабля.'],
+    ['Хвилі-гори', 1, '#tides', '05', 'Поблизу надмасивної чорної діри припливні сили не розривають планету, проте суттєво деформують її форму. Гіпотеза про виникнення хвиль від легкого гойдання цілком життєздатна, хоча в самому фільмі вона не підкріплена розрахунками.'],
+    ['Блакитний зсув', 1, '#blue', '06', 'Світло ззовні на планеті стискається в ту саму 61 тисячу разів і мало б випалити її ультрафіолетом і рентгеном. Творці фільму свідомо опустили цей наслідок.'],
+    ['Червоточина', 1, '#worm', '07', 'Тривимірний вигляд червоточини як кулі з іншим зоряним небом повністю науково обґрунтований і опублікований. Проте питання реального існування прохідних тунелів залишається відкритим через потребу в екзотичній матерії.'],
+    ['Тесеракт і петля', 2, '#tess', '08', 'П\'ятивимірний тесеракт і спроба передати повідомлення у минуле є найбільш сміливою та відвертою спекуляцією усього фільму, яку сам науковий консультант не намагався видавати за доведену науку.']
   ];
   const box = el('div', 'vz vz-mx');
   const head = el('div', 'vz-mx__head');
@@ -75,7 +75,39 @@ function initIntro(slot) {
   const hint = el('p', 'chint', 'Натисніть на рядок — короткий вердикт і посилання на розділ. Поділ — за книжкою Кіпа Торна «The Science of Interstellar».');
   slot.appendChild(hint);
   if (REDUCE) { box.classList.add('in'); return; }
-  const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { box.classList.add('in'); io.disconnect(); } }, { threshold: 0.25 });
+  /* вступ: таблиця спершу розгорнута, назви й вердикти «набираються» з крапок і тире Морзе (з нотами, якщо увімкнено звук статті),
+     потім рядки по черзі згортаються, а стрілки ледь хитаються — видно, що кожен пункт можна розгорнути. Будь-який клік — вступ зупиняється. */
+  const items = [...box.querySelectorAll('.vz-mx__item')], CODE = '·−';
+  let stop = false; box.addEventListener('pointerdown', () => { stop = true; }, { once: true });
+  function typeIn(node, text, speed, beep) {
+    return new Promise((ok) => { let k = 0;
+      const step = () => { if (stop) { node.textContent = text; return ok(); }
+        node.textContent = text.slice(0, k) + [...text.slice(k)].map((ch) => (ch === ' ' ? ' ' : CODE[Math.random() < .5 ? 0 : 1])).join('');
+        if (beep && k % 5 === 0 && window.IS_SOUND) IS_SOUND.morse(Math.random() < .5 ? '.' : '-', k);
+        k += Math.max(1, Math.round(text.length / 60)); if (k < text.length) setTimeout(step, speed); else { node.textContent = text; ok(); } }; step(); });   // довгий текст — кількома літерами за крок, щоб рядок «падав» за ~0,5 с
+  }
+  const wait = (ms) => new Promise((ok) => setTimeout(ok, ms));
+  // доміно: увесь текст одразу — крапки й тире; знизу вгору кожен рядок за мить «розшифровується» в літери й згортається,
+  // а наступний (вищий) підхоплює ще до того, як попередній закінчив
+  const morseOf = (t) => [...t].map((ch) => (ch === ' ' ? ' ' : CODE[Math.random() < .5 ? 0 : 1])).join('');
+  async function intro() {
+    const parts = items.map((it) => { const nm = it.querySelector('.vz-mx__name'), nTxt = [...nm.childNodes].find((n) => n.nodeType === 3), p = it.querySelector('.vz-mx__body p'), bTxt = [...p.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim());
+      const a = { nTxt, n: nTxt.textContent, bTxt, b: bTxt.textContent }; nTxt.textContent = morseOf(a.n); bTxt.textContent = morseOf(a.b); return a; });
+    items.forEach((it) => { it.classList.add('open'); it.querySelector('.vz-mx__row').setAttribute('aria-expanded', 'true'); });
+    await wait(1600);
+    const N = items.length;
+    await Promise.all(parts.map(async (q, i) => {
+      const order = N - 1 - i; await wait(order * 650);                       // нижній — першим
+      if (stop) { q.nTxt.textContent = q.n; q.bTxt.textContent = q.b; return; }
+      if (window.IS_SOUND) IS_SOUND.morse(order % 2 ? '-' : '.', order);
+      await Promise.all([typeIn(q.nTxt, q.n, 45, false), typeIn(q.bTxt, q.b, 14, false)]);
+      if (stop) return; await wait(450);
+      const it = items[i]; it.classList.add('fall'); it.classList.remove('open'); it.querySelector('.vz-mx__row').setAttribute('aria-expanded', 'false');
+      setTimeout(() => it.classList.remove('fall'), 800);
+    }));
+    if (!stop) { box.classList.add('nudge'); setTimeout(() => box.classList.remove('nudge'), 1600); }
+  }
+  const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { box.classList.add('in'); io.disconnect(); intro(); } }, { threshold: 0.35 });
   io.observe(box);
 }
 
