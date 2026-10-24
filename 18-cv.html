@@ -20,7 +20,7 @@
 .cv-head .ct{font-size:14px;color:var(--ink-2);line-height:1.7}
 .cv-head .ct span{margin:0 8px;color:var(--ink-3)}
 .mail-btn{font:inherit;color:var(--act);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-@media print{.mail-btn,.cv-head .ct span,.cv-head .dl{display:none}}
+@media print{.mail-btn,.cv-head .ct span{display:none}}
 .cv p{max-width:none}
 .cv ul{margin:4px 0 8px;padding-left:22px;font-size:15px;color:var(--ink-2)}
 .cv li{margin-bottom:3px}
@@ -46,9 +46,6 @@
 .h3{font-weight:600;color:var(--ink);margin:var(--sp-md) 0 6px!important}
 .tl p{margin:0 0 6px;font-size:15px}
 .tl p b{color:var(--ink)}
-.dl{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);border-radius:var(--r-md);margin-top:10px;
-  padding:6px 12px;background:var(--paper);font-weight:600;font-size:13.5px;text-decoration:none;color:var(--act)}
-.dl:hover{border-color:var(--act);background:var(--act-soft)}
 @media(max-width:640px){.cv-head{flex-direction:column;align-items:flex-start}.dom{grid-template-columns:1fr}}
 </style>
 </head>
@@ -69,7 +66,6 @@
       <div class="kicker">Artem Zhavrotskyi · CV</div>
       <h1>Delivery Manager / Senior Technical Project Manager</h1>
       <div class="ct">LinkedIn: <a href="https://www.linkedin.com/in/artemzhavrotskyi" target="_blank" rel="noopener">artemzhavrotskyi</a><span>|</span><button type="button" class="mail-btn" id="mailBtn">Show email</button></div>
-      <a class="dl" href="assets/Zhavrotskyi_CV.pdf" target="_blank" rel="noopener">CV as PDF ↗</a>
     </div>
   </header>
 
@@ -123,25 +119,6 @@
   <p class="mt"><b>Team:</b> PM, Data / ML Lead, Data / ML Engineer</p>
   <p class="mt"><b>Tech stack:</b> Python, OpenAI API, CLI, JSON / CSV</p>
   <p>Development of an MVP tool designed to measure website visibility in generative AI search responses (e.g., ChatGPT). Automates persona generation, query execution, response parsing, and WCI metrics calculation with historical versioning based on provided RFP and prompt templates.</p>
-    </div>
-    <div class="proj">
-  <p class="pj">Project: IT System for River Mall</p>
-  <p class="mt"><b>Industry:</b> Retail <b>Duration:</b> 2019–2022, 2025–2026</p>
-  <p class="mt"><b>Role:</b> Solution Architect &amp; Project Manager <b>Team:</b> 3–25 (up to 5 teams)</p>
-  <p class="mt"><b>Project Type:</b> Time &amp; Materials, Fixed Price</p>
-  <p>Led a 3-year program to design and deliver River Mall’s IT ecosystem from scratch — network / server infrastructure, mobile app, Wi-Fi analytics, captive portal, financial system, and analytics platform — using hybrid Agile / Waterfall. Owned the 5-year roadmap, vendor analysis, tender documentation, and regular updates to ownership; integrated on-premises and cloud solutions for customer engagement, operations, and analytics.</p>
-  <ul>
-    <li><b>Infrastructure:</b> Designed and deployed LAN / server infrastructure from scratch on HPE Aruba (selected via tender); managed integrator work, documentation, and hiring of the in-house IT team incl. IT Director.</li>
-    <li><b>Solutions:</b> Mobile app with BLE navigation and location-triggered push; Wi-Fi analytics with heatmaps and movement tracking; custom captive portal; Zendesk-based tenant help desk; financial system and website; centralized DWH with 8 Power BI dashboards.</li>
-    <li><b>Security &amp; Results:</b> FortiGate with UTP; Aruba AirWave for network monitoring. Reduced equipment costs by 40% and integrated on-premises + cloud analytics via DWH and Power BI.</li>
-  </ul>
-    </div>
-    <div class="proj">
-  <p class="pj">Subproject: DWH Migration &amp; Modernization (DMS Stack, River Mall)</p>
-  <p class="mt"><b>Contractual Model:</b> Fixed Price</p>
-  <p class="mt"><b>Team:</b> PM, Power BI Engineer, Data Engineer, DevOps</p>
-  <p class="mt"><b>Tech stack:</b> Python, Dagster, PostgreSQL, MS SQL (legacy), MySQL, Power BI, Docker Compose, GitLab CI/CD</p>
-  <p>Modernization of River Mall's visitor analytics and financial reporting — migrating from a legacy MS SQL architecture to a centralized PostgreSQL DWH orchestrated with Dagster. Consolidates data from 1C (via a MySQL buffer), R-Stat counters (MSSQL), Hikvision counters (PostgreSQL), rental email exports, and legacy history (backfill). All business logic is computed inside the DWH; Power BI and a Telegram bot are read-only consumers of pre-aggregated data. Deployed via Docker Compose and GitLab CI/CD, with schema migrations managed through Alembic.</p>
     </div>
     <div class="proj">
   <p class="pj">Honsel RivSmart eBZ Zero S</p>
