@@ -9,7 +9,7 @@
   const S = window.IS_SOUND = { on: false, ctx: null, duck, morse, fx, wind };
   let master = null, music = null, verb = null, zone = 'main';
   const ducks = new Map();
-  const A = 'assets/interstellar/audio/', XF = 6, SW = 4, LEVEL = .55, DUCKED = .14;
+  const A = 'assets/interstellar/audio/', XF = 6, SW = 4, LEVEL = .385, DUCKED = .1;   // музика на 30 % тихіше за перший варіант (.55 → .385) — прохання власника 20.10.2026
   const TR = { main: { url: A + 'main.m4a' }, tess: { url: A + 'tess.m4a' }, after: { url: A + 'theme.m4a' } };
 
   /* кнопки: одна в банері (під підзаголовком), друга — плаваюча, з'являється, коли банер прокручено */
