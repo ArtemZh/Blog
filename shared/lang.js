@@ -16,22 +16,28 @@
   var def = document.documentElement.getAttribute('data-lang-default');
   var picked = false; try { picked = sessionStorage.getItem(SKEY) === '1'; } catch (e) {}
   var saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
-  var lang = q === 'en' || q === 'uk' ? q : (def && !picked ? def : (saved || 'uk'));
+  /* Мови сторінки: за замовчуванням uk + en; сторінка може оголосити свій набір (<html data-langs="uk pl">).
+     Переклад лежить в атрибуті data-<мова>. Якщо збереженої мови на сторінці немає — показуємо українську,
+     але вибір людини в сховищі не перезаписуємо (на іншій сторінці він знову спрацює). */
+  var LANGS = (document.documentElement.getAttribute('data-langs') || 'uk en').split(/\s+/);
+  var lang = LANGS.indexOf(q) >= 0 ? q : (def && !picked ? def : (saved || 'uk'));
+  var keep = LANGS.indexOf(lang) >= 0; if (!keep) lang = 'uk';
   /* Сторінки зі схемами, які малюються з даних один раз, перемальовуються перезавантаженням:
      дешевше, ніж тримати в кожному рендерері окремий шлях оновлення. */
   window.PMP_LANG = lang;
 
   function apply(l) {
-    var nodes = document.querySelectorAll('[data-en]');
+    var nodes = document.querySelectorAll(LANGS.filter(function (x) { return x !== 'uk'; }).map(function (x) { return '[data-' + x + ']'; }).join(',') || '[data-en]');
     for (var i = 0; i < nodes.length; i++) {
       var n = nodes[i];
+      if (n.tagName === 'TITLE') continue;
       if (n.dataset.uk === undefined) n.dataset.uk = n.innerHTML;
-      n.innerHTML = l === 'en' ? n.dataset.en : n.dataset.uk;
+      n.innerHTML = l !== 'uk' && n.dataset[l] !== undefined ? n.dataset[l] : n.dataset.uk;
     }
     var t = document.querySelector('title');
-    if (t && t.dataset.en) {
+    if (t && t.dataset[l] !== undefined || t && t.dataset.uk !== undefined) {
       if (t.dataset.uk === undefined) t.dataset.uk = t.textContent;
-      t.textContent = l === 'en' ? t.dataset.en : t.dataset.uk;
+      t.textContent = l !== 'uk' && t.dataset[l] !== undefined ? t.dataset[l] : t.dataset.uk;
     }
     document.documentElement.lang = l;
     var btns = document.querySelectorAll('.langsw button');
@@ -39,7 +45,7 @@
       btns[j].classList.toggle('on', btns[j].dataset.l === l);
       btns[j].setAttribute('aria-pressed', btns[j].dataset.l === l ? 'true' : 'false');
     }
-    try { localStorage.setItem(KEY, l); } catch (e) {}
+    if (keep) { try { localStorage.setItem(KEY, l); } catch (e) {} }
   }
 
   function mount() {
@@ -50,11 +56,12 @@
     sw.className = 'langsw';
     sw.setAttribute('role', 'group');
     sw.setAttribute('aria-label', 'Мова / Language');
-    ['uk', 'en'].forEach(function (l) {
+    LANGS.forEach(function (l) {
       var b = document.createElement('button');
       b.type = 'button'; b.dataset.l = l; b.textContent = l.toUpperCase();
       b.addEventListener('click', function () {
         try { sessionStorage.setItem(SKEY, '1'); } catch (e) {}
+        keep = true;
         if (document.body.hasAttribute('data-lang-reload')) {
           try { localStorage.setItem(KEY, l); } catch (e) {}
           var u = new URL(location.href); u.searchParams.set('lang', l); location.href = u.toString();

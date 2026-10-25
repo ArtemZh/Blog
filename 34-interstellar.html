@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="uk">
+<html lang="uk" data-langs="uk pl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Фізика «Інтерстеллара» · Draft</title>
+<title data-pl="Fizyka „Interstellar” · Draft">Фізика «Інтерстеллара» · Draft</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,13 +16,13 @@
                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
 </script>
 </head>
-<body>
+<body data-lang-reload>
 <div class="page">
 <header class="topbar">
-  <a class="brand" href="#top">Фізика «Інтерстеллара»</a>
+  <a class="brand" href="#top" data-pl="Fizyka „Interstellar”">Фізика «Інтерстеллара»</a>
   <nav class="toc" id="toc" aria-label="Розділи">
-    <a href="#film">Фільм</a><a href="#bh-sec">Гаргантюа</a><a href="#time">Час</a><a href="#twins-sec">Купер і Мерф</a>
-    <a href="#tides">Хвилі</a><a href="#blue">Зсув</a><a href="#worm">Червоточина</a><a href="#tess">Тесеракт</a><a href="#map">Карта</a><a href="#refs">Відсилки</a><a href="#known">Що відомо</a>
+    <a href="#film" data-pl="Film">Фільм</a><a href="#bh-sec" data-pl="Gargantua">Гаргантюа</a><a href="#time" data-pl="Czas">Час</a><a href="#twins-sec" data-pl="Cooper i Murph">Купер і Мерф</a>
+    <a href="#tides" data-pl="Fale">Хвилі</a><a href="#blue" data-pl="Przesunięcie">Зсув</a><a href="#worm" data-pl="Tunel">Червоточина</a><a href="#tess" data-pl="Tesserakt">Тесеракт</a><a href="#map" data-pl="Mapa">Карта</a><a href="#refs" data-pl="Nawiązania">Відсилки</a><a href="#known" data-pl="Co wiemy">Що відомо</a>
   </nav>
 </header>
 
@@ -35,144 +35,146 @@
       <ellipse class="acc" cx="1420" cy="410" rx="880" ry="230" transform="rotate(-8 1420 410)"/>
     </svg>
     <div class="hero3__txt">
-      <div class="hero3__kick">Стаття · фізика · чернетка</div>
-      <h1>Фізика «Інтерстеллара»</h1>
-      <p class="hero3__sub">Що у фільмі пораховано, що спрощено, а що вигадано</p>
+      <div class="hero3__kick" data-pl="Artykuł · fizyka · szkic">Стаття · фізика · чернетка</div>
+      <h1 data-pl="Fizyka „Interstellar”">Фізика «Інтерстеллара»</h1>
+      <p class="hero3__sub" data-pl="Co w filmie policzono, co uproszczono, a co wymyślono">Що у фільмі пораховано, що спрощено, а що вигадано</p>
     </div>
   </header>
-  <div class="wrap"><p class="lede lede3">«Інтерстеллар» Крістофера Нолана (2014) став чи не єдиним голлівудським блокбастером, над яким всерйоз працював справжній фізик-теоретик. Кіп Торн особисто обчислював параметри чорної діри, червоточини та гравітаційного сповільнення часу, а його розгортання на екрані переросло у фахові наукові публікації. Пройдемося ключовими головоломками кінострічки й з'ясуємо, де ховається залізна логіка, де просте вимушене спрощення, а де чиста фантазія. Кожен ефект марковано: <span class="badge sci">наука</span><span class="badge simp">спрощення</span><span class="badge fic">вигадка</span>.</p></div>
+  <div class="wrap"><p class="lede lede3" data-pl="„Interstellar” Christophera Nolana (2014) to chyba jedyny hollywoodzki blockbuster, nad którym na poważnie pracował prawdziwy fizyk teoretyk. Kip Thorne osobiście obliczał parametry czarnej dziury, tunelu czasoprzestrzennego i grawitacyjnego spowolnienia czasu, a przeniesienie ich na ekran przerodziło się w fachowe publikacje naukowe. Przejdźmy przez kluczowe zagadki filmu i sprawdźmy, gdzie kryje się żelazna logika, gdzie zwykłe wymuszone uproszczenie, a gdzie czysta fantazja. Każdy efekt jest oznaczony: &lt;span class=&quot;badge sci&quot;&gt;nauka&lt;/span&gt;&lt;span class=&quot;badge simp&quot;&gt;uproszczenie&lt;/span&gt;&lt;span class=&quot;badge fic&quot;&gt;fikcja&lt;/span&gt;.">«Інтерстеллар» Крістофера Нолана (2014) став чи не єдиним голлівудським блокбастером, над яким всерйоз працював справжній фізик-теоретик. Кіп Торн особисто обчислював параметри чорної діри, червоточини та гравітаційного сповільнення часу, а його розгортання на екрані переросло у фахові наукові публікації. Пройдемося ключовими головоломками кінострічки й з'ясуємо, де ховається залізна логіка, де просте вимушене спрощення, а де чиста фантазія. Кожен ефект марковано: <span class="badge sci">наука</span><span class="badge simp">спрощення</span><span class="badge fic">вигадка</span>.</p></div>
 
   <div class="wrap">
 
   <section class="sec" id="film">
-    <h2><span class="num">01</span>Справжня наука під прицілом камери</h2>
-    <p>Кіп Торн — визнаний фізик із Каліфорнійського технологічного інституту та ключовий ідеолог детектора гравітаційних хвиль LIGO. За цей прорив 2017 року він здобув Нобелівську премію спільно з Райнером Вайссом та Баррі Барішем. Сам задум стрічки народився з його давніх обговорень із продюсеркою Ліндою Обст, а на знімальному майданчику Торн виступав одночасно науковим консультантом і виконавчим продюсером.</p>
-    <p>Він поставив перед творцями ультиматум із двох пунктів. По-перше, жоден кадр не повинен суперечити перевіреним законам фізики. По-друге, найсміливіші припущення зобов'язані базуватися на реальних гіпотезах, а не на довільній фантазії сценаристів. Усі викладки й розрахунки вчений згодом зібрав у книзі «The Science of Interstellar», яка і лягла в основу цього розбору.</p>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;01&lt;/span&gt;Prawdziwa nauka przed obiektywem kamery"><span class="num">01</span>Справжня наука під прицілом камери</h2>
+    <p data-pl="Kip Thorne to uznany fizyk z Kalifornijskiego Instytutu Technologicznego i jeden z głównych pomysłodawców detektora fal grawitacyjnych LIGO. Za ten przełom w 2017 roku otrzymał Nagrodę Nobla wspólnie z Rainerem Weissem i Barrym Barishem. Sam pomysł filmu zrodził się z jego dawnych rozmów z producentką Lyndą Obst, a na planie Thorne był jednocześnie konsultantem naukowym i producentem wykonawczym.">Кіп Торн — визнаний фізик із Каліфорнійського технологічного інституту та ключовий ідеолог детектора гравітаційних хвиль LIGO. За цей прорив 2017 року він здобув Нобелівську премію спільно з Райнером Вайссом та Баррі Барішем. Сам задум стрічки народився з його давніх обговорень із продюсеркою Ліндою Обст, а на знімальному майданчику Торн виступав одночасно науковим консультантом і виконавчим продюсером.</p>
+    <p data-pl="Postawił twórcom ultimatum z dwóch punktów. Po pierwsze, żadne ujęcie nie może przeczyć sprawdzonym prawom fizyki. Po drugie, najśmielsze założenia muszą opierać się na prawdziwych hipotezach, a nie na dowolnej fantazji scenarzystów. Wszystkie wywody i obliczenia naukowiec zebrał później w książce „The Science of Interstellar”, która stała się podstawą tej analizy.">Він поставив перед творцями ультиматум із двох пунктів. По-перше, жоден кадр не повинен суперечити перевіреним законам фізики. По-друге, найсміливіші припущення зобов'язані базуватися на реальних гіпотезах, а не на довільній фантазії сценаристів. Усі викладки й розрахунки вчений згодом зібрав у книзі «The Science of Interstellar», яка і лягла в основу цього розбору.</p>
     <div id="viz-intro" class="viz-slot"></div>
-    <p class="trap"><b>Насправді.</b> Статус наукового консультанта не робить усе показане єдиною правдою. Торн самостійно розмежовує кінематографічні ефекти на доведену науку, правдоподібні припущення та чисті спекуляції. Наприклад, появу тесеракта він без вагань зараховує до найсміливіших вигадок.</p>
+    <p class="trap" data-pl="&lt;b&gt;W rzeczywistości.&lt;/b&gt; Status konsultanta naukowego nie czyni wszystkiego, co pokazano, jedyną prawdą. Thorne sam dzieli efekty filmowe na udowodnioną naukę, wiarygodne założenia i czyste spekulacje. Na przykład pojawienie się tesseraktu bez wahania zalicza do najśmielszych wymysłów."><b>Насправді.</b> Статус наукового консультанта не робить усе показане єдиною правдою. Торн самостійно розмежовує кінематографічні ефекти на доведену науку, правдоподібні припущення та чисті спекуляції. Наприклад, появу тесеракта він без вагань зараховує до найсміливіших вигадок.</p>
   </section>
 
   <section class="sec" id="bh-sec">
-    <h2><span class="num">02</span><span class="badge sci">наука</span>Як насправді виглядає Гаргантюа</h2>
-    <p>Сама чорна діра не випромінює світло, проте навколо неї вирує величний диск розпеченого газу, а колосальне тяжіння викривлює світлові промені. Завдяки цьому ми бачимо не лише лицьовий бік диска, а й ту його частину, що ховається позаду діри: світло обгинає небесне тіло і приходить до нас. Через такий ефект сяючий диск немов огортає темну тінь зверху та знизу.</p>
-    <p>Для втілення цього ефекту студія візуальних ефектів Double Negative розробила спеціальний алгоритм DNGR. Програма скрупульозно відстежувала траєкторію кожного світлового променя за законами загальної теорії відносності. На інтерактивній схемі нижче цей процес показано в мініатюрі: браузерний рушій прораховує викривлення променя від камери поблизу чорної діри та визначає його кінцевий шлях і колір.</p>
-    <div class="ctl" style="margin-bottom:0">
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;02&lt;/span&gt;&lt;span class=&quot;badge sci&quot;&gt;nauka&lt;/span&gt;Jak naprawdę wygląda Gargantua"><span class="num">02</span><span class="badge sci">наука</span>Як насправді виглядає Гаргантюа</h2>
+    <p data-pl="Sama czarna dziura nie emituje światła, ale wokół niej wiruje majestatyczny dysk rozgrzanego gazu, a ogromna grawitacja zakrzywia promienie światła. Dzięki temu widzimy nie tylko przednią stronę dysku, ale i tę jego część, która chowa się za dziurą: światło okrąża ciało niebieskie i dociera do nas. Przez ten efekt świecący dysk jakby otula ciemny cień z góry i z dołu.">Сама чорна діра не випромінює світло, проте навколо неї вирує величний диск розпеченого газу, а колосальне тяжіння викривлює світлові промені. Завдяки цьому ми бачимо не лише лицьовий бік диска, а й ту його частину, що ховається позаду діри: світло обгинає небесне тіло і приходить до нас. Через такий ефект сяючий диск немов огортає темну тінь зверху та знизу.</p>
+    <p data-pl="Aby uzyskać ten efekt, studio efektów wizualnych Double Negative opracowało specjalny algorytm DNGR. Program skrupulatnie śledził trajektorię każdego promienia światła zgodnie z prawami ogólnej teorii względności. Interaktywny schemat poniżej pokazuje ten proces w miniaturze: silnik w przeglądarce oblicza zakrzywienie promienia od kamery w pobliżu czarnej dziury i wyznacza jego końcową drogę i kolor.">Для втілення цього ефекту студія візуальних ефектів Double Negative розробила спеціальний алгоритм DNGR. Програма скрупульозно відстежувала траєкторію кожного світлового променя за законами загальної теорії відносності. На інтерактивній схемі нижче цей процес показано в мініатюрі: браузерний рушій прораховує викривлення променя від камери поблизу чорної діри та визначає його кінцевий шлях і колір.</p>
+    <div class="ctl" style="margin-bottom:0" data-pl="&lt;span class=&quot;seg&quot; id=&quot;bhMode&quot; role=&quot;group&quot; aria-label=&quot;Tryb&quot;&gt;&lt;button type=&quot;button&quot; data-m=&quot;film&quot; class=&quot;on&quot;&gt;Jak w filmie&lt;/button&gt;&lt;button type=&quot;button&quot; data-m=&quot;real&quot;&gt;Jak byłoby naprawdę&lt;/button&gt;&lt;/span&gt;
+      &lt;span class=&quot;seg&quot; id=&quot;bhView&quot; role=&quot;group&quot; aria-label=&quot;Kąt&quot;&gt;&lt;button type=&quot;button&quot; data-p=&quot;0.035&quot; class=&quot;on&quot;&gt;W płaszczyźnie dysku&lt;/button&gt;&lt;button type=&quot;button&quot; data-p=&quot;0.35&quot;&gt;Trochę z góry&lt;/button&gt;&lt;button type=&quot;button&quot; data-p=&quot;1.3&quot;&gt;Z góry&lt;/button&gt;&lt;/span&gt;">
       <span class="seg" id="bhMode" role="group" aria-label="Режим"><button type="button" data-m="film" class="on">Як у фільмі</button><button type="button" data-m="real">Як було б насправді</button></span>
       <span class="seg" id="bhView" role="group" aria-label="Кут"><button type="button" data-p="0.035" class="on">У площині диска</button><button type="button" data-p="0.35">Трохи згори</button><button type="button" data-p="1.3">Згори</button></span>
     </div>
     <div class="simw">
-      <div><div class="bhw" id="bh"><span class="bhcap">тягніть — обертати, колесо — ближче/далі</span></div></div>
+      <div><div class="bhw" id="bh" data-pl="&lt;span class=&quot;bhcap&quot;&gt;przeciągnij — obracaj, kółko — bliżej/dalej&lt;/span&gt;"><span class="bhcap">тягніть — обертати, колесо — ближче/далі</span></div></div>
       <div class="simside">
-        <div class="simnote bhnote" data-m="film"><b>Як у фільмі.</b> Диск однаково яскравий з обох боків. Насправді з одного боку газ летить до нас, а з іншого — від нас, і це сильно змінило б картинку. Нолан і команда свідомо прибрали цей ефект: глядач заплутався б, а для сюжету він нічого не дає.</div>
-        <div class="simnote bhnote" data-m="real" hidden><b>Як було б насправді.</b> Газ у диску летить зі швидкістю в десятки відсотків від швидкості світла. Бік, що наближається, стає яскравішим і синішим, бік, що віддаляється, — тьмянішим і червонішим. А біля самого горизонту світло ще й втрачає енергію, важко вибираючись із гравітаційної ями. Саме таку асиметрію видно на справжніх знімках тіні M87* (2019) і Стрільця A* (2022) від телескопа Event Horizon.</div>
-        <p class="chint" style="margin-top:10px">Спрощення сцени: діра тут не обертається, а візерунок газу в диску умовний. Гаргантюа у фільмі обертається майже з граничною швидкістю, від цього тінь трохи сплющується з одного боку. Форма тіні й «обіймів» диска рахується точно. Корабель на передньому плані — звичайна 3D-модель поверх розрахованої картинки, тяжіння діри його світло не згинає.</p>
+        <div class="simnote bhnote" data-m="film" data-pl="&lt;b&gt;Jak w filmie.&lt;/b&gt; Dysk jest równie jasny z obu stron. W rzeczywistości z jednej strony gaz leci ku nam, a z drugiej — od nas, i to mocno zmieniłoby obraz. Nolan i zespół świadomie usunęli ten efekt: widz by się pogubił, a dla fabuły nic on nie wnosi."><b>Як у фільмі.</b> Диск однаково яскравий з обох боків. Насправді з одного боку газ летить до нас, а з іншого — від нас, і це сильно змінило б картинку. Нолан і команда свідомо прибрали цей ефект: глядач заплутався б, а для сюжету він нічого не дає.</div>
+        <div class="simnote bhnote" data-m="real" hidden data-pl="&lt;b&gt;Jak byłoby naprawdę.&lt;/b&gt; Gaz w dysku pędzi z prędkością dziesiątek procent prędkości światła. Strona, która się zbliża, staje się jaśniejsza i bardziej niebieska, a ta, która się oddala, — ciemniejsza i bardziej czerwona. A przy samym horyzoncie światło dodatkowo traci energię, z trudem wydostając się ze studni grawitacyjnej. Właśnie taką asymetrię widać na prawdziwych zdjęciach cienia M87* (2019) i Strzelca A* (2022) z teleskopu Event Horizon."><b>Як було б насправді.</b> Газ у диску летить зі швидкістю в десятки відсотків від швидкості світла. Бік, що наближається, стає яскравішим і синішим, бік, що віддаляється, — тьмянішим і червонішим. А біля самого горизонту світло ще й втрачає енергію, важко вибираючись із гравітаційної ями. Саме таку асиметрію видно на справжніх знімках тіні M87* (2019) і Стрільця A* (2022) від телескопа Event Horizon.</div>
+        <p class="chint" style="margin-top:10px" data-pl="Uproszczenie sceny: dziura się tu nie obraca, a wzór gazu w dysku jest umowny. Gargantua w filmie obraca się niemal z prędkością graniczną, przez co cień jest z jednej strony nieco spłaszczony. Kształt cienia i „objęć” dysku jest liczony dokładnie. Statek na pierwszym planie to zwykły model 3D na wierzchu obliczonego obrazu — grawitacja dziury nie zagina jego światła.">Спрощення сцени: діра тут не обертається, а візерунок газу в диску умовний. Гаргантюа у фільмі обертається майже з граничною швидкістю, від цього тінь трохи сплющується з одного боку. Форма тіні й «обіймів» диска рахується точно. Корабель на передньому плані — звичайна 3D-модель поверх розрахованої картинки, тяжіння діри його світло не згинає.</p>
       </div>
     </div>
-    <p class="trap"><b>Цікавий факт.</b> Чорна діра зовсім не схожа на воронку чи звичайну темну кулю. Її центральна тінь приблизно вдвічі з половиною перевищує розмір горизонту подій — саме таку площу займають світлові промені, звідки немає вороття.</p>
+    <p class="trap" data-pl="&lt;b&gt;Ciekawostka.&lt;/b&gt; Czarna dziura wcale nie przypomina lejka ani zwykłej ciemnej kuli. Jej centralny cień jest mniej więcej dwa i pół raza większy od horyzontu zdarzeń — właśnie taki obszar zajmują promienie światła, dla których nie ma powrotu."><b>Цікавий факт.</b> Чорна діра зовсім не схожа на воронку чи звичайну темну кулю. Її центральна тінь приблизно вдвічі з половиною перевищує розмір горизонту подій — саме таку площу займають світлові промені, звідки немає вороття.</p>
   </section>
 
   <section class="sec" id="time">
-    <h2><span class="num">03</span><span class="badge sci">наука</span>Одна година, що дорівнює семи рокам</h2>
-    <p>На таємничій планеті Міллер кожна прожита година еквівалентна семи земним рокам. Причина криється у гравітаційному сповільненні часу: чим глибше об'єкт занурений у гравітаційну яму, тим повільніше для нього плине час. Цей феномен абсолютно реальний — скажімо, навігаційні супутники GPS щодня коригують свої годинники на частки мікросекунд через слабшу гравітацію на орбіті.</p>
-    <p>Проте уповільнення у 61 тисячу разів — показник екстремальний. Поблизу нерухомої чорної діри планета не змогла б утриматися ближче ніж на відстані трьох радіусів горизонту, і час там сповільнився б лише в 1,4 раза. Торн знайшов витончений вихід: якщо чорна діра обертається на граничній швидкості, найближча безпечна орбіта зсувається впритул до горизонту. Покрутіть повзунок обертання, щоб побачити трансформацію часу.</p>
-    <div class="ctl"><label>Обертання діри <input type="range" id="spinSl" min="0" max="1000" value="0" style="width:220px"></label>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;03&lt;/span&gt;&lt;span class=&quot;badge sci&quot;&gt;nauka&lt;/span&gt;Jedna godzina równa siedmiu latom"><span class="num">03</span><span class="badge sci">наука</span>Одна година, що дорівнює семи рокам</h2>
+    <p data-pl="Na tajemniczej planecie Miller każda przeżyta godzina odpowiada siedmiu latom na Ziemi. Przyczyną jest grawitacyjne spowolnienie czasu: im głębiej obiekt jest zanurzony w studni grawitacyjnej, tym wolniej płynie dla niego czas. To zjawisko jest całkowicie realne — na przykład satelity nawigacyjne GPS codziennie korygują swoje zegary o ułamki mikrosekund z powodu słabszej grawitacji na orbicie.">На таємничій планеті Міллер кожна прожита година еквівалентна семи земним рокам. Причина криється у гравітаційному сповільненні часу: чим глибше об'єкт занурений у гравітаційну яму, тим повільніше для нього плине час. Цей феномен абсолютно реальний — скажімо, навігаційні супутники GPS щодня коригують свої годинники на частки мікросекунд через слабшу гравітацію на орбіті.</p>
+    <p data-pl="Jednak spowolnienie 61 tysięcy razy to wartość ekstremalna. W pobliżu nieruchomej czarnej dziury planeta nie utrzymałaby się bliżej niż w odległości trzech promieni horyzontu, a czas zwolniłby tam zaledwie 1,4 raza. Thorne znalazł eleganckie wyjście: jeśli czarna dziura obraca się z prędkością graniczną, najbliższa bezpieczna orbita przesuwa się tuż pod horyzont. Przesuń suwak obrotu, aby zobaczyć, jak zmienia się czas.">Проте уповільнення у 61 тисячу разів — показник екстремальний. Поблизу нерухомої чорної діри планета не змогла б утриматися ближче ніж на відстані трьох радіусів горизонту, і час там сповільнився б лише в 1,4 раза. Торн знайшов витончений вихід: якщо чорна діра обертається на граничній швидкості, найближча безпечна орбіта зсувається впритул до горизонту. Покрутіть повзунок обертання, щоб побачити трансформацію часу.</p>
+    <div class="ctl" data-pl="&lt;label&gt;Obrót dziury &lt;input type=&quot;range&quot; id=&quot;spinSl&quot; min=&quot;0&quot; max=&quot;1000&quot; value=&quot;0&quot; style=&quot;width:220px&quot;&gt;&lt;/label&gt;
+      &lt;button type=&quot;button&quot; class=&quot;chipbtn&quot; id=&quot;spinGarg&quot;&gt;jak u Gargantui&lt;/button&gt;"><label>Обертання діри <input type="range" id="spinSl" min="0" max="1000" value="0" style="width:220px"></label>
       <button type="button" class="chipbtn" id="spinGarg">як у Гаргантюа</button></div>
     <div class="spinw">
       <canvas id="orbitCv" role="img" aria-label="Діра згори: горизонт, найближча стійка орбіта і планета"></canvas>
       <div class="calc calc--col">
-        <div><span>обертання (a = 1 — граничне)</span><b id="spinA"></b></div>
-        <div><span>найближча стійка орбіта</span><b id="spinR"></b></div>
-        <div><span>час на орбіті повільніший у</span><b id="spinK"></b></div>
-        <div><span>1 година на орбіті — на Землі</span><b id="spinH"></b></div>
+        <div data-pl="&lt;span&gt;obrót (a = 1 — graniczny)&lt;/span&gt;&lt;b id=&quot;spinA&quot;&gt;&lt;/b&gt;"><span>обертання (a = 1 — граничне)</span><b id="spinA"></b></div>
+        <div data-pl="&lt;span&gt;najbliższa stabilna orbita&lt;/span&gt;&lt;b id=&quot;spinR&quot;&gt;&lt;/b&gt;"><span>найближча стійка орбіта</span><b id="spinR"></b></div>
+        <div data-pl="&lt;span&gt;czas na orbicie wolniejszy&lt;/span&gt;&lt;b id=&quot;spinK&quot;&gt;&lt;/b&gt;"><span>час на орбіті повільніший у</span><b id="spinK"></b></div>
+        <div data-pl="&lt;span&gt;1 godzina na orbicie — na Ziemi&lt;/span&gt;&lt;b id=&quot;spinH&quot;&gt;&lt;/b&gt;"><span>1 година на орбіті — на Землі</span><b id="spinH"></b></div>
       </div>
     </div>
     <p class="chint" id="spinNote"></p>
-    <p class="chint">Схема згори в радіусах GM/c²: чорне коло — горизонт, пунктир — найближча стійка орбіта діри без обертання (6 радіусів), світле коло — найближча стійка орбіта при вибраному обертанні, крапка — планета. Що ближче орбіта до горизонту, то червоніше світиться планета: глибше в гравітаційній ямі. Формули — Бардін, Прес і Тьюколскі (1972).</p>
+    <p class="chint" data-pl="Schemat z góry w promieniach GM/c²: czarny okrąg — horyzont, linia przerywana — najbliższa stabilna orbita dziury bez obrotu (6 promieni), jasny okrąg — najbliższa stabilna orbita przy wybranym obrocie, kropka — planeta. Im bliżej horyzontu orbita, tym bardziej czerwono świeci planeta: głębiej w studni grawitacyjnej. Wzory — Bardeen, Press i Teukolsky (1972).">Схема згори в радіусах GM/c²: чорне коло — горизонт, пунктир — найближча стійка орбіта діри без обертання (6 радіусів), світле коло — найближча стійка орбіта при вибраному обертанні, крапка — планета. Що ближче орбіта до горизонту, то червоніше світиться планета: глибше в гравітаційній ямі. Формули — Бардін, Прес і Тьюколскі (1972).</p>
 
     <div id="viz-time" class="viz-slot"></div>
 
 
-    <p>Для маси Гаргантюа, що становить близько 100 мільйонів мас Сонця, вчений підібрав швидкість обертання, яка поступається граничній лише на мінімальне значення 1,3·10⁻¹⁴. Математичний розрахунок із такими параметрами дає якраз той самий коефіцієнт — близько 62 тисяч, що забезпечує сюжетну умову про «годину за сім років».</p>
-    <p>Тут ховається чесне застереження. Ще 1974 року той самий Кіп Торн показав, що газ, падаючи на чорну діру, розкручує її лише до a ≈ 0,998: випромінювання диска гальмує подальше розкручування. Тож Гаргантюа з обертанням 1 − 1,3·10⁻¹⁴ — свідоме припущення заради сюжету: фізика його не забороняє, але природа таких дір, найімовірніше, не створює. За a = 0,998 розрахунок дає множник лише близько 11 — година на планеті обернулася б одинадцятьма годинами на Землі.</p>
-    <p class="trap"><b>Насправді.</b> Для членів екіпажу на самій планеті час плине абсолютно звично — ніхто не відчуває дивних ривків. Помітною різниця стає лише після повернення на корабель і порівняння циферблатів.</p>
+    <p data-pl="Dla masy Gargantui, wynoszącej około 100 milionów mas Słońca, naukowiec dobrał prędkość obrotu, która ustępuje granicznej zaledwie o minimalną wartość 1,3·10⁻¹⁴. Obliczenie z takimi parametrami daje właśnie ten współczynnik — około 62 tysięcy, który zapewnia fabularny warunek „godzina za siedem lat”.">Для маси Гаргантюа, що становить близько 100 мільйонів мас Сонця, вчений підібрав швидкість обертання, яка поступається граничній лише на мінімальне значення 1,3·10⁻¹⁴. Математичний розрахунок із такими параметрами дає якраз той самий коефіцієнт — близько 62 тисяч, що забезпечує сюжетну умову про «годину за сім років».</p>
+    <p data-pl="Tu kryje się uczciwe zastrzeżenie. Już w 1974 roku ten sam Kip Thorne pokazał, że gaz spadający na czarną dziurę rozkręca ją tylko do a ≈ 0,998: promieniowanie dysku hamuje dalsze rozkręcanie. Dlatego Gargantua z obrotem 1 − 1,3·10⁻¹⁴ to świadome założenie na potrzeby fabuły: fizyka go nie zabrania, ale natura takich dziur najpewniej nie tworzy. Przy a = 0,998 obliczenie daje mnożnik zaledwie około 11 — godzina na planecie oznaczałaby jedenaście godzin na Ziemi.">Тут ховається чесне застереження. Ще 1974 року той самий Кіп Торн показав, що газ, падаючи на чорну діру, розкручує її лише до a ≈ 0,998: випромінювання диска гальмує подальше розкручування. Тож Гаргантюа з обертанням 1 − 1,3·10⁻¹⁴ — свідоме припущення заради сюжету: фізика його не забороняє, але природа таких дір, найімовірніше, не створює. За a = 0,998 розрахунок дає множник лише близько 11 — година на планеті обернулася б одинадцятьма годинами на Землі.</p>
+    <p class="trap" data-pl="&lt;b&gt;W rzeczywistości.&lt;/b&gt; Dla członków załogi na samej planecie czas płynie zupełnie zwyczajnie — nikt nie odczuwa dziwnych skoków. Różnica staje się widoczna dopiero po powrocie na statek i porównaniu tarcz zegarów."><b>Насправді.</b> Для членів екіпажу на самій планеті час плине абсолютно звично — ніхто не відчуває дивних ривків. Помітною різниця стає лише після повернення на корабель і порівняння циферблатів.</p>
   </section>
 
   <section class="sec" id="twins-sec">
-    <h2><span class="num">04</span><span class="badge sci">наука</span>Близнюки, які опинилися в різних епохах</h2>
-    <p>Купер вирушає в космос, коли його маленькій доньці Мерф виповнилося лише десять років. На фінальних кадрах фільму вона зустрічає його сивою літньою жінкою, тоді як сам мандрівник майже не змінився. Це класичне втілення відомого парадоксу близнюків: годинники розходяться, бо долають різні траєкторії у просторі-часі. Насправді жодного парадоксу тут немає — кожен просто пройшов власним шляхом різної довжини.</p>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;04&lt;/span&gt;&lt;span class=&quot;badge sci&quot;&gt;nauka&lt;/span&gt;Bliźnięta, które trafiły w różne epoki"><span class="num">04</span><span class="badge sci">наука</span>Близнюки, які опинилися в різних епохах</h2>
+    <p data-pl="Cooper wyrusza w kosmos, gdy jego mała córka Murph ma zaledwie dziesięć lat. W ostatnich scenach filmu spotyka go jako siwa starsza kobieta, podczas gdy sam podróżnik prawie się nie zmienił. To klasyczne wcielenie znanego paradoksu bliźniąt: zegary się rozchodzą, bo przebywają różne trajektorie w czasoprzestrzeni. W rzeczywistości nie ma tu żadnego paradoksu — każdy po prostu przeszedł własną drogę o innej długości.">Купер вирушає в космос, коли його маленькій доньці Мерф виповнилося лише десять років. На фінальних кадрах фільму вона зустрічає його сивою літньою жінкою, тоді як сам мандрівник майже не змінився. Це класичне втілення відомого парадоксу близнюків: годинники розходяться, бо долають різні траєкторії у просторі-часі. Насправді жодного парадоксу тут немає — кожен просто пройшов власним шляхом різної довжини.</p>
     <div id="viz-twins" class="viz-slot"></div>
     <div id="viz-dust" class="viz-slot"></div>
-    <p class="trap"><b>Важливо.</b> Колосальну різницю у віці спричиняє зовсім не швидкість польоту корабля. Головним каталізатором у сюжеті «Інтерстеллара» виступає потужна гравітація велетня Гаргантюа.</p>
+    <p class="trap" data-pl="&lt;b&gt;Ważne.&lt;/b&gt; Ogromnej różnicy wieku wcale nie powoduje prędkość lotu statku. Głównym katalizatorem w fabule „Interstellar” jest potężna grawitacja olbrzyma Gargantui."><b>Важливо.</b> Колосальну різницю у віці спричиняє зовсім не швидкість польоту корабля. Головним каталізатором у сюжеті «Інтерстеллара» виступає потужна гравітація велетня Гаргантюа.</p>
   </section>
 
   <section class="sec" id="tides">
-    <h2><span class="num">05</span><span class="badge simp">спрощення</span>Гігантські хвилі на водній планеті</h2>
-    <p>Головна небезпека поблизу чорної діри полягає не в загальному притяганні, а в припливних силах — різниці тяжіння між ближньою і дальньою точками об'єкта. Вони нещадно розтягують будь-яке тіло вздовж радіуса. Дивовижний факт: чим масивніша чорна діра, тим м'якшими стають припливні сили біля її горизонту. Саме тому Торн наділив Гаргантюа колосальною масою, інакше планета Міллер була б моментально розірвана на частини.</p>
-    <div class="ctl"><label>Маса діри <input type="range" id="tideSl" min="5" max="100" value="10" style="width:220px"></label></div>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;05&lt;/span&gt;&lt;span class=&quot;badge simp&quot;&gt;uproszczenie&lt;/span&gt;Gigantyczne fale na wodnej planecie"><span class="num">05</span><span class="badge simp">спрощення</span>Гігантські хвилі на водній планеті</h2>
+    <p data-pl="Główne niebezpieczeństwo w pobliżu czarnej dziury tkwi nie w ogólnym przyciąganiu, lecz w siłach pływowych — różnicy grawitacji między bliższym a dalszym punktem obiektu. Bezlitośnie rozciągają one każde ciało wzdłuż promienia. Zaskakujący fakt: im masywniejsza czarna dziura, tym łagodniejsze są siły pływowe przy jej horyzoncie. Właśnie dlatego Thorne obdarzył Gargantuę ogromną masą, inaczej planeta Miller zostałaby natychmiast rozerwana na kawałki.">Головна небезпека поблизу чорної діри полягає не в загальному притяганні, а в припливних силах — різниці тяжіння між ближньою і дальньою точками об'єкта. Вони нещадно розтягують будь-яке тіло вздовж радіуса. Дивовижний факт: чим масивніша чорна діра, тим м'якшими стають припливні сили біля її горизонту. Саме тому Торн наділив Гаргантюа колосальною масою, інакше планета Міллер була б моментально розірвана на частини.</p>
+    <div class="ctl" data-pl="&lt;label&gt;Masa dziury &lt;input type=&quot;range&quot; id=&quot;tideSl&quot; min=&quot;5&quot; max=&quot;100&quot; value=&quot;10&quot; style=&quot;width:220px&quot;&gt;&lt;/label&gt;"><label>Маса діри <input type="range" id="tideSl" min="5" max="100" value="10" style="width:220px"></label></div>
     <div class="calc">
-      <div><span>маса</span><b id="tideM"></b></div>
-      <div><span>радіус горизонту</span><b id="tideR"></b></div>
-      <div><span>розтяг людини 2 м на горизонті</span><b id="tideG"></b></div>
-      <div><span>людина</span><b id="tideV"></b></div>
+      <div data-pl="&lt;span&gt;masa&lt;/span&gt;&lt;b id=&quot;tideM&quot;&gt;&lt;/b&gt;"><span>маса</span><b id="tideM"></b></div>
+      <div data-pl="&lt;span&gt;promień horyzontu&lt;/span&gt;&lt;b id=&quot;tideR&quot;&gt;&lt;/b&gt;"><span>радіус горизонту</span><b id="tideR"></b></div>
+      <div data-pl="&lt;span&gt;rozciąganie człowieka 2 m na horyzoncie&lt;/span&gt;&lt;b id=&quot;tideG&quot;&gt;&lt;/b&gt;"><span>розтяг людини 2 м на горизонті</span><b id="tideG"></b></div>
+      <div data-pl="&lt;span&gt;człowiek&lt;/span&gt;&lt;b id=&quot;tideV&quot;&gt;&lt;/b&gt;"><span>людина</span><b id="tideV"></b></div>
     </div>
     <div id="viz-tides" class="viz-slot"></div>
-    <p class="chint">Оцінка за Ньютоном: різниця прискорень голови й ніг 2GM·L/r³ на горизонті невращаючої діри. Для зоряної діри (10 мас Сонця) це десятки мільйонів g, для Гаргантюа — менше мільйонної частки g.</p>
-    <p>Оскільки планета у тисячі разів більша за людину, припливний вплив на неї залишається потужним. За задумом Торна, це деформує світ, а велетенські хвилі виникають через легке розгойдування планети навколо чорної діри. Така гіпотеза виглядає переконливо, але в самому фільмі цих розрахунків не наводять, через що ми залишаємо позначку спрощення.</p>
-    <p class="trap"><b>Цікавий факт.</b> Перетин горизонту не завжди супроводжується загибеллю. Біля надмасивної чорної діри мандрівник може пройти межу непомітно, а головні загрози зустрінуть його вже всередині.</p>
+    <p class="chint" data-pl="Szacunek według Newtona: różnica przyspieszeń głowy i stóp 2GM·L/r³ na horyzoncie nieobracającej się dziury. Dla dziury gwiazdowej (10 mas Słońca) to dziesiątki milionów g, dla Gargantui — mniej niż milionowa część g.">Оцінка за Ньютоном: різниця прискорень голови й ніг 2GM·L/r³ на горизонті невращаючої діри. Для зоряної діри (10 мас Сонця) це десятки мільйонів g, для Гаргантюа — менше мільйонної частки g.</p>
+    <p data-pl="Ponieważ planeta jest tysiące razy większa od człowieka, wpływ pływowy na nią pozostaje potężny. Według koncepcji Thorne’a deformuje to świat, a gigantyczne fale powstają przez lekkie kołysanie się planety wokół czarnej dziury. Taka hipoteza brzmi przekonująco, ale w samym filmie tych obliczeń nie podano, dlatego zostawiamy oznaczenie uproszczenia.">Оскільки планета у тисячі разів більша за людину, припливний вплив на неї залишається потужним. За задумом Торна, це деформує світ, а велетенські хвилі виникають через легке розгойдування планети навколо чорної діри. Така гіпотеза виглядає переконливо, але в самому фільмі цих розрахунків не наводять, через що ми залишаємо позначку спрощення.</p>
+    <p class="trap" data-pl="&lt;b&gt;Ciekawostka.&lt;/b&gt; Przekroczenie horyzontu nie zawsze oznacza śmierć. Przy supermasywnej czarnej dziurze podróżnik może niepostrzeżenie minąć granicę, a główne zagrożenia spotkają go dopiero w środku."><b>Цікавий факт.</b> Перетин горизонту не завжди супроводжується загибеллю. Біля надмасивної чорної діри мандрівник може пройти межу непомітно, а головні загрози зустрінуть його вже всередині.</p>
   </section>
 
   <section class="sec" id="blue">
-    <h2><span class="num">06</span><span class="badge simp">спрощення</span>За кадром фільму: ефект блакитного зсуву</h2>
-    <p>Якщо час на планеті сповільнений у 61 тисячу разів, то й світлові потоки, що падають із глибин космосу, надходять у 61 тисячу разів стрімкіше. Кожна електромагнітна хвиля катастрофічно стискається, а частота випромінювання стрімко зростає. Реліктове випромінювання з початковою температурою 2,7 кельвіна перетворилося б на планеті Міллер на жорстке рентгенівське випромінювання з температурами понад 160 тисяч градусів. Додавши сюди світло зір і навколишнього диска, ми отримали б повністю випалену поверхню.</p>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;06&lt;/span&gt;&lt;span class=&quot;badge simp&quot;&gt;uproszczenie&lt;/span&gt;Poza kadrem: efekt przesunięcia ku błękitowi"><span class="num">06</span><span class="badge simp">спрощення</span>За кадром фільму: ефект блакитного зсуву</h2>
+    <p data-pl="Jeśli czas na planecie jest spowolniony 61 tysięcy razy, to i światło spadające z głębin kosmosu dociera 61 tysięcy razy szybciej. Każda fala elektromagnetyczna zostaje katastrofalnie ściśnięta, a częstotliwość promieniowania gwałtownie rośnie. Promieniowanie reliktowe o początkowej temperaturze 2,7 kelwina zmieniłoby się na planecie Miller w twarde promieniowanie rentgenowskie o temperaturze ponad 160 tysięcy stopni. Dodając do tego światło gwiazd i otaczającego dysku, otrzymalibyśmy całkowicie wypaloną powierzchnię.">Якщо час на планеті сповільнений у 61 тисячу разів, то й світлові потоки, що падають із глибин космосу, надходять у 61 тисячу разів стрімкіше. Кожна електромагнітна хвиля катастрофічно стискається, а частота випромінювання стрімко зростає. Реліктове випромінювання з початковою температурою 2,7 кельвіна перетворилося б на планеті Міллер на жорстке рентгенівське випромінювання з температурами понад 160 тисяч градусів. Додавши сюди світло зір і навколишнього диска, ми отримали б повністю випалену поверхню.</p>
     <div id="viz-blue" class="viz-slot"></div>
-    <p>Кіп Торн відкрито згадує цю проблему у своїй книзі. Виходом стало припущення, що Гаргантюа є відносно спокійною чорною дірою з тьмяним диском, а решту технічних деталей сценаристи просто залишили за кадром. Через це ставиться позначка спрощення: суворі закони фізики тут не порушені грубо, проте вкрай руйнівні наслідки навмисно проігноровані.</p>
-    <p class="trap"><b>Висновок.</b> Час і світло нерозривно пов'язані між собою: гравітаційне сповільнення та блакитний зсув є двома сторонами єдиного фундаментального процесу.</p>
+    <p data-pl="Kip Thorne otwarcie wspomina o tym problemie w swojej książce. Wyjściem było założenie, że Gargantua jest stosunkowo spokojną czarną dziurą z przyćmionym dyskiem, a resztę szczegółów technicznych scenarzyści po prostu zostawili poza kadrem. Dlatego stawiamy oznaczenie uproszczenia: surowe prawa fizyki nie są tu rażąco złamane, ale skrajnie niszczycielskie skutki celowo pominięto.">Кіп Торн відкрито згадує цю проблему у своїй книзі. Виходом стало припущення, що Гаргантюа є відносно спокійною чорною дірою з тьмяним диском, а решту технічних деталей сценаристи просто залишили за кадром. Через це ставиться позначка спрощення: суворі закони фізики тут не порушені грубо, проте вкрай руйнівні наслідки навмисно проігноровані.</p>
+    <p class="trap" data-pl="&lt;b&gt;Wniosek.&lt;/b&gt; Czas i światło są nierozerwalnie ze sobą związane: grawitacyjne spowolnienie i przesunięcie ku błękitowi to dwie strony jednego fundamentalnego procesu."><b>Висновок.</b> Час і світло нерозривно пов'язані між собою: гравітаційне сповільнення та блакитний зсув є двома сторонами єдиного фундаментального процесу.</p>
   </section>
 
   <section class="sec" id="worm">
-    <h2><span class="num">07</span><span class="badge simp">спрощення</span>Таємнича червоточина біля Сатурна</h2>
-    <p>У кінематографічному світі червоточина виглядає не як плоска вирва, а як тривимірна куля, крізь яку проглядає зовсім інше зоряне небо. Це фізично обґрунтовано: тунель з'єднує віддалені регіони Всесвіту, і світло з протилежного кінця пробивається крізь горловину з усіх боків. Поблизу країв кулі світлові промені з нашого боку викривлюються настільки сильно, що зірки перетворюються на витончені світлові дуги. Команда Торна ретельно прорахувала цей візуальний ефект і 2015 року опублікувала окремою науковою статтею.</p>
-    <div class="bhw whw" id="wh"><span class="bhcap">тягніть — обертати, колесо — ближче/далі</span></div>
-    <p class="chint">Схема: за «горлом» — інше небо з пурпуровою туманністю, біля краю — наше небо, вигнуте лінзуванням, ліворуч — Сатурн. Лінзування тут наближене, а не точне, як у статті 2015 року.</p>
-    <p>Чи можуть такі червоточини існувати — відкрите питання. Загальна теорія відносності їх дозволяє, але щоб горло не схлопнулося, потрібна речовина з від'ємною енергією, а як її отримати у великій кількості, невідомо. Тому вигляд червоточини — наука, а її існування — припущення.</p>
-    <p class="trap"><b>Не плутати.</b> Червоточина жодним чином не є чорною дірою. Крізь безпечний прохід тунелю можна мандрувати в обидва боки, тоді як у чорну діру веде дорога виключно в один кінець.</p>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;07&lt;/span&gt;&lt;span class=&quot;badge simp&quot;&gt;uproszczenie&lt;/span&gt;Tajemniczy tunel czasoprzestrzenny przy Saturnie"><span class="num">07</span><span class="badge simp">спрощення</span>Таємнича червоточина біля Сатурна</h2>
+    <p data-pl="W filmowym świecie tunel czasoprzestrzenny nie wygląda jak płaski lej, lecz jak trójwymiarowa kula, przez którą prześwituje zupełnie inne gwiaździste niebo. To ma fizyczne uzasadnienie: tunel łączy odległe rejony Wszechświata, a światło z drugiego końca przebija się przez gardziel ze wszystkich stron. W pobliżu krawędzi kuli promienie światła z naszej strony zakrzywiają się tak mocno, że gwiazdy zamieniają się w wytworne świetlne łuki. Zespół Thorne’a starannie przeliczył ten efekt wizualny i w 2015 roku opublikował go w osobnym artykule naukowym.">У кінематографічному світі червоточина виглядає не як плоска вирва, а як тривимірна куля, крізь яку проглядає зовсім інше зоряне небо. Це фізично обґрунтовано: тунель з'єднує віддалені регіони Всесвіту, і світло з протилежного кінця пробивається крізь горловину з усіх боків. Поблизу країв кулі світлові промені з нашого боку викривлюються настільки сильно, що зірки перетворюються на витончені світлові дуги. Команда Торна ретельно прорахувала цей візуальний ефект і 2015 року опублікувала окремою науковою статтею.</p>
+    <div class="bhw whw" id="wh" data-pl="&lt;span class=&quot;bhcap&quot;&gt;przeciągnij — obracaj, kółko — bliżej/dalej&lt;/span&gt;"><span class="bhcap">тягніть — обертати, колесо — ближче/далі</span></div>
+    <p class="chint" data-pl="Schemat: za „gardzielą” — inne niebo z purpurową mgławicą, przy krawędzi — nasze niebo wygięte soczewkowaniem, po lewej — Saturn. Soczewkowanie jest tu przybliżone, a nie dokładne jak w artykule z 2015 roku.">Схема: за «горлом» — інше небо з пурпуровою туманністю, біля краю — наше небо, вигнуте лінзуванням, ліворуч — Сатурн. Лінзування тут наближене, а не точне, як у статті 2015 року.</p>
+    <p data-pl="Czy takie tunele mogą istnieć — to otwarte pytanie. Ogólna teoria względności na nie pozwala, ale żeby gardziel się nie zapadła, potrzebna jest materia o ujemnej energii, a nie wiadomo, jak uzyskać jej dużo. Dlatego wygląd tunelu to nauka, a jego istnienie — założenie.">Чи можуть такі червоточини існувати — відкрите питання. Загальна теорія відносності їх дозволяє, але щоб горло не схлопнулося, потрібна речовина з від'ємною енергією, а як її отримати у великій кількості, невідомо. Тому вигляд червоточини — наука, а її існування — припущення.</p>
+    <p class="trap" data-pl="&lt;b&gt;Nie mylić.&lt;/b&gt; Tunel czasoprzestrzenny w żaden sposób nie jest czarną dziurą. Przez bezpieczne przejście tunelu można podróżować w obie strony, podczas gdy do czarnej dziury prowadzi wyłącznie droga w jedną stronę."><b>Не плутати.</b> Червоточина жодним чином не є чорною дірою. Крізь безпечний прохід тунелю можна мандрувати в обидва боки, тоді як у чорну діру веде дорога виключно в один кінець.</p>
   </section>
 
   <section class="sec" id="tess">
-    <h2><span class="num">08</span><span class="badge fic">вигадка</span>Магія тесеракта та часові петлі</h2>
-    <p>Опиняючись усередині надмасивного Гаргантюа, Купер потрапляє до тесеракта — багатовимірного простору, де часова шкала кімнати Мерф перетворена на окрему фізичну координату, якою можна переміщатися. Звідти герой за допомогою азбуки Морзе та коливань стрілки годинника передає дочці розрахунки, необхідні для створення теорії квантової гравітації. Торн відверто визнає цей ефект відвертою спекуляцією: ідея додаткових вимірів розглядається у фізиці, але жодних підтверджень існування тесеракта не існує.</p>
-    <p>У сюжеті вибудовується класична замкнена петля: загадковий «привид» у дитячій кімнаті на початку історії — це сам дорослий Купер із майбутнього, а сам тесеракт зводять майбутні люди, врятовані завдяки цій передачі. Хто ж став першопричиною подій? Перед нами постає парадокс бутстрапа, де подія породжує саму себе. На відміну від парадоксу з дідусем, тут немає логічних суперечностей — історія залишається монолітною, хоча й замкнутою в коло.</p>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;08&lt;/span&gt;&lt;span class=&quot;badge fic&quot;&gt;fikcja&lt;/span&gt;Magia tesseraktu i pętle czasu"><span class="num">08</span><span class="badge fic">вигадка</span>Магія тесеракта та часові петлі</h2>
+    <p data-pl="Znalazłszy się wewnątrz supermasywnej Gargantui, Cooper trafia do tesseraktu — wielowymiarowej przestrzeni, w której oś czasu pokoju Murph stała się osobną współrzędną fizyczną, po której można się przemieszczać. Stamtąd bohater za pomocą alfabetu Morse’a i drgań wskazówki zegarka przekazuje córce obliczenia potrzebne do stworzenia teorii grawitacji kwantowej. Thorne szczerze uznaje ten efekt za otwartą spekulację: idea dodatkowych wymiarów jest rozważana w fizyce, ale nie ma żadnych dowodów na istnienie tesseraktu.">Опиняючись усередині надмасивного Гаргантюа, Купер потрапляє до тесеракта — багатовимірного простору, де часова шкала кімнати Мерф перетворена на окрему фізичну координату, якою можна переміщатися. Звідти герой за допомогою азбуки Морзе та коливань стрілки годинника передає дочці розрахунки, необхідні для створення теорії квантової гравітації. Торн відверто визнає цей ефект відвертою спекуляцією: ідея додаткових вимірів розглядається у фізиці, але жодних підтверджень існування тесеракта не існує.</p>
+    <p data-pl="W fabule powstaje klasyczna zamknięta pętla: tajemniczy „duch” w pokoju dziecięcym na początku historii to sam dorosły Cooper z przyszłości, a tesserakt budują przyszli ludzie, ocaleni dzięki tej transmisji. Kto więc był pierwszą przyczyną wydarzeń? Stajemy przed paradoksem bootstrapu, w którym zdarzenie rodzi samo siebie. W przeciwieństwie do paradoksu dziadka nie ma tu sprzeczności logicznych — historia pozostaje spójna, choć zamknięta w koło.">У сюжеті вибудовується класична замкнена петля: загадковий «привид» у дитячій кімнаті на початку історії — це сам дорослий Купер із майбутнього, а сам тесеракт зводять майбутні люди, врятовані завдяки цій передачі. Хто ж став першопричиною подій? Перед нами постає парадокс бутстрапа, де подія породжує саму себе. На відміну від парадоксу з дідусем, тут немає логічних суперечностей — історія залишається монолітною, хоча й замкнутою в коло.</p>
     <div id="viz-tess" class="viz-slot"></div>
-    <p class="trap"><b>Важливо.</b> Часова петля не має офіційного підтвердження у природі. Загальна теорія відносності теоретично дозволяє замкнені часові траєкторії, проте більшість фізиків вважають такі сценарії неможливими. Ще 1992 року Стівен Гокінг сформулював це припущення як гіпотезу захисту хронології.</p>
+    <p class="trap" data-pl="&lt;b&gt;Ważne.&lt;/b&gt; Pętla czasu nie ma oficjalnego potwierdzenia w przyrodzie. Ogólna teoria względności teoretycznie dopuszcza zamknięte trajektorie czasowe, ale większość fizyków uważa takie scenariusze za niemożliwe. Już w 1992 roku Stephen Hawking sformułował to przypuszczenie jako hipotezę ochrony chronologii."><b>Важливо.</b> Часова петля не має офіційного підтвердження у природі. Загальна теорія відносності теоретично дозволяє замкнені часові траєкторії, проте більшість фізиків вважають такі сценарії неможливими. Ще 1992 року Стівен Гокінг сформулював це припущення як гіпотезу захисту хронології.</p>
   </section>
 
   <section class="sec" id="map">
-    <h2><span class="num">09</span>Карта наукової достовірності</h2>
-    <p>Схема зводить усі ефекти фільму в три колонки. Наведіть на блок, щоб побачити, на що він спирається, або запустіть маршрут.</p>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;09&lt;/span&gt;Mapa naukowej wiarygodności"><span class="num">09</span>Карта наукової достовірності</h2>
+    <p data-pl="Schemat zbiera wszystkie efekty filmu w trzy kolumny. Najedź na blok, aby zobaczyć, na czym się opiera, albo uruchom trasę.">Схема зводить усі ефекти фільму в три колонки. Наведіть на блок, щоб побачити, на що він спирається, або запустіть маршрут.</p>
     <div class="cbox" data-comp="is"></div>
   </section>
 
   <section class="sec" id="refs">
-    <h2><span class="num">10</span>Сховані відсилки та кінематографічні пасхалки</h2>
-    <p>«Інтерстеллар» насичений тонкими посиланнями на класичні кінокартини, літературні твори та реальні історичні факти. Деякі з них є даниною поваги жанру наукової фантастики, інші ж спрямовують до серйозних досліджень.</p>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;10&lt;/span&gt;Ukryte nawiązania i filmowe easter eggi"><span class="num">10</span>Сховані відсилки та кінематографічні пасхалки</h2>
+    <p data-pl="„Interstellar” jest pełen subtelnych odniesień do klasycznych filmów, dzieł literackich i prawdziwych faktów historycznych. Niektóre z nich to hołd dla gatunku science fiction, inne kierują ku poważnym badaniom.">«Інтерстеллар» насичений тонкими посиланнями на класичні кінокартини, літературні твори та реальні історичні факти. Деякі з них є даниною поваги жанру наукової фантастики, інші ж спрямовують до серйозних досліджень.</p>
     <div id="viz-refs" class="viz-slot"></div>
   </section>
 
   <section class="sec" id="known">
-    <h2><span class="num">11</span>Що відомо сьогодні</h2>
-    <p>За п'ять років після прем'єри фільму колаборація Event Horizon Telescope оприлюднила перше реальне зображення тіні чорної діри в галактиці M87. Знімок продемонстрував разючу схожість із Гаргантюа, проте з яскравим асиметричним кільцем через ефект Доплера, яким творці фільму свідомо знехтували. У 2022 році вчені показали аналогічний знімок надмасивної діри в центрі нашої Галактики. Гравітаційне сповільнення часу сьогодні вимірюється з неймовірною точністю — сучасні атомні годинники здатні фіксувати різницю висот у кілька сантиметрів.</p>
-    <p>Існування стабільних червоточин і тесеракта поки що залишається у сфері теоретичних роздумів. А про складні правила руху трьох тіл, з яких стартує подорож корабля «Ендьюренс» біля Гаргантюа, детально розказано у статті <a href="33-three-body.html">«Задача трьох тіл»</a>.</p>
-    <p class="trap"><b>Висновок.</b> Оцінювати фізичну достовірність фільмів за принципом «на екрані показали, отже це можливо» чи «це лише художнє кіно» хибно. Набагато корисніше критично й окремо аналізувати кожен окремий ефект, як це зроблено у нашому розборі.</p>
-    <h3>Джерела</h3>
+    <h2 data-pl="&lt;span class=&quot;num&quot;&gt;11&lt;/span&gt;Co wiemy dziś"><span class="num">11</span>Що відомо сьогодні</h2>
+    <p data-pl="Pięć lat po premierze filmu współpraca Event Horizon Telescope opublikowała pierwszy prawdziwy obraz cienia czarnej dziury w galaktyce M87. Zdjęcie pokazało uderzające podobieństwo do Gargantui, ale z jasnym asymetrycznym pierścieniem wynikającym z efektu Dopplera, który twórcy filmu świadomie pominęli. W 2022 roku naukowcy pokazali podobne zdjęcie supermasywnej dziury w centrum naszej Galaktyki. Grawitacyjne spowolnienie czasu mierzy się dziś z niesamowitą dokładnością — nowoczesne zegary atomowe potrafią wychwycić różnicę wysokości kilku centymetrów.">За п'ять років після прем'єри фільму колаборація Event Horizon Telescope оприлюднила перше реальне зображення тіні чорної діри в галактиці M87. Знімок продемонстрував разючу схожість із Гаргантюа, проте з яскравим асиметричним кільцем через ефект Доплера, яким творці фільму свідомо знехтували. У 2022 році вчені показали аналогічний знімок надмасивної діри в центрі нашої Галактики. Гравітаційне сповільнення часу сьогодні вимірюється з неймовірною точністю — сучасні атомні годинники здатні фіксувати різницю висот у кілька сантиметрів.</p>
+    <p data-pl="Istnienie stabilnych tuneli czasoprzestrzennych i tesseraktu pozostaje na razie w sferze rozważań teoretycznych. A o skomplikowanych zasadach ruchu trzech ciał, od których zaczyna się podróż statku „Endurance” w pobliżu Gargantui, szczegółowo opowiada artykuł &lt;a href=&quot;33-three-body.html&quot;&gt;„Problem trzech ciał”&lt;/a&gt;.">Існування стабільних червоточин і тесеракта поки що залишається у сфері теоретичних роздумів. А про складні правила руху трьох тіл, з яких стартує подорож корабля «Ендьюренс» біля Гаргантюа, детально розказано у статті <a href="33-three-body.html">«Задача трьох тіл»</a>.</p>
+    <p class="trap" data-pl="&lt;b&gt;Wniosek.&lt;/b&gt; Ocenianie fizycznej wiarygodności filmów według zasady „pokazali na ekranie, więc to możliwe” albo „to tylko kino” jest błędne. O wiele bardziej przydatne jest krytyczne i osobne przeanalizowanie każdego efektu, tak jak zrobiliśmy to w tej analizie."><b>Висновок.</b> Оцінювати фізичну достовірність фільмів за принципом «на екрані показали, отже це можливо» чи «це лише художнє кіно» хибно. Набагато корисніше критично й окремо аналізувати кожен окремий ефект, як це зроблено у нашому розборі.</p>
+    <h3 data-pl="Źródła">Джерела</h3>
     <ul class="src29">
-      <li>K. Thorne — «The Science of Interstellar» (W. W. Norton, 2014): Гаргантюа, планета Міллер, припливи, блакитний зсув, тесеракт</li>
+      <li data-pl="K. Thorne — „The Science of Interstellar” (W. W. Norton, 2014): Gargantua, planeta Miller, pływy, przesunięcie ku błękitowi, tesserakt">K. Thorne — «The Science of Interstellar» (W. W. Norton, 2014): Гаргантюа, планета Міллер, припливи, блакитний зсув, тесеракт</li>
       <li><a href="https://arxiv.org/abs/1502.03808" target="_blank" rel="noopener">O. James, E. von Tunzelmann, P. Franklin, K. Thorne — Gravitational lensing by spinning black holes in astrophysics, and in the movie Interstellar (Classical and Quantum Gravity, 2015)</a></li>
       <li><a href="https://arxiv.org/abs/1502.03809" target="_blank" rel="noopener">O. James, E. von Tunzelmann, P. Franklin, K. Thorne — Visualizing Interstellar's Wormhole (American Journal of Physics, 2015)</a></li>
-      <li>J. Bardeen, W. Press, S. Teukolsky — Rotating black holes (Astrophysical Journal, 1972): орбіти навколо діри Керра</li>
-      <li><a href="https://eventhorizontelescope.org/" target="_blank" rel="noopener">Event Horizon Telescope</a>: знімки тіней M87* і Sgr A*</li>
-      <li>K. Thorne — Disk-accretion onto a black hole. II. Evolution of the hole (Astrophysical Journal, 1974): межа обертання a ≈ 0,998</li>
-      <li><a href="https://www.nobelprize.org/prizes/physics/2017/summary/" target="_blank" rel="noopener">Нобелівська премія з фізики 2017</a></li>
-      <li>Текст відредаговано з допомогою Gemini, факти звірено з джерелами вище.</li>
+      <li data-pl="J. Bardeen, W. Press, S. Teukolsky — Rotating black holes (Astrophysical Journal, 1972): orbity wokół dziury Kerra">J. Bardeen, W. Press, S. Teukolsky — Rotating black holes (Astrophysical Journal, 1972): орбіти навколо діри Керра</li>
+      <li data-pl="&lt;a href=&quot;https://eventhorizontelescope.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Event Horizon Telescope&lt;/a&gt;: zdjęcia cieni M87* i Sgr A*"><a href="https://eventhorizontelescope.org/" target="_blank" rel="noopener">Event Horizon Telescope</a>: знімки тіней M87* і Sgr A*</li>
+      <li data-pl="K. Thorne — Disk-accretion onto a black hole. II. Evolution of the hole (Astrophysical Journal, 1974): granica obrotu a ≈ 0,998">K. Thorne — Disk-accretion onto a black hole. II. Evolution of the hole (Astrophysical Journal, 1974): межа обертання a ≈ 0,998</li>
+      <li data-pl="&lt;a href=&quot;https://www.nobelprize.org/prizes/physics/2017/summary/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Nagroda Nobla z fizyki 2017&lt;/a&gt;"><a href="https://www.nobelprize.org/prizes/physics/2017/summary/" target="_blank" rel="noopener">Нобелівська премія з фізики 2017</a></li>
+      <li data-pl="Tekst zredagowano z pomocą Gemini, fakty sprawdzono ze źródłami powyżej; przekład na polski — Claude.">Текст відредаговано з допомогою Gemini, факти звірено з джерелами вище.</li>
     </ul>
   </section>
 
@@ -180,8 +182,66 @@
 </main>
 </div>
 
+<script src="shared/lang.js?v=20261025202028"></script>
+<script src="shared/i18n.js?v=20261025202407"></script>
+<script src="shared/i18n-pl.js?v=20261025202407"></script>
 <script>
-window.COMP_DATA = {
+window.COMP_DATA = window.PMP_LANG === 'pl' ? {
+  is: {
+    ui: { play: 'Odtwórz trasę', prev: 'Poprzedni krok', next: 'Następny krok' },
+    lanes: [
+      { id: 'sci', t: 'Nauka', w: 210 },
+      { id: 'simp', t: 'Uproszczenie', w: 210 },
+      { id: 'fic', t: 'Fikcja', w: 210 }
+    ],
+    nodes: [
+      { id: 'gr', lane: 'sci', row: 0, t: 'Ogólna teoria względności', s: 'Einstein · 1915',
+        b: 'Grawitacja to zakrzywienie przestrzeni i czasu. Wynika z niej wszystko inne na tym schemacie.' },
+      { id: 'lens', lane: 'sci', row: 1, t: 'Cień i soczewkowanie', s: 'DNGR · 2015',
+        b: 'Dysk „obejmuje” cień, bo światło zza dziury ją okrąża. Policzone z równań i opublikowane.' },
+      { id: 'dil', lane: 'sci', row: 2, t: 'Godzina = 7 lat', s: 'mnożnik ≈ 61 000',
+        b: 'Grawitacyjne spowolnienie czasu na orbicie przy dziurze obracającej się niemal granicznie.' },
+      { id: 'twins', lane: 'sci', row: 3, t: 'Cooper i Murph', s: 'różne drogi',
+        b: 'Wariant paradoksu bliźniąt: zegary się rozchodzą przez grawitację Gargantui.' },
+      { id: 'dopp', lane: 'simp', row: 1, t: 'Dysk bez Dopplera', s: 'świadomie usunięto',
+        b: 'Prawdziwy dysk byłby jednostronny: strona, która się zbliża, jest jaśniejsza. Zdjęcie M87* to pokazało.' },
+      { id: 'blue', lane: 'simp', row: 2, t: 'Przesunięcie ku błękitowi', s: 'pominięto',
+        b: 'Światło na planecie Miller powinno być 61 tysięcy razy bardziej energetyczne. Thorne wybrał „cichą” dziurę.' },
+      { id: 'waves', lane: 'simp', row: 4, t: 'Fale jak góry', s: 'pływy',
+        b: 'Pływy deformują planetę; fale — od jej kołysania. Wiarygodne, ale bez obliczeń w kadrze.' },
+      { id: 'worm', lane: 'simp', row: 5, t: 'Tunel-kula', s: 'wygląd — nauka',
+        b: 'Wygląd policzono dokładnie. Czy takie mogą istnieć — nie wiadomo: potrzebna jest ujemna energia.' },
+      { id: 'tide', lane: 'sci', row: 4, t: 'Pływy', s: '∝ 1/M² na horyzoncie',
+        b: 'Im większa dziura, tym łagodniejsze pływy przy horyzoncie. Dlatego Gargantua jest supermasywna.' },
+      { id: 'tess', lane: 'fic', row: 3, t: 'Tesserakt', s: 'czas jako wymiar',
+        b: 'Najśmielsza spekulacja filmu. Dodatkowe wymiary w fizyce są, tesseraktu — nie ma.' },
+      { id: 'loop', lane: 'fic', row: 2, t: 'Pętla przyczynowa', s: 'paradoks bootstrapu',
+        b: 'Cooper jest „duchem” dla samego siebie. Historia jest spójna, ale zamknięta w koło.' },
+      { id: 'data', lane: 'fic', row: 4, t: 'Dane z osobliwości', s: 'grawitacja kwantowa',
+        b: 'Teorii opisującej wnętrze dziury wciąż nie ma — a tym bardziej sposobu, by przesłać z niej dane.' }
+    ],
+    links: [
+      { from: 'gr', to: 'lens' },
+      { from: 'lens', to: 'dopp' },
+      { from: 'dil', to: 'blue' },
+      { from: 'dil', to: 'twins' },
+      { from: 'twins', to: 'loop', kind: 'rule' },
+      { from: 'loop', to: 'tess' },
+      { from: 'tess', to: 'data' },
+      { from: 'tide', to: 'waves' }
+    ],
+    scenario: { steps: [
+      { n: ['gr'], d: '1. Wszystko zaczyna się od ogólnej teorii względności.' },
+      { w: ['gr', 'lens'], d: '2. Światło się zagina — i dysk obejmuje cień dziury.' },
+      { w: ['lens', 'dopp'], d: '3. Dopplerowską asymetrię dysku w filmie usunięto.' },
+      { n: ['dil'], d: '4. Czas przy Gargantui: godzina na planecie — siedem lat na Ziemi.' },
+      { w: ['dil', 'blue'], d: '5. Druga strona spowolnienia czasu — przesunięcie ku błękitowi, o którym film milczy.' },
+      { w: ['dil', 'twins'], d: '6. Dlatego Murph się starzeje, a Cooper — nie.' },
+      { w: ['twins', 'loop'], d: '7. Fabuła zamyka się w pętlę: Cooper staje się „duchem”.' },
+      { w: ['loop', 'tess'], d: '8. Pętlę trzyma tesserakt — najśmielszy wymysł filmu.' }
+    ] }
+  }
+} : {
   is: {
     ui: { play: 'Програти маршрут', prev: 'Попередній крок', next: 'Наступний крок' },
     lanes: [
@@ -238,12 +298,12 @@ window.COMP_DATA = {
   }
 };
 </script>
-<script src="shared/nav.js?v=20261020144826"></script>
+<script src="shared/nav.js?v=20261025202028"></script>
 <script src="shared/comp.js?v=20261019002319"></script>
 <script src="shared/interstellar.js?v=20261019002319"></script>
 <script src="shared/is-fx.js?v=20261020151253"></script>
 <script type="module" src="shared/is-dust.js?v=20261020153323"></script>
-<script type="module" src="shared/is-refs.js?v=20261020161125"></script>
+<script type="module" src="shared/is-refs.js?v=20261025202218"></script>
 <script src="shared/is-sound.js?v=20261020201233"></script>
 <script src="shared/is-hint.js?v=20261020160943"></script>
 <script src="shared/is-bh-sound.js?v=20261019223521"></script>

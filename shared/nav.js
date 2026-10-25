@@ -4,7 +4,8 @@
   /* Схеми 13/14/14a англійські й перемикача не мають, але рейка на них спільна:
      мову беремо з вибору користувача, збереженого lang.js. */
   var stored = null; try { stored = localStorage.getItem('pmp-lang'); } catch (e) {}
-  var EN = (window.PMP_LANG || stored) === 'en';
+  /* польська версія є лише в окремих статтях — рейка для неї англійською */
+  var EN = ['en', 'pl'].indexOf(window.PMP_LANG || stored) >= 0;
   function t(uk, en) { return EN ? en : uk; }
 
   /* Чотири групи: профіль → як я веду доставку → на чому це стоїть → приклади.

@@ -322,7 +322,7 @@ function init(slot) {
       done.geometry.setDrawRange(0, k + 2); done.geometry.attributes.position.setXYZ(k + 1, V3.x, .03, V3.z); done.geometry.attributes.position.needsUpdate = true;
       const date = new Date(D0 + dd * 864e5), ev = dd >= b[0] && k === RT.length - 2 ? b[3] : a[3];
       dV.textContent = Math.round(dd) + ' з 634';
-      h.innerHTML = date.toLocaleDateString('uk', { day: 'numeric', month: 'long', year: 'numeric' }) + '<b>' + ev + '</b>';
+      h.innerHTML = date.toLocaleDateString(window.PMP_LANG === 'pl' ? 'pl' : 'uk', { day: 'numeric', month: 'long', year: 'numeric' }) + '<b>' + ev + '</b>';
       // камера-супровід: близько за кораблем (видно модель), карта довкола; до старту й після порятунку — загальний план усієї карти
       const follow = (play || (dd > 0 && dd < 634)) ? 1 : 0; camF += (follow - camF) * Math.min(1, dt * 1.5);
       camT.lerp(V3, Math.min(1, dt * 3));

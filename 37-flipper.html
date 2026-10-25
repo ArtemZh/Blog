@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flipper Zero · Draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/tokens.css?v=20261019002319">
+<link rel="stylesheet" href="shared/style.css?v=20261019100150">
+<link rel="stylesheet" href="shared/threebody.css?v=20261019183857">
+<link rel="stylesheet" href="shared/interstellar.css?v=20261019094636">
+<style>
+/* ── стаття 37 Flipper Zero: власні блоки (без банера, без звуку, без 3D) ── */
+/* роздільники актів і підзаголовки (з sk.css, щоб не тягти весь файл) */
+.sk-act{display:flex;align-items:baseline;gap:18px;margin:calc(var(--sp-xl) * 1.1) 0 var(--sp-sm);padding:18px 0 14px;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+.sk-act span{font:500 11px var(--mono);letter-spacing:.24em;color:var(--act)} .sk-act b{font:600 clamp(22px,3.2vw,34px)/1.1 var(--sans);letter-spacing:-.02em;color:var(--ink)}
+.sk-sub{display:block;margin-top:4px;font:500 13px var(--mono);letter-spacing:.06em;color:var(--ink-3);text-transform:none}
+.fz-hero{background:radial-gradient(120% 140% at 78% 30%,#2a1a0b 0%,#0a0d13 62%)}
+.fz-hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.fz-hero .hero3__txt{z-index:2}
+.badge.myth{background:color-mix(in srgb,#f2555a 14%,transparent);color:#c9363b}
+.badge.truth{background:color-mix(in srgb,#49c267 16%,transparent);color:#23843d}
+.badge.part{background:color-mix(in srgb,#e0b23c 18%,transparent);color:#9a7310}
+.badge.tech{background:color-mix(in srgb,var(--c-blue,#4678DC) 14%,transparent);color:var(--c-blue,#4678DC)}
+/* сцени — світлі картки в стилі сайту; темним лишається лише «екран» */
+.fz-panel{background:var(--paper);border:1px solid var(--rule);border-radius:var(--r-lg,14px);padding:16px;margin:var(--sp-sm) 0}
+.fz-cap{font:500 11.5px/1.4 var(--mono);color:var(--ink-3);margin:8px 0 0}
+.fz-chip{font:600 12.5px/1 var(--sans);padding:9px 13px;border-radius:999px;border:1px solid var(--rule-2,#d0d5dd);background:var(--ground);color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s,color .15s}
+.fz-chip:hover{border-color:var(--act)}
+.fz-chip.on{background:var(--act);border-color:var(--act);color:#fff}
+.fz-seg{display:inline-flex;border:1px solid var(--rule-2,#d0d5dd);border-radius:999px;overflow:hidden}
+.fz-seg .fz-chip{border:0;border-radius:0}
+/* розділ 01: фото + модулі */
+.fz-hw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start;margin:var(--sp-sm) 0}
+@media(max-width:720px){.fz-hw{grid-template-columns:1fr}}
+.fz-hw__img{width:100%;height:auto;border-radius:14px;border:1px solid var(--rule);display:block}
+.fz-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.fz-expl{min-height:120px;background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--act);border-radius:12px;padding:14px 16px}
+.fz-expl h4{margin:0 0 6px;font:700 16px/1.25 var(--sans);color:var(--ink)}
+.fz-expl .f{font:600 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--act);margin-bottom:8px;display:block}
+.fz-expl p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+/* таблиця прошивок */
+.fz-fw{overflow-x:auto;border:1px solid var(--rule);border-radius:12px}
+.fz-fw table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+.fz-fw th,.fz-fw td{border-bottom:1px solid var(--rule);padding:11px 13px;text-align:left;vertical-align:top}
+.fz-fw thead th{background:var(--paper);color:var(--ink-3);font:600 10.5px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.fz-fw tbody th{background:var(--ground);color:var(--ink);cursor:pointer;white-space:nowrap;font-weight:700}
+.fz-fw tbody td{background:var(--ground);cursor:pointer}
+.fz-fw tbody th small{display:block;color:var(--ink-3);font:500 11px/1.3 var(--mono);margin-top:3px}
+.fz-fw tbody tr:last-child th,.fz-fw tbody tr:last-child td{border-bottom:0}
+.fz-fw tr.on th,.fz-fw tr.on td{background:color-mix(in srgb,var(--act) 7%,var(--ground))}
+.fz-fw tr.on th{box-shadow:inset 3px 0 0 var(--act)}
+.fz-fw .y{color:#23843d;font-weight:600}.fz-fw .n{color:var(--ink-3)}.fz-fw .p{color:#9a7310;font-weight:600}
+.fz-fwx{margin-top:12px;background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--act);border-radius:12px;padding:13px 16px;font-size:14px;line-height:1.55;color:var(--ink-2);min-height:44px}
+.fz-fwx b{color:var(--ink)}
+/* міфи */
+.fz-myth{list-style:none;padding:0;margin:var(--sp-sm) 0;display:flex;flex-direction:column;gap:10px}
+.fz-myth li{background:var(--ground);border:1px solid var(--rule);border-radius:12px;overflow:hidden;transition:border-color .15s}
+.fz-myth li:hover,.fz-myth li.on{border-color:color-mix(in srgb,var(--act) 45%,var(--rule))}
+.fz-myth__h{display:flex;gap:12px;align-items:center;padding:14px 16px;cursor:pointer}
+.fz-myth__h .q{font:600 15px/1.35 var(--sans);color:var(--ink);flex:1}
+.fz-myth__h .mk{font:500 20px/1 var(--sans);color:var(--ink-3);transition:transform .2s}
+.fz-myth li.on .mk{transform:rotate(45deg);color:var(--act)}
+.fz-myth__b{max-height:0;overflow:hidden;transition:max-height .28s ease}
+.fz-myth__b div{padding:0 16px 15px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+/* з чого почати: корпус Flipper навколо екрана */
+.fz-start{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;align-items:center;margin:var(--sp-sm) 0}
+@media(max-width:820px){.fz-start{grid-template-columns:1fr}}
+.fz-dev{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;background:linear-gradient(180deg,#f7f7f8,#e9eaed);border-radius:34px;padding:22px 24px;box-shadow:inset 0 0 0 1px #d7dadf,0 14px 34px rgba(20,24,32,.10)}
+.fz-dev canvas{border-radius:6px;border:6px solid #1d1d1f;box-shadow:inset 0 0 0 1px #000;image-rendering:pixelated;max-width:100%}
+.fz-ctl{display:flex;align-items:center;gap:14px}
+.fz-dpad{position:relative;width:118px;height:118px;border-radius:50%;background:#f07a30;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12),0 3px 8px rgba(240,122,48,.35);flex:none}
+.fz-dpad button{position:absolute;border:0;background:transparent;color:#fff;font:700 13px/1 var(--sans);cursor:pointer;width:36px;height:30px;padding:0}
+.fz-dpad button:active{transform:translateY(1px)}
+.fz-dpad .u{top:4px;left:41px}.fz-dpad .d{bottom:4px;left:41px}
+.fz-dpad .ok{top:34px;left:34px;width:50px;height:50px;border-radius:50%;background:#e2661c;box-shadow:inset 0 -2px 0 rgba(0,0,0,.15);font-size:12px}
+.fz-back{width:44px;height:44px;border-radius:50%;border:0;background:#f07a30;color:#fff;font:700 15px/1 var(--sans);cursor:pointer;box-shadow:0 3px 8px rgba(240,122,48,.35)}
+.fz-hint{font:500 11.5px/1.4 var(--mono);color:var(--ink-3);text-align:center;margin:10px 0 0}
+.fz-steps{list-style:none;padding:0;margin:0;counter-reset:s;display:flex;flex-direction:column;gap:14px}
+.fz-steps li{position:relative;padding-left:42px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.fz-steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--act);color:#fff;font:700 13px/28px var(--mono);text-align:center}
+.fz-steps b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <a class="brand" href="#top">Flipper Zero</a>
+  <nav class="toc" id="toc" aria-label="Розділи">
+    <a href="#what">Пристрій</a><a href="#ir">Інфрачервоний</a><a href="#sub">Радіо</a><a href="#rfid">RFID·NFC</a><a href="#fw">Прошивки</a><a href="#myth">Міфи</a><a href="#law">Закон·старт</a><a href="#map">Карта</a>
+  </nav>
+</header>
+
+<main class="main" id="top">
+  <header class="hero3 fz-hero">
+    <canvas id="fzWaves" aria-hidden="true"></canvas>
+    <div class="hero3__txt">
+      <div class="hero3__kick">Стаття · гаджети · чернетка</div>
+      <h1>Flipper Zero</h1>
+      <p class="hero3__sub">Тамагочі для гіків: що він справді вміє — і чому TikTok перебільшує</p>
+    </div>
+  </header>
+  <div class="wrap"><p class="lede lede3">Flipper Zero — кишеньковий «мультитул» для роботи з радіосигналами, який за формою нагадує іграшку-тамагочі з дельфіном на екрані. Він читає й повторює інфрачервоні пульти, сигнали на частотах 433 і 868 МГц, безконтактні мітки й картки, прикидається USB-клавіатурою. Навколо нього виріс ореол «універсального зламувача» з роликів у TikTok — здебільшого перебільшений. Ця стаття — оглядова: як влаштовано кожен «орган чуття» пристрою, що з популярних страшилок правда, а що міф, і з чого почати власнику. Кожен блок позначено джерелом: <span class="badge tech">технологія</span><span class="badge truth">правда</span><span class="badge myth">міф</span><span class="badge part">частково</span>.</p></div>
+
+  <div class="wrap">
+
+  <div class="sk-act" aria-hidden="true"><span>АКТ I</span><b>Пристрій</b></div>
+
+  <section class="sec" id="what">
+    <h2><span class="num">01</span>Що це за пристрій<small class="sk-sub">залізо під корпусом</small></h2>
+    <p>Усередині — мікроконтролер STMicroelectronics STM32WB55RG: ядро ARM Cortex-M4 на 64 МГц для прошивки й окреме M0+ на 32 МГц для Bluetooth. Пам'ять скромна: 1024 КБ flash і 256 КБ RAM, решта — на microSD. Екран монохромний, 1,4 дюйма, 128×64 пікселі, з бурштиновим підсвічуванням. Живлення — акумулятор 2100 мА·год, у режимі очікування пристрій живе близько місяця. Кожна «антена» відповідає за свою технологію — натисніть на модуль нижче.</p>
+    <div class="fz-hw">
+      <div>
+        <img class="fz-hw__img" src="assets/flipper/device-sm.jpg" srcset="assets/flipper/device-sm.jpg 640w, assets/flipper/device-full.jpg 1000w" sizes="(max-width:720px) 100vw, 560px" width="640" height="396" alt="Flipper Zero: невеликий білий пристрій із помаранчевими кнопками, монохромним екраном і дельфіном на ньому">
+        <p class="fz-cap">Фото: Turbospok, Wikimedia Commons, CC BY-SA 4.0</p>
+      </div>
+      <div>
+        <div class="fz-chips" id="fzChips"></div>
+        <div class="fz-expl" id="fzExpl"></div>
+      </div>
+    </div>
+    <p class="trap"><b>Не плутати.</b> «Антена на всі діапазони» — перебільшення. Радіомодуль CC1101 працює лише в піддіапазонах 300–928 МГц (пульти, брелоки, давачі), а Wi-Fi і стільникового зв'язку в базовому Flipper немає взагалі — для Wi-Fi потрібна окрема плата-модуль.</p>
+  </section>
+
+  <div class="sk-act" aria-hidden="true"><span>АКТ II</span><b>Органи чуття</b></div>
+
+  <section class="sec" id="ir">
+    <h2><span class="num">02</span>Інфрачервоний пульт<small class="sk-sub">найбезпечніший трюк</small></h2>
+    <p>Звичайний пульт телевізора блимає невидимим інфрачервоним діодом. Щоб блимання не плутали зі світлом лампи, його «несуть» на частоті 38 кГц, а кнопку кодують довжиною пауз. У протоколі NEC нуль — це коротка пауза (близько 1,12 мс), одиниця — удвічі довша (близько 2,25 мс). Flipper просто записує цей візерунок і повторює його своїм діодом. Натисніть кнопку на сцені — і подивіться, як код кнопки перетворюється на спалахи.</p>
+    <div class="fz-panel"><div id="fzIr"></div></div>
+    <p>Це найкорисніша й найбезпечніша функція: універсальний пульт для власного телевізора, кондиціонера чи проєктора, коли «рідний» загубився. Інфрачервоний сигнал діє лише в прямій видимості й лише на кілька метрів.</p>
+    <p class="trap"><b>Цікавий факт.</b> У режимі «універсального пульта» Flipper не копіює ваш пульт, а перебирає базу найпоширеніших кодів вимкнення, доки телевізор не згасне — тому одним пристроєм можна вимкнути майже будь-який екран у кафе. Це дратує, але нічого не «зламує».</p>
+  </section>
+
+  <section class="sec" id="sub">
+    <h2><span class="num">03</span>Радіо 433 і 868 МГц<small class="sk-sub">фіксований код проти плаваючого</small></h2>
+    <p>На цих частотах «розмовляють» брелоки шлагбаумів, бездротові дзвінки, давачі температури, старі автосигналізації. Ранні брелоки надсилали <b>той самий код</b> щоразу — його достатньо один раз записати й повторити. Саме проти цього й придумали <b>плаваючий код</b> (rolling code): брелок і приймач мають спільний лічильник, і кожне натискання — це новий одноразовий код. Записаний сигнал, програний удруге, приймач уже відхиляє як «старий». Перемкніть тип брелока на сцені й спробуйте «повторити» запис.</p>
+    <div class="fz-panel"><div id="fzSub"></div></div>
+    <p class="trap"><b>Висновок.</b> Перехід на плаваючий код прибрав найпростіший «повтор» — і саме тому старі системи з фіксованим кодом поступово замінюють. Офіційна прошивка Flipper навмисно <b>не вміє</b> надсилати захоплені плаваючі коди — лише показувати їх у списку.</p>
+  </section>
+
+  <section class="sec" id="rfid">
+    <h2><span class="num">04</span>RFID і NFC<small class="sk-sub">чому пропуск копіюється, а картка — ні</small></h2>
+    <p>Безконтактні мітки бувають двох світів. Старі перепустки на 125 кГц (RFID) — це фактично «ім'я вголос»: піднесли — картка проказала своє число, і все. Таке число Flipper зчитує й записує як просте значення. Банківська картка й сучасний пропуск на 13,56 МГц (NFC) влаштовані інакше: там криптографія. Зчитувач ставить «запитання», картка рахує відповідь із секретним ключем, який ніколи не залишає картку, — і щоразу відповідь нова. Повторити її не можна. Перемкніть частоту й подивіться на обмін.</p>
+    <div class="fz-panel"><div id="fzRfid"></div></div>
+    <div class="fz-hw" style="margin-top:14px">
+      <div>
+        <img class="fz-hw__img" src="assets/flipper/nfc-pcb-sm.jpg" srcset="assets/flipper/nfc-pcb-sm.jpg 640w, assets/flipper/nfc-pcb-full.jpg 1000w" sizes="(max-width:720px) 100vw, 560px" width="640" height="160" loading="lazy" alt="Плата Flipper Zero з котушкою-антеною NFC і чипом ST25R3916">
+        <p class="fz-cap">Антена NFC і чип ST25R3916 на платі. Фото: Turbospok, Wikimedia Commons, CC0</p>
+      </div>
+      <div><p>За NFC відповідає чип ST25R3916 на 13,56 МГц: він розуміє ISO-14443A/B, MIFARE, FeliCa, iClass. За 125 кГц — окрема котушка. Банківську картку Flipper <b>бачить</b>, але читає лише службові дані (тип, іноді маскований номер) — цього замало, щоб щось оплатити.</p></div>
+    </div>
+    <p class="trap"><b>Важливо.</b> Саме через криптографію «відповіді щоразу нової» платіжні картки й сучасні пропуски скопіювати простим піднесенням не вдається. Уразливі — лише старі статичні мітки, які передають незмінний номер.</p>
+  </section>
+
+  <div class="sk-act" aria-hidden="true"><span>АКТ III</span><b>Міфи й реальність</b></div>
+
+  <section class="sec" id="fw">
+    <h2><span class="num">05</span>Прошивки<small class="sk-sub">офіційна й спільнотні</small></h2>
+    <p>Flipper відкритий, тому крім офіційної прошивки є кілька спільнотних «форків». Головна відмінність між ними — не стільки можливості (ядро в усіх спільне), скільки стабільність і кількість «наворотів». Натисніть на рядок, щоб побачити, чим прошивка вирізняється.</p>
+    <div class="fz-fw">
+      <table id="fzFw">
+        <thead><tr><th>Прошивка</th><th>Регіон. лок знято</th><th>Плаваючі коди</th><th>Плагіни · ігри</th><th>Стабільність</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="fz-fwx" id="fzFwx"></div>
+    <p class="trap"><b>Не плутати.</b> «Знято регіональний лок» означає лише дозвіл передавати на частотах інших регіонів — у багатьох країнах це само собою незаконно, бо порушує правила радіоефіру. Перемикання між форками до того ж може стерти збережені файли, тож спершу роблять бекап microSD.</p>
+    <p class="chint">Версії на 25.10.2026: офіційна 1.5.1 (15 жовтня), Momentum mntm-012 (31.12.2025), Unleashed і RogueMaster оновлюються безперервно. Джерела — репозиторії й сайти проєктів.</p>
+  </section>
+
+  <section class="sec" id="myth">
+    <h2><span class="num">06</span>Міфи з TikTok<small class="sk-sub">що правда, а що ні</small></h2>
+    <p>Більшість вірусних роликів показують «миттєвий злам» усього підряд. Розберімо найпоширеніші твердження — натисніть на кожне, щоб побачити вердикт.</p>
+    <ul class="fz-myth" id="fzMyth"></ul>
+    <p class="trap"><b>Висновок.</b> Flipper — потужний навчальний інструмент, щоб <i>побачити</i> радіосвіт довкола. Але сучасний захист — плаваючі коди й криптографія — тримається саме проти «записав і повторив». Там, де в ролику «зламали за секунду», зазвичай або стара вразлива система, або штатний сигнал, або монтаж.</p>
+  </section>
+
+  <div class="sk-act" aria-hidden="true"><span>АКТ IV</span><b>Практика</b></div>
+
+  <section class="sec" id="law">
+    <h2><span class="num">07</span>Закон і з чого почати<small class="sk-sub">де легально та перші кроки</small></h2>
+    <p>Сам по собі пристрій легальний у більшості країн; карається не володіння, а зловживання — доступ до чужих систем. Але є винятки. У Бразилії регулятор ANATEL ще 2023 року не пропустив Flipper через правила радіочастот, і партії вилучали на митниці. Amazon заблокував продаж 7 квітня 2023-го, назвавши пристрій «скімером». Канада в лютому 2024-го оголосила про намір заборонити його через викрадення авто, але вже 20 березня пом'якшила позицію до «обмежити зловживання», бо жодного доведеного викрадення саме цим пристроєм не знайшлося. У США володіння легальне.</p>
+    <p>Якщо Flipper уже у вас — ось безпечні перші кроки. Сцена нижче відтворює його інтерфейс: гортайте меню кнопками.</p>
+    <div class="fz-start">
+      <div id="fzScreen"></div>
+      <ol class="fz-steps">
+        <li><b>Познайомтеся з дельфіном.</b> Він — тамагочі: що більше ви користуєтеся пристроєм, то він щасливіший. Жодних дій не потребує.</li>
+        <li><b>Оновіть прошивку.</b> Через застосунок або qFlipper. Свіжа прошивка — це нові протоколи й виправлення. <span class="chint">(на тестовому пристрої стояла 0.64.5 від 01.02.2024 — уже застаріла.)</span></li>
+        <li><b>Спробуйте універсальний пульт.</b> Infrared → Universal Remotes → TV, наведіть на <b>свій</b> телевізор. Безпечний перший експеримент.</li>
+        <li><b>Прочитайте щось своє.</b> Власний домофонний брелок чи пропуск — щоб побачити, що зчитується, а що ні.</li>
+        <li><b>Для тих, хто кодить.</b> GPIO-піни й скрипти на JavaScript (з прошивки 1.0) — пристрій як платформа для електроніки.</li>
+      </ol>
+    </div>
+    <p class="chint">Статус станом на 25.10.2026 за відкритими джерелами; у вашій країні звіряйте з місцевими правилами радіочастот окремо.</p>
+  </section>
+
+  <div class="sk-act" aria-hidden="true"><span>АКТ V</span><b>За лаштунками</b></div>
+
+  <section class="sec" id="map">
+    <h2><span class="num">08</span>Карта можливостей<small class="sk-sub">частоти → модулі → реальність</small></h2>
+    <p>Схема зводить усе докупи: яка «антена» на якій частоті, що реально можна зробити, а що — міф. Наведіть на блок або запустіть маршрут.</p>
+    <div class="cbox" data-comp="fz"></div>
+  </section>
+
+  <section class="sec" id="known">
+    <h2><span class="num">09</span>Звідки все це</h2>
+    <p>Концепт Flipper Zero народився 2019 року (Павел Жовнер і Олексій Кулагін). У серпні 2020-го проєкт вийшов на Kickstarter із ціллю $60 тисяч — і зібрав близько $4,88 мільйона від майже 38 тисяч бекерів, перевершивши мету в десятки разів за перші хвилини. Перші пристрої поїхали до замовників приблизно за півтора року. У липні 2023-го відкрився каталог застосунків, а 10 вересня 2024-го вийшла прошивка 1.0 зі скриптами на JavaScript і 89 підтримуваними Sub-GHz протоколами. Компанія заявляє про понад мільйон проданих пристроїв до 2026 року.</p>
+    <h3>Джерела</h3>
+    <ul class="src29">
+      <li><a href="https://docs.flipper.net/development/hardware/tech-specs" target="_blank" rel="noopener">Flipper Zero — Tech specs (офіційна документація)</a>: усе залізо, частоти, протоколи</li>
+      <li><a href="https://en.wikipedia.org/wiki/Flipper_Zero" target="_blank" rel="noopener">Flipper Zero — Wikipedia</a>: історія, заборони (Amazon, ANATEL, ISED, CBP)</li>
+      <li><a href="https://blog.flipper.net/released-firmware-1/" target="_blank" rel="noopener">Firmware 1.0 Released — Flipper Blog</a> (10.09.2024): JavaScript, NFC, каталог застосунків</li>
+      <li><a href="https://github.com/flipperdevices/flipperzero-firmware/releases" target="_blank" rel="noopener">Офіційні релізи прошивки</a>, <a href="https://github.com/DarkFlippers/unleashed-firmware" target="_blank" rel="noopener">Unleashed</a>, <a href="https://momentum-fw.dev/" target="_blank" rel="noopener">Momentum</a>: порівняння прошивок</li>
+      <li><a href="https://www.slashgear.com/1337907/flipper-zero-hacking-device/" target="_blank" rel="noopener">SlashGear</a> і <a href="https://www.thedrive.com/news/nerds-are-trolling-tesla-owners-by-wirelessly-opening-charging-ports" target="_blank" rel="noopener">The Drive</a>: спростування міфів (банківські картки, зарядний порт Tesla)</li>
+      <li>Фото пристрою — Wikimedia Commons: Turbospok (CC BY-SA 4.0, CC0). Сцени й схема побудовано кодом. Технічні дані звірено з документацією.</li>
+    </ul>
+  </section>
+
+  </div>
+</main>
+</div>
+
+<script>
+window.COMP_DATA = {
+  fz: {
+    ui: { play: 'Програти маршрут', prev: 'Попередній крок', next: 'Наступний крок' },
+    lanes: [ { id: 'freq', t: 'Частота', w: 200 }, { id: 'mod', t: 'Модуль', w: 200 }, { id: 'can', t: 'Реально', w: 210 } ],
+    nodes: [
+      { id: 'ir', lane: 'freq', row: 0, t: 'Інфрачервоне', s: '940 нм · 38 кГц', b: 'Пульти в прямій видимості. Світло, не радіо.' },
+      { id: 'lf', lane: 'freq', row: 1, t: '125 кГц', s: 'RFID', b: 'Старі безконтактні мітки: передають незмінний номер.' },
+      { id: 'hf', lane: 'freq', row: 2, t: '13,56 МГц', s: 'NFC', b: 'Картки з криптографією: MIFARE, банківські, iClass.' },
+      { id: 'sg', lane: 'freq', row: 3, t: '433 · 868 МГц', s: 'Sub-GHz', b: 'Брелоки, давачі, дзвінки. Фіксований або плаваючий код.' },
+      { id: 'irm', lane: 'mod', row: 0, t: 'ІЧ-діод', s: 'RX/TX', b: 'Запис і повтор пультів; універсальний пульт.' },
+      { id: 'coil', lane: 'mod', row: 1, t: 'Котушка 125 кГц', s: 'читання/запис', b: 'Читає й записує статичні мітки EM4100, HID…' },
+      { id: 'nfc', lane: 'mod', row: 2, t: 'ST25R3916', s: '13,56 МГц', b: 'Читає службові дані; секретні ключі лишаються в картці.' },
+      { id: 'cc', lane: 'mod', row: 3, t: 'CC1101', s: '300–928 МГц', b: 'Приймач/передавач радіо. Регіональний лок на передачу.' },
+      { id: 'remote', lane: 'can', row: 0, t: 'Пульт для свого ТВ', s: 'можна', b: 'Корисно й безпечно: універсальний пульт.' },
+      { id: 'copyold', lane: 'can', row: 1, t: 'Копія старої мітки', s: 'можна', b: 'Статичний номер — просте значення. Тому їх і міняють.' },
+      { id: 'nocard', lane: 'can', row: 2, t: 'Клон банк. картки', s: 'не можна', b: 'Криптовідповідь щоразу нова — повторити не вийде.' },
+      { id: 'noroll', lane: 'can', row: 3, t: 'Плаваючий код авто', s: 'не можна', b: 'Офіційна прошивка не надсилає захоплені rolling-коди.' }
+    ],
+    links: [
+      { from: 'ir', to: 'irm' }, { from: 'irm', to: 'remote' },
+      { from: 'lf', to: 'coil' }, { from: 'coil', to: 'copyold' },
+      { from: 'hf', to: 'nfc' }, { from: 'nfc', to: 'nocard', kind: 'rule' },
+      { from: 'sg', to: 'cc' }, { from: 'cc', to: 'noroll', kind: 'rule' }
+    ],
+    scenario: { steps: [
+      { n: ['ir'], d: '1. Інфрачервоне — це світло: пульти в прямій видимості.' },
+      { w: ['ir', 'remote'], d: '2. Звідси найкорисніше: універсальний пульт для своєї техніки.' },
+      { n: ['lf'], d: '3. 125 кГц — старі мітки передають незмінний номер.' },
+      { w: ['lf', 'copyold'], d: '4. Тому їх легко скопіювати — і тому поступово міняють.' },
+      { n: ['hf'], d: '5. 13,56 МГц — картки з криптографією.' },
+      { w: ['hf', 'nocard'], d: '6. Відповідь щоразу нова — банківську картку не клонувати.' },
+      { w: ['sg', 'noroll'], d: '7. На радіо плаваючий код захищає від простого повтору.' }
+    ] }
+  }
+};
+</script>
+<script src="shared/nav.js?v=20261020144826"></script>
+<script src="shared/comp.js?v=20261019002319"></script>
+<script src="shared/fz-viz.js?v=20261025224925"></script>
+</body>
+</html>
