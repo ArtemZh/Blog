@@ -1,4 +1,4 @@
-/* Стаття 38: банер — процедурні 3D-зерна кави (three.js, без моделей ззовні).
+/* Стаття 38, розділ 01 «Арабіка й робуста на око» — процедурні 3D-зерна кави (three.js, без моделей ззовні).
    Два «героя» праворуч: арабіка — довша, овальна, борозна вигнута S-подібно; робуста — кругліша, борозна майже пряма
    (так їх розрізняють на око). Довкола повільно летять дрібніші зерна. Клік по зерну-герою — воно перевертається плоским боком
    з борозною до глядача. prefers-reduced-motion — статичний кадр. */
@@ -43,7 +43,7 @@ if (host) {
 
   function size() { const w = host.clientWidth || 1, h = host.clientHeight || 1; R.setSize(w, h, false); cam.aspect = w / h;
     // на вузькому екрані герої зсуваються в центр і менші
-    const narrow = w < 700; heroA.position.x = narrow ? -1.0 : 2.2; heroC.position.x = narrow ? 1.6 : 4.5; heroA.position.y = narrow ? -1.6 : .55; heroC.position.y = narrow ? -2.6 : -.9;
+    const narrow = w < 700; heroA.position.set(narrow ? -1.3 : -2.3, narrow ? .4 : .1, 0); heroC.position.set(narrow ? 1.3 : 2.3, narrow ? -.4 : -.1, 0); heroA.scale.setScalar(narrow ? .9 : 1.25); heroC.scale.setScalar(narrow ? .85 : 1.15);
     cam.updateProjectionMatrix(); }
   new ResizeObserver(size).observe(host); size();
 
@@ -52,7 +52,7 @@ if (host) {
   host.addEventListener('click', (e) => { const r = host.getBoundingClientRect(); nd.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(nd, cam); const h = ray.intersectObjects([heroA, heroC])[0]; if (!h) return; const u = h.object.userData; u.goal = u.goal ? 0 : 1;
     if (window.CF_SND) CF_SND.fx('bean', h.object === heroA ? 'EN' : 'LC');
-    const cap = document.querySelector(h.object === heroA ? '.cf-hero__lab.a' : '.cf-hero__lab.c'); if (cap) { cap.classList.add('on'); setTimeout(() => cap.classList.remove('on'), 2600); } });
+    const cap = host.parentElement.querySelector(h.object === heroA ? '.cf-hero__lab.a' : '.cf-hero__lab.c'); if (cap) { cap.classList.add('on'); setTimeout(() => cap.classList.remove('on'), 2600); } });
   host.addEventListener('pointermove', (e) => { const r = host.getBoundingClientRect(); nd.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(nd, cam); host.style.cursor = ray.intersectObjects([heroA, heroC]).length ? 'pointer' : ''; });
 

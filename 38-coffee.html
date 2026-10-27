@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="shared/threebody.css?v=20261019183857">
 <link rel="stylesheet" href="shared/interstellar.css?v=20261019094636">
 <link rel="stylesheet" href="shared/recession.css?v=20261020184605">
-<link rel="stylesheet" href="shared/coffee.css?v=20261027d">
+<link rel="stylesheet" href="shared/coffee.css?v=20261027f">
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
@@ -29,16 +29,14 @@
 
 <main class="main" id="top">
   <header class="cf-hero">
-    <div class="cf-hero__3d" id="cf-hero3d" aria-label="Тривимірні зерна арабіки й робусти; клік по зерну перевертає його"></div>
+    <img class="cf-hero__img" src="assets/coffee/banner.jpg" alt="Гілка зі стиглими червоними ягодами кави і зерна — від зелених до темно обсмажених" width="1916" height="821">
     <div class="cf-hero__txt">
       <div class="cf-hero__kick">Стаття · біологія й ринок · чернетка</div>
       <h1>Види кави</h1>
       <p class="cf-hero__sub">Чому дві чашки «просто кави» відрізняються, як вино від пива: від гена до горнятка</p>
     </div>
-    <span class="cf-hero__lab a">арабіка · овальна, борозна вигнута</span>
-    <span class="cf-hero__lab c">робуста · кругліша, борозна пряма</span>
   </header>
-  <div class="wrap"><p class="lede lede3">Слово «кава» ховає рід зі 130 видів, із яких у чашку потрапляють переважно два — арабіка й робуста. Вони різняться всім: генами, хімією зерна, кліматом, у якому ростуть, і ціною — до тисяч разів. Пройдімо шлях одного зерна: від виду до сорту, від ягоди до обсмажування й до біржі. Кожне число в тексті має джерело й дату; позначки <span class="badge sci">факт</span> — опубліковані дані, <span class="badge hypb">тенденція</span> — загальні правила дегустаторів. Банер живий: клікніть по зерну.</p></div>
+  <div class="wrap"><p class="lede lede3">Слово «кава» ховає рід зі 130 видів, із яких у чашку потрапляють переважно два — арабіка й робуста. Вони різняться всім: генами, хімією зерна, кліматом, у якому ростуть, і ціною — до тисяч разів. Пройдімо шлях одного зерна: від виду до сорту, від ягоди до обсмажування й до біржі. Кожне число в тексті має джерело й дату; позначки <span class="badge sci">факт</span> — опубліковані дані, <span class="badge hypb">тенденція</span> — загальні правила дегустаторів.</p></div>
 
   <div class="wrap">
 
@@ -53,6 +51,10 @@
     <p>Кава — це рід <i>Coffea</i> з родини маренових. На 2021 рік науці відомо 130 видів: 65 ростуть на Мадагаскарі, 48 — в Африці, решта — в Азії й Австралії. Майже всі — дикі кущі й дерева тропічних лісів, яких ніхто не культивує.</p>
     <p>2019 року ботаніки з Kew оцінили 124 види за критеріями Червоного списку МСОП: 75 із них (60 %) — під загрозою зникнення, 35 — ні, про 14 замало даних. Головна причина — малий ареал і вирубування лісів. Нижче кожне зерно — один вид; клікніть по названих, щоб побачити картку.</p>
     <div id="cf-species" class="viz-slot"></div>
+    <h3>Арабіка й робуста на око</h3>
+    <p>Зерна двох головних видів легко розрізнити без лабораторії: арабіка довша й пласкіша, борозна на ній вигнута; робуста кругліша, борозна майже пряма. Клікніть по зерну — воно перевернеться борозною до вас.</p>
+    <div class="cf-beans"><div class="cf-beans__3d" id="cf-hero3d" aria-label="Тривимірні зерна арабіки й робусти; клік по зерну перевертає його"></div>
+      <span class="cf-hero__lab a">арабіка · овальна, борозна вигнута</span><span class="cf-hero__lab c">робуста · кругліша, борозна пряма</span></div>
     <p class="trap"><b>Цікавий факт.</b> Сама арабіка в дикій природі має статус «під загрозою»: у лісах Ефіопії її ареал скорочується, а в кавових господарствах ростуть нащадки лише кількох жмень насіння.</p>
   </section>
 
@@ -101,6 +103,13 @@
     <p>Зелене зерно пахне травою й горохом. Смак кави народжується в ростері: спершу зерно сохне, потім, приблизно від 140–150 °C, іде реакція Маяра — цукри й амінокислоти утворюють сотні ароматичних речовин і коричневі меланоїдини. Близько 200 °C пара й гази розривають клітини — чутно перший тріск.</p>
     <p>Кофеїн під час обсмажування майже не руйнується, а хлорогенові кислоти розпадаються — тому темна кава менш кисла. Перетягніть повзунок часу.</p>
     <div id="cf-roast" class="viz-slot"></div>
+    <h3>Чим мелють і варять</h3>
+    <p>Після ростера зерно ще треба змолоти й заварити. Дві класичні домашні речі — покрутіть мишею або пальцем.</p>
+    <div id="cf-gear3d" class="cf-gear wait">
+      <div class="cf-gear__3d"></div>
+      <div class="cf-gear__ui"><button type="button" data-gear="grinder">Млинок</button><button type="button" data-gear="moka">Мока</button></div>
+      <p class="cf-gear__cap"></p>
+    </div>
     <p class="trap"><b>Насправді.</b> Темна обсмажка не «міцніша» за кофеїном: кофеїну в зерні стільки ж, а сприйняття міцності — це гіркота продуктів обсмажування.</p>
   </section>
 
@@ -117,6 +126,11 @@
     <p>Усе разом: від виду до чашки. Наведіть на блок або запустіть маршрут.</p>
     <div class="cbox" data-comp="cf"></div>
   </section>
+
+  <figure class="cf-desk">
+    <img src="assets/coffee/desk-coffee.jpg" alt="Біла чашка кави з парою на робочому столі, позаду розмиті монітори" width="1600" height="900" loading="lazy">
+    <figcaption>Та сама чашка, заради якої все це: 130 видів, гібрид із 44 хромосомами, ростер і біржа.</figcaption>
+  </figure>
 
   <section class="sec" id="known">
     <h2><span class="num">10</span>Що відомо</h2>
@@ -147,7 +161,7 @@
       <li><a href="https://inheritancecoffee.com/blogs/news/robusta-coffee-price-fall-certified-stocks-october-2026" target="_blank" rel="noopener">Ціни ICE на 23.10.2026 (огляд Inheritance Coffee)</a></li>
       <li><a href="https://www.gcrmag.com/best-of-panama-auction-sees-world-record-price" target="_blank" rel="noopener">Best of Panama 2025 — рекорд гейші (Global Coffee Report)</a></li>
     </ul>
-    <p class="chint">Числа на сцені = числа в тексті = числа в джерелах (знімок на 27.10.2026, shared/cf-data.js). Ціни на біржі змінюються щодня; частки видів у врожаї — оцінки USDA. 3D-зерна, сцени й ролик намальовано кодом.</p>
+    <p class="chint">Числа на сцені = числа в тексті = числа в джерелах (знімок на 27.10.2026, shared/cf-data.js). Ціни на біржі змінюються щодня; частки видів у врожаї — оцінки USDA. 3D-зерна, сцени й ролик намальовано кодом; млинок і мока — 3D-моделі (Tripo), кадр із чашкою — рендер у Blender.</p>
   </section>
 
   </div>
@@ -188,7 +202,8 @@ window.COMP_DATA = {
 <script src="shared/cf-data.js?v=20261027b"></script>
 <script src="shared/cf-sound.js?v=20261027a"></script>
 <script src="shared/cf-viz.js?v=20261027c"></script>
-<script src="shared/cf-reel.js?v=20261027a"></script>
-<script type="module" src="shared/cf-bean3d.js?v=20261027a"></script>
+<script src="shared/cf-reel.js?v=20261027c"></script>
+<script type="module" src="shared/cf-bean3d.js?v=20261027b"></script>
+<script type="module" src="shared/cf-gear3d.js?v=20261027a"></script>
 </body>
 </html>

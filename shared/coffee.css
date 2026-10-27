@@ -118,3 +118,22 @@
 @media(max-width:760px){.cf-pc{grid-template-columns:1fr}.cf-pc__r{grid-template-columns:80px minmax(0,1fr) 70px}}
 @media (max-width:760px){.cf-hero{margin:calc(-1 * var(--sp-md)) calc(-1 * var(--sp-md)) var(--sp-md);height:460px}}
 @media (max-width:700px){.cf-hero__lab{display:none}.cf-hero__lab.a,.cf-hero__lab.c{left:14px;right:auto;top:auto;bottom:18px}.cf-hero__lab.on{display:block}}
+/* банер-фото (ChatGPT) і 3D-зерна в розділі 01 */
+.cf-hero__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center}
+@media(max-width:760px){.cf-hero__img{object-position:72% center}}
+.cf-beans{position:relative;height:clamp(300px,34vw,420px);margin:var(--sp-sm) 0;border-radius:var(--r-lg);overflow:hidden;background:radial-gradient(110% 90% at 60% 40%,#3a2214 0%,#1c110a 55%,#0c0806 100%)}
+.cf-beans__3d{position:absolute;inset:0} .cf-beans__3d canvas{display:block;width:100%;height:100%}
+.cf-beans .cf-hero__lab.a{left:6%;right:auto;top:auto;bottom:8%} .cf-beans .cf-hero__lab.c{right:6%;left:auto;top:auto;bottom:8%}
+@media (max-width:700px){.cf-beans .cf-hero__lab{display:block}.cf-beans .cf-hero__lab.a{left:10px;bottom:46px}.cf-beans .cf-hero__lab.c{right:10px;bottom:10px}}
+/* 07 · млинок і мока (cf-gear3d.js) */
+.cf-gear{position:relative;margin:var(--sp-sm) 0;border-radius:var(--r-lg);overflow:hidden;background:radial-gradient(90% 80% at 50% 45%,#3a2214 0%,#1c110a 60%,#0c0806 100%)}
+.cf-gear__3d{height:clamp(300px,36vw,440px);touch-action:pan-y;cursor:grab} .cf-gear__3d canvas{display:block;width:100%;height:100%}
+.cf-gear.wait .cf-gear__3d{opacity:.4}
+.cf-gear__ui{position:absolute;top:12px;left:12px;display:flex;gap:8px}
+.cf-gear__ui button{font:600 13px/1 var(--font-sans,system-ui);padding:8px 14px;border-radius:999px;border:1px solid #ffffff33;background:#0008;color:#f3e6d8;cursor:pointer}
+.cf-gear__ui button.on{background:#e0a35a;color:#1c110a;border-color:#e0a35a}
+.cf-gear:not(.touched) .cf-gear__ui button:not(.on){animation:cfGlow 1.6s ease-in-out infinite}
+@keyframes cfGlow{50%{box-shadow:0 0 0 4px #e0a35a55}}
+.cf-gear .cf-gear__cap{margin:0;max-width:none;padding:10px 14px 14px;color:#e8d8c6;font-size:14px;line-height:1.45;background:#0006}
+.cf-desk{margin:var(--sp-md) 0} .cf-desk img{display:block;width:100%;height:auto;border-radius:var(--r-lg)}
+.cf-desk figcaption{margin-top:8px;font-size:14px;opacity:.75}
