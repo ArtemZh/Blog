@@ -1,0 +1,120 @@
+/* Стаття 38 «Види кави»: банер із 3D-зернами й сцени розділів (shared/cf-viz.js) */
+.cf-hero{position:relative;margin:calc(-1 * var(--sp-xl)) calc(-1 * var(--sp-lg)) var(--sp-md);height:clamp(420px,58vh,620px);overflow:hidden;border-radius:0 0 var(--r-lg) var(--r-lg);
+  background:radial-gradient(120% 90% at 78% 40%,#3a2214 0%,#1c110a 45%,#0c0806 100%)}
+.cf-hero__3d{position:absolute;inset:0}
+.cf-hero__3d canvas{display:block;width:100%;height:100%}
+.cf-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,8,6,.85) 0%,rgba(12,8,6,.45) 42%,rgba(12,8,6,0) 70%);pointer-events:none}
+.cf-hero__txt{position:absolute;z-index:2;left:clamp(20px,5vw,72px);top:50%;transform:translateY(-50%);max-width:min(560px,86%);color:#fff;pointer-events:none}
+.cf-hero__kick{font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#e8b27a;margin-bottom:12px}
+.cf-hero h1{margin:0;font:700 clamp(36px,6vw,68px)/1.02 var(--sans);letter-spacing:-.02em}
+.cf-hero__sub{margin:14px 0 0;font:500 clamp(15px,1.7vw,19px)/1.45 var(--sans);color:rgba(255,236,214,.85)}
+.cf-hero__lab{position:absolute;z-index:3;font:600 11px/1.3 var(--mono);color:rgba(255,236,214,.75);padding:6px 9px;border-radius:8px;background:rgba(12,8,6,.55);pointer-events:none;transition:background .3s,color .3s}
+.cf-hero__lab.on{background:var(--act);color:#fff}
+.cf-hero__lab.a{right:28%;top:18%} .cf-hero__lab.c{right:7%;bottom:24%}
+@media(max-width:700px){.cf-hero__lab.a{right:auto;left:14px;top:auto;bottom:86px}.cf-hero__lab.c{right:14px;bottom:86px}.cf-hero::after{background:linear-gradient(180deg,rgba(12,8,6,.85) 0%,rgba(12,8,6,.4) 55%,rgba(12,8,6,.1) 100%)}.cf-hero__txt{top:34%}}
+
+.cf-chip{font:500 12px var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--rule);background:var(--ground);color:var(--ink-2);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .2s,border-color .2s,color .2s}
+.cf-chip:hover{border-color:var(--ink-3);color:var(--ink)} .cf-chip.on{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.cf-chip i{width:10px;height:10px;border-radius:50%;background:var(--c);border:1px solid rgba(0,0,0,.25)}
+.cf-note{margin:8px 0 0;font:500 11.5px/1.5 var(--mono);color:var(--ink-3)}
+.cf-k{display:block;font:600 10px/1.6 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:6px}
+.rc-btn.used{animation:none}
+
+/* 01 · види */
+.cf-sp{display:grid;gap:12px;margin:var(--sp-sm) 0}
+.cf-sp__f{display:flex;flex-wrap:wrap;gap:6px}
+.cf-sp__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(26px,1fr));gap:6px;padding:14px;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper)}
+.cf-bean{position:relative;aspect-ratio:1.35;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--c) 70%,#000);background:var(--c);cursor:pointer;padding:0;opacity:0;transform:scale(.4);transition:opacity .4s,transform .4s,box-shadow .2s,filter .3s}
+.cf-bean::after{content:"";position:absolute;left:18%;right:18%;top:48%;height:1.5px;background:rgba(0,0,0,.35);border-radius:2px;transform:rotate(-8deg)}
+.cf-bean[data-k=NEW]{background:transparent;border-style:dashed;border-color:var(--ink-3)}
+.cf-sp.in .cf-bean{opacity:1;transform:none}
+.cf-bean.dim{filter:grayscale(1);opacity:.18}
+.cf-bean.sel{box-shadow:0 0 0 3px var(--ground),0 0 0 5px var(--act)}
+.cf-bean.named{grid-column:span 2;aspect-ratio:2.7;border-radius:999px}
+.cf-bean em{position:absolute;inset:0;display:grid;place-items:center;font:600 9.5px var(--mono);font-style:normal;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5);white-space:nowrap;overflow:hidden}
+.cf-sp__card{border:1px solid var(--rule);border-radius:12px;padding:12px 14px;background:var(--ground);min-height:92px}
+.cf-sp__card b{font:700 15px var(--sans)} .cf-sp__card b i{font-weight:500;color:var(--ink-3)} .cf-sp__card p{margin:6px 0 0;font-size:13.5px;color:var(--ink-2)}
+.cf-sp__card .kv{display:grid;grid-template-columns:auto 1fr auto 1fr auto 1fr;gap:4px 8px;margin-top:6px;font:500 12px var(--mono)} .cf-sp__card .kv span{color:var(--ink-3)}
+@media(max-width:620px){.cf-sp__card .kv{grid-template-columns:auto 1fr}}
+
+/* 02 · гібрид */
+.cf-hy{margin:var(--sp-sm) 0}
+.cf-hy canvas{display:block;width:100%;height:clamp(280px,34vw,380px);border-radius:var(--r-lg);background:#120c08}
+.cf-hy__bar{display:flex;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap}
+.cf-hy__t{font:500 12px var(--mono);color:var(--ink-3)}
+
+/* 03 · хімія */
+.cf-ch{display:grid;gap:12px;margin:var(--sp-sm) 0;padding:14px;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper)}
+.cf-ch__ctl{display:grid;gap:8px} .cf-ch__ctl label{display:grid;gap:4px;font:600 12px var(--mono);color:var(--ink-2)} .cf-ch__ctl input{width:100%}
+.cf-ch__pre{display:flex;flex-wrap:wrap;gap:6px}
+.cf-ch__r{display:grid;grid-template-columns:150px minmax(0,1fr) 110px;gap:10px;align-items:center;font-size:13.5px}
+.cf-ch__b{display:flex;height:16px;border-radius:8px;background:var(--ground);border:1px solid var(--rule);overflow:hidden}
+.cf-ch__b i{height:100%;transition:width .25s} .cf-ch__b .a{background:#c98b5a} .cf-ch__b .c{background:#6e4428}
+.cf-ch__r em{font:700 13px var(--mono);font-style:normal;text-align:right}
+.cf-ch__dose{font-size:13.5px;color:var(--ink-2);border-top:1px dashed var(--rule);padding-top:10px}
+@media(max-width:620px){.cf-ch__r{grid-template-columns:1fr auto}.cf-ch__b{grid-column:1/-1;grid-row:2}}
+
+/* 04 · клімат */
+.cf-cl{display:grid;gap:10px;margin:var(--sp-sm) 0;padding:14px;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper)}
+.cf-cl__in{display:grid;gap:4px;font:600 12px var(--mono);color:var(--ink-2)} .cf-cl__in input{width:100%}
+.cf-cl__ax{margin-bottom:14px}
+.cf-cl__axis{position:relative;height:18px;background:linear-gradient(90deg,#4a7bd0,#d9a21b 45%,#e0532a);border-radius:9px;opacity:.85}
+.cf-cl__axis span{position:absolute;top:22px;transform:translateX(-50%);font:500 10px var(--mono);color:var(--ink-3)}
+.cf-cl__axis .now{position:absolute;top:-6px;width:4px;height:30px;margin-left:-2px;border-radius:2px;background:var(--ink)}
+.cf-cl__rows{display:grid;gap:8px}
+.cf-cl__r{display:grid;grid-template-columns:100px minmax(0,1fr) 190px;gap:10px;align-items:center;font-size:13.5px;transition:color .25s}
+.cf-cl__r em{font:600 12px var(--mono);font-style:normal;color:var(--ink-3)} .cf-cl__r.ok em{color:#3f8f5a}
+.cf-cl__t{position:relative;height:14px;border-radius:7px;background:var(--ground);border:1px solid var(--rule)}
+.cf-cl__t i{position:absolute;top:-1px;bottom:-1px;border-radius:7px} .cf-cl__t .opt{background:#3f8f5a;opacity:.75} .cf-cl__t .opt.le{background:linear-gradient(90deg,transparent,#3f8f5a 55%);border-radius:0 7px 7px 0} .cf-cl__t .old{border:1.5px dashed var(--ink-3)}
+.cf-cl__t .pin{width:12px;margin-left:-6px;background:#e0532a}
+@media(max-width:620px){.cf-cl__r{grid-template-columns:80px minmax(0,1fr)}.cf-cl__r em{grid-column:1/-1}.cf-cl__ax>span:last-child{display:none}}
+
+/* 05 · дерево сортів */
+.cf-tr{display:grid;gap:10px;margin:var(--sp-sm) 0}
+.cf-tr__wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper);padding:8px}
+.cf-tr svg{display:block;width:100%;min-width:560px;height:auto}
+.cf-tr path{fill:none;stroke:var(--ink-3);stroke-width:1.4} .cf-tr path.rust{stroke:#b3261e;stroke-dasharray:4 4}
+.cf-tr__n{cursor:pointer} .cf-tr__n rect{fill:var(--ground);stroke:var(--rule-2,#ccc);stroke-width:1;transition:fill .25s,stroke .25s}
+.cf-tr__n text{font:600 9.5px var(--sans);text-anchor:middle;fill:var(--ink)} .cf-tr__n text.s{font:500 7.5px var(--mono);fill:var(--ink-3)}
+.cf-tr__n.rust rect{stroke:#b3261e} .cf-tr__n.on rect{fill:var(--act);stroke:var(--act)} .cf-tr__n.on text{fill:#fff}
+.cf-tr__bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.cf-tr__div{display:flex;align-items:center;gap:8px;font:500 11.5px var(--mono);color:var(--ink-3)} .cf-tr__div i{display:block;width:160px;height:8px;border-radius:4px;background:var(--ground);border:1px solid var(--rule);overflow:hidden} .cf-tr__div b{display:block;height:100%;background:var(--act);transition:width .6s}
+.cf-tr__card{border:1px solid var(--rule);border-radius:12px;padding:12px 14px;background:var(--ground);min-height:84px} .cf-tr__card b{font:700 15px var(--sans)} .cf-tr__card span{font:500 12px var(--mono);color:var(--ink-3)} .cf-tr__card p{margin:6px 0 0;font-size:13.5px;color:var(--ink-2)}
+
+/* 06 · обробка */
+.cf-pr{display:grid;gap:12px;margin:var(--sp-sm) 0;padding:14px;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper)}
+.cf-pr__m{display:flex;flex-wrap:wrap;gap:6px}
+.cf-pr__g{display:grid;grid-template-columns:200px 150px minmax(0,1fr);gap:16px;align-items:center}
+.cf-pr__g svg{width:100%;height:auto} .cf-pr__g ellipse{transition:opacity .6s,transform .6s;transform-origin:110px 110px} .cf-pr__g ellipse.off{opacity:0;transform:scale(1.15)}
+.cf-pr__leg{list-style:none;margin:0;padding:0;display:grid;gap:4px;font:500 12px var(--mono)} .cf-pr__leg li{display:flex;align-items:center;gap:8px;transition:opacity .4s} .cf-pr__leg li.off{opacity:.3;text-decoration:line-through}
+.cf-pr__leg i{width:12px;height:12px;border-radius:50%}
+.cf-pr__txt b{font:700 15px var(--sans)} .cf-pr__txt p{margin:6px 0 0;font-size:13.5px;color:var(--ink-2)} .cf-pr__txt .hyp{color:var(--ink-3)}
+.badge.hypb{background:color-mix(in srgb,#d9a21b 18%,transparent);color:#8a6510}
+@media(max-width:700px){.cf-pr__g{grid-template-columns:140px 1fr}.cf-pr__txt{grid-column:1/-1}}
+
+/* 07 · обсмажування */
+.cf-ro{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:12px;margin:var(--sp-sm) 0;padding:14px;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper)}
+.cf-ro canvas{display:block;width:100%;height:clamp(240px,28vw,320px);border-radius:12px;background:#140d09}
+.cf-ro__side{display:grid;gap:10px;align-content:start}
+.cf-ro__bean{width:120px;height:86px;margin:6px auto;border-radius:50%;background:var(--c,#8aa060);box-shadow:inset -10px -8px 18px rgba(0,0,0,.35),inset 8px 6px 14px rgba(255,255,255,.18);position:relative;transition:background .3s}
+.cf-ro__bean::after{content:"";position:absolute;left:14%;right:14%;top:48%;height:3px;border-radius:2px;background:rgba(0,0,0,.4);transform:rotate(-8deg)}
+.cf-ro__st b{font:700 14px var(--sans)} .cf-ro__st p{margin:4px 0 0;font-size:12.5px;color:var(--ink-2)} .cf-ro__st i{font-style:normal;font-weight:600}
+.cf-ro__in{grid-column:1/-1;display:grid;gap:4px;font:600 12px var(--mono);color:var(--ink-2)} .cf-ro__in input{width:100%}
+.cf-ro .cf-note{grid-column:1/-1}
+@media(max-width:700px){.cf-ro{grid-template-columns:1fr}}
+
+/* 08 · ціна */
+.cf-pc{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;margin:var(--sp-sm) 0;padding:14px;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--paper)}
+.cf-pc__r{display:grid;grid-template-columns:96px minmax(0,1fr) 84px;grid-template-rows:auto auto;gap:2px 10px;align-items:center;width:100%;padding:8px;border:1px solid transparent;border-radius:10px;background:none;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.cf-pc__r:hover{border-color:var(--rule)} .cf-pc__r.on{border-color:var(--act);background:var(--ground)}
+.cf-pc__r b{font:700 14px var(--sans)} .cf-pc__r small{grid-column:1;grid-row:2;font:500 10px var(--mono);color:var(--ink-3)}
+.cf-pc__b{grid-column:2;grid-row:1/3;height:16px;border-radius:8px;background:var(--ground);border:1px solid var(--rule);overflow:hidden} .cf-pc__b i{display:block;height:100%;width:0;background:var(--c);transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+.cf-pc.in .cf-pc__b i{width:var(--w)}
+.cf-pc__r em{grid-column:3;grid-row:1/3;font:700 14px var(--mono);font-style:normal;text-align:right}
+.cf-pc__cmp{margin:8px 0 0;font-size:14px;color:var(--ink-2);min-height:42px}
+.cf-pc__stack{display:flex;height:120px;gap:3px}
+.cf-pc__stack i{display:flex;align-items:flex-end;padding:6px;border-radius:8px;font:600 10.5px/1.3 var(--mono);font-style:normal;color:#fff;overflow:hidden}
+.cf-pc__stack .ar{background:#c98b5a} .cf-pc__stack .ca{background:#6e4428} .cf-pc__stack .re{background:#9aa3b2}
+@media(max-width:760px){.cf-pc{grid-template-columns:1fr}.cf-pc__r{grid-template-columns:80px minmax(0,1fr) 70px}}
+@media (max-width:760px){.cf-hero{margin:calc(-1 * var(--sp-md)) calc(-1 * var(--sp-md)) var(--sp-md);height:460px}}
+@media (max-width:700px){.cf-hero__lab{display:none}.cf-hero__lab.a,.cf-hero__lab.c{left:14px;right:auto;top:auto;bottom:18px}.cf-hero__lab.on{display:block}}
