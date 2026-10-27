@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Скіл «інтерактивна стаття» · Draft</title>
+<title data-en="The “explorable article” skill · Draft">Скіл «інтерактивна стаття» · Draft</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,85 +12,132 @@
 <link rel="stylesheet" href="shared/threebody.css?v=20261019183857">
 <link rel="stylesheet" href="shared/interstellar.css?v=20261019094636">
 <link rel="stylesheet" href="shared/recession.css?v=20261020184605">
-<link rel="stylesheet" href="shared/sk.css?v=20261020184341">
+<link rel="stylesheet" href="shared/sk.css?v=20261026h">
+<link rel="stylesheet" href="shared/sk-prod.css?v=20261026r">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
 </head>
-<body>
+<body data-lang-reload>
 <div class="page">
 <header class="topbar">
-  <a class="brand" href="#top">Скіл «інтерактивна стаття»</a>
+  <a class="brand" href="#top" data-en="The “explorable article” skill">Скіл «інтерактивна стаття»</a>
   <nav class="toc" id="toc" aria-label="Розділи">
-    <a href="#why">Навіщо</a><a href="#line">Конвеєр</a><a href="#anatomy">Анатомія</a><a href="#roles">Ролі</a><a href="#rules">Правила</a><a href="#check">Перевірка</a><a href="#map">Карта</a><a href="#use">Як користуватися</a>
+    <a href="#prod" data-en="Production">Виробництво</a><a href="#roles" data-en="Crew">Група</a><a href="#anatomy" data-en="Shot">Кадр</a><a href="#prov" data-en="Fact-check">Фактчек</a><a href="#check" data-en="Screening">Показ</a><a href="#stage" data-en="Franchise">Франшиза</a><a href="#map" data-en="Backstage">Лаштунки</a><a href="#use" data-en="Credits">Титри</a>
   </nav>
 </header>
 
 <main class="main" id="top">
   <header class="hero3">
-    <img class="hero3__img" src="assets/skill/banner.jpg" alt="Темна майстерня: конвеєр скляних панелей перетворює нотатки на інтерактивну сторінку" width="1918" height="820">
     <div class="hero3__txt">
-      <div class="hero3__kick">Стаття · як я працюю з AI · чернетка</div>
-      <h1>Як Claude збирає інтерактивну статтю</h1>
-      <p class="hero3__sub">Скіл, який виріс із трьох статей і ~150 моїх правок</p>
+      <div class="hero3__kick" data-en="Article · how I work with AI · draft">Стаття · як я працюю з AI · чернетка</div>
+      <h1 data-en="How Claude builds an explorable article">Як Claude збирає інтерактивну статтю</h1>
+      <p class="hero3__sub" data-en="A skill that grew out of three articles, a trailer, a presentation and ~150 of my edits">Скіл, який виріс із трьох статей, трейлера, презентації і ~150 моїх правок</p>
     </div>
   </header>
-  <div class="wrap"><p class="lede lede3">«Задача трьох тіл», «Фізика „Інтерстеллара“» і «Рецесія в США» зроблені однаково: дослідження з джерелами, сцени, що рахують за справжніми формулами чи даними, короткий ролик, звук і карта залежностей. Щоразу, коли щось ішло не так, я казав про це Claude — і з цих правок склався скіл: інструкція, яку Claude підвантажує сам, щойно бачить знайоме завдання. Ця стаття розбирає, як він працює, — у тому самому форматі, який описує.</p></div>
+  <div class="wrap"><div id="sk-trailer"></div></div>
+  <div class="wrap"><div id="sk-board"></div><p class="lede lede3" data-prov="fact" data-en="This is a making-of. “The Three-Body Problem”, “The Physics of Interstellar” and “Recession in the US” were shot the same way: I am the producer, Claude is the director, and the crew is ChatGPT, Gemini, Suno, Tripo, Blender and ai slop helper. Every edit I made became a rule, and those rules added up to a skill — instructions that Claude loads by itself as soon as it recognises a familiar task. Below is how one article was shot, from the first word to the premiere, and what this “film” is made of.">Це making of. «Задача трьох тіл», «Фізика „Інтерстеллара“» і «Рецесія в США» знято однаково: продюсер — я, режисер — Claude, знімальна група — ChatGPT, Gemini, Suno, Tripo, Blender і ai slop helper. Кожна моя правка ставала правилом, і з цих правил склався скіл — інструкція, яку Claude підвантажує сам, щойно бачить знайоме завдання. Нижче — як знімалась одна стаття від першого слова до прем’єри, і з чого складається цей «фільм».</p>
+    <div class="sk-provbar" data-en="&lt;button type=&quot;button&quot; class=&quot;rc-btn&quot; id=&quot;skProvToggle&quot;&gt;director’s cut: marks and comments&lt;/button&gt;&lt;span id=&quot;skProvSum&quot;&gt;&lt;/span&gt;"><button type="button" class="rc-btn" id="skProvToggle">режисерська версія: помітки й коментарі</button><span id="skProvSum"></span></div></div>
 
   <div class="wrap">
 
-  <section class="sec" id="why">
-    <h2><span class="num">01</span>Навіщо скіл</h2>
-    <p>Скіл — це папка з файлом <code>SKILL.md</code>: короткий опис «коли мене використовувати», правила й посилання на довідку. Claude бачить лише опис і відкриває решту, коли завдання збігається. Тому інструкція не роздуває кожну розмову, а спрацьовує саме тоді, коли я кажу «нова сторінка в такому ж вигляді» чи «зроби ролик».</p>
-    <p>Без скіла кожна нова стаття починалася з тих самих пояснень: не перейменовуй примітки в «пастки», не пуш без команди, не підписуй картинки «згенеровано», перевір у Chrome, бо вбудований браузер не малює кадри. Скіл перетворює ці пояснення на пам'ять процесу.</p>
-    <p class="trap"><b>Важливо.</b> Скіл не замінює рішень власника. Він фіксує, <i>як</i> робити, а <i>що</i> робити — і коли зупинитися — вирішують команди «22», «11» і «пуш».</p>
+  <div class="sk-act" aria-hidden="true" data-en="&lt;span&gt;ACT I&lt;/span&gt;&lt;b&gt;Production&lt;/b&gt;"><span>АКТ I</span><b>Виробництво</b></div>
+
+  <section class="sec" id="prod">
+    <div class="sk-slate" aria-hidden="true" data-en="&lt;span&gt;SCENE 01&lt;/span&gt;&lt;span&gt;TAKE 35 · 20.10.2026&lt;/span&gt;"><span>СЦЕНА 01</span><span>ДУБЛЬ 35 · 20.10.2026</span></div>
+    <h2 data-en="&lt;span class=&quot;num&quot;&gt;01&lt;/span&gt;Production&lt;small class=&quot;sk-sub&quot;&gt;from “22” to the premiere&lt;/small&gt;"><span class="num">01</span>Виробництво<small class="sk-sub">від «22» до прем’єри</small></h2>
+    <p data-prov="fact" data-en="Here is how one real article was shot — “Recession in the US”. Scroll: on the left the page assembles layer by layer, on the right — who worked at each stage, what they wanted, what went wrong and which rule came out of it. At the gates “22”, “11” and “push” — a real excerpt from the session log: the owner’s message and the commands that followed it; each stage has an “under the hood” block with tools, files and commands.">Ось як знімалася одна справжня стаття — «Рецесія в США». Гортайте: ліворуч сторінка збирається шарами, праворуч — хто працював на кожному етапі, що хотіли, що пішло не так і яке правило з цього вийшло. На воротах «22», «11» і «пуш» — справжній фрагмент журналу сесії: повідомлення власника й команди, що пішли за ним; на кожному етапі — блок «під капотом» з інструментами, файлами й командами.</p>
+    <p class="sk-dir" data-prov="dir" data-en="This is ordinary project management: gates, roles, definition of done, retrospective. Only the team is AI, and a gate costs one word.">Це звичайне управління проєктом: ворота, ролі, критерії готовності, ретроспектива. Тільки команда — з ШІ, а ворота коштують одне слово.</p>
+    <div id="sk-prod" class="viz-slot"></div>
   </section>
 
-  <section class="sec" id="line">
-    <h2><span class="num">02</span>Конвеєр за десять кроків</h2>
-    <p>Від теми до опублікованої сторінки — десять станцій. Натисніть «▶ провести статтю», щоб пройти їх по черзі, або клікніть станцію: хто її робить, що на виході і що пішло не так у попередніх статтях.</p>
-    <div id="sk-line" class="viz-slot"></div>
+  <div class="sk-act" aria-hidden="true" data-en="&lt;span&gt;ACT II&lt;/span&gt;&lt;b&gt;On set&lt;/b&gt;"><span>АКТ II</span><b>На майданчику</b></div>
+
+  <section class="sec" id="roles">
+    <div class="sk-slate" aria-hidden="true" data-en="&lt;span&gt;SCENE 02&lt;/span&gt;&lt;span&gt;CASTING&lt;/span&gt;"><span>СЦЕНА 02</span><span>КАСТИНГ</span></div>
+    <h2 data-en="&lt;span class=&quot;num&quot;&gt;02&lt;/span&gt;The crew&lt;small class=&quot;sk-sub&quot;&gt;who does what&lt;/small&gt;"><span class="num">02</span>Знімальна група<small class="sk-sub">хто що робить</small></h2>
+    <p class="sk-dir" data-prov="dir" data-en="As a PM I assign tools rather than people — but the questions are the same: who is responsible, who approves, where the boundary of responsibility lies.">Як ПМ я призначаю не людей, а інструменти — але питання ті самі: хто відповідає, хто затверджує, де межа відповідальності.</p>
+    <p data-prov="fact" data-en="Claude is the conductor, but not the only performer. ChatGPT draws the pictures, Tripo and Blender build the 3D, Gemini edits the style of the texts, Suno writes the music, ai slop helper marks where each phrase came from, and the numbers come from primary sources. The crew is drawn with the same diagram skill as the data platform in the article “Data and how to govern it”: lanes, nested groups, “+” expands a block into its parts, and the buttons on top trace the path from the owner’s command to the page.">Claude — диригент, але не єдиний виконавець. Картинки малює ChatGPT, 3D збирають Tripo і Blender, стиль текстів править Gemini, музику пише Suno, походження фраз позначає ai slop helper, а цифри приходять із першоджерел. Команда намальована тим самим скілом схем, що й платформа даних у статті «Дані та керування ними»: смуги, вкладені групи, «+» розгортає блок у складові, а кнопки згори проводять шлях від команди власника до сторінки.</p>
+    <div id="sk-roles" class="viz-slot"></div>
+    <p data-prov="fact" data-en="Four helpers from this list are swappable modules of the machine that prints the article: a brush, a tuning fork, a crystal and a lens. The model was made with the same pipeline as the 3D in the articles: ChatGPT drew four views — front, left, right, back — Tripo built a model from them (262 thousand faces, 4K texture), and Blender reduced the textures to 2K and compressed everything to 3.7 megabytes. The mesh was not simplified: when simplified, the smooth panels “crumple” like foil.">Чотири помічники з цього списку — змінні модулі верстата, що друкує статтю: пензель, камертон, кристал і лінза. Модель зроблена тим самим конвеєром, що й 3D у статтях: ChatGPT намалював чотири види — спереду, зліва, справа, ззаду, — Tripo зібрав із них модель (262 тисячі граней, текстура 4K), а Blender зменшив текстури до 2K і стиснув усе до 3,7 мегабайта. Сітку не спрощували: при спрощенні гладкі панелі «мнуться», як фольга.</p>
+    <div class="sk-kit" id="sk-kit" data-en="&lt;span class=&quot;sk-kit__cap&quot;&gt;drag — rotate · labels — roles&lt;/span&gt;"><span class="sk-kit__cap">тягніть — крутити · мітки — ролі</span></div>
+    <p data-prov="fact" data-en="Other models Tripo built for earlier articles — an astronaut, a lander, a sailing ship, a farm, a watch — became miniatures on the same desk where the Lander stood. The scene and light come from the Lander renders, Blender, Cycles.">Інші моделі, які Tripo зібрав для попередніх статей, — космонавт, посадковий модуль, вітрильник, ферма, годинник — стали мініатюрами на тому самому столі, де стояв Лендер. Сцена і світло — з рендерів Лендера, Blender, Cycles.</p>
+    <div class="sk-minis" id="sk-minis">
+      <figure><a href="assets/skill/minis/01-desk.webp"><img src="assets/skill/minis/01-desk-sm.webp" srcset="assets/skill/minis/01-desk-sm.webp 720w, assets/skill/minis/01-desk.webp 1920w" sizes="(max-width:1240px) 100vw, 1180px" loading="lazy" alt="Білий робочий стіл із двома моніторами, на правому — ця стаття; ліворуч від клавіатури — мініатюрні ферма й корабель, біля підставки монітора — годинник, на трекпаді — космонавт" width="720" height="405"></a><figcaption data-en="The desk: all the miniatures, this article on the monitor">Стіл: усі мініатюри, на моніторі — ця стаття</figcaption></figure>
+      <figure><a href="assets/skill/minis/02-diorama.webp"><img src="assets/skill/minis/02-diorama-sm.webp" srcset="assets/skill/minis/02-diorama-sm.webp 720w, assets/skill/minis/02-diorama.webp 1920w" sizes="(max-width:639px) 100vw, 590px" loading="lazy" alt="Низький ракурс: зелений трактор у фокусі, за ним розмиті червона стодола й білий двоповерховий будинок" width="720" height="405"></a><figcaption data-en="Diorama: house, barn, tractor">Діорама: будинок, стодола, трактор</figcaption></figure>
+      <figure><a href="assets/skill/minis/03-ship.webp"><img src="assets/skill/minis/03-ship-sm.webp" srcset="assets/skill/minis/03-ship-sm.webp 720w, assets/skill/minis/03-ship.webp 1920w" sizes="(max-width:639px) 100vw, 590px" loading="lazy" alt="Трищогловий вітрильник із чорно-червоним корпусом на білому столі, ракурс три чверті" width="720" height="405"></a><figcaption data-en="Sailing ship, 3/4 view">Вітрильник, ракурс 3/4</figcaption></figure>
+      <figure><a href="assets/skill/minis/04-astronaut.webp"><img src="assets/skill/minis/04-astronaut-sm.webp" srcset="assets/skill/minis/04-astronaut-sm.webp 720w, assets/skill/minis/04-astronaut.webp 1920w" sizes="(max-width:639px) 100vw, 590px" loading="lazy" alt="Фігурка космонавта в білому скафандрі з помаранчевими вставками стоїть на трекпаді, позаду розмитий монітор" width="720" height="405"></a><figcaption data-en="Astronaut on the trackpad">Космонавт на трекпаді</figcaption></figure>
+      <figure><a href="assets/skill/minis/05-watch.webp"><img src="assets/skill/minis/05-watch-sm.webp" srcset="assets/skill/minis/05-watch-sm.webp 720w, assets/skill/minis/05-watch.webp 1920w" sizes="(max-width:639px) 100vw, 590px" loading="lazy" alt="Наручний годинник зі світлим циферблатом і коричневим шкіряним ремінцем лежить на столі циферблатом угору" width="720" height="405"></a><figcaption data-en="The watch by the monitor stand">Годинник біля підставки монітора</figcaption></figure>
+      <figure><a href="assets/skill/minis/06-high.webp"><img src="assets/skill/minis/06-high-sm.webp" srcset="assets/skill/minis/06-high-sm.webp 720w, assets/skill/minis/06-high.webp 1920w" sizes="(max-width:639px) 100vw, 590px" loading="lazy" alt="Вид згори-збоку на стіл: клавіатура, трекпад із космонавтом, корабель, ферма й годинник" width="720" height="405"></a><figcaption data-en="The whole composition from above">Уся композиція згори</figcaption></figure>
+      <figure><a href="assets/skill/minis/07-lander.webp"><img src="assets/skill/minis/07-lander-sm.webp" srcset="assets/skill/minis/07-lander-sm.webp 720w, assets/skill/minis/07-lander.webp 1920w" sizes="(max-width:639px) 100vw, 590px" loading="lazy" alt="Космонавт на трекпаді і посадковий модуль з «Інтерстеллара» на опорах поруч" width="720" height="405"></a><figcaption data-en="Astronaut and lander">Космонавт і посадковий модуль</figcaption></figure>
+    </div>
   </section>
 
   <section class="sec" id="anatomy">
-    <h2><span class="num">03</span>Анатомія розділу</h2>
-    <p>Кожен розділ статті має однакову будову: короткий текст, сцена і примітка. Сцена — не ілюстрація, а модель: вона рахує, і її можна зачепити. Спробуйте на живому прикладі нижче — це дві зорі, які рахуються за законом тяжіння; клік додає третє тіло.</p>
+    <div class="sk-slate" aria-hidden="true" data-en="&lt;span&gt;SCENE 03&lt;/span&gt;&lt;span&gt;SHOT 1 · BLACK HOLE&lt;/span&gt;"><span>СЦЕНА 03</span><span>КАДР 1 · ЧОРНА ДІРА</span></div>
+    <h2 data-en="&lt;span class=&quot;num&quot;&gt;03&lt;/span&gt;One shot&lt;small class=&quot;sk-sub&quot;&gt;anatomy of a section&lt;/small&gt;"><span class="num">03</span>Один кадр<small class="sk-sub">анатомія розділу</small></h2>
+    <p data-prov="fact" data-en="Every section of an article has the same structure: a short text, a scene and a note. The scene is not an illustration but a model: it computes, and you can poke it. Try the live example below — section 02 of article 34, “What Gargantua really looks like”, as is: every light ray is computed by general relativity; a click sends a probe ray.">Кожен розділ статті має однакову будову: короткий текст, сцена і примітка. Сцена — не ілюстрація, а модель: вона рахує, і її можна зачепити. Спробуйте на живому прикладі нижче — це розділ 02 статті 34 «Як насправді виглядає Гаргантюа» як є: кожен промінь світла рахується за загальною теорією відносності; клік запускає пробний промінь.</p>
     <div id="sk-anatomy" class="viz-slot"></div>
-    <p class="trap"><b>Не плутати.</b> Примітка в кінці розділу — не «пастка» і не попередження. Це одне з п'яти коротких уточнень: «Насправді», «Важливо», «Висновок», «Не плутати», «Цікавий факт». Слово «пастка» я заборонив — воно звучить так, ніби читача ловлять.</p>
+    <p class="trap" data-prov="mine" data-en="&lt;b&gt;Don’t confuse.&lt;/b&gt; The note at the end of a section is not a “trap” or a warning. It is one of five short clarifications: “Actually”, “Important”, “Takeaway”, “Don’t confuse”, “Fun fact”. I banned the word “trap” — it sounds as if the reader is being caught."><b>Не плутати.</b> Примітка в кінці розділу — не «пастка» і не попередження. Це одне з п'яти коротких уточнень: «Насправді», «Важливо», «Висновок», «Не плутати», «Цікавий факт». Слово «пастка» я заборонив — воно звучить так, ніби читача ловлять.</p>
   </section>
 
-  <section class="sec" id="roles">
-    <h2><span class="num">04</span>Хто що робить</h2>
-    <p>Claude — диригент, але не єдиний виконавець. Картинки малює ChatGPT, стиль текстів править Gemini, 3D-моделі будує Tripo з Blender, музику пише Suno, а цифри приходять із першоджерел. Клікніть на роль, щоб побачити, де межа її відповідальності.</p>
-    <div id="sk-roles" class="viz-slot"></div>
+  <section class="sec" id="prov">
+    <div class="sk-slate" aria-hidden="true" data-en="&lt;span&gt;SCENE 04&lt;/span&gt;&lt;span&gt;EDITING ROOM&lt;/span&gt;"><span>СЦЕНА 04</span><span>МОНТАЖНА</span></div>
+    <h2 data-en="&lt;span class=&quot;num&quot;&gt;04&lt;/span&gt;Editing and fact-check&lt;small class=&quot;sk-sub&quot;&gt;where did this phrase come from&lt;/small&gt;"><span class="num">04</span>Монтаж і фактчек<small class="sk-sub">звідки ця фраза</small></h2>
+    <p class="sk-dir" data-prov="dir" data-en="The most expensive part of working with AI is not generation but proofreading. Provenance marks turn “reread everything” into “close the list”.">Найдорожче в роботі з ШІ — не генерація, а вичитка. Помітки походження перетворюють «перечитати все» на «закрити список».</p>
+    <p data-prov="fact" data-en="An assistant writes what it took from a source and what it just made up in the same convincing voice. So proofreading turns into rereading everything. The ai slop helper project makes provenance visible: next to each block there is a mark — “Verified”, “Hypothesis”, “My conclusion”, or a working one — “To finish”, “Rework · ai slop”, “Delete”. Claude sets them itself while writing; the owner goes through the page, changes the marks and leaves comments, and then says “process the comments”.">Асистент пише однаково переконливо і те, що взяв із джерела, і те, що щойно вигадав. Тому вичитка перетворюється на суцільне перечитування. Проєкт ai slop helper робить походження видимим: біля кожного блока — помітка «Перевірено», «Гіпотеза», «Мій висновок» або робоча — «Доробити», «Переробити · ai slop», «Видалити». Claude сам ставить їх, коли пише; власник проходить сторінку, змінює помітки й лишає зауваження, а потім каже «опрацюй зауваження».</p>
+    <p data-prov="fact" data-en="Try it: a click on a mark changes it, and the “process the comments” button runs the loop — an edit, an “asked → done” list, and the counter of working marks goes down to zero. And the switch at the top of the article shows the marks on this very article.">Спробуйте: клік по помітці змінює її, а кнопка «опрацюй зауваження» виконує цикл — правка, перелік «просив → зробив», лічильник робочих поміток іде до нуля. А перемикач угорі статті показує помітки на самій цій статті.</p>
+    <div id="sk-prov" class="viz-slot"></div>
+    <p class="trap" data-prov="mine" data-en="&lt;b&gt;Takeaway.&lt;/b&gt; Slop is not a hypothesis. Text the assistant wrote without a source is marked “rework”, and the owner’s pass is about bringing such blocks down to zero."><b>Висновок.</b> Слоп — це не гіпотеза. Текст, який асистент написав без джерела, позначається «переробити», і прохід власника полягає в тому, щоб звести таких блоків до нуля.</p>
   </section>
 
-  <section class="sec" id="rules">
-    <h2><span class="num">05</span>Правила, що виросли з помилок</h2>
-    <p>Найцінніша частина скіла — не конвеєр, а таблиця «помилка → правило». Кожен рядок колись коштував мені повідомлення з кількома знаками оклику. Переверніть картку.</p>
-    <div id="sk-rules" class="viz-slot"></div>
-  </section>
+  <div class="sk-act" aria-hidden="true" data-en="&lt;span&gt;ACT III&lt;/span&gt;&lt;b&gt;Screening&lt;/b&gt;"><span>АКТ III</span><b>Показ</b></div>
 
   <section class="sec" id="check">
-    <h2><span class="num">06</span>Перевірка — від найдешевшої</h2>
-    <p>Перевірка йде від дешевого до дорогого: синтаксис файлу, консоль, скрипт схеми, знімок у браузері. Повну регресію — лише на запит. Відмітьте кроки, щоб побачити, що кожен ловить.</p>
+    <div class="sk-slate" aria-hidden="true" data-en="&lt;span&gt;SCENE 05&lt;/span&gt;&lt;span&gt;RUN-THROUGH&lt;/span&gt;"><span>СЦЕНА 05</span><span>ПРОГІН</span></div>
+    <h2 data-en="&lt;span class=&quot;num&quot;&gt;05&lt;/span&gt;Test screening&lt;small class=&quot;sk-sub&quot;&gt;checks — cheapest first&lt;/small&gt;"><span class="num">05</span>Тестовий показ<small class="sk-sub">перевірка — від найдешевшої</small></h2>
+    <p class="sk-dir" data-prov="dir" data-en="The order of checks is cost management: first what costs a second, and only then what costs an hour.">Порядок перевірок — це керування вартістю: спершу те, що коштує секунду, і лише потім те, що коштує годину.</p>
+    <p data-prov="fact" data-en="Checks go from cheap to expensive: file syntax, console, diagram script, a browser screenshot. A full regression — only on request. Tick the steps to see what each one catches.">Перевірка йде від дешевого до дорогого: синтаксис файлу, консоль, скрипт схеми, знімок у браузері. Повну регресію — лише на запит. Відмітьте кроки, щоб побачити, що кожен ловить.</p>
     <div id="sk-check" class="viz-slot"></div>
-    <p class="trap"><b>Цікавий факт.</b> Вбудований у застосунок браузер часто «засинає» і не перемальовує канвас. Тому для сцен скіл каже читати стан програми скриптом (пікселі, лічильники), а вигляд перевіряти у звичайному Chrome.</p>
+    <p class="trap" data-prov="fact" data-en="&lt;b&gt;Fun fact.&lt;/b&gt; The browser built into the app often “falls asleep” and does not repaint the canvas. That is why, for scenes, the skill says to read the program state with a script (pixels, counters) and check the look in regular Chrome."><b>Цікавий факт.</b> Вбудований у застосунок браузер часто «засинає» і не перемальовує канвас. Тому для сцен скіл каже читати стан програми скриптом (пікселі, лічильники), а вигляд перевіряти у звичайному Chrome.</p>
   </section>
 
+  <section class="sec" id="stage">
+    <div class="sk-slate" aria-hidden="true" data-en="&lt;span&gt;SCENE 06&lt;/span&gt;&lt;span&gt;33 · 34 · 35 · 36&lt;/span&gt;"><span>СЦЕНА 06</span><span>33 · 34 · 35 · 36</span></div>
+    <h2 data-en="&lt;span class=&quot;num&quot;&gt;06&lt;/span&gt;Franchise&lt;small class=&quot;sk-sub&quot;&gt;four sisters&lt;/small&gt;"><span class="num">06</span>Франшиза<small class="sk-sub">чотири сестри</small></h2>
+    <p class="sk-dir" data-prov="dir" data-en="A franchise is the best test of a skill: if the fourth article comes out as a sister of the first without extra explanations, the rules work.">Франшиза — найкраща перевірка скіла: якщо четверта стаття виходить сестрою першої без окремих пояснень, правила працюють.</p>
+    <p data-prov="fact" data-en="Here is what comes off the pipeline: the first screens of articles 33–36. Different topics — physics, film, economics and the skill itself — but one structure: a banner with a quiet left part for the title, a legend of marks, numbered sections. The showcase is product shots: on the left, “tilt-shift” on real 3D models of an iPhone and iPad — the devices lie on a desk and only a strip that wanders across them is sharp, like a miniature photo; on the right, a “focus pull” — a browser window with the Itspired site and floating portfolio windows, the focus drifting by itself from the near edge to the far one.">Ось що виходить на виході конвеєра: перші екрани статей 33–36. Різні теми — фізика, кіно, економіка й сам скіл, — але одна будова: банер із тихою лівою частиною під заголовок, легенда позначок, нумеровані розділи. Вітрина — продуктові кадри: ліворуч на справжніх 3D-моделях iPhone та iPad «тілт-шифт» — пристрої лежать на столі, різка лише смуга, що гуляє ним, як на фото мініатюри; праворуч «перевід фокуса» — вікно браузера із сайтом Itspired і плаваючими вікнами портфоліо, різкість сама пливе від ближнього краю до дальнього.</p>
+    <div id="sk-stage" class="viz-slot"></div>
+  </section>
+
+  <div class="sk-act" aria-hidden="true" data-en="&lt;span&gt;ACT IV&lt;/span&gt;&lt;b&gt;Backstage&lt;/b&gt;"><span>АКТ IV</span><b>За лаштунками</b></div>
+
   <section class="sec" id="map">
-    <h2><span class="num">07</span>Карта скіла</h2>
-    <p>Що на вході, через які кроки проходить, що з'являється на сторінці і чим це перевіряється. Наведіть на блок або запустіть маршрут.</p>
-    <div class="cbox" data-comp="sk"></div>
+    <div class="sk-slate" aria-hidden="true" data-en="&lt;span&gt;SCENE 07&lt;/span&gt;&lt;span&gt;THE SKILL ON DISK&lt;/span&gt;"><span>СЦЕНА 07</span><span>СКІЛ НА ДИСКУ</span></div>
+    <h2 data-en="&lt;span class=&quot;num&quot;&gt;07&lt;/span&gt;Backstage&lt;small class=&quot;sk-sub&quot;&gt;how Claude opens the skill&lt;/small&gt;"><span class="num">07</span>За лаштунками<small class="sk-sub">як Claude відкриває скіл</small></h2>
+    <p data-prov="fact" data-en="Behind the scenes there is no magic — five text files in one folder. Claude always keeps only the skill’s short description in mind; when the owner’s request matches it, Claude opens SKILL.md, and then only the one reference that the task needs. Pick a request — and you’ll see which lines it reads and how many words of the skill actually get into the context.">За лаштунками немає магії — п’ять текстових файлів в одній папці. Claude постійно тримає в голові лише короткий опис скіла; коли запит власника з ним збігається, він відкриває SKILL.md, а далі — тільки той один довідник, який потрібен для задачі. Оберіть запит — і побачите, які рядки він читає і скільки слів скіла насправді потрапляє в контекст.</p>
+    <div id="sk-back" class="viz-slot"></div>
   </section>
 
   <section class="sec" id="use">
-    <h2><span class="num">08</span>Як користуватися</h2>
-    <p>Скіл лежить у <code>~/.claude/skills/building-explorable-articles/</code>: <code>SKILL.md</code> (≈700 слів: протокол власника, конвеєр, правила) і <code>reference.md</code> (каркас сторінки, шаблони ролика, звуку, перевірки). Claude Code знаходить його сам за описом. Достатньо написати «нова стаття в такому ж вигляді, тема — …, 22» — і Claude почне з вивчення попередньої сторінки й дослідження, а не з коду.</p>
-    <p>Той самий підхід працює для будь-якої повторюваної роботи: зберіть правки власника за кілька ітерацій, перетворіть кожну на правило з причиною — і наступного разу їх не доведеться повторювати.</p>
-    <p class="trap"><b>Висновок.</b> Хороший скіл — це не промпт «зроби красиво», а стисла історія помилок конкретної команди. Тому він короткий, з причинами в кожному рядку і з посиланнями на робочі приклади.</p>
-    <h3>Посилання</h3>
+    <div class="sk-slate" aria-hidden="true" data-en="&lt;span&gt;SCENE 08&lt;/span&gt;&lt;span&gt;THE END · OR IS IT?&lt;/span&gt;"><span>СЦЕНА 08</span><span>КІНЕЦЬ · ЧИ НІ?</span></div>
+    <h2 data-en="&lt;span class=&quot;num&quot;&gt;08&lt;/span&gt;End credits&lt;small class=&quot;sk-sub&quot;&gt;how to shoot your own&lt;/small&gt;"><span class="num">08</span>Фінальні титри<small class="sk-sub">як зняти своє</small></h2>
+    <p data-prov="fact" data-en="The skill lives in &lt;code&gt;~/.claude/skills/building-explorable-articles/&lt;/code&gt;: the core &lt;code&gt;SKILL.md&lt;/code&gt; (owner’s protocol, pipeline, rules) and four references — page skeleton, reel and video, provenance marks, client presentation. Claude Code finds it by itself from its description. It is enough to write “a new article in the same style, topic — …, 22” — and Claude will start by studying the previous page and doing research, not by writing code.">Скіл лежить у <code>~/.claude/skills/building-explorable-articles/</code>: ядро <code>SKILL.md</code> (протокол власника, конвеєр, правила) і чотири довідки — каркас сторінки, ролик і відео, помітки походження, презентація для клієнта. Claude Code знаходить його сам за описом. Достатньо написати «нова стаття в такому ж вигляді, тема — …, 22» — і Claude почне з вивчення попередньої сторінки й дослідження, а не з коду.</p>
+    <h3 data-en="Try it yourself">Спробуйте самі</h3>
+    <div id="sk-try" class="viz-slot"></div>
+    <p data-prov="mine" data-en="The same approach works for any repeated work: collect the owner’s edits over a few iterations, turn each into a rule with a reason — and next time you won’t have to repeat them.">Той самий підхід працює для будь-якої повторюваної роботи: зберіть правки власника за кілька ітерацій, перетворіть кожну на правило з причиною — і наступного разу їх не доведеться повторювати.</p>
+    <p data-prov="mine" data-en="&lt;b&gt;Limits.&lt;/b&gt; Free Suno gives a few downloads a day; generations in Tripo and ChatGPT cost credits and run only on command; subagents also run only on command, and Claude checks their work itself; facts are still checked by a human."><b>Межі.</b> Безкоштовний Suno дає кілька завантажень на день; генерації в Tripo й ChatGPT коштують кредити й запускаються лише за командою; субагенти — теж лише за командою, і їхню роботу Claude перевіряє сам; факти все одно перевіряє людина.</p>
+    <p data-prov="mine" data-en="&lt;b&gt;What it means beyond the blog.&lt;/b&gt; The same loop — decision gates, roles, checks from the cheapest, lessons that become rules — works in any project where AI does part of the work: reports, presentations, prototypes. The human does not write more — they make decisions more often."><b>Що це означає поза блогом.</b> Той самий цикл — ворота рішень, ролі, перевірка від найдешевшої, уроки, що стають правилами, — працює в будь-якому проєкті, де частину роботи робить ШІ: звіти, презентації, прототипи. Людина не пише більше — вона частіше ухвалює рішення.</p>
+    <p class="trap" data-prov="mine" data-en="&lt;b&gt;Takeaway.&lt;/b&gt; A good skill is not a “make it pretty” prompt but a condensed history of one team’s mistakes. That is why it is short, has a reason in every line and links to working examples."><b>Висновок.</b> Хороший скіл — це не промпт «зроби красиво», а стисла історія помилок конкретної команди. Тому він короткий, з причинами в кожному рядку і з посиланнями на робочі приклади.</p>
+    <h3 data-en="Links">Посилання</h3>
     <ul class="src29">
-      <li><a href="33-three-body.html">«Задача трьох тіл»</a> — перша стаття, на якій склався формат</li>
-      <li><a href="https://docs.claude.com/en/docs/claude-code/skills" target="_blank" rel="noopener">Claude Code — Agent Skills (документація Anthropic)</a></li>
-      <li>Ілюстрація — власна згенерована; сцени й схеми побудовано кодом.</li>
+      <li data-en="&lt;a href=&quot;33-three-body.html&quot;&gt;“The Three-Body Problem”&lt;/a&gt; — the first article where the format took shape"><a href="33-three-body.html">«Задача трьох тіл»</a> — перша стаття, на якій склався формат</li>
+      <li data-en="&lt;a href=&quot;https://github.com/ArtemZh/Ai_slop_helper&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;ai slop helper&lt;/a&gt; — provenance marks and margin comments"><a href="https://github.com/ArtemZh/Ai_slop_helper" target="_blank" rel="noopener">ai slop helper</a> — помітки походження й зауваження на полях</li>
+      <li data-en="&lt;a href=&quot;https://docs.claude.com/en/docs/claude-code/skills&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Claude Code — Agent Skills (Anthropic documentation)&lt;/a&gt;"><a href="https://docs.claude.com/en/docs/claude-code/skills" target="_blank" rel="noopener">Claude Code — Agent Skills (документація Anthropic)</a></li>
+      <li data-en="Illustrations are my own generations; music — Suno; scenes, diagrams and the trailer are built in code. The “long exposure of edits” banner (Hero 32, React Bits Pro), the “target cursor” and “ghost fibres” effects and the “tilt-shift / focus pull” showcase (Center Stage) are based on ideas from &lt;a href=&quot;https://reactbits.dev/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;React Bits&lt;/a&gt;, rewritten in my own code. Device 3D models: iPhone 15 Pro Max — &lt;a href=&quot;https://sketchfab.com/3d-models/apple-iphone-15-pro-max-black-df17520841214c1792fb8a44c6783ee7&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;polyman Studio&lt;/a&gt; (CC BY 4.0), iPad Pro — &lt;a href=&quot;https://sketchfab.com/3d-models/apple-ipad-pro-e5ffb3c80b2d4d6690249f8ee2bdafbe&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;DatSketch&lt;/a&gt; (CC BY-NC 4.0), Sketchfab.">Ілюстрації — власні згенеровані; музика — Suno; сцени, схеми й трейлер побудовано кодом. Банер «довга витримка правок» (Hero 32, React Bits Pro), ефекти «приціл», «примарні волокна» і вітрина «тілт-шифт / перевід фокуса» (Center Stage) — за ідеями <a href="https://reactbits.dev/" target="_blank" rel="noopener">React Bits</a>, переписано власним кодом. 3D-моделі пристроїв: iPhone 15 Pro Max — <a href="https://sketchfab.com/3d-models/apple-iphone-15-pro-max-black-df17520841214c1792fb8a44c6783ee7" target="_blank" rel="noopener">polyman Studio</a> (CC BY 4.0), iPad Pro — <a href="https://sketchfab.com/3d-models/apple-ipad-pro-e5ffb3c80b2d4d6690249f8ee2bdafbe" target="_blank" rel="noopener">DatSketch</a> (CC BY-NC 4.0), Sketchfab.</li>
+      <li data-en="The trailer’s post-credit scene — models from the SW_TopDown game (simplified, as a hologram), Sketchfab. CC BY 4.0: holotable — &lt;a href=&quot;https://sketchfab.com/3d-models/isd-bridge-holotable-starwars-02f07fc213d04accaafc1146af6911b3&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;eemil&lt;/a&gt;; Imperial I Star Destroyer, A-wing, Y-wing, TIE Interceptor, TIE Bomber — &lt;a href=&quot;https://sketchfab.com/LarsH.&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;LarsH.&lt;/a&gt;; Venator — &lt;a href=&quot;https://sketchfab.com/3d-models/venator-class-star-destroyer-af3648043a5b4fd394adfc32baee369e&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Digital Sock&lt;/a&gt;; Nebulon-B — &lt;a href=&quot;https://sketchfab.com/3d-models/star-wars-nebulon-b-frigate-1986f7b0dee647b3b2374eb80dbd1faf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Daniel&lt;/a&gt;; X-wing — &lt;a href=&quot;https://sketchfab.com/3d-models/rebels-x-wing-starfighter-7fb5817cb5dc4be6ae91f047720fcbab&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Lena Katsak&lt;/a&gt;. Sketchfab Standard: TIE Fighter, CR90 — &lt;a href=&quot;https://sketchfab.com/Heataker&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Heataker&lt;/a&gt;. CC BY-NC-SA 4.0: Mon Calamari — &lt;a href=&quot;https://sketchfab.com/3d-models/mon-calamari-e08e911d18344d3480439b387fc2ee3f&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;StarWars-Universe&lt;/a&gt;.">Пост-кредит трейлера — моделі гри SW_TopDown (спрощено, голограмою), Sketchfab. CC BY 4.0: голостіл — <a href="https://sketchfab.com/3d-models/isd-bridge-holotable-starwars-02f07fc213d04accaafc1146af6911b3" target="_blank" rel="noopener">eemil</a>; Imperial I Star Destroyer, A-wing, Y-wing, TIE Interceptor, TIE Bomber — <a href="https://sketchfab.com/LarsH." target="_blank" rel="noopener">LarsH.</a>; Venator — <a href="https://sketchfab.com/3d-models/venator-class-star-destroyer-af3648043a5b4fd394adfc32baee369e" target="_blank" rel="noopener">Digital Sock</a>; Nebulon-B — <a href="https://sketchfab.com/3d-models/star-wars-nebulon-b-frigate-1986f7b0dee647b3b2374eb80dbd1faf" target="_blank" rel="noopener">Daniel</a>; X-wing — <a href="https://sketchfab.com/3d-models/rebels-x-wing-starfighter-7fb5817cb5dc4be6ae91f047720fcbab" target="_blank" rel="noopener">Lena Katsak</a>. Sketchfab Standard: TIE Fighter, CR90 — <a href="https://sketchfab.com/Heataker" target="_blank" rel="noopener">Heataker</a>. CC BY-NC-SA 4.0: Mon Calamari — <a href="https://sketchfab.com/3d-models/mon-calamari-e08e911d18344d3480439b387fc2ee3f" target="_blank" rel="noopener">StarWars-Universe</a>.</li>
+      <li data-en="Desk miniatures are my own models (Tripo); desk models from the Lander renders: Magic Keyboard — jyun_studio (CC BY-NC 4.0), Magic Trackpad — EwanLejkowski (CC BY 4.0), Mac Studio — CGTrader (free).">Мініатюри на столі — власні моделі (Tripo); моделі столу з рендерів Лендера: Magic Keyboard — jyun_studio (CC BY-NC 4.0), Magic Trackpad — EwanLejkowski (CC BY 4.0), Mac Studio — CGTrader (free).</li>
     </ul>
   </section>
 
@@ -98,8 +145,47 @@
 </main>
 </div>
 
+<script src="shared/lang.js?v=20261025202028"></script>
+<script src="shared/i18n.js?v=20261026d"></script>
+<script src="shared/i18n-en.js?v=20261026g"></script>
 <script>
-window.COMP_DATA = {
+window.COMP_DATA = window.PMP_LANG === 'en' ? {
+  sk: {
+    ui: { play: 'Play the route', prev: 'Previous step', next: 'Next step' },
+    lanes: [ { id: 'in', t: 'Input', w: 190 }, { id: 'do', t: 'Pipeline', w: 190 }, { id: 'page', t: 'On the page', w: 190 }, { id: 'qa', t: 'Checks', w: 190 } ],
+    nodes: [
+      { id: 'cmd', lane: 'in', row: 0, t: 'Owner’s commands', s: '22 · 11 · push', b: '22 — plan only, 11 — do the whole plan, push — publish. Without them nothing changes.' },
+      { id: 'prev', lane: 'in', row: 1, t: 'Previous article', s: '33 · 34 · 35', b: 'A new page is a sister of the previous one: same structure, modules, styles.' },
+      { id: 'src', lane: 'in', row: 2, t: 'Primary sources', s: 'data · papers', b: 'Every number: value · date · source. Weak sources — only as a hint.' },
+      { id: 'plan', lane: 'do', row: 0, t: 'Plan .md', s: 'sections · scenes', b: 'One visual per section, open questions are numbered.' },
+      { id: 'data', lane: 'do', row: 1, t: 'Data snapshot', s: 'FRED · formulas', b: 'Data — as a dated file; physics — real formulas, simplifications labelled.' },
+      { id: 'img', lane: 'do', row: 2, t: 'Images and 3D', s: 'ChatGPT · Tripo', b: 'A banner with a quiet left part for the title; no text, logos or faces.' },
+      { id: 'gem', lane: 'do', row: 3, t: 'Text editing', s: 'Gemini', b: 'Blocks with labels; edits applied selectively, facts cross-checked.' },
+      { id: 'scene', lane: 'page', row: 1, t: 'Scenes', s: 'click · sliders', b: 'Every scene responds to a click; “▶” buttons glow until the first press.' },
+      { id: 'reel', lane: 'page', row: 0, t: 'Reel', s: 'explain first', b: 'A frame is a function of time; sections on the timeline; a sandbox under the reel.' },
+      { id: 'snd', lane: 'page', row: 2, t: 'Sound', s: 'off by default', b: 'One switch; the theme ducks under effects; loops without clicks.' },
+      { id: 'mapn', lane: 'page', row: 3, t: 'Dependency map', s: 'comp.js', b: 'A diagram with routes — like this one.' },
+      { id: 'syn', lane: 'qa', row: 0, t: 'Syntax', s: 'node --check', b: 'Catches a comment that “ate” a line, and an apostrophe inside quotes.' },
+      { id: 'con', lane: 'qa', row: 1, t: 'Console · state', s: 'JS checks', b: 'Errors and the real state of scenes, not a screenshot.' },
+      { id: 'shot', lane: 'qa', row: 2, t: 'Screenshots', s: 'Chrome · 375 px', b: 'The look — in Chrome; phone — no horizontal scroll.' },
+      { id: 'pub', lane: 'qa', row: 3, t: 'Publishing', s: 'only on “push”', b: 'Commit, push, wait for the Pages build, share the link. The page stays hidden until the owner says so.' }
+    ],
+    links: [
+      { from: 'cmd', to: 'plan' }, { from: 'prev', to: 'plan', kind: 'rule' }, { from: 'src', to: 'data' }, { from: 'plan', to: 'reel' },
+      { from: 'data', to: 'scene' }, { from: 'img', to: 'snd', kind: 'rule' }, { from: 'gem', to: 'mapn', kind: 'rule' },
+      { from: 'reel', to: 'syn' }, { from: 'scene', to: 'con' }, { from: 'snd', to: 'shot' }, { from: 'mapn', to: 'pub' }
+    ],
+    scenario: { steps: [
+      { n: ['cmd'], d: '1. The owner writes a topic and “22”.' },
+      { w: ['cmd', 'plan'], d: '2. Claude studies the previous article, does research and a plan.' },
+      { w: ['src', 'data'], d: '3. After “11” — a data snapshot from primary sources.' },
+      { w: ['data', 'scene'], d: '4. From the data — scenes that respond to a click.' },
+      { w: ['plan', 'reel'], d: '5. The reel explains what is not obvious.' },
+      { w: ['scene', 'con'], d: '6. Checks: console and the state of scenes.' },
+      { w: ['mapn', 'pub'], d: '7. Publishing — only on the word “push”.' }
+    ] }
+  }
+} : {
   sk: {
     ui: { play: 'Програти маршрут', prev: 'Попередній крок', next: 'Наступний крок' },
     lanes: [ { id: 'in', t: 'Вхід', w: 190 }, { id: 'do', t: 'Конвеєр', w: 190 }, { id: 'page', t: 'На сторінці', w: 190 }, { id: 'qa', t: 'Перевірка', w: 190 } ],
@@ -137,9 +223,22 @@ window.COMP_DATA = {
   }
 };
 </script>
-<script src="shared/nav.js?v=20261020144826"></script>
+<script src="shared/nav.js?v=20261025202028"></script>
 <script src="shared/comp.js?v=20261019002319"></script>
-<script src="shared/sk-viz.js?v=20261020184341"></script>
-<script src="shared/is-hint.js?v=20261020160943"></script>
+<script src="shared/sk-trailer.js?v=20261026t"></script>
+<script src="shared/sk-roles.js?v=20261020231709"></script>
+<script src="shared/sk-viz2.js?v=20261021000245"></script>
+<script type="module" src="shared/sk-kit.js?v=20261024135017"></script>
+<script type="module" src="shared/blackhole-3d.js?v=20261020160719"></script>
+<script type="module" src="shared/sk-stage.js?v=20261026a"></script>
+<script src="shared/sk-minis.js?v=20261020230919"></script>
+<script src="shared/sk-hero.js?v=20261024111454"></script>
+<script src="shared/sk-prod.js?v=20261026r"></script><script src="shared/sk-board.js?v=20261021002343"></script>
+<script src="shared/sk-sound.js?v=20261026r"></script>
+<script src="shared/sk-viz.js?v=20261026d"></script>
+<script src="shared/sk-back-data.js?v=20261026a"></script><script src="shared/sk-back.js?v=20261026c"></script>
+<script src="shared/sk-try.js?v=20261026b"></script>
+<script src="shared/sk-motion.js?v=20261026c"></script>
+<script src="shared/sk-target.js?v=20261026u"></script>
 </body>
 </html>
