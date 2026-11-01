@@ -15,26 +15,26 @@
     [7.2, 10.2, 'Усередині скла світло відбивається від стінок і йде на третину повільніше, ніж у вакуумі.'],
     [10.2, 12.8, 'Суходіл і дно Балтики до Данії: ≈750 км.'],
     [12.8, 15.8, 'Блобʼєрг. Кабель заходить у Північне море.'],
-    [15.8, 19, 'На дні він завтовшки зі шланг: сталь, мідь і кілька волокон усередині.'],
-    [19, 21.4, 'Кожні 70 км світло слабшає, і підсилювач повертає йому силу.'],
-    [21.4, 24.4, 'Під ним лежить історія. 1858 рік: 98 слів королеви, і сигнал розпливається дорогою.'],
-    [24.4, 26.4, 'Напругу піднімають, ізоляція не витримує. 20 жовтня лінія замовкає.'],
-    [26.4, 29.4, '1866 рік: кінець кабелю 1865 року виловлюють гаком із глибини понад 3 км.'],
-    [29.4, 33, '«Грейт Істерн», 211 метрів: єдиний корабель, який вмістив увесь кабель.'],
-    [33, 36, '1956 рік, TAT-1: 36 розмов в одному кабелі, 51 підсилювач.'],
-    [36, 38.2, 'Сьогодні одне волокно несе десятки кольорів, і кожен колір — окремий канал.'],
-    [38.2, 40.2, 'Хребет посеред Атлантики. Спалах — кожні 70 км.'],
-    [40.2, 46.2, '18 листопада 1929 року: зсув рве кабелі один за одним, 28 обривів.'],
-    [46.2, 50.6, 'Від одного дроту 1851 року — до мережі, яка оплітає планету.'],
-    [50.6, 54, 'Волл, Нью-Джерсі. Світло виходить із води.'],
-    [54, 59.4, 'Нью-Йорк: 42,6 мс. Це теоретична межа, насправді трохи довше.']
+    [15.8, 22, 'На дні він завтовшки зі шланг: сталь, мідь і кілька волокон усередині.'],
+    [22, 24.4, 'Кожні 70 км світло слабшає, і підсилювач повертає йому силу.'],
+    [24.4, 27.4, 'Під ним лежить історія. 1858 рік: 98 слів королеви, і сигнал розпливається дорогою.'],
+    [27.4, 29.4, 'Напругу піднімають, ізоляція не витримує. 20 жовтня лінія замовкає.'],
+    [29.4, 32.4, '1866 рік: кінець кабелю 1865 року виловлюють гаком із глибини понад 3 км.'],
+    [32.4, 36, '«Грейт Істерн», 211 метрів: єдиний корабель, який вмістив увесь кабель.'],
+    [36, 39, '1956 рік, TAT-1: 36 розмов в одному кабелі, 51 підсилювач.'],
+    [39, 41.2, 'Сьогодні одне волокно несе десятки кольорів, і кожен колір — окремий канал.'],
+    [41.2, 43.2, 'Хребет посеред Атлантики. Спалах — кожні 70 км.'],
+    [43.2, 49.2, '18 листопада 1929 року: зсув рве кабелі один за одним, 28 обривів.'],
+    [49.2, 53.6, 'Від одного дроту 1851 року — до мережі, яка оплітає планету.'],
+    [53.6, 57, 'Волл, Нью-Джерсі. Світло виходить із води.'],
+    [57, 62.4, 'Нью-Йорк: 42,6 мс в один бік. Це теоретична межа, насправді трохи довше.']
   ];
-  const CH = [['Гданськ', 0, 12.8], ['Дно', 12.8, 21.4], ['1858–1866', 21.4, 33], ['Світло', 33, 40.2], ['1929', 40.2, 46.2], ['Світ', 46.2, 50.6], ['Нью-Йорк', 50.6, 59.4]];
-  const TOTAL = 59.4;
+  const CH = [['Гданськ', 0, 12.8], ['Дно', 12.8, 24.4], ['1858–1866', 24.4, 36], ['Світло', 36, 43.2], ['1929', 43.2, 49.2], ['Світ', 49.2, 53.6], ['Нью-Йорк', 53.6, 62.4]];
+  const TOTAL = 62.4;
   const box = document.createElement('div'); box.className = 'rc-reel oc-reel';
   box.innerHTML = `<div class="rc-reel__scr"><canvas aria-label="Ролик: імпульс світла з Гданська до Нью-Йорка"></canvas><div class="rc-reel__cap" aria-live="polite"></div>
       <button type="button" class="rc-reel__cover" data-play><span class="pl">▶</span><b>43 мілісекунди</b><small>ролик · 1 хв · уся стаття коротко</small></button></div>
-    <div class="rc-reel__bar"><button type="button" class="rc-btn" data-pp>▶</button><div class="rc-reel__trk">${CH.map((s) => `<i style="left:${s[1] / TOTAL * 100}%;width:${(s[2] - s[1]) / TOTAL * 100}%" title="${s[0]}"><u>${s[0]}</u></i>`).join('')}<em></em></div><span class="rc-reel__tm">0:00 / 0:59</span></div>`;
+    <div class="rc-reel__bar"><button type="button" class="rc-btn" data-pp>▶</button><div class="rc-reel__trk">${CH.map((s) => `<i style="left:${s[1] / TOTAL * 100}%;width:${(s[2] - s[1]) / TOTAL * 100}%" title="${s[0]}"><u>${s[0]}</u></i>`).join('')}<em></em></div><span class="rc-reel__tm">0:00 / 1:02</span></div>`;
   slot.appendChild(box);
   const cv = box.querySelector('canvas'), cap = box.querySelector('.rc-reel__cap'), cover = box.querySelector('.rc-reel__cover'), pp = box.querySelector('[data-pp]'),
     trk = box.querySelector('.rc-reel__trk'), head = trk.querySelector('em'), tm = box.querySelector('.rc-reel__tm'), segs = [...trk.querySelectorAll('i')];
@@ -172,25 +172,25 @@
     const q = at(c5, ez(u / 3) * 1.02); pulse(q[0], q[1], 7, 90, q[2]);
     x.restore(); tag('Блобʼєрг, Данія', 1236, 74, ez((u - .1) / .4) * (1 - ez((u - 1.6) / .4)), 'right'); if (u > 1.7) { const a = ez((u - 1.8) / .4); tag('Північне море', 40, 74, a); }
   }
-  /* 6. Рух уздовж дна: кабель у розрізі */
+  /* 6. Рух уздовж дна; лупа: кабель зупиняється, шари наростають навколо волокон, далі знову рух */
+  const LY = [['волокна', .1, '#6ec6d8', 'Ø 1 мм'], ['гель', .15, '#e6c26a', 'Ø 2,6 мм'], ['сталева трубка', .2, '#bfc8cc', 'Ø 3,2 мм'], ['сталеві дроти', .56, '#8d969c', 'Ø 8,4 мм'], ['мідь', .66, '#c77b3a', 'Ø 9,8 мм'], ['поліетилен', 1, '#20282b', 'Ø 18 мм']];
   function s6(u) {
-    const off = -u * 85, Z = mix(1, 1.28, ez(u / 3.2));
+    const tr = (w) => (w < 1 ? w * 85 : 85 + (w - 1) * 6 * (w < 5 ? 1 : 0) + (w >= 5 ? 24 + (w - 5) * 110 : 0)), dist = tr(u), off = -dist, Z = mix(1, 1.2, ez(u / 1.4)) * mix(1, 1 / 1.2, ez((u - 5) / 1));
     rect(vgrad(0, 720, '#031a28', '#021019', '#010609')); snow(u, 60, 7, 40, .32, .9);
-    ridge(380, 60, 2, off * .25, '#04141d'); ridge(450, 42, 4, off * .5, '#051a24'); x.save(); cam(Z, 640, 390);
-    // дно й дрібниці на ньому
+    ridge(380, 60, 2, off * .25, '#04141d'); ridge(450, 42, 4, off * .5, '#051a24'); x.save(); cam(Z, 640, 420);
     ridge(545, 16, 6, off, '#1a2e31'); for (let i = 0; i < 26; i++) { const X = ((hh(i) * 1500 - off) % 1500 + 1500) % 1500 - 100, Y = 548 + hh(i + 1) * 110; x.fillStyle = `rgba(${40 + hh(i + 2) * 30},${70 + hh(i) * 30},${70},.75)`; x.beginPath(); x.ellipse(X, Y, 6 + hh(i + 3) * 26, 3 + hh(i + 4) * 8, 0, 0, 6.3); x.fill(); }
-    // трубка кабелю
     const y0 = 500, r0 = 36; rect(vgrad(y0 - r0, y0 + r0, '#2a3a40', '#0d1417', '#050809'), -100, y0 - r0, 1500, r0 * 2);
-    for (let X = -60 + (u * 85) % 70; X < 1400; X += 70) line([[X - 8, y0 - r0], [X + 8, y0 + r0]], 'rgba(255,255,255,.04)', 3);
-    // вирізане вікно: шари
-    const a = 320, b = 1020; const bands = [['#343f43', 36], ['#8d969c', 28], ['#a86b3c', 18], ['#c8c07a', 11], ['#071018', 6]];
-    x.save(); x.beginPath(); x.rect(a, y0 - r0, b - a, r0 * 2); x.clip(); bands.forEach((q) => { rect(q[0], a, y0 - q[1], b - a, q[1] * 2); }); for (let X = a + (u * 85) % 18; X < b; X += 18) { line([[X - 5, y0 - 28], [X + 5, y0 - 18]], 'rgba(30,35,38,.55)', 2); line([[X - 5, y0 + 18], [X + 5, y0 + 28]], 'rgba(30,35,38,.55)', 2); } [-3, 0, 3].forEach((o) => rect(o ? 'rgba(90,190,210,.6)' : 'rgba(140,235,255,.95)', a, y0 + o - .6, b - a, 1.4)); x.restore();
-    x.strokeStyle = 'rgba(255,255,255,.2)'; x.lineWidth = 1.5; x.strokeRect(a, y0 - r0, b - a, r0 * 2);
+    for (let X = -60 + dist % 70; X < 1400; X += 70) line([[X - 8, y0 - r0], [X + 8, y0 + r0]], 'rgba(255,255,255,.05)', 3);
     x.restore();
-    // лупа: кабель у перерізі, справжні шари
-    const cx = 210, cy = 200, R = 128 * ez((u - .15) / .5); if (R > 2) { x.save(); line([[cx - 56, cy + 110], [640, 500]], 'rgba(200,235,245,.25)', 1.5); [[1, '#20282b'], [.82, '#8d969c'], [.56, '#a86b3c'], [.38, '#c8c07a'], [.2, '#0a1820']].forEach((q) => disc(cx, cy, R * q[0], q[1])); for (let i = 0; i < 24; i++) { const an = i / 24 * 6.283, q = R * .69; disc(cx + Math.cos(an) * q, cy + Math.sin(an) * q, R * .055, '#5c666c'); } for (let i = 0; i < 8; i++) { const an = i / 8 * 6.283 + .3, q = R * .1; disc(cx + Math.cos(an) * q, cy + Math.sin(an) * q, R * .022, i === 2 ? '#c8f8ff' : '#6ec6d8'); } x.strokeStyle = 'rgba(255,255,255,.45)'; x.lineWidth = 2; x.beginPath(); x.arc(cx, cy, R, 0, 6.3); x.stroke();
-      const la = ez((u - .7) / .4); [['полієтилен', -.82, .9], ['сталь', -.45, .72], ['мідь', 0, .47], ['волокна', .4, .1]].forEach((q, i) => { const Y = cy + q[1] * R * .95, X = cx + R + 22; line([[cx + R * q[2] * .9, Y], [X - 4, Y]], `rgba(255,255,255,${.3 * la})`, 1); tag(q[0], X, Y + 6, la * .95); }); x.restore(); }
-    const k = cl((u - .2) / 2.9), Xp = mix(1380, -130, k); pulse(Xp, mix(500, 500 - (Xp - 640) * .0, 0), 7, 220);
+    // лупа: переріз відкривається, шари лягають за порядком, потім кабель знову цілий
+    const ap = ez((u - .7) / .5) * (1 - ez((u - 5) / .6)), cx = 400, cy = 268, R = 218 * ap;
+    if (R > 2) { line([[cx + R * .35, cy + R * .92], [640, 480]], `rgba(200,235,245,${.35 * ap})`, 2); disc(cx, cy, R, '#04121a');
+      const per = .62, t0 = 1.15, n = cl((u - t0) / per); for (let i = LY.length - 1; i >= 0; i--) { const q = cl((u - t0 - i * per) / (per * .8)); if (q <= 0) continue; const rr = R * LY[i][1] * .96 * eo(q) + (i ? R * LY[i - 1][1] * .96 * (1 - eo(q)) : 0); disc(cx, cy, Math.max(.1, rr), LY[i][2]); if (i === 3) for (let k = 0; k < 14; k++) { const an = k / 14 * 6.283 + (1 - eo(q)) * 3, q2 = R * .38 * .96; disc(cx + Math.cos(an) * q2 * eo(q) , cy + Math.sin(an) * q2 * eo(q), R * .075, '#5c666c'); disc(cx + Math.cos(an) * q2 * eo(q) - 2, cy + Math.sin(an) * q2 * eo(q) - 2, R * .025, '#c3ccd0'); } if (i === 5) { x.strokeStyle = 'rgba(255,255,255,.1)'; x.lineWidth = 2; x.beginPath(); x.arc(cx, cy, rr - 4, -2, -.9); x.stroke(); } }
+      // світло в серці завжди поверх
+      const nowR = R * .1 * .9; for (let i = 0; i < 8; i++) { const an = i / 8 * 6.283 + .3; disc(cx + Math.cos(an) * nowR * .5, cy + Math.sin(an) * nowR * .5, Math.max(.8, R * .012), i === 2 ? '#fff' : '#c8f8ff'); } x.save(); x.globalCompositeOperation = 'lighter'; glow(cx, cy, R * .22, '120,235,255', .6); x.restore();
+      x.strokeStyle = `rgba(255,255,255,${.6 * ap})`; x.lineWidth = 3; x.beginPath(); x.arc(cx, cy, R, 0, 6.3); x.stroke();
+      const idx = Math.min(LY.length - 1, Math.floor((u - t0) / per)); if (u >= t0) { LY.forEach((q, i) => { if (i > idx) return; const Y = cy - 120 + FS(30) * i, a = ez((u - t0 - i * per) / .25) * ap, cur = i === idx; tag(q[0], cx + R + 34, Y, a * (cur ? 1 : .6), 'left', cur ? '255,226,180' : '205,232,240'); }); txt(LY[idx][3], cx + R + 34, cy - 120 + FS(30) * LY.length + FS(26), 34, `rgba(255,255,255,${ap})`, 'left', 700); } }
+    const k = u < 4.9 ? mix(1300, 980, cl(u / 4.9)) : mix(980, -130, ez((u - 4.9) / 1.3)); x.save(); cam(Z, 640, 420); rect('rgba(140,235,255,.5)', -100, 499, 1500, 2); pulse(k, 500, 7, 220); x.restore();
   }
   /* 7. Наддеталь: підсилювач, ерб у кільці */
   function s7(u) {
@@ -415,7 +415,7 @@
   }
   const FN = [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18];
   // скільки мс і км пролетів імпульс до моменту t
-  function clock(t) { if (t < 3) return 0; if (t < 12.8) return mix(0, LAND, (t - 3) / 9.8); if (t < 50.6) return mix(LAND, LAND + SEA, (t - 12.8) / 37.8); return mix(LAND + SEA, END, cl((t - 50.6) / 3.6)); }
+  function clock(t) { if (t < 3) return 0; if (t < 12.8) return mix(0, LAND, (t - 3) / 9.8); if (t < 53.6) return mix(LAND, LAND + SEA, (t - 12.8) / 40.8); return mix(LAND + SEA, END, cl((t - 53.6) / 3.6)); }
   let capNow = null, segNow = -1;
   function draw(t) {
     x.setTransform(SC, 0, 0, SC, 0, 0); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
@@ -426,11 +426,11 @@
     // лічильник: у кожному кадрі, поки не стане головним числом
     if (t >= 2.9 && i < 17) { const ms = clock(t), km = ms / 1000 * V; const bw = Math.max(236, FS(13) * 13.5); rrect(1248 - bw, 34, bw, FS(32) + FS(13) + 40, 10); x.fillStyle = 'rgba(2,8,12,.62)'; x.fill(); txt(f(ms) + ' мс', 1234, 42 + FS(32), 32, '#fff', 'right', 700); txt(`${Math.round(km)} км · теоретично`, 1234, 52 + FS(32) + FS(13), 13, 'rgba(170,230,245,.9)', 'right', 500); }
     if (capNow !== s[2]) { capNow = s[2]; cap.textContent = s[2]; }
-    head.style.left = (t / TOTAL * 100) + '%'; tm.textContent = `0:${String(Math.floor(t)).padStart(2, '0')} / 0:59`;
+    head.style.left = (t / TOTAL * 100) + '%'; tm.textContent = `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')} / 1:02`;
     let c = CH.findIndex((q) => t < q[2]); if (c < 0) c = CH.length - 1; if (c !== segNow) { segNow = c; segs.forEach((e, q) => e.classList.toggle('on', q === c)); }
   }
   // звукові події плану (лише якщо звук статті ввімкнено)
-  const CUES = [[2.7, 'send'], [12.8, 'whoosh'], [20.15, 'blip'], [21.4, 'morse'], [25.52, 'zap'], [28.15, 'thud'], [41, 'snap'], [42.3, 'snap'], [43.5, 'snap'], [44, 'snap'], [44.8, 'snap'], [54.45, 'chord']];
+  const CUES = [[2.7, 'send'], [12.8, 'whoosh'], [23.15, 'blip'], [24.4, 'morse'], [28.52, 'zap'], [31.15, 'thud'], [44, 'snap'], [45.3, 'snap'], [46.5, 'snap'], [47, 'snap'], [47.8, 'snap'], [57.45, 'chord']];
   let t = 0, playing = false, raf = 0, last = 0;
   function loop(now) { const dt = last ? Math.min(.1, (now - last) / 1000) : 0; last = now; const t0 = t; t += dt;
     if (t >= TOTAL) { t = TOTAL; pause(); draw(t - .001); return; }
@@ -445,6 +445,6 @@
   addEventListener('oc-sound', (e) => { if (playing) TRK(e.detail.on, t); });
   new IntersectionObserver((es) => { if (!es[0].isIntersecting && playing) pause(); }, { threshold: .2 }).observe(box);
   new ResizeObserver(() => { size(); draw(t); }).observe(cv);
-  size(); draw(REDUCE ? 58 : 17.4); t = 0;
+  size(); draw(REDUCE ? 61 : 19); t = 0;
   window.__ocReel = { total: TOTAL, end: END, seek: (tt) => new Promise((ok) => { t = tt; draw(t); requestAnimationFrame(() => ok()); }) };
 })();
