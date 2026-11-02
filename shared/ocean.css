@@ -48,7 +48,7 @@
 .sk-tc.hint .c{animation:sktc-breath 1.6s ease-in-out infinite}@keyframes sktc-breath{50%{opacity:.45}}
 @media (prefers-reduced-motion:reduce){.sk-tc.hint .c{animation:none}}
 .oc-glow{box-shadow:0 0 0 0 #2fb7c488;animation:ocglow 1.6s ease-out infinite}@keyframes ocglow{70%{box-shadow:0 0 0 12px #2fb7c400}100%{box-shadow:0 0 0 0 #2fb7c400}}
-.oc-cut{margin:var(--sp-sm) 0}.oc-cut canvas{display:block;width:100%;aspect-ratio:1280/560;border-radius:var(--r-lg);cursor:default}
+.oc-cut{margin:var(--sp-sm) 0}.oc-cut canvas{display:block;width:100%;aspect-ratio:1280/426;border-radius:var(--r-lg);cursor:default}
 .oc-cut__bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.oc-cut__nums{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .oc-cut__nums button,.oc-3d__steps button{min-width:32px;height:32px;border:1px solid var(--rule-2,#ccd);border-radius:999px;background:transparent;color:inherit;font:600 12px var(--mono);cursor:pointer}
 .oc-cut__nums button.on{background:#ffd29a;color:#10181d;border-color:#ffd29a}
