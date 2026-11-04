@@ -1,0 +1,42 @@
+/* Стаття 40 «Чотири ігри»: сцени поверх .oc-sc із ocean.css */
+.fg-hero{background:radial-gradient(120% 90% at 70% 50%,#123a44 0%,#0a1420 55%,#04060b 100%)}
+.fg-snd{pointer-events:auto;margin-top:16px;font:600 12px var(--mono);padding:7px 11px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(4,10,18,.55);color:#fff;cursor:pointer}
+.fg-cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.fg-cmp button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:7px;padding:12px;border:1px solid var(--rule);border-radius:12px;background:var(--ground)}
+.fg-cmp button:hover,.fg-cmp button.on{border-color:var(--act)}.fg-cmp button:focus-visible{outline:2px solid var(--act)}
+.fg-cmp b{font:700 15px/1.25 var(--sans);color:var(--ink)}
+.fg-cmp small{font:500 11px/1.35 var(--mono);color:var(--ink-3);display:flex;justify-content:space-between;gap:8px}
+.fg-dots{letter-spacing:2px;color:var(--act);white-space:nowrap}
+.fg-sc canvas{touch-action:manipulation}
+.fg-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fg-bar .rc-btn.on{background:var(--act);border-color:var(--act);color:#fff}
+.fg-res{font:600 13px/1.4 var(--sans);color:var(--ink)}
+.fg-touch{display:none;gap:8px;justify-content:center}.fg-touch button{min-width:56px;min-height:44px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none}
+@media (pointer:coarse){.fg-touch{display:flex}}
+.fg-pick{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);gap:14px}.fg-pick>*{min-width:0}
+.fg-pick label{display:grid;gap:2px;font:500 11.5px var(--mono);color:var(--ink-2)}.fg-pick input{width:100%}
+.fg-pick__ctl{display:grid;gap:7px;align-content:start}
+@media (max-width:640px){.fg-pick{grid-template-columns:1fr}}
+.fg-mech{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-block:12px 20px}
+.fg-mech>div{display:grid;gap:5px;align-content:start;padding:12px 14px;border:1px solid var(--rule);border-radius:12px;background:var(--ground);min-width:0}
+.fg-mech b{font:700 14.5px/1.3 var(--sans);color:var(--ink)}
+.fg-mech p{margin:0;font-size:14px;line-height:1.45}
+.fg-mech small{font-size:12.5px;line-height:1.4;color:var(--ink-3)}
+.fg-verdict{padding:14px 16px;border-left:4px solid var(--act);background:var(--ground);border-radius:0 10px 10px 0}
+.fg-dec{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-block:14px 22px}
+.fg-dec article{border:1px solid var(--rule);border-radius:12px;background:var(--ground);padding:14px;min-width:0}
+.fg-dec header{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-bottom:8px}
+.fg-dec header b{font:700 16px var(--sans);color:var(--ink)}
+.fg-dec header span{font:600 11px var(--mono);padding:3px 7px;border-radius:6px;border:1px solid currentColor}
+.fg-dec .go{color:#1d8a55}.fg-dec .try{color:#1f7ea8}.fg-dec .wait{color:#a8761a}.fg-dec .no{color:#a8483a}
+.fg-dec dl{margin:0;display:grid;gap:6px}.fg-dec dt{font:600 11px var(--mono);color:var(--ink-3)}.fg-dec dd{margin:0;font-size:13.5px;line-height:1.42}
+.fg-eng{display:grid;gap:8px}
+.fg-eng>div{display:grid;grid-template-columns:150px 90px minmax(0,1fr);gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--rule);border-radius:10px}
+.fg-eng>div.best{border-color:var(--act);border-width:2px}
+.fg-eng b{font:600 13px var(--sans);color:var(--ink)}.fg-eng span{font-size:13px;line-height:1.4}
+.fg-eng i{display:block;height:6px;border-radius:3px;background:var(--rule)}.fg-eng u{display:block;height:100%;border-radius:3px;background:var(--act)}
+@media (max-width:560px){.fg-eng>div{grid-template-columns:1fr;gap:5px}}
+
+.fg-desk{margin:18px 0 22px}
+.fg-desk img{display:block;width:100%;height:auto;border-radius:12px}
+.fg-desk figcaption{margin-top:8px;font-size:13.5px;line-height:1.45;color:var(--ink-2,#5a6270);max-width:640px}
