@@ -2,7 +2,7 @@
    Кадр детермінований: frame(t) малює все лише з t — перегляд і запис у MP4 дають те саме. Плани 15–16 — справжня карта (rr-reel-city.js). Кадри Blender: банер, ранок (85 мм), робот по блоках (20 кадрів розльоту), фінал.
    Числа на кадрах = числа в статті: модель розділу 01 (w = 34,9 €), розділ 02 (111 / 66 / 34 год), розділ 10 (RaaS, перетин 40 міс.), IFR, Kroger, GXO. */
 (function () {
-  const box = document.getElementById('rr-reel'); if (!box) return;
+  const box = document.getElementById('rr-reel'); if (!box || !/[?&]reel=render/.test(location.search)) return; // на сторінці — готове відео (rr-video.js), код лише для рендеру
   const EN = window.PMP_LANG === 'en', L = (uk, en) => (EN ? en : uk);
   const DUR = 96, MONO = '"Roboto Mono", monospace', SANS = 'Inter, system-ui, sans-serif';
   const cl = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v)), sm = (v) => { v = cl(v); return v * v * (3 - 2 * v); }, lerp = (a, b, k) => a + (b - a) * k, seg = (t, a, b) => cl((t - a) / (b - a));

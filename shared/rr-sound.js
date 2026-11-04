@@ -3,7 +3,7 @@
    Ролик (shared/rr-reel.js) грає assets/retail-robots/audio/reel.m4a синхронно з кадром через RR_SND.reel(on, t); фон тим часом мовчить.
    Ефекти — window.RR_SND.fx(kind, arg): click, event, whoosh, chord, blip, coin, alarm, tick. */
 (function () {
-  const S = window.RR_SND = { on: false, fx, reel };
+  const S = window.RR_SND = { on: false, fx, reel, hold };
   let ac = null, master = null, bed = null, fxBus = null, verb = null, padT = 0, noteT = 0, step = 0, duckT = 0;
   const LEVEL = .5, BED = .5, TRK = .38, A = 'assets/retail-robots/audio/';
   let bedSrc = null, bedBuf = null, reelSrc = null, reelBuf = null, reelOn = false, tried = false;
@@ -101,6 +101,8 @@
     if (!S.on || !ac) return; if (!on) { bedOn(); return; } bedOff();
     if (!reelBuf) reelBuf = await load('reel.m4a'); if (!reelBuf || !reelOn) return;
     reelSrc = ac.createBufferSource(); reelSrc.buffer = reelBuf; const g = ac.createGain(); g.gain.value = .55; reelSrc.connect(g).connect(master); reelSrc.start(ac.currentTime + .02, Math.min(t, reelBuf.duration - .05)); }
+  // відео ролика грає своїм звуком — фонова музика сторінки на цей час замовкає
+  function hold(on) { if (!S.on || !ac) return; if (on) bedOff(); else bedOn(); }
   function set(on) {
     if (on && !init()) return; S.on = on; paint();
     if (ac) { const t = ac.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value, t); master.gain.linearRampToValueAtTime(on ? LEVEL : 0, t + (on ? 1.5 : .6));
