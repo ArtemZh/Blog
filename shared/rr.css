@@ -1,0 +1,206 @@
+/* Стаття 41 «Доба супермаркету»: сцени поверх .oc-sc із ocean.css, банер — поверх .oc-hero */
+.rr-hero{background:radial-gradient(120% 90% at 70% 55%,#2a3b2e 0%,#121a17 55%,#06080a 100%)}
+.rr-hero .oc-hero__kick{color:#ffd29a}
+.badge.hypb{background:color-mix(in srgb,#d9a21b 18%,transparent);color:#8a6510}
+.rr-ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 16px}
+.rr-ctl b{color:var(--ink)}
+.oc-ro div.rr-best{border-color:var(--act);border-width:2px}
+.rr-bars{display:grid;gap:6px}
+.rr-bars>div{display:grid;grid-template-columns:minmax(120px,230px) minmax(0,1fr) 84px;gap:8px;align-items:center;font:500 12px var(--mono);color:var(--ink-2)}
+.rr-bars>div.on{color:var(--ink);font-weight:700}
+.rr-bars i{display:block;height:12px;border-radius:6px;background:var(--ground);border:1px solid var(--rule);overflow:hidden}
+.rr-bars i b{display:block;height:100%;background:#2fb7c4;transition:width .3s}
+.rr-bars>div.on i b{background:var(--act)}
+.rr-bars em{font-style:normal;font-weight:700;text-align:right}
+.rr-eu>div.pos i b{background:#2fa36b}.rr-eu>div.neg i b{background:#c8573f}
+@media(max-width:560px){.rr-bars>div{grid-template-columns:minmax(0,1fr) 76px}.rr-bars i{grid-column:1/-1;grid-row:2}}
+.rr-plan{position:relative;aspect-ratio:16/6.5;min-height:300px;max-width:100%;border-radius:12px;background:#0b1622;overflow:hidden}
+.rr-z{all:unset;box-sizing:border-box;position:absolute;display:grid;align-content:center;gap:4px;padding:8px;border:2px solid #0b1622;cursor:pointer;color:#e9f1f3;text-align:center;min-width:0}
+.rr-z b{font:700 clamp(11px,1.6vw,15px)/1.2 var(--sans)}.rr-z small{font:600 clamp(9px,1.1vw,11px)/1.2 var(--mono);opacity:.8}
+.rr-z.go{background:#1c4a36}.rr-z.try{background:#21455c}.rr-z.back{background:#5a2f27}.rr-z.early{background:#3a3550}
+.rr-z:hover,.rr-z.on{border-color:#ffd29a}.rr-z:focus-visible{outline:2px solid #ffd29a;outline-offset:-4px}
+.rr-leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0;font:500 11.5px var(--mono);color:var(--ink-3)}
+.rr-leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.rr-leg .go::before{background:#1c4a36}.rr-leg .try::before{background:#21455c}.rr-leg .back::before{background:#5a2f27}.rr-leg .early::before{background:#3a3550}
+.rr-tr{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.rr-tr button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:6px;padding:10px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--ground);min-width:0}
+.rr-tr button:hover,.rr-tr button.on{border-color:var(--act)}.rr-tr button:focus-visible{outline:2px solid var(--act)}
+.rr-tr b{font:700 14px/1.25 var(--sans);color:var(--ink)}
+.rr-st{justify-self:start;font:600 10.5px var(--mono);padding:2px 7px;border-radius:6px;border:1px solid currentColor}
+.rr-st.go{color:#1d8a55}.rr-st.try{color:#1f7ea8}.rr-st.back{color:#a8483a}
+.rr-seg{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.rr-seg small{min-width:64px;font:600 11px var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.rr-seg button{font:600 12.5px var(--sans);padding:7px 12px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--ink-2);cursor:pointer}
+.rr-seg button.on{background:var(--act);border-color:var(--act);color:#fff}
+.rr-rank{display:grid;gap:6px}
+.rr-rank>div{display:grid;grid-template-columns:minmax(150px,230px) 90px minmax(0,1fr);gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--rule);border-radius:10px}
+.rr-rank>div.top{border-color:var(--act);border-width:2px}
+.rr-rank b{font:600 13px var(--sans);color:var(--ink)}.rr-rank span{font-size:13px;line-height:1.4;color:var(--ink-2)}
+.rr-rank i{display:block;height:6px;border-radius:3px;background:var(--rule)}.rr-rank u{display:block;height:100%;border-radius:3px;background:var(--act)}
+@media(max-width:560px){.rr-rank>div{grid-template-columns:1fr;gap:5px}}
+.rr-desk{margin:18px 0 22px}.rr-desk img{display:block;width:100%;height:auto;border-radius:12px}
+.rr-desk figcaption{margin-top:8px;font-size:13.5px;line-height:1.45;color:var(--ink-2,#5a6270);max-width:640px}
+.rr-cmp{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.4}
+.rr-cmpw{overflow-x:auto;margin:12px 0 18px}
+.rr-cmp th,.rr-cmp td{padding:8px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top;min-width:150px}
+.rr-cmp th{font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+.rr-cmp td:first-child{font-weight:600;color:var(--ink);min-width:120px}
+/* друга частина: стек, етапи пілота, чек-лист */
+.rr-stack{display:grid;gap:6px}
+.rr-ly{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:34px minmax(0,190px) minmax(0,1fr);gap:4px 12px;align-items:center;padding:9px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--ground);min-width:0}
+.rr-ly__n{grid-row:span 2;font:700 12px var(--mono);color:var(--ink-3)}
+.rr-ly b{font:600 14px/1.25 var(--sans);color:var(--ink)}.rr-ly small{grid-column:2;font:500 11.5px/1.35 var(--mono);color:var(--ink-3)}
+.rr-ly em{grid-column:3;grid-row:1/span 2;font-style:normal;font-size:13.5px;line-height:1.4;color:var(--ink-2);border-left:3px solid #2fb7c4;padding-left:10px}
+.rr-ly:hover,.rr-ly.on{border-color:var(--act)}.rr-ly:focus-visible{outline:2px solid var(--act)}
+.rr-ly.dead{opacity:.45}.rr-ly.dead em{border-left-color:#c8573f}
+.rr-stack.run .rr-ly em{animation:rrIn .45s both;animation-delay:var(--d)}
+@keyframes rrIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.rr-stack.run .rr-ly em{animation:none}}
+@media(max-width:620px){.rr-ly{grid-template-columns:28px minmax(0,1fr)}.rr-ly em{grid-column:1/-1;grid-row:auto;margin-top:4px}}
+.rr-cut{display:flex;gap:8px;align-items:center;font:500 13px var(--sans);color:var(--ink-2);cursor:pointer}
+.rr-risk{display:block;margin-top:6px;color:#a8483a}
+.rr-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}
+.rr-steps button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:3px;padding:9px 10px;border:1px solid var(--rule);border-radius:10px;font:600 13px/1.25 var(--sans);color:var(--ink);min-width:0}
+.rr-steps span{font:700 11px var(--mono);color:var(--ink-3)}.rr-steps small{font:500 11px var(--mono);color:var(--ink-3)}
+.rr-steps button.done{background:color-mix(in srgb,var(--act) 8%,transparent)}.rr-steps button.on{border-color:var(--act);border-width:2px;background:color-mix(in srgb,var(--act) 14%,transparent)}
+.rr-steps button:focus-visible{outline:2px solid var(--act)}
+.rr-stg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.rr-stg>div{padding:10px 12px;border:1px solid var(--rule);border-radius:10px;font-size:14px;line-height:1.45;color:var(--ink);min-width:0}
+.rr-stg small{display:block;margin-bottom:3px;font:600 10.5px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+.rr-stg .bad{border-color:color-mix(in srgb,#c8573f 50%,var(--rule))}.rr-stg .ex{background:var(--ground)}
+.rr-prog{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
+.rr-prog i{display:block;height:8px;border-radius:4px;background:var(--rule);overflow:hidden}.rr-prog u{display:block;height:100%;width:0;background:var(--act);transition:width .3s}
+.rr-prog b{font:700 13px var(--mono);color:var(--ink)}
+.rr-chk{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.rr-chk fieldset{margin:0;padding:8px 12px 10px;border:1px solid var(--rule);border-radius:10px;display:grid;gap:7px;min-width:0}
+.rr-chk legend{padding:0 4px;font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+.rr-chk label{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;font-size:14px;line-height:1.4;color:var(--ink);cursor:pointer}
+.rr-chk input{margin-top:3px;accent-color:var(--act)}
+.rr-copy{justify-self:start;font:600 13px var(--sans);padding:8px 14px;border-radius:999px;border:1px solid var(--act);background:transparent;color:var(--act);cursor:pointer}
+.rr-interlude{margin:28px 0 8px;padding:14px 18px;border-left:3px solid var(--act);font-size:16px;line-height:1.55;color:var(--ink-2)}
+/* ролик: сцена 16:9, карта під полотном, обкладинка з ▶, доріжка з главами */
+.rr-reel{margin:8px 0 6px}
+.rr-reel__stage{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#07111b}
+.rr-reel__stage canvas,.rr-reel__map,.rr-reel__lbls{position:absolute;inset:0;width:100%;height:100%}
+.rr-reel__map{visibility:hidden}.rr-reel__map .maplibregl-ctrl-attrib,.rr-reel__map .maplibregl-ctrl-logo{display:none}
+.rr-reel__stage canvas{pointer-events:none}.rr-reel__lbls{pointer-events:none}
+.rr-reel__cover{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;color:#e9f1f3;background:radial-gradient(ellipse at center,rgba(7,17,27,.35),rgba(7,17,27,.88)),url(../assets/retail-robots/banner.jpg?v=4) center/cover;font:inherit}
+.rr-reel__cover b{font:700 clamp(18px,3vw,30px)/1.2 Inter,system-ui,sans-serif}.rr-reel__cover small{font:500 12px var(--mono,monospace);opacity:.75}
+.rr-reel__play{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-size:26px;background:#2fe0d0;color:#07111b;box-shadow:0 0 0 0 rgba(47,224,208,.6);animation:rrGlow 1.8s ease-out infinite}
+@keyframes rrGlow{to{box-shadow:0 0 0 22px rgba(47,224,208,0)}}
+.rr-reel__ctl{display:flex;align-items:center;gap:10px;margin:10px 0 6px}
+.rr-reel__ctl button{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--line,#c9d2da);background:transparent;color:inherit;cursor:pointer;font-size:13px}
+.rr-reel__bar{position:relative;flex:1;min-width:0;padding-bottom:16px}.rr-reel__bar input{width:100%}
+.rr-reel__ch span{position:absolute;bottom:0;font:500 10.5px var(--mono,monospace);opacity:.65;transform:translateX(2px);white-space:nowrap}
+.rr-reel__ctl output{font:600 12px var(--mono,monospace);min-width:36px;text-align:right}
+.rr-reel__lbls .rc__lbl{position:absolute;transform:translate(-50%,-50%);font:700 clamp(9px,1.3vw,14px)/1.15 Inter,system-ui,sans-serif;color:#e9f1f3;text-align:center;white-space:nowrap;text-shadow:0 1px 6px #000}
+.rr-reel__lbls .rc__lbl em{display:block;font:600 clamp(8px,1.1vw,12px) var(--mono,monospace);font-style:normal}
+.rr-reel__lbls .rc__lbl.pos em{color:#5fe39a}.rr-reel__lbls .rc__lbl.neg em{color:#ff8a72}
+.rr-reel [hidden]{display:none!important}
+/* 03.11: робот по блоках, тиждень магазину, потік, таймлайн, розподіл ЄС */
+.rr-cv{display:block;width:100%;max-width:100%;border-radius:12px}
+.rr-parts__view{position:relative;width:100%;max-width:100%;border-radius:12px;overflow:hidden;background:radial-gradient(90% 80% at 50% 40%,#1b2a33 0%,#0b1622 60%,#070d14 100%)}
+.rr-parts__view canvas{display:block;touch-action:pan-y}
+.rr-parts__lbls{position:absolute;inset:0;pointer-events:none}
+.rr-parts__lbl{all:unset;box-sizing:border-box;position:absolute;transform:translateY(-50%);padding:3px 8px;border-radius:999px;background:rgba(7,17,27,.78);border:1px solid rgba(95,232,220,.45);font:600 11.5px/1.2 var(--sans);color:#e9f1f3;cursor:pointer;white-space:nowrap;transition:opacity .25s}
+.rr-parts__lbl.l{transform:translate(-100%,-50%)}
+.rr-parts__lbl.on,.rr-parts__lbl:hover{background:#0d4a45;border-color:#5fe8dc}
+.rr-parts__lbl:focus-visible{outline:2px solid #ffd29a}
+.rr-parts__cloud{position:absolute;right:12px;top:12px;max-width:46%;padding:6px 10px;border-radius:8px;border:1px dashed rgba(95,232,220,.6);font:600 11px/1.3 var(--mono);color:#5fe8dc;opacity:0;transition:opacity .3s;pointer-events:none}
+.rr-parts__cloud.on{opacity:1}
+.rr-parts__load{position:absolute;inset:0;display:grid;place-items:center;font:500 12px var(--mono);color:rgba(233,241,243,.6)}
+@media(max-width:520px){.rr-parts__lbl{font-size:10px;padding:2px 6px}}
+.rr-flow,.rr-time,.rr-swarm{width:100%;max-width:100%;overflow-x:auto;border-radius:12px;background:#0b1622}
+.rr-flow svg,.rr-time svg,.rr-swarm svg{display:block;width:100%;min-width:560px;height:auto}
+.rr-flow__t{font:600 13px var(--sans);fill:#e9f1f3}
+.rr-time__ax{stroke:rgba(233,241,243,.35);stroke-width:1.5}
+.rr-time__y{font:500 12px var(--mono);fill:rgba(233,241,243,.55)}
+.rr-time__e{cursor:pointer}.rr-time__e line{stroke-width:1.5}.rr-time__e circle{stroke:#0b1622;stroke-width:2}
+.rr-time__e text{font:600 13px var(--sans);fill:#e9f1f3}
+.rr-time__e.up line,.rr-time__k.up{stroke:#5fe8dc;fill:#5fe8dc}.rr-time__e.up circle{fill:#2fb7c4}
+.rr-time__e.dn line,.rr-time__k.dn{stroke:#e0735d;fill:#e0735d}.rr-time__e.dn circle{fill:#c8573f}
+.rr-time__k{font:600 11px var(--mono);stroke:none!important}
+.rr-time__e.on text{fill:#ffd29a}.rr-time__e.on circle{r:9}
+.rr-time__e:focus-visible{outline:none}.rr-time__e:focus-visible text{text-decoration:underline}
+.rr-swarm__ok{fill:rgba(47,163,107,.12)}
+.rr-swarm__be{stroke:#ffd29a;stroke-width:2;stroke-dasharray:5 4}
+.rr-swarm__bt{font:600 12px var(--mono);fill:#ffd29a}
+.rr-swarm__p circle{stroke:#0b1622;stroke-width:1.5}.rr-swarm__p.pos circle{fill:#2fa36b}.rr-swarm__p.neg circle{fill:#8a3b2d}
+.rr-swarm__p text{font:700 9.5px var(--mono);fill:#fff}
+.rr-figure img{display:block;width:100%;height:auto;border-radius:12px}
+.rr-parts [hidden]{display:none!important}
+.rr-step{display:flex;align-items:center;gap:10px;font:600 12px var(--mono);color:var(--ink-2)}
+.rr-step button{font:600 14px var(--sans);width:34px;height:30px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--ink);cursor:pointer}
+.rr-step button:disabled{opacity:.35;cursor:default}
+.rr-evt{margin:8px 0 4px;padding:8px 10px;border-radius:8px;background:#0b1622;color:#5fe8dc;font:500 12px/1.45 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere}
+.rr-tree{width:100%;max-width:100%;overflow-x:auto;border-radius:12px;background:#0b1622}
+.rr-tree svg{display:block;width:100%;min-width:600px;height:auto}
+.rr-tree__grid{stroke:rgba(233,241,243,.07);stroke-width:1}.rr-tree__y{font:500 11px var(--mono);fill:rgba(233,241,243,.5)}
+.rr-tree__trunk{fill:rgba(95,232,220,.12);stroke:rgba(95,232,220,.35)}.rr-tree__tl{font:500 11px var(--mono);fill:rgba(233,241,243,.55)}
+.rr-tree__ln{font:600 12.5px var(--sans);fill:#e9f1f3}
+.rr-tree__w{stroke:rgba(233,241,243,.45);stroke-width:2}.rr-tree__w.dash{stroke-dasharray:4 4;stroke:rgba(95,232,220,.5)}
+.rr-tree__st{stroke-width:1.5;fill:#0b1622}.rr-tree__st.mass{stroke:#5fe8dc}.rr-tree__st.pilot{stroke:#ffd29a}.rr-tree__st.down{stroke:#e0735d}
+.rr-tree__stt{font:600 11px var(--mono);fill:#e9f1f3}
+.rr-tree__n{cursor:pointer}.rr-tree__n circle{fill:#e9f1f3;stroke:#0b1622;stroke-width:2}.rr-tree__n text{font:600 12.5px var(--sans);fill:#e9f1f3}
+.rr-tree__n.dn circle{fill:#0b1622;stroke:#e0735d;stroke-width:2.5}
+.rr-tree__n.on text{fill:#ffd29a}.rr-tree__n.on circle{r:10}
+.rr-tree__n:focus-visible{outline:none}.rr-tree__n:focus-visible text{text-decoration:underline}
+.rr-tree__lane.dim,.rr-tree__n.dim{opacity:.18}
+/* відкриті списки замість карток «клікни, щоб прочитати» (04.11) */
+.rr-log{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.rr-log li{display:grid;grid-template-columns:minmax(0,210px) minmax(0,1fr);gap:4px 14px;padding:9px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--ground);min-width:0}
+.rr-log li[data-i]{cursor:pointer}.rr-log li.on{border-color:var(--act);box-shadow:inset 3px 0 0 var(--act)}
+.rr-log__h{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;align-content:start;min-width:0}
+.rr-log__h b{font:700 14px/1.3 var(--sans);color:var(--ink)}.rr-log__k{font:600 11.5px var(--mono);color:var(--ink-3)}
+.rr-log p{margin:0;font-size:14px;line-height:1.45;color:var(--ink-2)}.rr-log p small{display:block;margin-top:3px;font:500 11px/1.4 var(--mono);color:var(--ink-3)}
+.rr-log li.rr-log__g{display:flex;gap:8px;align-items:center;padding:10px 2px 2px;border:0;background:none;font:700 12px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+.rr-log__g .rr-st{text-transform:none;letter-spacing:0}
+@media(max-width:620px){.rr-log li{grid-template-columns:minmax(0,1fr)}}
+div.rr-ly{cursor:default}.rr-ly__q{grid-column:2/-1;font-style:normal;font-size:13px;line-height:1.45;color:var(--ink-2);padding-top:4px;border-top:1px dashed var(--rule)}
+.rr-ly__q>span:first-child{font:600 11px var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+.rr-ly__q .rr-risk{margin-top:3px}
+@media(max-width:620px){.rr-ly__q{grid-column:1/-1}}
+.rr-pl{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rr-pl>li{display:grid;gap:8px;padding:10px 12px;border:1px solid var(--rule);border-radius:12px;min-width:0}
+.rr-pl__h{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}.rr-pl__h span{font:700 12px var(--mono);color:var(--ink-3)}
+.rr-pl__h b{font:700 15px/1.3 var(--sans);color:var(--ink)}.rr-pl__h small{font:500 11.5px var(--mono);color:var(--ink-3)}
+.rr-pl .rr-stg{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 16px}
+.rr-pl .rr-stg>div{border:0;padding:0;background:none;font-size:13.5px}.rr-pl .rr-stg .bad small{color:#a8483a}
+/* робот по блоках: підписи хмарних систем (самі системи — 3D у сцені) */
+.rr-parts__h{margin:6px 0 0;font:700 12px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+.rr-flowlog li.done{opacity:.75}.rr-log p .rr-risk{font-size:13px}
+/* «А ще…»: вісім експонатів — схема зверху, повний текст нижче */
+.rr-ex{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:14px}
+.rr-ex__c{display:grid;grid-template-rows:auto 1fr;border:1px solid var(--rule);border-radius:14px;overflow:hidden;background:var(--ground);min-width:0}
+.rr-ex__v{background:#0b1622}.rr-ex__v svg{display:block;width:100%;height:auto}
+.rr-ex__t{padding:12px 14px 14px;min-width:0}
+.rr-ex__k{font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+.rr-ex__t h4{margin:4px 0 6px;font:700 16px/1.3 var(--sans);color:var(--ink);text-wrap:balance}
+.rr-ex__t p{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2)}
+.rr-ex__c .dr{opacity:0;transition:opacity .9s ease .15s}.rr-ex__c.in .dr{opacity:1}
+.rr-ex__c .gr{transform:scaleX(0);transform-box:fill-box;transform-origin:left center;transition:transform .9s cubic-bezier(.2,.7,.2,1) .1s}.rr-ex__c.in .gr{transform:none}
+@media(prefers-reduced-motion:reduce){.rr-ex__c .dr,.rr-ex__c .gr{opacity:1;transform:none;transition:none}}
+#more{container-type:inline-size}
+@container (min-width:560px){.rr-ex{grid-template-columns:1fr}.rr-ex__c{grid-template-columns:minmax(0,320px) minmax(0,1fr);grid-template-rows:auto}.rr-ex__v{display:grid;align-items:center}}
+@container (min-width:900px){.rr-ex{grid-template-columns:1fr 1fr}.rr-ex__c{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
+
+/* робот: хмарні системи — нерухомі плашки, лінії зв'язків домальовуються на ▶ */
+.rr-parts__stage{position:relative;container:rrst/inline-size}
+.rr-sys{list-style:none;margin:0;padding:0;position:absolute;right:16px;top:50%;transform:translateY(-50%);width:min(36%,300px);display:grid;grid-template-areas:"c c" "i i" "e w" "a a";grid-template-columns:1fr 1fr;gap:30px 12px;z-index:2}
+.rr-sys__c{display:grid;gap:2px;align-content:start;margin:0;padding:7px 10px;border-radius:8px;background:rgba(7,17,27,.9);border:1px solid rgba(95,232,220,.3);color:#e9f1f3;transition:background .35s,border-color .35s}
+.rr-sys__c b{font:600 12px/1.2 var(--sans)}
+.rr-sys__c small{font:500 10.5px/1.3 var(--mono);opacity:.72}
+.rr-sys__c.on{background:#0d4a45;border-color:#5fe8dc}
+.rr-sysw{position:absolute;left:0;top:0;pointer-events:none;z-index:1;overflow:visible}
+.rr-sysw__b{fill:none;stroke:rgba(95,232,220,.3);stroke-width:1.2;stroke-dasharray:3 4}
+.rr-sysw__d{fill:none;stroke:#5fe8dc;stroke-width:2;stroke-linecap:round;stroke-dasharray:1 1;stroke-dashoffset:1;opacity:0}
+@container rrst (max-width:999px){.rr-sys{position:static;transform:none;width:auto;margin-top:26px;grid-template-areas:"c i e a" "c i w a";grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 10px}}
+@container rrst (max-width:560px){.rr-sys{grid-template-areas:"c c" "i i" "e w" "a a";grid-template-columns:1fr 1fr;gap:18px 10px}.rr-sys__c{padding:6px 9px}}
+/* робот: «Шлях однієї події» праворуч від сцени, коли є місце; сцена липне, поки читаєш кроки */
+.rr-parts{container:rrp/inline-size}
+.rr-parts__top{display:grid;gap:14px;min-width:0}
+.rr-parts__main,.rr-parts__side{display:grid;gap:12px;align-content:start;min-width:0}
+@container rrp (min-width:860px){.rr-parts__top{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:18px;align-items:start}
+.rr-parts__main{position:sticky;top:64px}
+.rr-parts__side .rr-parts__h{margin-top:0}
+.rr-parts__side .rr-log li{grid-template-columns:minmax(0,1fr);gap:2px}
+.rr-parts__side .rr-log p{font-size:13.5px}}

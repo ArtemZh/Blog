@@ -16,7 +16,7 @@
   document.body.appendChild(el);
   const corners = [...el.querySelectorAll('.c')];
   const S = 11, P = 5, GROW = 10;   // відступ дужок від елемента; на появі дужки «сходяться» з відстані GROW
-  let tgt = null, raf = 0, last = 0, fresh = false, hint = false, idleT = 0, hopT = 0, moved = 0;
+  let pg = null, tgt = null, raf = 0, last = 0, fresh = false, hint = false, idleT = 0, hopT = 0, moved = 0;
   const used = new WeakSet();   // елементи, яких читач уже торкався — підказка їх пропускає
   const cur = corners.map(() => [0, 0]);   // поточні положення кутів (згладжено)
   // ціль: найближчий клікабельний предок, або перший предок із курсором-рукою (до 6 рівнів угору)
@@ -30,7 +30,7 @@
     if (t === tgt) return;
     // з порожнього місця — дужки з’являються трохи ширше й сходяться; з сусіднього елемента — перетікають
     if (t && !tgt) { const r = t.getBoundingClientRect(); box(r, P + GROW).forEach((p, i) => { cur[i][0] = p[0]; cur[i][1] = p[1]; }); fresh = true; }
-    tgt = t; el.classList.toggle('on', !!t); el.classList.toggle('lock', !!t); el.classList.toggle('hint', !!t && hint);
+    tgt = t; pg = null; el.classList.toggle('on', !!t); el.classList.toggle('lock', !!t); el.classList.toggle('hint', !!t && hint);
     if (t && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
   }
   // підказка: кандидати — клікабельні елементи в межах статті, повністю на екрані; пропускаємо вже використані й верхнє меню
@@ -38,7 +38,7 @@
   function candidates() { const vh = innerHeight, vw = innerWidth;
     return [...MAIN.querySelectorAll(TARGET + ', canvas')].filter((e) => { if (used.has(e) || e.closest('.topbar, nav, .rail, .sk-tc')) return false;
       if (e.tagName === 'CANVAS' && getComputedStyle(e).cursor !== 'pointer' && getComputedStyle(e).cursor !== 'crosshair' && !e.closest('[data-k=s], .sk-sc__view')) return false;
-      const r = e.getBoundingClientRect(); const hid = e.closest('.mv:not(.mv-in)'); return !hid && r.width > 8 && r.height > 8 && r.top > 70 && r.bottom < vh - 10 && r.left >= 0 && r.right <= vw && getComputedStyle(e).visibility !== 'hidden'; }); }
+      const r = e.getBoundingClientRect(); const hid = e.closest('.mv:not(.mv-in)'); return !hid && r.width > 8 && r.height > 8 && r.top > 70 && r.bottom < vh - 10 && r.left >= 0 && r.right <= vw && getComputedStyle(e).visibility !== 'hidden' && getComputedStyle(e).pointerEvents !== 'none' && +getComputedStyle(e).opacity > .05; }); }   // невидимі (прозорість 0) й «наскрізні» елементи підказка пропускає
   function hop() { clearTimeout(hopT); if (!hint) return; const c = candidates();
     if (c.length) { const cur = c.indexOf(tgt), nx = c[(cur + 1) % c.length]; set(nx === tgt ? null : nx); } else set(null);
     hopT = setTimeout(hop, REDUCE ? 4000 : 3200); }
@@ -61,7 +61,9 @@
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     if (tgt && !tgt.isConnected) set(null);
     if (tgt) {
-      const goal = box(tgt.getBoundingClientRect(), P), k = REDUCE ? 1 : Math.min(1, dt * (hint ? 2.6 : fresh ? 14 : 18));   // підказка рухається повільно
+      const goal = box(tgt.getBoundingClientRect(), P), k = REDUCE ? 1 : Math.min(1, dt * (hint ? 2.6 : fresh ? 14 : 18));   // перехід між елементами — повільно
+      // ціль сама рухається (анімація, зсув розкладки) — дужки зсуваються разом із нею в тому ж кадрі, плавним лишається лише перехід
+      if (pg) corners.forEach((c, i) => { cur[i][0] += goal[i][0] - pg[i][0]; cur[i][1] += goal[i][1] - pg[i][1]; }); pg = goal;
       corners.forEach((c, i) => { cur[i][0] += (goal[i][0] - cur[i][0]) * k; cur[i][1] += (goal[i][1] - cur[i][1]) * k;
         c.style.transform = `translate(${cur[i][0] - S / 2}px,${cur[i][1] - S / 2}px) rotate(${i * 90}deg)`; });
     }
