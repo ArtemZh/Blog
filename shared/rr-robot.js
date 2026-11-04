@@ -54,7 +54,7 @@ if (host) {
     ['ERP', L('залишки й замовлення', 'stock and orders')], ['WMS', L('склад магазину → «поповнити»', 'back room → “replenish”')],
     [L('Застосунок працівника', 'Staff app'), L('завдання → «виконано»', 'task → “done”')]];
   const CORE = L('без нього обходу немає', 'no pass without it'), OPT = L('опційно', 'optional');
-  host.innerHTML = `<div class="oc-sc rr-sc rr-parts"><div class="rr-parts__top"><div class="rr-parts__main"><div class="rr-parts__stage" data-g><div class="rr-parts__view" data-v><div class="rr-parts__lbls" data-l></div>
+  host.innerHTML = `<div class="oc-sc rr-sc rr-parts" data-no-hint><div class="rr-parts__top"><div class="rr-parts__main"><div class="rr-parts__stage" data-g><div class="rr-parts__view" data-v><div class="rr-parts__lbls" data-l></div>
       <div class="rr-parts__load" data-load>${L('робот завантажується…', 'loading the robot…')}</div></div>
       <svg class="rr-sysw" data-w aria-hidden="true">${LN.map(() => '<path class="rr-sysw__b"/><path class="rr-sysw__d" pathLength="1"/>').join('')}</svg>
       <ol class="rr-sys">${SYS.map((s, i) => `<li class="rr-sys__c" style="grid-area:${'ciewa'[i]}"><b>${s[0]}</b><small>${s[1]}</small></li>`).join('')}</ol></div>
@@ -133,13 +133,15 @@ if (host) {
     const hit = ray.intersectObjects(Object.values(parts).map((p) => p.o), true)[0]; if (!hit) return; let o = hit.object; while (o && !(o.name in EX)) o = o.parent; if (o) pick(o.name); });
   ctl.addEventListener('change', () => { need = true; });
   const v3 = new THREE.Vector3();
-  function size() { const w = view.clientWidth, h = Math.round(Math.min(560, Math.max(360, w * .72))); view.style.height = h + 'px'; R.setSize(w, h, false); R.domElement.style.width = w + 'px'; R.domElement.style.height = h + 'px'; C.aspect = w / h; C.fov = w < 520 ? 36 : 31; C.updateProjectionMatrix();
-    // на широкій сцені праворуч стоять плашки систем (інакше — рядком під сценою) — зсуваємо робота вліво (ціль і камеру разом, кут не змінюється); на телефоні плашки під сценою
-    const off = getComputedStyle(host.querySelector('.rr-sys')).position === 'absolute' ? .8 : 0, d = off - shift; shift = off; ctl.target.x += d; C.position.x += d; ctl.update(); need = true; }
-  let shift = 0;
+  // плашки систем — на полі сцени: на широкій колонкою праворуч (робот зсувається вліво), на вужчій смугою знизу (сцена вища, робот піднімається над смугою)
+  const sysP = host.querySelector('.rr-sys'); let shift = 0, shiftY = 0;
+  function size() { const w = view.clientWidth, strip = getComputedStyle(sysP).transform === 'none', sh = strip ? sysP.offsetHeight + 16 : 0, h = Math.round(Math.min(560, Math.max(360, w * .72))) + sh;
+    view.style.height = h + 'px'; R.setSize(w, h, false); R.domElement.style.width = w + 'px'; R.domElement.style.height = h + 'px'; C.aspect = w / h; C.fov = (w < 520 ? 36 : 31) * h / (h - sh); C.updateProjectionMatrix();
+    const off = strip ? 0 : .8, offY = sh / 2 * 2 * C.position.distanceTo(ctl.target) * Math.tan(C.fov * Math.PI / 360) / h, d = off - shift, dy = offY - shiftY; shift = off; shiftY = offY;
+    ctl.target.x += d; C.position.x += d; ctl.target.y -= dy; C.position.y -= dy; ctl.update(); need = true; }
   const ro = new ResizeObserver(size); ro.observe(view); ro.observe(stage); size();
   let vis = false, swung = false;
-  new IntersectionObserver((e) => { vis = e[0].isIntersecting; if (vis && e[0].intersectionRatio > .33 && !swung && ready) { swung = true; anim(1, 1100); setTimeout(() => anim(.6, 700), 1300); } }, { threshold: [0, .34] }).observe(view);
+  new IntersectionObserver((e) => { vis = e[0].isIntersecting; if (vis) need = true; if (vis && e[0].intersectionRatio > .33 && !swung && ready) { swung = true; anim(1, 1100); setTimeout(() => anim(.6, 700), 1300); } }, { threshold: [0, .34] }).observe(view);
   function frame(now) {
     requestAnimationFrame(frame); if (!vis) return; if (an) an(now); ctl.update();
     if (!need && !an && !play) return; need = false;

@@ -20,7 +20,7 @@
   const used = new WeakSet();   // елементи, яких читач уже торкався — підказка їх пропускає
   const cur = corners.map(() => [0, 0]);   // поточні положення кутів (згладжено)
   // ціль: найближчий клікабельний предок, або перший предок із курсором-рукою (до 6 рівнів угору)
-  function find(n) {
+  function find(n) { if (n.closest && n.closest('[data-no-hint]')) return null;   // блок попросив без підказки
     const t = n.closest && n.closest(TARGET); if (t && !t.disabled) return t;
     for (let e = n, k = 0; e && e !== document.body && k < 6; e = e.parentElement, k++) if (getComputedStyle(e).cursor === 'pointer') return e;
     return null;
@@ -36,7 +36,7 @@
   // підказка: кандидати — клікабельні елементи в межах статті, повністю на екрані; пропускаємо вже використані й верхнє меню
   const MAIN = document.querySelector('main') || document.body;
   function candidates() { const vh = innerHeight, vw = innerWidth;
-    return [...MAIN.querySelectorAll(TARGET + ', canvas')].filter((e) => { if (used.has(e) || e.closest('.topbar, nav, .rail, .sk-tc')) return false;
+    return [...MAIN.querySelectorAll(TARGET + ', canvas')].filter((e) => { if (used.has(e) || e.closest('.topbar, nav, .rail, .sk-tc, [data-no-hint]')) return false;
       if (e.tagName === 'CANVAS' && getComputedStyle(e).cursor !== 'pointer' && getComputedStyle(e).cursor !== 'crosshair' && !e.closest('[data-k=s], .sk-sc__view')) return false;
       const r = e.getBoundingClientRect(); const hid = e.closest('.mv:not(.mv-in)'); return !hid && r.width > 8 && r.height > 8 && r.top > 70 && r.bottom < vh - 10 && r.left >= 0 && r.right <= vw && getComputedStyle(e).visibility !== 'hidden' && getComputedStyle(e).pointerEvents !== 'none' && +getComputedStyle(e).opacity > .05; }); }   // невидимі (прозорість 0) й «наскрізні» елементи підказка пропускає
   function hop() { clearTimeout(hopT); if (!hint) return; const c = candidates();
