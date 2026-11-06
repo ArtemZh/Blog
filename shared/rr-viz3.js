@@ -58,10 +58,12 @@
       const N0 = 100, N1 = N0 * f, N2 = N1 * ii, N3 = N2 * w, FA = N1 * p, FAs = FA * ii;
       const loss = [[L('пропустив робот', 'missed by the robot'), N0 - N1], [L('застрягли в порталі', 'stuck in the portal'), N1 - N2], [L('не встигли до відкриття', 'not done before opening'), N2 - N3]].sort((a, b2) => b2[1] - a[1]);
       const VW = 1000, VH = 300, sc_ = 2.1, cx = [40, 330, 620, 900], top = 30;
-      const node = (c, y, h, cl, t, v) => `<rect x="${cx[c]}" y="${y}" width="16" height="${Math.max(1, h)}" rx="3" fill="${cl}"/><text x="${c === 3 ? cx[c] - 8 : cx[c] + 24}" y="${y + Math.max(h, 12) / 2 + 4}" text-anchor="${c === 3 ? 'end' : 'start'}" class="rr-flow__t">${t} · ${num(v)}</text>`;
+      const ly = (y, h) => y + Math.max(h, 12) / 2 + 4, node = (c, y, h, cl, t, v, yl) => `<rect x="${cx[c]}" y="${y}" width="16" height="${Math.max(1, h)}" rx="3" fill="${cl}"/><text x="${c === 3 ? cx[c] - 8 : cx[c] + 24}" y="${yl != null ? yl : ly(y, h)}" text-anchor="${c === 3 ? 'end' : 'start'}" class="rr-flow__t">${t} · ${num(v)}</text>`;
       const band = (c, y0, y1, h, cl, op = .35) => { const xa = cx[c] + 16, xb = cx[c + 1], m = (xa + xb) / 2; return `<path d="M${xa} ${y0} C${m} ${y0} ${m} ${y1} ${xb} ${y1} L${xb} ${y1 + h} C${m} ${y1 + h} ${m} ${y0 + h} ${xa} ${y0 + h} Z" fill="${cl}" opacity="${op}"/>`; };
       const h0 = N0 * sc_, h1 = N1 * sc_, h2 = N2 * sc_, h3 = N3 * sc_, hm1 = h0 - h1, hm2 = h1 - h2, hm3 = h2 - h3;
       const yMiss = top + h1 + 14, yStuck = top + h2 + 14, yLate = top + h3 + 14;
+      // підписи 3-ї колонки не мають налазити на підписи 2-ї (06.11): розводимо по вертикалі щонайменше на 17 px
+      const apart = (a, b2) => (Math.abs(a - b2) < 17 ? (b2 >= a ? a + 17 : a - 17) : b2), yl3 = apart(ly(top, h2), ly(top, h3)), yl3b = apart(ly(yStuck, hm2), ly(yLate, hm3));
       host.innerHTML = `<svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="${L('Потік 100 порожніх місць від камери до полиці', 'Flow of 100 empty slots from camera to shelf')}">
         ${band(0, top, top, h1, '#2fb7c4')}${band(0, top + h1, yMiss, hm1, '#c8573f', .28)}
         ${band(1, top, top, h2, '#2fb7c4')}${band(1, top + h2, yStuck, hm2, '#c8573f', .28)}
@@ -69,13 +71,13 @@
         ${node(0, top, h0, '#cfdde3', L('Порожніх місць за ніч', 'Empty slots overnight'), N0)}
         ${node(1, top, h1, '#2fb7c4', L('Знайшов робот', 'Found by robot'), N1)}${node(1, yMiss, hm1, '#c8573f', L('Пропустив', 'Missed'), N0 - N1)}
         ${node(2, top, h2, '#2fb7c4', L('Дійшло до людини', 'Reached a person'), N2)}${node(2, yStuck, hm2, '#c8573f', L('Застрягло', 'Stuck'), N1 - N2)}
-        ${node(3, top, h3, '#5fe8dc', L('Полиця повна', 'Shelf full'), N3)}${node(3, yLate, hm3, '#c8573f', L('Не встигли', 'Too late'), N2 - N3)}
+        ${node(3, top, h3, '#5fe8dc', L('Полиця повна', 'Shelf full'), N3, yl3)}${node(3, yLate, hm3, '#c8573f', L('Не встигли', 'Too late'), N2 - N3, Math.abs(yl3b - yl3) < 17 ? yl3 + 17 : yl3b)}
       </svg>`;
       b.querySelector('[data-c]').innerHTML = `<b>${L(`Поповнено ${num(N3)} зі 100`, `${num(N3)} of 100 refilled`)}</b>${L(`Найбільша втрата — ${loss[0][0]} (${num(loss[0][1])}). Крім того, працівники ходять на ${num(FAs)} хибних тривог. Точність камери тут не головне: дані мають дійти до людини, а людина — встигнути.`, `The biggest loss: ${loss[0][0]} (${num(loss[0][1])}). On top of that, staff walk to ${num(FAs)} false alarms. Camera accuracy is not the main thing here: data must reach a person, and the person must get there in time.`)}`;
       T.flow = { found: Math.round(N1), reached: Math.round(N2), refilled: Math.round(N3), falseAlarms: Math.round(FAs), worst: loss[0][0] }; }
     Object.values(I).forEach((e) => e.addEventListener('input', () => { used(e); upd(); })); upd();
     // повзунок інтеграції раз гойдається, коли сцена на третині екрана
-    io(host, () => { if (REDUCE) return; const e = I.i, a = +e.value; let t0 = 0; const st = (now) => { if (!t0) t0 = now; const k = Math.min(1, (now - t0) / 1600); e.value = Math.round((a + (100 - a) * Math.sin(k * Math.PI)) / 5) * 5; upd(); if (k < 1 && !e.classList.contains('used')) requestAnimationFrame(st); else { e.value = a; upd(); } }; requestAnimationFrame(st); }); })();
+    io(host, () => { if (REDUCE) return; const e = I.i, a = +e.value; let t0 = 0; const st = (now) => { if (!t0) t0 = now; const k = Math.min(1, (now - t0) / 1600); e.value = Math.round((a + (100 - a) * Math.sin(k * Math.PI)) / 5) * 5; upd(); e.dispatchEvent(new CustomEvent('rr-swing')); if (k < 1 && !e.classList.contains('used')) requestAnimationFrame(st); else { e.value = a; upd(); e.dispatchEvent(new CustomEvent('rr-swing')); } }; requestAnimationFrame(st); }); })();
 
   /* ═════ 05 · завтра: хвилі запусків і згортань 2016–2026 ═════ */
   (function () { const s = $('rr-time'); if (!s) return;

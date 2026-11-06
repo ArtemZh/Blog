@@ -31,7 +31,7 @@
     // 03 Żabka Nano: 25 точок у 6 містах (кластери, не карта) + магазин на заводі
     { k: L('Європа', 'Europe'), svg: () => { const cl = [[52, 52, 7], [118, 98, 5], [62, 120, 4], [180, 46, 4], [150, 140, 3], [218, 104, 2]]; let d = '';
       cl.forEach(([x, y, n], ci) => { for (let i = 0; i < n; i++) { const a = i / n * 6.283 + ci, r = n > 1 ? 9 + (i % 2) * 5 : 0; d += `<circle cx="${(x + r * Math.cos(a)).toFixed(1)}" cy="${(y + r * Math.sin(a)).toFixed(1)}" r="3.4" fill="${C.teal}"/>`; } });
-      return `${d}${t(14, 160, L('2022: 25 точок у 6 містах (схема, не карта)', '2022: 25 locations in 6 cities (a diagram, not a map)'), { c: C.dim, n: 10, mono: 1 })}
+      return `${d}${t(14, 160, L('2022: 25 точок у 6 містах (схема, не карта)', '2022: 25 sites in 6 cities (diagram, not a map)'), { c: C.dim, n: 10 })}
       <rect x="236" y="30" width="54" height="40" fill="none" stroke="${C.warm}"/><path d="M236 30 l12 -10 v10 l12 -10 v10 l12 -10 v10" fill="none" stroke="${C.warm}"/><circle cx="263" cy="52" r="3.4" fill="${C.teal}"/>
       ${t(263, 88, L('2025: усередині', '2025: inside'), { a: 'middle', n: 10, c: C.warm })}${t(263, 101, L('заводу Michelin', 'a Michelin plant'), { a: 'middle', n: 10, c: C.warm })}
       ${t(263, 126, L('450–1 500', '450–1,500'), { a: 'middle', n: 12, w: 700 })}${t(263, 139, L('позицій', 'products'), { a: 'middle', n: 10, c: C.dim })}`; } },
@@ -41,7 +41,7 @@
       ${t(14, 104, L('27 з ≈44 — Just Walk Out прибрали,', '27 of ≈44: Just Walk Out removed,'), { n: 10.5, c: C.red })}${t(14, 118, L('замість нього — візки Dash Cart', 'Dash Cart smart carts instead'), { n: 10.5, c: C.dim })}
       ${arrow(170, 70, 200, 70, C.teal)}${t(206, 46, L('лишився:', 'stayed:'), { n: 10.5, c: C.dim })}${t(206, 64, 'Amazon Go', { n: 11, w: 700, c: C.teal })}${t(206, 80, L('малі Fresh у Британії', 'small UK Fresh'), { n: 10.5, c: C.teal })}
       ${t(206, 98, L('130+ точок інших', '130+ sites of other'), { n: 10.5, c: C.teal })}${t(206, 112, L('компаній: аеропорти,', 'companies: airports,'), { n: 10.5, c: C.dim })}${t(206, 126, L('стадіони, кампуси', 'stadiums, campuses'), { n: 10.5, c: C.dim })}
-      ${t(14, 156, L('великий кошик рахує візок, швидку покупку — камери', 'a big basket suits the cart, a quick grab suits cameras'), { n: 10, c: C.dim, mono: 1 })}`; } },
+      ${t(14, 156, L('великий кошик рахує візок, швидку покупку — камери', 'a big basket suits the cart, a quick grab suits cameras'), { n: 10, c: C.dim })}`; } },
     // 05 RFID: хвилі проходять крізь стопку одягу; без мітки товар не видно
     { k: L('одяг', 'apparel'), svg: () => { let g = '', w = ''; for (let i = 0; i < 6; i++) { const x = 150 + i * 26, tag = i !== 4;
         g += `<line x1="${x + 10}" y1="34" x2="${x + 10}" y2="44" stroke="${C.dim}"/><path d="M${x} 50 l10 -6 l10 6 v52 h-20 z" fill="${tag ? '#1d3440' : 'none'}" stroke="${tag ? C.ink : C.faint}" stroke-opacity=".6"${tag ? '' : ' stroke-dasharray="3 3"'}/>${tag ? `<rect x="${x + 6}" y="84" width="8" height="6" fill="${C.warm}"/>` : ''}`; }
@@ -50,10 +50,10 @@
       ${t(14, 140, L('мітку не треба бачити — робот читає стопку на ходу', 'no line of sight: the robot reads a stack in passing'), { n: 10.5 })}${t(14, 156, L('без мітки (пунктир) товар для робота не існує', 'untagged (dashed) items do not exist for the robot'), { n: 10, c: C.dim, mono: 1 })}`; } },
     // 06 LoweBot: від пілоту до прототипу
     { k: L('прототип', 'prototype'), svg: () => `<line class="dr" x1="30" y1="96" x2="296" y2="96" stroke="${C.faint}" stroke-width="2"/>
-      ${[[40, '2014', 'OSHbot', L('пілот', 'pilot')], [140, '2016', 'LoweBot', L('11 магазинів', '11 stores')], [250, L('зараз', 'now'), L('прототип', 'prototype'), L('ідея — у цифрових двійниках', 'idea lives on in digital twins')]].map(([x, y, a, b], i) => `<circle cx="${x}" cy="96" r="6" fill="${i === 2 ? C.bg : C.ink}" stroke="${i === 2 ? C.red : C.ink}" stroke-width="2"/>${t(x, 84, y, { a: 'middle', n: 10, c: C.dim, mono: 1 })}${t(x, 118, a, { a: 'middle', n: 11.5, w: 700, c: i === 2 ? C.red : C.ink })}${t(x, 133, b, { a: 'middle', n: 10, c: C.dim })}`).join('')}
-      <g opacity=".7"><rect x="122" y="22" width="36" height="46" rx="12" fill="none" stroke="${C.ink}" stroke-dasharray="3 3"/><rect x="130" y="32" width="20" height="12" rx="2" fill="none" stroke="${C.ink}" stroke-dasharray="2 2"/></g>
+      ${[[36, '2014', 'OSHbot', L('пілот', 'pilot')], [120, '2016', 'LoweBot', L('11 магазинів', '11 stores')], [250, L('зараз', 'now'), L('прототип', 'prototype'), L('ідея — у цифрових двійниках', 'idea lives on in digital twins')]].map(([x, y, a, b], i) => `<circle cx="${x}" cy="96" r="6" fill="${i === 2 ? C.bg : C.ink}" stroke="${i === 2 ? C.red : C.ink}" stroke-width="2"/>${t(x, 84, y, { a: 'middle', n: 10, c: C.dim, mono: 1 })}${t(x, 118, a, { a: 'middle', n: 11.5, w: 700, c: i === 2 ? C.red : C.ink })}${t(i === 2 ? 312 : x, 133, b, { a: i === 2 ? 'end' : 'middle', n: 10, c: C.dim })}`).join('')}
+      <g opacity=".7"><rect x="102" y="22" width="36" height="46" rx="12" fill="none" stroke="${C.ink}" stroke-dasharray="3 3"/><rect x="110" y="32" width="20" height="12" rx="2" fill="none" stroke="${C.ink}" stroke-dasharray="2 2"/></g>
       <rect x="208" y="34" width="84" height="22" rx="3" fill="none" stroke="${C.red}" stroke-width="1.6" transform="rotate(-6 250 45)"/>${t(250, 50, L('ПРОТОТИП', 'PROTOTYPE'), { a: 'middle', n: 11, w: 700, c: C.red, mono: 1 })}
-      ${t(14, 158, L('«де шурупи» тепер відповідає застосунок у телефоні', '“where are the screws” is now answered by a phone app'), { n: 10, c: C.dim, mono: 1 })}` },
+      ${t(14, 158, L('«де шурупи» тепер відповідає застосунок у телефоні', '“where are the screws” is now answered by a phone app'), { n: 10, c: C.dim })}` },
     // 07 Knightscope: маршрут по парковці, не в залі; підписка
     { k: L('бізнес-модель', 'business model'), svg: () => { let p = ''; for (let i = 0; i < 7; i++) p += `<rect x="${34 + i * 24}" y="76" width="18" height="30" fill="none" stroke="${C.faint}"/><rect x="${34 + i * 24}" y="116" width="18" height="30" fill="none" stroke="${C.faint}"/>`;
       return `<rect x="24" y="16" width="180" height="40" fill="#16242e" stroke="${C.dim}"/>${t(114, 40, L('магазини-орендарі', 'retail tenants'), { a: 'middle', n: 10.5, c: C.dim })}${p}
@@ -66,7 +66,7 @@
       ${t(14, 48, 'Straits Research', { n: 11 })}<rect class="gr" x="20" y="54" width="${X(24) - 20}" height="18" rx="3" fill="${C.ink}" fill-opacity=".55"/>${t(X(24) + 6, 67, '≈24', { n: 12, w: 700 })}
       ${t(14, 94, 'Fortune Business Insights', { n: 11 })}<rect class="gr" x="20" y="100" width="${X(31) - 20}" height="18" rx="3" fill="${C.ink}" fill-opacity=".55"/>${t(X(31) + 6, 113, '31', { n: 12, w: 700 })}
       <rect x="${X(24)}" y="96" width="${X(31) - X(24)}" height="26" fill="${C.warm}" fill-opacity=".25" stroke="${C.warm}" stroke-dasharray="3 3"/>
-      ${t(14, 146, L('методики не показані — межу «ринку» кожен проводить сам', 'no methods shown: each firm draws the “market” its own way'), { n: 10, c: C.dim, mono: 1 })}`; } }];
+      ${t(14, 146, L('методики не показані — межу «ринку» кожен проводить сам', 'no methods shown: each firm draws the “market” its own way'), { n: 10, c: C.dim })}`; } }];
 
   // перебудова: кожен пункт списку → картка «експонат» зі схемою зверху й повним текстом нижче
   const items = [...ul.children];

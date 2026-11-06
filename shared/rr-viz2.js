@@ -29,7 +29,7 @@
       <label class="rr-cut"><input type="checkbox" data-cut> ${L('Без інтеграційного шару', 'Without the integration layer')}</label>`);
     const st = b.querySelector('[data-st]');
     function draw() { cut = b.querySelector('[data-cut]').checked ? 3 : -1;
-      st.innerHTML = LY.map((l, i) => { const dead = cut >= 0 && i >= cut; return `<div class="rr-ly${dead ? ' dead' : ''}" style="--d:${i * 90}ms"><span class="rr-ly__n">${String(i + 1).padStart(2, '0')}</span><b>${l.t}</b><small>${l.d}</small><em>${dead ? L('сюди подія не доходить', 'the event never gets here') : EV[ev].s[i]}</em><i class="rr-ly__q"><span>${L('Спитати', 'Ask')}:</span> ${l.q}<span class="rr-risk">${L('Де ламається', 'Where it breaks')}: ${l.r}</span></i></div>`; }).join('');
+      st.innerHTML = LY.map((l, i) => { const dead = cut >= 0 && i >= cut; return `<div class="rr-ly${dead ? ' dead' : ''}" style="--d:${i * 50}ms"><span class="rr-ly__n">${String(i + 1).padStart(2, '0')}</span><b>${l.t}</b><small>${l.d}</small><em>${dead ? L('сюди подія не доходить', 'the event never gets here') : EV[ev].s[i]}</em><i class="rr-ly__q"><span>${L('Спитати', 'Ask')}:</span> ${l.q}<span class="rr-risk">${L('Де ламається', 'Where it breaks')}: ${l.r}</span></i></div>`; }).join('');
       st.classList.remove('run'); void st.offsetWidth; st.classList.add('run');
       T.stack = { ev: EV[ev].id, cut }; }
     b.querySelectorAll('[data-ev] button').forEach((e) => e.addEventListener('click', () => { b.querySelectorAll('[data-ev] button').forEach((q) => q.classList.toggle('on', q === e)); ev = +e.dataset.v; SND('click'); draw(); }));

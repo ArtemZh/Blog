@@ -14,8 +14,11 @@
       border:1px solid rgba(255,255,255,.35);background:rgba(8,10,16,.45);color:#fff;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
     .snd-all.on{background:var(--act);border-color:var(--act)}
     .snd-fab{position:fixed;right:18px;bottom:76px;z-index:30;width:44px;height:44px;border-radius:50%;border:1px solid var(--rule-2);background:var(--ground);
-      box-shadow:0 4px 18px rgba(0,0,0,.18);cursor:pointer;font-size:18px;opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none}
-    .snd-fab.show{opacity:1;transform:none;pointer-events:auto}
+      box-shadow:0 4px 18px rgba(0,0,0,.18);cursor:pointer;font-size:18px;opacity:0;transform:translateY(8px);transition:opacity .15s ease-out,transform .15s ease-out;pointer-events:none}
+    .snd-fab.show{opacity:1;transform:none;pointer-events:auto;transition-duration:.25s;transition-timing-function:cubic-bezier(.23,1,.32,1)}
+    .snd-fab{transition-property:opacity,transform,background-color,border-color}
+    .snd-all{transition:transform .16s cubic-bezier(.23,1,.32,1),background-color .15s ease,border-color .15s ease}
+    .snd-all:active,.snd-fab.show:active{transform:scale(.97)}
     .snd-fab.on{background:var(--act);border-color:var(--act)}
     @media(max-width:1080px){.snd-fab{bottom:86px;right:12px}}
     @media(max-width:860px){.snd-all{left:auto;right:14px;bottom:auto;top:14px;padding:8px 12px;font-size:12px}}`;

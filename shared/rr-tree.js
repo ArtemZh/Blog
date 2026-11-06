@@ -49,7 +49,7 @@
       ${ticks.map((t) => `<line x1="${X(t)}" x2="${X(t)}" y1="${LY0 - 34}" y2="${VH - 40}" class="rr-tree__grid"/><text x="${X(t)}" y="${VH - 22}" class="rr-tree__y" text-anchor="middle">${t}</text>`).join('')}
       <rect x="${X(1999.3)}" y="${LY0 - 30}" width="${X(2000.7) - X(1999.3)}" height="${LH * 5 + 60}" rx="4" class="rr-tree__trunk"/>
       <text x="${X(2000) + 10}" y="${LY0 - 40}" class="rr-tree__tl">${L('2000-ні: навігація, камери, дешеві обчислення', '2000s: navigation, cameras, cheap compute')}</text>
-      <text x="${X(1950)}" y="${VH - 0}" class="rr-tree__tl">${L('шкала до 2000 стиснута', 'scale before 2000 is compressed')}</text>
+      <text x="${X(1950)}" y="${VH - 5}" class="rr-tree__tl">${L('шкала до 2000 стиснута', 'scale before 2000 is compressed')}</text>
       ${LANES.map((l, i) => { const ns = N.filter((n) => n[0] === i), x0 = Math.min(X(ns[0][1]), X(TR)), x1 = 905;
         return `<g class="rr-tree__lane${dim(i) ? ' dim' : ''}"><text x="12" y="${Y(i) + 4}" class="rr-tree__ln">${l[0]}</text>
           <line x1="${x0}" x2="${x1}" y1="${Y(i)}" y2="${Y(i)}" class="rr-tree__w"/>
